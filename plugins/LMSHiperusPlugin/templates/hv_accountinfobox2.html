@@ -1,0 +1,64 @@
+{include file="hv_js.html"}
+<table class="lmsbox">
+	<THEAD>
+	<TR>
+	<td width="99%" class="fleftu hand" onclick="showOrHide('voipaccounthiperusbox');">
+	    <img src="img/voip.gif" alt=""><b>Konta VoIP Hiperus C5 ({$hiperusaccountcustomerlist|@count})</b> 
+	</td>
+	<td width="1%" class="frightu" align="right" nowrap>
+		{if $customerinfo.status neq "1" and ! $customerinfo.deleted}<a href="?m=hv_accountadd&cusid={$customerinfo.id}">Dodaj nowe konto VoIP &raquo;</a>&nbsp;{/if}
+	</td>
+	</TR>
+	</THEAD>
+	<TBODY>
+    <tr id="voipaccounthiperusbox" style="display:none;">
+	<td width="100%" colspan="2" class="fall">
+	    <table width="100%" cellpadding="3" cellspacing="0">
+		<tr class="dark">
+		    <td width="auto" class="fleftu" style="padding-right:10px;" nowrap>Konto&nbsp;VoIP</td>
+		    <td width="1%" class="fbt" align="center">Faktura<br>VAT</td>
+		    <td width="1%" class="fbt" align="center">&nbsp;Numerów&nbsp;<br>&nbsp;Terminali&nbsp;</td>
+		    <td width="1%" class="fbt" align="center">Domyślny<br>Cennik</td>
+		    <td width="1%" class="fbt" align="center">Typ<br>&nbsp;Płatności&nbsp;</td>
+		    <td width="1%" class="frightu" align="center" nowrap >LINK</td>
+		</tr>
+
+		{cycle values="lucid,light" print=false}
+		{section name=hiperusaccountcustomerlist loop=$hiperusaccountcustomerlist}
+		<tr class="{cycle} lista" onmouseover="addClass(this,'highlight');" onmouseout="removeClass(this,'highlight');">
+		    <td class="fleft" style="padding-right:10px;cursor:pointer;" nowrap onclick="return self.location.href='?m=hv_accountinfo&id={$hiperusaccountcustomerlist[hiperusaccountcustomerlist].id}'"><b>{$hiperusaccountcustomerlist[hiperusaccountcustomerlist].name}</b><br>{$hiperusaccountcustomerlist[hiperusaccountcustomerlist].address} {$hiperusaccountcustomerlist[hiperusaccountcustomerlist].street_number}{if $hiperusaccountcustomerlist[hiperusaccountcustomerlist].apartment_number}/{$hiperusaccountcustomerlist[hiperusaccountcustomerlist].apartment_number}{/if}&nbsp;&nbsp;{$hiperusaccountcustomerlist[hiperusaccountcustomerlist].postcode} {$hiperusaccountcustomerlist[hiperusaccountcustomerlist].city}</td>
+		    <td width="1%" align="center" nowrap onclick="return self.location.href='?m=hv_accountinfo&id={$hiperusaccountcustomerlist[hiperusaccountcustomerlist].id}'" style="cursor:pointer;">{if $hiperusaccountcustomerlist[hiperusaccountcustomerlist].invoice=='0'}&nbsp;{elseif $hiperusaccountcustomerlist[hiperusaccountcustomerlist].invoice=='1'}&nbsp;Hiperus&nbsp;{elseif $hiperusaccountcustomerlist[hiperusaccountcustomerlist].invoice=='2'}&nbsp;LMS&nbsp;{/if}</td>
+		    <td width="1%" align="center" nowrap onclick="return self.location.href='?m=hv_accountinfo&id={$hiperusaccountcustomerlist[hiperusaccountcustomerlist].id}'" style="cursor:pointer;">{$hiperusaccountcustomerlist[hiperusaccountcustomerlist].pstncount}&nbsp;/&nbsp;{$hiperusaccountcustomerlist[hiperusaccountcustomerlist].terminalcount}</td>
+		    <td width="1%" align="center" nowrap onclick="return self.location.href='?m=hv_accountinfo&id={$hiperusaccountcustomerlist[hiperusaccountcustomerlist].id}'" style="cursor:pointer;">&nbsp;{$hiperusaccountcustomerlist[hiperusaccountcustomerlist].price_name}&nbsp;</td>
+		    <td width="1%" align="center" nowrap onclick="return self.location.href='?m=hv_accountinfo&id={$hiperusaccountcustomerlist[hiperusaccountcustomerlist].id}'" style="cursor:pointer;">{$hiperusaccountcustomerlist[hiperusaccountcustomerlist].payment_type}</td>
+		    <td width="1%" align="right" class="fright" nowrap >
+			<a href="?m=hv_accountedit&id={$hiperusaccountcustomerlist[hiperusaccountcustomerlist].id}&out=lista"><img src="img/edit.gif"></a>
+			<a href="?m=hv_accountdelete&id={$hiperusaccountcustomerlist[hiperusaccountcustomerlist].id}&accountlist" onclick="return confirm('Usunięcie konta spowoduje również usunięcie :\nterminali, numerów i bilingów przypisanych do konta.\n\nCzy napewno chcesz skasować to konto ?');"><img src="img/delete.gif"></a>
+			
+		    </td>
+		</tr>
+		{sectionelse}
+		<tr>
+		    <td colspan="6" align="center" class="fall">
+			<p><h4>Brak kont VoIP dla klienta<br><a href="?m=hv_accountadd&cusid={$customerinfo.id}">Kliknij tutaj aby dodać nowe konto VoIP </a></h4></p>
+	    
+		    </td>
+		</tr>
+		{/section}
+
+		<tr class="dark">
+		    <td colspan="6" class="fall">
+			&nbsp;
+		    </td>
+		</tr>
+	    </table>
+	</td>
+    </tr>
+	</TBODY>
+</table>
+<script type="text/javascript">
+<!--
+if (getCookie('voipaccounthiperusbox') == '1')
+	document.getElementById('voipaccounthiperusbox').style.display = '';
+//-->
+</script>
