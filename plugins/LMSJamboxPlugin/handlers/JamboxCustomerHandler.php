@@ -31,14 +31,14 @@
  */
 class JamboxCustomerHandler {
 	public function CustomerInfoOnLoad() {
-		global $SMARTY;
+		global $SMARTY, $LMSTV;
 
 		require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSJamboxPlugin::plugin_directory_name
 			. DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'customer.tv.inc.php');
 	}
 
 	public function CustomerEditOnLoad() {
-		global $SMARTY;
+		global $SMARTY, $LMSTV;
 
 		require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSJamboxPlugin::plugin_directory_name
 			. DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'customer.tv.inc.php');

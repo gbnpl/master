@@ -21,7 +21,7 @@
 	<THEAD>
 	<TR class="hand">
 		<TD style="width: 99%;" class="fleftu hand bold" onclick="showOrHide('tvjamboxaccountspanel');">
-			<IMG src="img/tv_icon.png" alt="">
+			<IMG src="img/{LMSJamboxPlugin::plugin_directory_name}/tv_icon.png" alt="">
 			{t a=$customertvjamboxaccounts|@count|default:"0"}Konta TV ($a){if $accblockednum > 0}<span style="color: red;"> ({$accblockednum} wstrzymane)</span>{/if}:{/t}
 		</TD>
 		<TD style="width: 1%;" class="frightu text-right nobr">
@@ -92,7 +92,7 @@
 					<td>
 					<table cellpadding="5" cellspacing="0" width="100%">
 					<tr class="dark">
-					<td colspan=3><img src="img/account.png">&nbsp;Konto numer: <u><strong><font {if $acc.acc_active eq 0}style="background-color: red"{/if}>{$cust_data.cust_number}/{$acc.account_id}</font></strong></u> / 
+					<td colspan=3><img src="img/{LMSJamboxPlugin::plugin_directory_name}/account.png">&nbsp;Konto numer: <u><strong><font {if $acc.acc_active eq 0}style="background-color: red"{/if}>{$cust_data.cust_number}/{$acc.account_id}</font></strong></u> / 
 					Adres: {$acc.cust_i_street} {$acc.cust_i_home_nr} {$acc.cust_i_flat}, {$acc.cust_i_postal_code} {$acc.cust_i_city}</td>
 					<td colspan=10 class="text-right">
 							<a href="#tv-edit-account1{$acc.account_id}" class="hand" onclick="showOrHide('tv-edit-account{$acc.account_id}');">Edytuj <img src="img/edit.gif" alt="[ Edytuj ]"></a>
@@ -319,9 +319,8 @@
 				{/if}
 				<SCRIPT type="text/javascript">
 				<!--
-				//if(getCookie('tv-add-packages{/literal}{$acc.account_id}{literal}')=='1') {
-					//document.getElementById('tv-add-packages{/literal}{$acc.account_id}{literal}').style.display = 'block';
-				//}
+				//if (getCookie('tv-add-packages{$acc.account_id}')=='1')
+					//document.getElementById('tv-add-packages{$acc.account_id}').style.display = 'block';
 				//-->
 				</SCRIPT>
 				
@@ -329,7 +328,7 @@
 				{if $toopen}
 					<SCRIPT type="text/javascript">
 					<!--
-					document.getElementById('{/literal}{$toopen}{literal}').style.display = 'block';
+					document.getElementById('{$toopen}').style.display = 'block';
 					//-->
 					</SCRIPT>
 				{/if}
