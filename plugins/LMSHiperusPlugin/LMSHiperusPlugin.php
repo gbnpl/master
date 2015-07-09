@@ -35,55 +35,55 @@ class LMSHiperusPlugin extends LMSPlugin {
 	public function registerHandlers() {
 		$this->handlers = array(
 			'lms_initialized' => array(
-				'class' => 'InitHandler',
+				'class' => 'HiperusInitHandler',
 				'method' => 'lmsInit'
 			),
 			'smarty_initialized' => array(
-				'class' => 'InitHandler',
+				'class' => 'HiperusInitHandler',
 				'method' => 'smartyInit'
 			),
 			'modules_dir_initialized' => array(
-				'class' => 'InitHandler',
+				'class' => 'HiperusInitHandler',
 				'method' => 'modulesDirInit'
 			),
 			'menu_initialized' => array(
-				'class' => 'InitHandler',
+				'class' => 'HiperusInitHandler',
 				'method' => 'menuInit'
 			),
 			'access_table_initialized' => array(
-				'class' => 'InitHandler',
+				'class' => 'HiperusInitHandler',
 				'method' => 'accessTableInit'
 			),
 			'userpanel_lms_initialized' => array(
-				'class' => 'InitHandler',
+				'class' => 'HiperusInitHandler',
 				'method' => 'lmsInit'
 			),
 			'userpanel_smarty_initialized' => array(
-				'class' => 'InitHandler',
+				'class' => 'HiperusInitHandler',
 				'method' => 'smartyInit'
 			),
 			'userpanel_modules_dir_initialized' => array(
-				'class' => 'InitHandler',
+				'class' => 'HiperusInitHandler',
 				'method' => 'userpanelModulesDirInit'
 			),
 			'customerinfo_on_load' => array(
-				'class' => 'CustomerHandler',
+				'class' => 'HiperusCustomerHandler',
 				'method' => 'customerInfoOnLoad'
 			),
 			'customeredit_on_load' => array(
-				'class' => 'CustomerHandler',
+				'class' => 'HiperusCustomerHandler',
 				'method' => 'customerEditOnLoad'
 			),
 			'nodeadd_on_load' => array(
-				'class' => 'NodeHandler',
+				'class' => 'HiperusNodeHandler',
 				'method' => 'NodeAddOnLoad'
 			),
 			'nodeinfo_on_load' => array(
-				'class' => 'NodeHandler',
+				'class' => 'HiperusNodeHandler',
 				'method' => 'NodeInfoOnLoad'
 			),
 			'nodeedit_on_load' => array(
-				'class' => 'NodeHandler',
+				'class' => 'HiperusNodeHandler',
 				'method' => 'NodeEditOnLoad'
 			),
 		);
