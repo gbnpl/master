@@ -77,7 +77,9 @@ class LMSTV extends LMS {
 		
 	public function __construct($DB, $AUTH, $SYSLOG) 
 	{
-		session_start();
+		if (!isset($_SERVER['SHELL']))
+			session_start();
+
 		parent::__construct($DB, $AUTH, $SYSLOG);
 		
 		$this->s = send::getInstance();
@@ -447,7 +449,8 @@ class LMSTV extends LMS {
 		$tv_cust_list = $this->CustomerList();
 		
 		$payment_info_array = array();
-			foreach($tv_cust_list as $list){
+		if (!empty($tv_cust_list))
+			foreach ($tv_cust_list as $list) {
 				if(empty($list['cust_external_id']) || empty($list['cust_number']))continue;
 				$payment_info_array[$list['cust_number']] = array(
 											'cust_total_balance'	=>	$this->GetCustomerBalance($list['cust_external_id']),															
