@@ -5,9 +5,9 @@ Wymagania: php-dom, php-calendar
 WDROŻENIE
 
 Dane rejestracyjne platformy Jambox są przechowywane w ustawieniach LMS:
-	jambox.login
+	jambox.username
 	jambox.password
-	jambox.server
+	jambox.server (domyślnie: https://sms.sgtsa.pl/sms/xmlrpc)
 
 Paczkę z pluginem rozpakowujemy do katalogu <lms-path>/plugins/LMSJamboxPlugin
 Tworzymy dowiązanie symboliczne w katalogu img LMS-a o nazwie LMSJamboxPlugin
