@@ -36,9 +36,9 @@ class InitHandler {
      * @param LMS $hook_data Hook data
      */
 	public function lmsInit(LMS $hook_data) {
-		global $HIPERUS, $DB;
+		global $HIPERUS;
 
-		$HIPERUS = new LMSHiperus($DB);
+		$HIPERUS = new LMSHiperus($hook_data->getDb());
 	}
 
     /**
