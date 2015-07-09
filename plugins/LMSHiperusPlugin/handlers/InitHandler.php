@@ -39,6 +39,8 @@ class InitHandler {
 		global $HIPERUS;
 
 		$HIPERUS = new LMSHiperus($hook_data->getDb());
+
+		return $hook_data;
 	}
 
     /**
