@@ -37,8 +37,8 @@ class send {
 				$instance->h = new Zend_XmlRpc_Client(ConfigHelper::getConfig('jambox.server', 'https://sms.sgtsa.pl/sms/xmlrpc'));
 				$instance->h->getHttpClient()->setHeaders(array('User-Agent: LMS SGT')); 
 				$instance->auth_data = array(
-					'user_name' => ConfigHelper::getConfig('jambox.username') . ';',
-					'user_pass' => ConfigHelper::getConfig('jambox.password') . ';',
+					'user_name' => ConfigHelper::getConfig('jambox.username'),
+					'user_pass' => ConfigHelper::getConfig('jambox.password'),
 				);
 				
 			} catch (Exception $e) {;}
@@ -84,7 +84,7 @@ class LMSTV extends LMS {
 		
 		$this->s = send::getInstance();
 		
-		$this->smsurl =substr(ConfigHelper::getConfig('jambox.server'), 0, -6);
+		$this->smsurl =substr(ConfigHelper::getConfig('jambox.server', 'https://sms.sgtsa.pl/sms/xmlrpc'), 0, -6);
 	
 		$frontendOptions = array(
 				'lifetime' => ConfigHelper::getConfig('jambox.cache_lifetime'),
