@@ -31,6 +31,7 @@ $parameters = array(
 	'q' => 'quiet',
 	'h' => 'help',
 	'v' => 'version',
+	'f:' => 'fakedate:',
 );
 
 foreach ($parameters as $key => $val) {
@@ -118,6 +119,17 @@ try {
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
+
+require_once(LIB_DIR . '/SYSLOG.class.php');
+$SYSLOG = new SYSLOG($DB);
+
+$AUTH = null;
+$LMS = new LMS($DB, $AUTH, $SYSLOG);
+$LMS->ui_lang = $_ui_language;
+$LMS->lang = $_language;
+
 function localtime2() {
 	global $fakedate;
 	if (!empty($fakedate)) {
@@ -129,43 +141,106 @@ function localtime2() {
 
 $fakedate = (array_key_exists('fakedate', $options) ? $options['fakedate'] : NULL);
 $cdate = strftime("%s", localtime2());
-$numberplanid = 1; // FIXMETVSGT NA PRAWIDŁOWY
+$year = strftime("%Y", localtime2());
+$month = intval(strftime("%m", localtime2()));
+$start_date = date("Y-m-d", mktime(12, 0, 0, $month - 1, 1, $year));
+$end_date = date("Y-m-d", mktime(12, 0, 0, $month, 0, $year));
+$starttime = intval($cdate / 86400) * 86400;
+$endtime = $starttime + 86400;
 
 $to_insert = array();
 
-$res = $DB->GetAll("SELECT * FROM tv_billingevent WHERE docid = 0 OR docid IS NULL ORDER BY account_id");
+$res = $DB->GetAll("SELECT * FROM tv_billingevent WHERE docid = 0 OR docid IS NULL
+		AND be_selling_date >= ? AND be_selling_date <= ?
+	ORDER BY account_id", array($start_date, $end_date));
 if (!empty($res))
 	foreach ($res as $key => $r) {
 		if (!isset($to_insert[$r['cust_number']]))
 			$to_insert[$r['cust_number']] = array();
 		$to_insert[$r['cust_number']][] = $r;
 	}
+if (empty($to_insert))
+	die("No billing records!\n");
+
+$numbertemplates = array();
+$numberplans = array();
+$results = $DB->GetAll("SELECT n.id, n.period, COALESCE(a.divisionid, 0) AS divid, isdefault 
+	FROM numberplans n 
+	LEFT JOIN numberplanassignments a ON (a.planid = n.id) 
+	WHERE doctype = ?",
+	array(DOC_INVOICE));
+foreach ($results as $row)
+	if ($row['isdefault'])
+		$numberplans[$row['divid']] = $row['id'];
+if (empty($numberplans))
+	die("No invoice number plans found!\n");
 
 foreach ($to_insert as $key => $i){
-	//$customerid = $DB->GetOne('SELECT id FROM customers WHERE cust_number = ?', array($i[0]['customerid']));
 	$customerid = $i[0]['customerid'];
-	$customer = $DB->GetRow("SELECT lastname, name, address, city, zip, ssn, ten, countryid, divisionid, paytime
-		FROM customers WHERE id = ?", array($customerid));
-	$number = $LMS->GetNewDocumentNumber(DOC_INVOICE, $numberplanid, $cdate);
+	if (empty($customerid) || !$DB->GetOne("SELECT id FROM customers WHERE cust_number = ?", array($customerid)))
+		continue;
+
+	$document = $DB->GetRow("SELECT MAX(d.id), MAX(itemid) AS itemid FROM documents d
+			JOIN invoicecontents ic ON ic.docid = d.id
+			WHERE customerid = ? AND sdate >= ? AND sdate < ?
+			GROUP BY d.id", array($customerid, $starttime, $endtime));
+	if (empty($document)) {
+		$customer = $DB->GetRow("SELECT lastname, name, address, city, zip, ssn, ten, countryid, divisionid, paytime, paytype
+			FROM customers WHERE id = ?", array($customerid));
+
+		if ($customer['paytime'] != -1)
+			$paytime = $customer['paytime'];
+		elseif (($paytime = $DB->GetOne("SELECT inv_paytime FROM divisions WHERE id = ?",
+			array($customer['divisionid']))) === NULL)
+			$paytime = ConfigHelper::getConfig('invoices.paytime');
+
+		if ($customer['paytype'])
+			$paytype = $customer['paytype'];
+		elseif ($paytype = $DB->GetOne("SELECT inv_paytype FROM divisions WHERE id = ?",
+			array($customer['divisionid'])) === NULL)
+			if (isset($PAYTYPES[$paytype]))
+				$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
+
+                $numberplanid = $customer['numberplanid'];
+                if (empty($numberplanid))
+                        $numberplanid = $numberplans[$customer['divisionid']];
+                if (!isset($numbertemplates[$numberplanid]))
+                        $numbertemplates[$numberplanid] = $DB->GetOne("SELECT template FROM numberplans WHERE id = ?", array($numberplanid));
+                $number = $LMS->GetNewDocumentNumber(DOC_INVOICE, $numberplanid, $cdate);
+
+		$division = $DB->GetRow("SELECT name, shortname, address, city, zip, countryid, ten, regon,
+			account, inv_header, inv_footer, inv_author, inv_cplace 
+			FROM divisions WHERE id = ?",array($customer['divisionid']));
 	
-	$paytime = $customer['paytime'];
-	if ($paytime == -1) $paytime = '14';
+		$DB->Execute("INSERT INTO documents (number, numberplanid, type, countryid, divisionid, 
+			customerid, name, address, zip, city, ten, ssn, cdate, sdate, paytime, paytype,
+			div_name, div_shortname, div_address, div_city, div_zip, div_countryid, div_ten, div_regon,
+			div_account, div_inv_header, div_inv_footer, div_inv_author, div_inv_cplace, fullnumber) 
+			VALUES(?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+				?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			array($number, $numberplanid, $customer['countryid'], $customer['divisionid'], 
+			$customerid, $customer['lastname']." ".$customer['name'], $customer['address'], $customer['zip'],
+			$customer['city'], $customer['ten'], $customer['ssn'], $cdate, $cdate, $paytime, 2,
+			($division['name'] ? $division['name'] : ''), ($division['shortname'] ? $division['shortname'] : ''),
+			($division['address'] ? $division['address'] : ''), ($division['city'] ? $division['city'] : ''),
+			($division['zip'] ? $division['zip'] : ''), ($division['countryid'] ? $division['countryid'] : 0),
+			($division['ten'] ? $division['ten'] : ''), ($division['regon'] ? $division['regon'] : ''),
+			($division['account'] ? $division['account'] : ''), ($division['inv_header'] ? $division['inv_header'] : ''),
+			($division['inv_footer'] ? $division['inv_footer'] : ''), ($division['inv_author'] ? $division['inv_author'] : ''),
+			($division['inv_cplace'] ? $division['inv_cplace'] : ''), $fullnumber));
+		$docid = $DB->GetLastInsertID('documents');
+		$itemid = 0;
+	} else {
+		$docid = $document['id'];
+		$itemid = $document['itemid'];
+	}
 
-	$DB->Execute("INSERT INTO documents (number, numberplanid, type, countryid, divisionid, 
-		customerid, name, address, zip, city, ten, ssn, cdate, sdate, paytime, paytype) 
-		VALUES(?, ?, 1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-		array($number, $numberplanid, $customer['countryid'], $customer['divisionid'], 
-		$customerid, $customer['lastname']." ".$customer['name'], $customer['address'], $customer['zip'],
-		$customer['city'], $customer['ten'], $customer['ssn'], $cdate, $cdate, $paytime, 2));
-	$docid = $DB->GetLastInsertID('documents');
-
-	$itemid = 0;
 	foreach ($i as $idx => $item) {
 		$taxval =  $item['be_vat'] * 100;
 		$taxid = $DB->GetOne("SELECT id FROM taxes WHERE value = ?
 			AND validfrom < ? AND (validto = 0 OR validto <= ?)",
 			array($taxval, $cdate, $cdate));	
-	
+
 		$itemid++;
 		$be_gross = str_replace(',', '.', $item['be_gross']);
 
@@ -178,8 +253,8 @@ foreach ($to_insert as $key => $i){
 		$DB->Execute("INSERT INTO cash (time, value, taxid, customerid, comment, docid, itemid)
 			VALUES (?, ?, ?, ?, ?, ?, ?)",
 			array($cdate, $value, $taxid, $customerid, 'usl.', $item['be_desc'], $docid, $itemid));
-					
-		$DB->Execute('UPDATE tv_billingevent SET docid = ? WHERE id = ?', array($docid, $item['id']));
+
+		$DB->Execute("UPDATE tv_billingevent SET docid = ? WHERE id = ?", array($docid, $item['id']));
 	}
 }
 

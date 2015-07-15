@@ -30,6 +30,7 @@ $parameters = array(
 	'q' => 'quiet',
 	'h' => 'help',
 	'v' => 'version',
+	'f:' => 'fakedate:',
 );
 
 foreach ($parameters as $key => $val) {
@@ -121,12 +122,23 @@ try {
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
+function localtime2() {
+	global $fakedate;
+	if (!empty($fakedate)) {
+		$date = explode("/", $fakedate);
+		return mktime(0, 0, 0, $date[1], $date[2], $date[0]);
+	} else
+		return time();
+}
+
+$fakedate = (array_key_exists('fakedate', $options) ? $options['fakedate'] : NULL);
+
 $AUTH = null;
 $SYSLOG = null;
 $LMSTV = new LMSTV($DB, $AUTH, $SYSLOG);
 
-$year = strftime("%Y");
-$month = intval(strftime("%m"));
+$year = strftime("%Y", localtime2());
+$month = intval(strftime("%m", localtime2()));
 $start_date = date("Y-m-d", mktime(12, 0, 0, $month - 1, 1, $year));
 $end_date = date("Y-m-d", mktime(12, 0, 0, $month, 0, $year));
 //echo "$start_date\n";
@@ -137,6 +149,8 @@ $res = $LMSTV->GetBillingEvents($start_date, $end_date);
 if (!empty($res)) {
 	foreach ($res as $key => $r){
 		try {
+			if ($DB->GetOne('SELECT beid FROM tv_billingevent WHERE beid = ?', array($r['id'])))
+				continue;
 			$DB->Execute('INSERT INTO tv_billingevent (customerid, account_id, be_selling_date, be_desc, be_vat, be_gross, be_b2b_netto, group_id, cust_number, package_id, hash, beid)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
 				array(
