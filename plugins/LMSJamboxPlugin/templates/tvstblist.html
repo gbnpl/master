@@ -23,7 +23,7 @@
 <TABLE class="lmsbox">
 	<THEAD>
 	<tr>
-		<td class="fall" colspan="16">
+		<td class="fall" colspan="10">
 			
 		<div style="float:left">
 		<span class="bold">Dodaj nowy:</span>
@@ -59,7 +59,7 @@
 		</td>
 	</tr>		
 	<tr class="fall">
-		<td></td>
+		<td>&nbsp;</td>
 		<td><a href="?m={$layout.module}&show_mode={$show_mode}&order=id&direction={if $direction eq "asc" && $order eq "id"}desc{/if}">ID:</A></B> {if $order eq "id"}<IMG SRC="img/{if $direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}</td>
 		<td><a href="?m={$layout.module}&show_mode={$show_mode}&order=stb_mac&direction={if $direction eq "asc" && $order eq "stb_mac"}desc{/if}">MAC:</A></B> {if $order eq "stb_mac"}<IMG SRC="img/{if $direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}</td>
 		<td><a href="?m={$layout.module}&show_mode={$show_mode}&order=stb_serial&direction={if $direction eq "asc" && $order eq "stb_serial"}desc{/if}">Serial:</A></B> {if $order eq "stb_serial"}<IMG SRC="img/{if $direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}</td>
@@ -74,7 +74,7 @@
 	<TBODY>
 	{foreach from=$list item=item}
 	<TR class="{cycle values="light,lucid"}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
-		<TD></TD>
+		<TD class="fleft">&nbsp;</TD>
 		<TD class="valign-top bold">{$item.stb_id}</TD>
 		<TD class="valign-top">{$item.stb_mac}</TD>
 		<TD class="valign-top bold"><a href="{$smsurl}stock/tracestb/stb/{$item.stb_serial}">{$item.stb_serial} <img src="img/node_on.png" alt="[ STB w SMS ]"></a></TD>
@@ -91,7 +91,7 @@
 			<a href="?m=customerinfo&id={$item.customerid}">{$item.customerid} <img src="img/customer.gif" alt="[ Klient w LMS ]"></a>
 			{/if}
 		</TD>
-		<TD class="valign-top text-right">
+		<TD class="fright valign-top text-right">
 			{if $item.stb_usage eq 'stock'}
 			<a href="?m=tvstblist&show_mode={$show_mode}&rem={$item.stb_mac}">Usuń z bazy <img src="img/delete.gif" alt="[ Usuń z bazy ]"></a>
 			{/if}
@@ -103,7 +103,7 @@
 		<TD COLSPAN="4" class="fleftu text-right bold">
 			{trans("Total:")}<BR>
 		</TD>
-		<TD COLSPAN="10" class="frightu valign-top bold">
+		<TD COLSPAN="6" class="frightu valign-top bold">
 			{if $list|@count}{$list|@count}{else}0{/if}
 		</TD>
 	</TR>
