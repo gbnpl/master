@@ -270,7 +270,6 @@ foreach ($customers as $i => $customer)
 $customers = $tabtmp;
 unset($tabtmp);
 
-$taxeslist = $LMS->GetTaxes();
 $starttime = mktime(0, 0, 0, $curr_month, 1, $curr_year);
 $endtime = intval($currtime / 86400) * 86400 + 86400;
 
