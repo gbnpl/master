@@ -31,6 +31,7 @@
  */
 class LMSJamboxPlugin extends LMSPlugin {
 	const plugin_directory_name = 'LMSJamboxPlugin';
+	const DBVERSION = '2015071800';
 
 	public function registerHandlers() {
 		$this->handlers = array(
