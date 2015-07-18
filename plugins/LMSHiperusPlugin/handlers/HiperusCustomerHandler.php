@@ -31,9 +31,9 @@
  */
 class HiperusCustomerHandler {
 	private function GetHiperusAccounts($cid) {
-		global $SMARTY, $DB, $HIPERUS;
+		global $SMARTY, $HIPERUS;
 
-		if ($DB->GetOne('SELECT id FROM hv_customers WHERE ext_billing_id=? LIMIT 1', array($cid)))
+		if (LMSDB::getInstance()->GetOne('SELECT id FROM hv_customers WHERE ext_billing_id=? LIMIT 1', array($cid)))
 			$SMARTY->assign('hiperusaccountcustomerlist',
 				$HIPERUS->GetCustomerListList('name,asc', array('extid' => $cid)));
 	}
