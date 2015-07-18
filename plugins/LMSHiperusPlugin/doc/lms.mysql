@@ -1,217 +1,211 @@
-CREATE TYPE hv_bool AS ENUM ('f', 't');
-CREATE TYPE hv_payment_type AS ENUM ('prepaid', 'postpaid');
-
-CREATE TABLE hv_customers (
-  id integer NOT NULL,
-  name varchar(255) DEFAULT NULL,
-  id_reseller integer DEFAULT NULL,
-  email varchar(255) DEFAULT NULL,
-  address varchar(255) DEFAULT NULL,
-  street_number varchar(10) DEFAULT NULL,
-  apartment_number varchar(10) DEFAULT NULL,
-  postcode varchar(10) DEFAULT NULL,
-  city varchar(255) DEFAULT NULL,
-  country varchar(255) DEFAULT NULL,
-  b_name varchar(255) DEFAULT NULL,
-  b_address varchar(255) DEFAULT NULL,
-  b_street_number varchar(255) DEFAULT NULL,
-  b_apartment_number varchar(10) DEFAULT NULL,
-  b_postcode varchar(10) DEFAULT NULL,
-  b_city varchar(255) DEFAULT NULL,
-  b_country varchar(255) DEFAULT NULL,
-  b_nip varchar(50) DEFAULT NULL,
-  b_regon varchar(50) DEFAULT NULL,
-  ext_billing_id integer DEFAULT NULL,
-  issue_invoice hv_bool NOT NULL DEFAULT 'f',
-  id_default_pricelist integer DEFAULT NULL,
-  id_default_balance integer DEFAULT NULL,
-  payment_type hv_payment_type NOT NULL DEFAULT 'postpaid',
-  is_wlr hv_bool NOT NULL DEFAULT 'f',
-  active hv_bool NOT NULL DEFAULT 't',
-  create_date varchar(30) DEFAULT NULL,
-  consent_data_processing hv_bool NOT NULL DEFAULT 'f',
-  platform_user_add_stamp varchar(50) DEFAULT NULL,
-  open_registration hv_bool NOT NULL DEFAULT 'f',
-  is_removed hv_bool NOT NULL DEFAULT 'f',
+CREATE TABLE IF NOT EXISTS hv_customers (
+  id int(11) NOT NULL ,
+  name varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  id_reseller int(11) DEFAULT NULL ,
+  email varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  address varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  street_number varchar(10) COLLATE utf8_polish_ci DEFAULT NULL ,
+  apartment_number varchar(10) COLLATE utf8_polish_ci DEFAULT NULL ,
+  postcode varchar(10) COLLATE utf8_polish_ci DEFAULT NULL ,
+  city varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  country varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  b_name varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  b_address varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  b_street_number varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  b_apartment_number varchar(10) COLLATE utf8_polish_ci DEFAULT NULL,
+  b_postcode varchar(10) COLLATE utf8_polish_ci DEFAULT NULL,
+  b_city varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
+  b_country varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
+  b_nip varchar(50) COLLATE utf8_polish_ci DEFAULT NULL,
+  b_regon varchar(50) COLLATE utf8_polish_ci DEFAULT NULL,
+  ext_billing_id int(11) DEFAULT NULL ,
+  issue_invoice enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f' ,
+  id_default_pricelist int(11) DEFAULT NULL ,
+  id_default_balance int(11) DEFAULT NULL ,
+  payment_type enum('prepaid','postpaid') COLLATE utf8_polish_ci NOT NULL DEFAULT 'postpaid',
+  is_wlr enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f' ,
+  active enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 't' ,
+  create_date varchar(30) COLLATE utf8_polish_ci DEFAULT NULL ,
+  consent_data_processing enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f' ,
+  platform_user_add_stamp varchar(50) COLLATE utf8_polish_ci DEFAULT NULL ,
+  open_registration enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f' ,
+  is_removed enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f' ,
   PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
-CREATE SEQUENCE hv_assign_id_seq;
-CREATE TABLE hv_assign (
-  id integer DEFAULT nextval('hv_assign_id_seq'::text) NOT NULL,
-  customerid integer DEFAULT NULL,
-  keytype char(30) NOT NULL DEFAULT '',
-  keyvalue varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (id)
-);
-CREATE INDEX hv_assign_customerid_idx ON hv_assign (customerid);
-CREATE INDEX hv_assign_keytype_idx ON hv_assign (keytype);
-
-CREATE TABLE hv_billing (
-  id bigint NOT NULL,
-  customerid integer DEFAULT NULL,
-  rel_cause integer DEFAULT NULL,
-  start_time varchar(30) DEFAULT NULL,
-  start_time_unix integer DEFAULT NULL,
-  customer_name varchar(255) DEFAULT NULL,
-  terminal_name varchar(255) DEFAULT NULL,
-  ext_billing_id integer DEFAULT NULL,
-  caller varchar(20) DEFAULT NULL,
-  bill_cpb varchar(20) DEFAULT NULL,
-  duration integer DEFAULT NULL,
-  calltype varchar(50) DEFAULT NULL,
-  country varchar(255) DEFAULT NULL,
-  description varchar(255) DEFAULT NULL,
-  operator varchar(255) DEFAULT NULL,
-  type varchar(30) DEFAULT NULL,
-  cost numeric(12,4) NOT NULL DEFAULT 0,
-  price numeric(12,4) NOT NULL DEFAULT 0,
-  init_charge numeric(12,4) NOT NULL DEFAULT 0,
-  reseller_price numeric(12,4) NOT NULL DEFAULT 0,
-  reseller_cost numeric(12,4) NOT NULL DEFAULT 0,
-  reseller_init_charge numeric(12,4) NOT NULL DEFAULT 0,
-  margin numeric(12,4) NOT NULL DEFAULT 0,
-  subscription_used hv_bool DEFAULT NULL,
-  platform_type varchar(20) DEFAULT NULL,
-  success_call hv_bool DEFAULT NULL,
-  PRIMARY KEY (id)
-);
-CREATE INDEX hv_billing_customerid_idx ON hv_billing (customerid);
-CREATE INDEX hv_billing_success_call_idx ON hv_billing (success_call);
-
-CREATE TABLE hv_pricelist (
-  id integer NOT NULL,
-  name varchar(50) DEFAULT NULL,
-  charge_internal_call hv_bool NOT NULL DEFAULT 'f',
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE hv_enduserlist (
-  id integer NOT NULL,
-  customerid integer DEFAULT NULL,
-  password varchar(255) DEFAULT NULL,
-  email varchar(255) DEFAULT NULL,
-  admin hv_bool NOT NULL DEFAULT 't',
-  vm_count integer DEFAULT NULL,
-  fax_count integer DEFAULT NULL,
-  exten_count integer DEFAULT NULL,
-  vexten_count integer DEFAULT NULL,
-  PRIMARY KEY (id)
-);
-CREATE INDEX hv_enduserlist_customerid_idx ON hv_enduserlist (customerid);
-
-CREATE TABLE hv_pstn (
-  id integer NOT NULL,
-  customerid integer DEFAULT NULL,
-  extension varchar(30) DEFAULT NULL,
-  country_code varchar(3) NOT NULL DEFAULT '48',
-  number varchar(20) DEFAULT NULL,
-  is_main hv_bool NOT NULL DEFAULT 't',
-  disa_enabled hv_bool NOT NULL DEFAULT 'f',
-  clir hv_bool NOT NULL DEFAULT 'f',
-  virtual_fax hv_bool NOT NULL DEFAULT 'f',
-  terminal_name varchar(100) DEFAULT NULL,
-  id_auth integer DEFAULT NULL,
-  create_date varchar(30) DEFAULT NULL,
-  voicemail_enabled hv_bool NOT NULL DEFAULT 't',
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE hv_pstnrange (
-  id integer NOT NULL,
-  range_start bigint DEFAULT NULL,
-  range_end bigint DEFAULT NULL,
-  description varchar(255) DEFAULT NULL,
-  id_reseller integer DEFAULT NULL,
-  country_code varchar(6) DEFAULT NULL,
-  open_registration hv_bool NOT NULL DEFAULT 'f',
-  ussage hv_bool NOT NULL DEFAULT 't',
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE hv_pstnusage (
-  extension bigint NOT NULL,
-  number integer DEFAULT NULL,
-  customerid integer DEFAULT NULL,
-  country_code varchar(6) DEFAULT NULL,
-  customer_name varchar(255) DEFAULT NULL,
-  idrange integer DEFAULT NULL,
-  PRIMARY KEY (extension)
-);
-CREATE INDEX hv_pstnusage_number_idx ON hv_pstnusage (number);
-CREATE INDEX hv_pstnusage_idrange_idx ON hv_pstnusage (idrange);
-
-CREATE TABLE hv_subscriptionlist (
-  id integer NOT NULL,
-  name varchar(255) DEFAULT NULL,
-  value numeric(9,2) NOT NULL DEFAULT 0,
-  f_dld varchar(255) DEFAULT NULL,
-  f_mobile varchar(255) DEFAULT NULL,
-  f_ild varchar(255) DEFAULT NULL,
-  id_reseller integer DEFAULT NULL,
-  invoice_value numeric(9,2) NOT NULL DEFAULT 0,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE hv_terminal (
-  id integer NOT NULL,
-  customerid integer DEFAULT NULL,
-  username varchar(100) DEFAULT NULL,
-  password varchar(100) DEFAULT NULL,
-  screen_numbers hv_bool NOT NULL DEFAULT 't',
-  t38_fax hv_bool NOT NULL DEFAULT 'f',
-  customer_name varchar(255) DEFAULT NULL,
-  id_pricelist integer DEFAULT NULL,
-  pricelist_name varchar(255) DEFAULT NULL,
-  balance_value numeric(9,2) DEFAULT 0,
-  id_auth integer DEFAULT NULL,
-  id_subscription integer DEFAULT NULL,
-  subscription_from varchar(50) DEFAULT NULL,
-  subscription_to varchar(50) DEFAULT NULL,
-  value_left numeric(9,2) DEFAULT 0,
-  id_terminal_location integer DEFAULT NULL,
-  area_code varchar(10) DEFAULT NULL,
-  borough varchar(255) DEFAULT NULL,
-  county varchar(255) DEFAULT NULL,
-  province varchar(255) DEFAULT NULL,
-  sip_proxy varchar(255) DEFAULT NULL,
-  subscriptions varchar(255) DEFAULT NULL,
-  extensions text,
-  PRIMARY KEY (id)
-);
-CREATE INDEX hv_terminal_customerid_idx ON hv_terminal (customerid);
-
-CREATE SEQUENCE hv_province_id_seq;
-CREATE TABLE hv_province (
-  id integer DEFAULT nextval('hv_province_id_seq'::text) NOT NULL,
-  name char(20) NOT NULL DEFAULT '',
+CREATE TABLE IF NOT EXISTS hv_assign (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  customerid int(11) DEFAULT NULL ,
+  keytype char(30) COLLATE utf8_polish_ci NOT NULL DEFAULT '',
+  keyvalue varchar(255) COLLATE utf8_polish_ci NOT NULL DEFAULT '',
   PRIMARY KEY (id),
-  UNIQUE (name)
-);
+  KEY customerid (customerid),
+  KEY keytype (keytype)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=1;
 
-CREATE SEQUENCE hv_county_id_seq;
-CREATE TABLE hv_county (
-  id integer DEFAULT nextval('hv_county_id_seq'::text) NOT NULL,
-  name varchar(50) NOT NULL DEFAULT '',
+CREATE TABLE IF NOT EXISTS hv_billing (
+  id bigint(20) NOT NULL,
+  customerid int(11) DEFAULT NULL ,
+  rel_cause int(11) DEFAULT NULL ,
+  start_time varchar(30) COLLATE utf8_polish_ci DEFAULT NULL,
+  start_time_unix int(11) DEFAULT NULL,
+  customer_name varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
+  terminal_name varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  ext_billing_id int(11) DEFAULT NULL ,
+  caller varchar(20) COLLATE utf8_polish_ci DEFAULT NULL ,
+  bill_cpb varchar(20) COLLATE utf8_polish_ci DEFAULT NULL ,
+  duration int(11) DEFAULT NULL ,
+  calltype varchar(50) COLLATE utf8_polish_ci DEFAULT NULL ,
+  country varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  description varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  operator varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  type varchar(30) COLLATE utf8_polish_ci DEFAULT NULL ,
+  cost decimal(12,4) NOT NULL DEFAULT '0.0000' ,
+  price decimal(12,4) NOT NULL DEFAULT '0.0000' ,
+  init_charge decimal(12,4) NOT NULL DEFAULT '0.0000' ,
+  reseller_price decimal(12,4) NOT NULL DEFAULT '0.0000' ,
+  reseller_cost decimal(12,4) NOT NULL DEFAULT '0.0000' ,
+  reseller_init_charge decimal(12,4) NOT NULL DEFAULT '0.0000' ,
+  margin decimal(12,4) NOT NULL DEFAULT '0.0000' ,
+  subscription_used enum('f','t') COLLATE utf8_polish_ci DEFAULT NULL ,
+  platform_type varchar(20) COLLATE utf8_polish_ci DEFAULT NULL ,
+  success_call enum('f','t') COLLATE utf8_polish_ci DEFAULT NULL ,
   PRIMARY KEY (id),
-  UNIQUE (name)
-);
+  KEY customerid (customerid),
+  KEY success_call (success_call)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
-CREATE SEQUENCE hv_borough_id_seq;
-CREATE TABLE hv_borough (
-  id integer DEFAULT nextval('hv_borough_id_seq'::text) NOT NULL,
-  name varchar(50) NOT NULL,
-  PRIMARY KEY (id),
-  UNIQUE (name)
-);
-
-CREATE TABLE hv_pcb (
-  id integer NOT NULL,
-  province integer NOT NULL,
-  county integer NOT NULL,
-  borough integer NOT NULL,
+CREATE TABLE IF NOT EXISTS hv_pricelist (
+  id int(11) NOT NULL ,
+  name varchar(50) COLLATE utf8_polish_ci DEFAULT NULL ,
+  charge_internal_call enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f' ,
   PRIMARY KEY (id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+CREATE TABLE IF NOT EXISTS hv_enduserlist (
+  id int(11) NOT NULL,
+  customerid int(11) DEFAULT NULL,
+  password varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
+  email varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
+  admin enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 't',
+  vm_count int(11) DEFAULT NULL,
+  fax_count int(11) DEFAULT NULL,
+  exten_count int(11) DEFAULT NULL,
+  vexten_count int(11) DEFAULT NULL,
+  PRIMARY KEY (id),
+  KEY customerid (customerid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+CREATE TABLE IF NOT EXISTS hv_pstn (
+  id int(11) NOT NULL ,
+  customerid int(11) DEFAULT NULL ,
+  extension varchar(30) COLLATE utf8_polish_ci DEFAULT NULL ,
+  country_code varchar(3) COLLATE utf8_polish_ci NOT NULL DEFAULT '48' ,
+  number varchar(20) COLLATE utf8_polish_ci DEFAULT NULL ,
+  is_main enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 't' ,
+  disa_enabled enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f' ,
+  clir enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f' ,
+  virtual_fax enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f' ,
+  terminal_name varchar(100) COLLATE utf8_polish_ci DEFAULT NULL ,
+  id_auth int(11) DEFAULT NULL ,
+  create_date varchar(30) COLLATE utf8_polish_ci DEFAULT NULL ,
+  voicemail_enabled enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 't' ,
+  PRIMARY KEY (id),
+  KEY customerid (customerid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+CREATE TABLE IF NOT EXISTS hv_pstnrange (
+  id int(11) NOT NULL,
+  range_start bigint(20) DEFAULT NULL,
+  range_end bigint(20) DEFAULT NULL,
+  description varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
+  id_reseller int(11) DEFAULT NULL,
+  country_code varchar(6) COLLATE utf8_polish_ci DEFAULT NULL,
+  open_registration enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f',
+  ussage enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 't',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+CREATE TABLE IF NOT EXISTS hv_pstnusage (
+  extension bigint(20) NOT NULL,
+  number int(11) DEFAULT NULL,
+  customerid int(11) DEFAULT NULL,
+  country_code varchar(6) COLLATE utf8_polish_ci DEFAULT NULL,
+  customer_name varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
+  idrange int(11) DEFAULT NULL,
+  PRIMARY KEY (extension),
+  KEY number (number),
+  KEY idrange (idrange)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+CREATE TABLE IF NOT EXISTS hv_subscriptionlist (
+  id int(11) NOT NULL ,
+  name varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  value decimal(9,2) NOT NULL DEFAULT '0.00' ,
+  f_dld varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
+  f_mobile varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
+  f_ild varchar(255) COLLATE utf8_polish_ci DEFAULT NULL,
+  id_reseller int(11) DEFAULT NULL,
+  invoice_value decimal(9,2) NOT NULL DEFAULT '0.00' ,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+CREATE TABLE IF NOT EXISTS hv_terminal (
+  id int(11) NOT NULL ,
+  customerid int(11) DEFAULT NULL ,
+  username varchar(100) COLLATE utf8_polish_ci DEFAULT NULL ,
+  password varchar(100) COLLATE utf8_polish_ci DEFAULT NULL ,
+  screen_numbers enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 't' ,
+  t38_fax enum('f','t') COLLATE utf8_polish_ci NOT NULL DEFAULT 'f' ,
+  customer_name varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  id_pricelist int(11) DEFAULT NULL ,
+  pricelist_name varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  balance_value decimal(9,2) DEFAULT '0.00' ,
+  id_auth int(11) DEFAULT NULL ,
+  id_subscription int(11) DEFAULT NULL ,
+  subscription_from varchar(50) COLLATE utf8_polish_ci DEFAULT NULL ,
+  subscription_to varchar(50) COLLATE utf8_polish_ci DEFAULT NULL ,
+  value_left decimal(9,2) DEFAULT '0.00' ,
+  id_terminal_location int(11) DEFAULT NULL ,
+  area_code varchar(10) COLLATE utf8_polish_ci DEFAULT NULL ,
+  borough varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  county varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  province varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  sip_proxy varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  subscriptions varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
+  extensions text COLLATE utf8_polish_ci,
+  PRIMARY KEY (id),
+  KEY customerid (customerid)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
+
+CREATE TABLE IF NOT EXISTS hv_province (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  name char(20) COLLATE utf8_polish_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (id),
+  UNIQUE KEY name (name)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci AUTO_INCREMENT=17;
+
+CREATE TABLE IF NOT EXISTS hv_county (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  name varchar(50) COLLATE utf8_polish_ci NOT NULL DEFAULT '',
+  PRIMARY KEY (id),
+  UNIQUE KEY name (name)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci COMMENT='powiaty' AUTO_INCREMENT=430;
+
+CREATE TABLE IF NOT EXISTS hv_borough (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  name varchar(50) COLLATE utf8_polish_ci NOT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY name (name)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci COMMENT='gminy' AUTO_INCREMENT=2438;
+
+CREATE TABLE IF NOT EXISTS hv_pcb (
+  id int(11) NOT NULL,
+  province int(11) NOT NULL,
+  county int(11) NOT NULL,
+  borough int(11) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 
 INSERT INTO hv_province (id, name) VALUES
@@ -700,7 +694,4 @@ INSERT INTO hv_pcb (id,province,county,borough) VALUES
 (2301,16,417,2301),(2302,16,417,2302),(2303,16,417,2303),(2304,16,417,2304),(2305,16,417,2305),(2306,16,418,2308),(2307,16,419,2309),(2308,16,419,2310),(2309,16,419,2311),(2310,16,419,2312),(2311,16,419,2313),
 (2312,16,420,697),(2313,16,420,2315),(2314,16,420,2316),(2315,16,420,2317),(2316,16,420,2318),(2317,16,421,2319),(2318,16,421,2320),(2319,16,422,2321),(2320,16,422,2322),(2321,16,422,2323),(2322,16,422,2324);
 
-SELECT setval('hv_assign_id_seq', (SELECT MAX(id) FROM hv_assign));
-SELECT setval('hv_province_id_seq', (SELECT MAX(id) FROM hv_province));
-SELECT setval('hv_county_id_seq', (SELECT MAX(id) FROM hv_county));
-SELECT setval('hv_borough_id_seq', (SELECT MAX(id) FROM hv_borough));
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSHiperusPlugin', '2015071800');

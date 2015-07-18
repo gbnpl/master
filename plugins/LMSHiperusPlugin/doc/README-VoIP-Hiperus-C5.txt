@@ -13,9 +13,6 @@ Paczkę z pluginem rozpakowujemy do katalogu <lms-path>/plugins/LMSHiperusPlugin
 Tworzymy dowiązanie symboliczne w katalogu img LMS-a o nazwie LMSHiperusPlugin
 do katalogu ../plugins/LMSHiperusPlugin/img
 
-Ładujemy definicje tabel i rekordy z plików doc/hiperus.{mysql,pgsql} do bazy danych
-w oparciu o którą działa LMS (wybieramy plik pasujący do silnika bazy danych przez nas używanego).
-
 Dodajemy ustawienie konfiguracyjne:
 	phpui.plugins=LMSHiperusPlugin
 
