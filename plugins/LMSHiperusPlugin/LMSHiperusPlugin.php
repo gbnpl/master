@@ -31,6 +31,7 @@
  */
 class LMSHiperusPlugin extends LMSPlugin {
 	const plugin_directory_name = 'LMSHiperusPlugin';
+	const DBVERSION = '2015071800';
 
 	public function registerHandlers() {
 		$this->handlers = array(
