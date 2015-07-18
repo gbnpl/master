@@ -141,9 +141,9 @@ class JamboxInitHandler {
 				),
 			),
 		);
-                $menu_keys = array_keys($hook_data);
-                $i = array_search('netdevices', $menu_keys);
-                array_splice($hook_data, $i + 1, 0, $menu_jambox);
+		$menu_keys = array_keys($hook_data);
+		$i = array_search('netdevices', $menu_keys);
+		array_splice($hook_data, $i + 1, 0, $menu_jambox);
 
 		return $hook_data;
 	}
