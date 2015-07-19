@@ -3,7 +3,7 @@
 /*
  *  LMS version 1.11-git
  *
- *  Copyright (C) 2001-2014 LMS Developers
+ *  Copyright (C) 2001-2015 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -32,11 +32,15 @@ use Phine\Observer\Subject;
  *
  * @author Maciej Lew <maciej.lew.1987@gmail.com>
  */
-class LMSPluginManager extends Subject implements SubjectInterface
-{
-    protected $hook_name;
-    protected $hook_data;
-	private $plugins = array();
+class LMSPluginManager extends Subject implements SubjectInterface {
+	const NEW_STYLE = 1;
+	const OLD_STYLE = 2;
+	const ALL_STYLES = 3;
+
+	protected $hook_name;
+	protected $hook_data;
+	private $new_style_plugins = array();
+	private $old_style_plugins = array();
 
 	/**
 	 * Loads plugins
@@ -65,7 +69,8 @@ class LMSPluginManager extends Subject implements SubjectInterface
 					'name' => $plugin_name,
 					'enabled' => false,
 					'new_style' => true,
-					'dbschversion' => null,
+					'dbcurrschversion' => null,
+					'dbschversion' => defined($plugin_name . '::DBVERSION') ? constant($plugin_name . '::DBVERSION') : null,
 				);
 				if (array_key_exists($plugin_name, $plugin_priorities)) {
 					$plugin = new $plugin_name();
@@ -76,48 +81,67 @@ class LMSPluginManager extends Subject implements SubjectInterface
 						array(
 							'enabled' => true,
 							'priority' => $plugin_priorities[$plugin_name],
-							'dbschversion' => $plugin->getDbSchemaVersion(),
+							'dbcurrschversion' => $plugin->getDbSchemaVersion(),
 						)
 					);
 
 					$this->registerObserver($plugin, $plugin_priority);
 				}
-				$this->plugins[$plugin_name] = $plugin_info;
+				$this->new_style_plugins[$plugin_name] = $plugin_info;
 			} else {
 				writesyslog("Unknown plugin $plugin_name at position $position", LOG_ERR);
 				continue;
 			}
 
-		$old_plugins = array_diff($plugins_tuples, array_keys($this->plugins));
-		if (empty($old_plugins))
+		$files = getdir(LIB_DIR . DIRECTORY_SEPARATOR . 'plugins', '^[0-9a-zA-Z_\-]+\.php$');
+		if (empty($files))
 			return;
-		foreach ($old_plugins as $plugin)
-			$this->plugins[$plugin] = array(
-				'name' => $plugin,
-				'enabled' => true,
+		asort($files);
+
+		$old_plugins = array_diff($plugins_tuples, array_keys($this->new_style_plugins));
+		foreach ($files as $plugin_name) {
+			if (!is_readable(LIB_DIR . DIRECTORY_SEPARATOR . 'plugins' . DIRECTORY_SEPARATOR . $plugin_name))
+				continue;
+			$plugin_name = str_replace('.php', '', $plugin_name);
+			$plugin_info = array(
+				'name' => $plugin_name,
+				'enabled' => false,
 				'new_style' => false,
 			);
+			if (array_key_exists($plugin_name, $plugin_priorities))
+				$plugin_info['enabled'] = true;
+			$this->old_style_plugins[$plugin_name] = $plugin_info;
+		}
 	}
 
 	/**
-	 * Returns info about all plugins
+	 * Returns info about selected style plugins
 	 *
+	 * @param integer $style selected style plugins
 	 * @return array of all plugin info
 	 */
-	public function getAllPluginInfo() {
-		return $this->plugins;
+	public function getAllPluginInfo($style = self::ALL_STYLES) {
+		$plugins = array();
+		if ($style & self::NEW_STYLE)
+			$plugins = array_merge($plugins, $this->new_style_plugins);
+		if ($style & self::OLD_STYLE)
+			$plugins = array_merge($plugins, $this->old_style_plugins);
+		return $plugins;
 	}
 
 	/**
 	 * Enables/Disables plugin
 	 *
-	 * @param string plugin name
-	 * @param bool enable plugin flag
+	 * @param string $name plugin name
+	 * @param bool $enable enable plugin flag
 	 */
 	public function enablePlugin($name, $enable) {
-		$this->plugins[$name]['enabled'] = $enable;
+		if (in_array($name, $this->new_style_plugins))
+			$this->new_style_plugins[$name]['enabled'] = $enable;
+		else
+			$this->old_style_plugins[$name]['enabled'] = $enable;
 		$plugins_config = array();
-		foreach ($this->plugins as $plugin_name => $plugin)
+		foreach (array_merge($this->new_style_plugins, $this->old_style_plugins) as $plugin_name => $plugin)
 			if ($plugin['enabled'])
 				$plugins_config[] = $plugin_name
 					. (isset($plugin['priority']) && $plugin['priority'] != SubjectInterface::LAST_PRIORITY ? ':' . $plugin['priority'] : '');
