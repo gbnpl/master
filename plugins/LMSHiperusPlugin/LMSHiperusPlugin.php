@@ -31,7 +31,10 @@
  */
 class LMSHiperusPlugin extends LMSPlugin {
 	const plugin_directory_name = 'LMSHiperusPlugin';
-	const DBVERSION = '2015071800';
+	const PLUGIN_DBVERSION = '2015071800';
+	const PLUGIN_NAME = 'Hiperus C5';
+	const PLUGIN_DESCRIPTION = 'Hiperus C5 Platform Support';
+	const PLUGIN_AUTHOR = 'Sylwester Kondracki, Tomasz Chiliński <tomasz.chilinski@chilan.com>';
 
 	public function registerHandlers() {
 		$this->handlers = array(
