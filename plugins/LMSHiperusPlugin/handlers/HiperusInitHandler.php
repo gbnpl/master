@@ -38,7 +38,8 @@ class HiperusInitHandler {
 	public function lmsInit(LMS $hook_data) {
 		global $HIPERUS;
 
-		$HIPERUS = new LMSHiperus($hook_data->getDb());
+		$db = $hook_data->getDb();
+		$HIPERUS = new LMSHiperus($db);
 
 		return $hook_data;
 	}
