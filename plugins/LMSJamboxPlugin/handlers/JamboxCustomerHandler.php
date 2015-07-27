@@ -43,6 +43,18 @@ class JamboxCustomerHandler {
 		require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSJamboxPlugin::plugin_directory_name
 			. DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'customer.tv.inc.php');
 	}
+
+	public function CustomerEditAfterSubmit(array $hook_data) {
+		global $DB;
+
+		$customerdata = &$hook_data['customerdata'];
+		$DB->Execute('UPDATE customers SET tv_suspend_billing = ? WHERE id = ?', array(
+			isset($customerdata['tv_suspend_billing']) ? $customerdata['tv_suspend_billing'] : 0,
+			$customerdata['id'],
+		));
+
+		return $hook_data;
+	}
 }
 
 ?>

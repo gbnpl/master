@@ -62,6 +62,10 @@ class LMSJamboxPlugin extends LMSPlugin {
 				'class' => 'JamboxCustomerHandler',
 				'method' => 'customerEditOnLoad'
 			),
+			'customeredit_after_submit' => array(
+				'class' => 'JamboxCustomerHandler',
+				'method' => 'customerEditAfterSubmit'
+			),
 		);
 	 }
 }
