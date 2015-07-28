@@ -135,7 +135,7 @@ class HiperusLib {
 	$fh = fopen(H_LOCK_FILE, "c+");
 	if (!$fh)
 		throw new Exception("HiperusLib couldn't open lock file: " . H_LOCK_FILE);
-	$ret = flock($fh, LOCK_EX);
+	flock($fh, LOCK_EX);
 	if (filesize(H_LOCK_FILE)) {
 		$lock = fread($fh, filesize(H_LOCK_FILE));
 		$params = explode(' ', $lock);
