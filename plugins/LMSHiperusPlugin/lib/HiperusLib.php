@@ -139,8 +139,13 @@ class HiperusLib {
 	if (filesize(H_LOCK_FILE)) {
 		$lock = fread($fh, filesize(H_LOCK_FILE));
 		$params = explode(' ', $lock);
-		$timestamp = intval($params[0]);
-		$counter = intval($params[1]);
+		if (count($params) < 2) {
+			$timestamp = time();
+			$counter = 0;
+		} else {
+			$timestamp = intval($params[0]);
+			$counter = intval($params[1]);
+		}
 	} else {
 		$timestamp = time();
 		$counter = 0;
