@@ -15,6 +15,8 @@
 // plik w którym będzie przechowywana sesja
 if(!defined('H_SESSION_FILE')) define('H_SESSION_FILE','/var/lib/hiperus/hiperus1.session');
 
+if (!defined('H_LOCK_FILE')) define('H_LOCK_FILE', '/var/lib/hiperus/hiperus1.lock');
+
 /******** End of configuration section ****************************************/
 
 define('H_URI','https://backend.hiperus.pl:8080/hiperusapi.php');
@@ -32,8 +34,6 @@ class HiperusLib {
     private $_h_sessid;
     private $_h_id_reseller;
     private $_h_debug = false;
-
-	static private $_h_req_count = 0;
 
     /**
      * __construct()
@@ -131,11 +131,33 @@ class HiperusLib {
         $sessid = $this->_h_session;
         $realm = $this->_h_realm;
 
-	self::$_h_req_count++;
-	if (self::$_h_req_count > 25) {
-		self::$_h_req_count = 0;
-		sleep(10);
+	// global hiperus locking mechanism to avoid request limit (30 reqs on 10 secs) on hiperus server
+	$fh = fopen(H_LOCK_FILE, "c+");
+	if (!$fh)
+		throw new Exception("HiperusLib couldn't open lock file: " . H_LOCK_FILE);
+	$ret = flock($fh, LOCK_EX);
+	if (filesize(H_LOCK_FILE)) {
+		$lock = fread($fh, filesize(H_LOCK_FILE));
+		$params = explode(' ', $lock);
+		$timestamp = intval($params[0]);
+		$counter = intval($params[1]);
+	} else {
+		$timestamp = time();
+		$counter = 0;
 	}
+	$counter++;
+	if ($counter >= 29) {
+		ftruncate($fh, 0);
+		rewind($fh);
+		if (time() - $timestamp < 11)
+			sleep(11 - (time() - $timestamp));
+	} else {
+		rewind($fh);
+		fwrite($fh, "$timestamp $counter");
+	}
+	fflush($fh);
+	flock($fh, LOCK_UN);
+	fclose($fh);
 
         $soapClient = new SoapClient(null,array(
             'uri'=>H_URI,

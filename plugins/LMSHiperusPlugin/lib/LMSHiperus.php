@@ -26,6 +26,7 @@
 
 
 define('H_SESSION_FILE', PLUGINS_DIR . DIRECTORY_SEPARATOR . 'LMSHiperusPlugin' . DIRECTORY_SEPARATOR . 'session' . DIRECTORY_SEPARATOR . 'session');
+define('H_LOCK_FILE', PLUGINS_DIR . DIRECTORY_SEPARATOR . 'LMSHiperusPlugin' . DIRECTORY_SEPARATOR . 'session' . DIRECTORY_SEPARATOR . 'lock');
 
 class LMSHiperus {
 	private $DB;
