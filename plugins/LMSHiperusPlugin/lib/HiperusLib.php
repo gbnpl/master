@@ -151,7 +151,7 @@ class HiperusLib {
 		$counter = 0;
 	}
 	$counter++;
-	if ($counter >= 29) {
+	if ($counter >= 25) {
 		ftruncate($fh, 0);
 		rewind($fh);
 		if (time() - $timestamp < 11)
