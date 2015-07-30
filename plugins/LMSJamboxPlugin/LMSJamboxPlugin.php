@@ -54,13 +54,13 @@ class LMSJamboxPlugin extends LMSPlugin {
 				'class' => 'JamboxInitHandler',
 				'method' => 'menuInit'
 			),
-			'customerinfo_on_load' => array(
+			'customerinfo_before_display' => array(
 				'class' => 'JamboxCustomerHandler',
-				'method' => 'customerInfoOnLoad'
+				'method' => 'customerInfoBeforeDisplay'
 			),
-			'customeredit_on_load' => array(
+			'customeredit_before_display' => array(
 				'class' => 'JamboxCustomerHandler',
-				'method' => 'customerEditOnLoad'
+				'method' => 'customerEditBeforeDisplay'
 			),
 			'customeredit_after_submit' => array(
 				'class' => 'JamboxCustomerHandler',

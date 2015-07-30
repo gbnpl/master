@@ -30,25 +30,29 @@
  * @author Tomasz Chiliński <tomasz.chilinski@chilan.com>
  */
 class JamboxCustomerHandler {
-	public function CustomerInfoOnLoad() {
-		global $SMARTY, $LMSTV;
+	public function customerInfoBeforeDisplay(array $hook_data) {
+		global $LMSTV;
 
+		$SMARTY = $hook_data['smarty'];
 		require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSJamboxPlugin::plugin_directory_name
 			. DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'customer.tv.inc.php');
+
+		return $hook_data;
 	}
 
-	public function CustomerEditOnLoad() {
-		global $SMARTY, $LMSTV;
+	public function customerEditBeforeDisplay(array $hook_data) {
+		global $LMSTV;
 
+		$SMARTY = $hook_data['smarty'];
 		require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSJamboxPlugin::plugin_directory_name
 			. DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'customer.tv.inc.php');
+
+		return $hook_data;
 	}
 
-	public function CustomerEditAfterSubmit(array $hook_data) {
-		global $DB;
-
+	public function customerEditAfterSubmit(array $hook_data) {
 		$customerdata = &$hook_data['customerdata'];
-		$DB->Execute('UPDATE customers SET tv_suspend_billing = ? WHERE id = ?', array(
+		LMSDB::getInstance()->Execute('UPDATE customers SET tv_suspend_billing = ? WHERE id = ?', array(
 			isset($customerdata['tv_suspend_billing']) ? $customerdata['tv_suspend_billing'] : 0,
 			$customerdata['id'],
 		));
