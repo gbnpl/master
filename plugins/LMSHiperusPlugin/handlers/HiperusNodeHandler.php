@@ -30,26 +30,27 @@
  * @author Tomasz Chiliński <tomasz.chilinski@chilan.com>
  */
 class HiperusNodeHandler {
-	private function GetHiperusAccounts($cid) {
-		global $SMARTY, $DB, $HIPERUS;
+	private function GetHiperusAccounts(Smarty $SMARTY, $cid) {
+		global $HIPERUS;
 
-		if ($DB->GetOne('SELECT id FROM hv_customers WHERE ext_billing_id=? LIMIT 1', array($cid)))
+		if (LMSDB::getInstance()->GetOne('SELECT id FROM hv_customers WHERE ext_billing_id=? LIMIT 1', array($cid)))
 			$SMARTY->assign('hiperusaccountcustomerlist',
 				$HIPERUS->GetCustomerListList('name,asc', array('extid' => $cid)));
 	}
 
-	public function NodeInfoOnLoad() {
-		global $DB;
-		$this->GetHiperusAccounts($DB->GetOne('SELECT ownerid FROM nodes WHERE id = ?', array(intval($_GET['id']))));
+	public function nodeInfoBeforeDisplay(array $hook_data) {
+		$this->GetHiperusAccounts($hook_data['smarty'], LMSDB::getInstance()->GetOne('SELECT ownerid FROM nodes WHERE id = ?', array(intval($_GET['id']))));
+		return $hook_data;
 	}
 
-	public function NodeEditOnLoad() {
-		global $DB;
-		$this->GetHiperusAccounts($DB->GetOne('SELECT ownerid FROM nodes WHERE id = ?', array(intval($_GET['id']))));
+	public function nodeEditBeforeDisplay(array $hook_data) {
+		$this->GetHiperusAccounts($hook_data['smarty'], LMSDB::getInstance()->GetOne('SELECT ownerid FROM nodes WHERE id = ?', array(intval($_GET['id']))));
+		return $hook_data;
 	}
 
-	public function NodeAddOnLoad() {
-		$this->GetHiperusAccounts(intval($_GET['ownerid']));
+	public function nodeAddBeforeDisplay(array $hook_data) {
+		$this->GetHiperusAccounts($hook_data['smarty'], intval($_GET['ownerid']));
+		return $hook_data;
 	}
 }
 

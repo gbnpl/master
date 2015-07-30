@@ -70,25 +70,25 @@ class LMSHiperusPlugin extends LMSPlugin {
 				'class' => 'HiperusInitHandler',
 				'method' => 'userpanelModulesDirInit'
 			),
-			'customerinfo_on_load' => array(
+			'customerinfo_before_display' => array(
 				'class' => 'HiperusCustomerHandler',
-				'method' => 'customerInfoOnLoad'
+				'method' => 'customerInfoBeforeDisplay'
 			),
-			'customeredit_on_load' => array(
+			'customeredit_before_display' => array(
 				'class' => 'HiperusCustomerHandler',
-				'method' => 'customerEditOnLoad'
+				'method' => 'customerEditBeforeDisplay'
 			),
-			'nodeadd_on_load' => array(
+			'nodeadd_before_display' => array(
 				'class' => 'HiperusNodeHandler',
-				'method' => 'NodeAddOnLoad'
+				'method' => 'nodeAddBeforeDisplay'
 			),
-			'nodeinfo_on_load' => array(
+			'nodeinfo_before_display' => array(
 				'class' => 'HiperusNodeHandler',
-				'method' => 'NodeInfoOnLoad'
+				'method' => 'nodeInfoBeforeDisplay'
 			),
-			'nodeedit_on_load' => array(
+			'nodeedit_before_display' => array(
 				'class' => 'HiperusNodeHandler',
-				'method' => 'NodeEditOnLoad'
+				'method' => 'nodeEditBeforeDisplay'
 			),
 		);
 	 }

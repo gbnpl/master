@@ -30,20 +30,22 @@
  * @author Tomasz Chiliński <tomasz.chilinski@chilan.com>
  */
 class HiperusCustomerHandler {
-	private function GetHiperusAccounts($cid) {
-		global $SMARTY, $HIPERUS;
+	private function GetHiperusAccounts(Smarty $SMARTY, $cid) {
+		global $HIPERUS;
 
 		if (LMSDB::getInstance()->GetOne('SELECT id FROM hv_customers WHERE ext_billing_id=? LIMIT 1', array($cid)))
 			$SMARTY->assign('hiperusaccountcustomerlist',
 				$HIPERUS->GetCustomerListList('name,asc', array('extid' => $cid)));
 	}
 
-	public function CustomerInfoOnLoad() {
-		$this->GetHiperusAccounts(intval($_GET['id']));
+	public function customerInfoBeforeDisplay(array $hook_data) {
+		$this->GetHiperusAccounts($hook_data['smarty'], intval($_GET['id']));
+		return $hook_data;
 	}
 
-	public function CustomerEditOnLoad() {
-		$this->GetHiperusAccounts(intval($_GET['id']));
+	public function customerEditBeforeDisplay(array $hook_data) {
+		$this->GetHiperusAccounts($hook_data['smarty'], intval($_GET['id']));
+		return $hook_data;
 	}
 }
 
