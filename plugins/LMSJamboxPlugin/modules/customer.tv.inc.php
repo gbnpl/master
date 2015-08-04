@@ -80,6 +80,34 @@ try{
 			$errormsg = $e->getMessage();
 		}
 	}
+	
+	
+	/** Upgrade pakietu **/
+	if ($_POST['formupgradepackage'] == "1"){
+	    
+	    try{
+	        $res = $LMSTV->PackageUpgrade($customerid, $_POST['subscription_id'], $_POST['new_package_id'], $_POST['new_package_date']); 
+ 
+	        $SESSION->redirect('?m=customerinfo&id='.$customerid);
+	    } catch (Exception $e){
+	        $errormsg = $e->getMessage();
+	    }
+	  
+	}
+	
+	/** Wydawanie pakietu prezentu po przedłużeniu umowy **/
+	if ($_POST['formaddextrapackage'] == "1"){
+	     
+	    try{
+	        $res = $LMSTV->AddExtraPackageForSubscription($customerid, $_POST['subscription_id'], $_POST['extra_package_id']);
+	
+	        $SESSION->redirect('?m=customerinfo&id='.$customerid);
+	    } catch (Exception $e){
+	        $errormsg = $e->getMessage();
+	    }
+	     
+	}
+	
 
 	if ($_GET['account_del']){
 		try {
@@ -164,6 +192,7 @@ try{
 	$cust_data 				= $LMSTV->GetCustomer($customerid);
 		
 	$customertvjamboxaccounts 	= $LMSTV->CustomerGetSubscriptions($customerid, $cust_number);
+	
 	if (!empty($customertvjamboxaccounts)) {
 		$subnetlist 		= $LMSTV->SubnetList(); 
 		$tvmessagelist 		= $LMSTV->MessagesList($customerid, $cust_number);
@@ -193,6 +222,12 @@ try{
 			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['pkg_base'] = (bool)ereg("pkg_base", $pkg['pkg_class']);
 			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['stb_max'] = (int)str_replace(array("pkg_base", "pkg_device", "(", ")", ","), "", $pkg['pkg_class']);
 			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['stb_left'] = $customertvjamboxaccounts[$key]['subscriptions'][$keyp]['stb_max'];
+			
+			/** Wyciąga pakiety do upgradu **/
+			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['pkg_for_upgrade'] = $LMSTV->GetPackagesForUpgrade($customerid, $pkg['subscription_id']);
+			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['pkg_extra'] = $LMSTV->GetExtraPackagesForSubscription($customerid, $pkg['subscription_id']);
+			
+			
 			foreach ($stb_list as $keys => $stb){
 				if ($stb['cust_order_id'] == $pkg['cust_order_id']){
 					$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['stb_list'][] = $stb;

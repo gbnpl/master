@@ -236,6 +236,15 @@
 									<a href="#tv-edit-account" class="hand" onclick="showOrHide('tv-terminate-{$item.cust_order_id}');">Anuluj</a>&nbsp;&nbsp;&nbsp;<a href="javascript:document.tvterminate{$item.cust_order_id}.submit();" accesskey="S" style="float:right">OK <img src="img/save.gif" alt=""></a>
 									</form>
 								</div>
+								
+								{if $item.pkg_for_upgrade.packages}
+								<a href="#tv-upgrade-packages{$item.cust_order_id}" class="hand" onclick="showOrHide('tv-upgrade-packages{$item.cust_order_id}');">Upgrade pakietu <img src="img/up.gif" alt="[ Upgrade pakietu  ]"></a>
+								{/if}
+								
+								{if $item.pkg_extra}
+								<a href="#tv-extra-packages{$item.cust_order_id}" class="hand" onclick="showOrHide('tv-extra-packages{$item.cust_order_id}');">Wydaj prezent <img src="img/{LMSJamboxPlugin::plugin_directory_name}/gift.gif" alt="[ Wydaj prezent  ]"></a>
+								{/if}
+								
 								{/if}
 								
 								{if $item.order_status_id eq 2}
@@ -249,12 +258,83 @@
 								{if $item.stb_left > 0 }
 								<a href="#tv-add-stb{$item.cust_order_id}" class="hand" onclick="showOrHide('tv-add-stb{$item.cust_order_id}');">Wydaj STB <img src="img/node_on.gif" alt="[ Wydaj STB ]"></a>
 								{/if}
+								
 							{/if}
 						</td>
 					</tr>	
-					{if $item.stb_left > 0}
+					
+					
+					<!--  Upgrade pakietu -->
+						<tr><td colspan=10 align=left>
+						<div id="tv-upgrade-packages{$item.cust_order_id}" style="display: none;">
+						<table width="100%">
+						<tr class="dark"><td colspan=2>Tę usługę możesz upgrade'ować</td></tr>
+						<form action="" name="formupgradepackage{$item.subscription_id}" id="formupgradepackage{$item.subscription_id}" method="post">
+							{foreach from=$item.pkg_for_upgrade.packages item = package}
+							<tr class="{cycle values="light"}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+								<td>
+									<input type="radio" name="new_package_id" id="new_package_id_{$item.subscription_id}{$package.package_id}" value="{$package.package_id}">
+								</td>
+								<td>
+									<label for="new_package_id_{$item.subscription_id}{$package.package_id}"><strong>{$package.pkg_name}</strong> {$package.pkg_desc}</label>
+								</td>
+							</tr>
+									{foreach from=$package.upgrade_dates item = date}
+							<tr><td colspan="2" align=right>										
+										<input type="radio" name="new_package_date" id="new_package_date_{$item.subscription_id}{$package.package_id}{$date.upgrade_date}" value="{$date.upgrade_date}"><label for="new_package_date_{$item.subscription_id}{$package.package_id}{$date.upgrade_date}">Data przejścia: {$date.upgrade_date}</label>		
+												Kwota kary brutto: <strong>{$date.termination_fee.fee_cust_gross|default:0}</strong>
+												Kwota kary B2B netto za zerwanie umowy (zostanie doliczona do najbliższego raportu): <strong>{$date.termination_fee.fee_b2b_netto|default:0}</strong>	
+							</td></tr>
+									{/foreach}
+							{/foreach}
+	
+							<tr class="{cycle values="light"}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+								<td colspan=2>
+									<input type="hidden" id="cust_number" name="cust_number" value="{$cust_data.cust_number}">
+									<input type="hidden" id="subscription_id" name="subscription_id" value="{$item.subscription_id}">
+									<input type="hidden" id="formupgradepackage" name="formupgradepackage" value="1">
+									<a href="javascript:document.formupgradepackage{$item.subscription_id}.submit();" accesskey="S" style="float:right">Zapisz <img src="img/save.gif" alt=""></a>
+								</td>
+							</tr>
+							</form>
+						</table>
+						</div>
+					</td></tr>
+					
+					{if $item.pkg_extra}
+					<!-- Pakiety prezenty -->
 					<tr>
-						<td colspan="10" class="text-right">
+						<td colspan=10 align=left>
+							<div id="tv-extra-packages{$item.cust_order_id}" style="display: none;">
+							<table width=100%>
+							<tr class="dark"><td colspan=2>Do tej usługi możesz wydać pakiet prezent:</td></tr>
+							<form action="" name="formaddextrapackage{$item.subscription_id}" id="formaddextrapackage{$item.subscription_id}" method="post">
+								{foreach from=$item.pkg_extra item = pkg_extra }
+								<tr class="{cycle values="light,lucid"}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+									<td colspan=2>
+										<input type="radio" name="extra_package_id" id="extra_package_id_{$item.subscription_id}{$pkg_extra.package_id}" value="{$pkg_extra.package_id}">
+										<label for="extra_package_id_{$item.subscription_id}{$pkg_extra.package_id}"><strong>{$pkg_extra.pkg_name}</strong> <br>{$pkg_extra.pkg_desc}</label>
+									</td>
+								</tr>
+								{/foreach}
+								<tr class="lucid">
+									<td colspan=2>
+										<input type="hidden" id="cust_number" name="cust_number" value="{$cust_data.cust_number}">
+										<input type="hidden" id="subscription_id" name="subscription_id" value="{$item.subscription_id}">
+										<input type="hidden" id="formaddextrapackage" name="formaddextrapackage" value="1">
+										<a href="javascript:document.formaddextrapackage{$item.subscription_id}.submit();" accesskey="S" style="float:right">Zapisz <img src="img/save.gif" alt=""></a>
+									</td>
+								</tr>
+								</form>
+							</table>
+							</div>
+						</td>
+					</tr>
+					{/if}
+					
+					 <!--  -->
+					{if $item.stb_left > 0}
+					<tr><td colspan=10 class="text-right">
 						<div id="tv-add-stb{$item.cust_order_id}" style="display: none;">
 						Do tego zamówienia możesz wydać {$item.stb_left} STB model {$item.pkg_additional_type}<br> <br>
 						<form action="" name="formaddstb{$item.cust_order_id}" id="formaddstb{$item.cust_order_id}" method="post">
@@ -272,8 +352,7 @@
 						</script>
 
 						</div>
-						</td>
-					</tr>
+					</td></tr>
 					{/if}
 
 					{if $item.stb_count }

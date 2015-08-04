@@ -377,6 +377,26 @@ class LMSTV extends LMS {
 		return $res;
 
 	}
+	
+	public function GetPackagesForUpgrade($customerid,$subscription_id){
+	    $cache_name = __FUNCTION__.$subscription_id;
+	    if (!$_SESSION['tv_cache'] || !$res = $this->tv_cache->load($cache_name)){
+	        $res = $this->s->get('getPackagesForUpgrade', array((string)$subscription_id));
+	        if ($_SESSION['tv_cache']) $this->tv_cache->save($res, $cache_name,array('customer'.$customerid));
+	    }
+	    
+	    return $res;
+	}
+	
+	public function GetExtraPackagesForSubscription($customerid,$subscription_id){
+	    $cache_name = __FUNCTION__.$subscription_id;
+	    if (!$_SESSION['tv_cache'] || !$res = $this->tv_cache->load($cache_name)){
+	        $res = $this->s->get('getExtraPackagesForSubscription', array((string)$subscription_id));
+	        if ($_SESSION['tv_cache']) $this->tv_cache->save($res, $cache_name,array('customer'.$customerid));
+	    }
+	     
+	    return $res;
+	}
 
 	public function SubnetList(){
 		$cache_name = __FUNCTION__;
@@ -461,6 +481,21 @@ class LMSTV extends LMS {
 		
 		return $this->s->get('setCustomerPaymentInfo', array($upload_date, $payment_info_array));
 	}
+	
+	/** Uniwersalny upgrade **/
+	public function PackageUpgrade($customerid, $subscription_id, $new_package_id, $new_package_date){
+	    $this->_cleanCustomerCache($customerid);
+	    return $this->s->get('packageUpgrade', array($subscription_id, $new_package_id, $new_package_date, true));
+	    
+	}
+	
+	/** Pakiety prezenty **/
+	public function AddExtraPackageForSubscription($customerid, $subscription_id, $package_id){
+	    $this->_cleanCustomerCache($customerid);
+	    return $this->s->get('addExtraPackageForSubscription', array($subscription_id, $package_id));
+	     
+	}
+	
 }
 
 ?>
