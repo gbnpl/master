@@ -34,6 +34,7 @@ class JamboxCustomerHandler {
 		global $LMSTV;
 
 		$SMARTY = $hook_data['smarty'];
+		$customerid = $hook_data['customerinfo']['id'];
 		require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSJamboxPlugin::plugin_directory_name
 			. DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'customer.tv.inc.php');
 
@@ -44,6 +45,7 @@ class JamboxCustomerHandler {
 		global $LMSTV;
 
 		$SMARTY = $hook_data['smarty'];
+		$customerid = $hook_data['customerinfo']['id'];
 		require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSJamboxPlugin::plugin_directory_name
 			. DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'customer.tv.inc.php');
 
