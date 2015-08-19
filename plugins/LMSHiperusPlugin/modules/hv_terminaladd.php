@@ -57,9 +57,10 @@ if (isset($_POST['terminaladd'])) {
 			$dane['id_terminal_location'] = $default_location;
 		}
 	}
-	if (ConfigHelper::checkValue(ConfigHelper::getConfig('hiperus_c5.default_terminal_username', false))) {
+	$default_terminal_username = ConfigHelper::getConfig('hiperus_c5.default_terminal_username');
+	if (!empty($default_terminal_username)) {
 		$terminalcount = 1 + $DB->GetOne("SELECT COUNT(*) FROM hv_terminal WHERE customerid = ?", array($cusid));
-		$dane['username'] = $account['ext_billing_id'] . '-' . $terminalcount;
+		$dane['username'] = preg_replace(array('/%cid/', '/%tcount/'), array($account['ext_billing_id'], $terminalcount), $default_terminal_username);
 	}
 	$dane['subscription_from'] = strftime("%Y/%m/%d");
 }
