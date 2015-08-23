@@ -219,7 +219,7 @@ try{
 		foreach ($acc['subscriptions'] as $keyp => $pkg){
 			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['stb_list'] = array();
 			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['stb_count'] = 0;
-			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['pkg_base'] = (bool)ereg("pkg_base", $pkg['pkg_class']);
+			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['pkg_base'] = (bool)preg_match('/pkg_base/', $pkg['pkg_class']);
 			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['stb_max'] = (int)str_replace(array("pkg_base", "pkg_device", "(", ")", ","), "", $pkg['pkg_class']);
 			$customertvjamboxaccounts[$key]['subscriptions'][$keyp]['stb_left'] = $customertvjamboxaccounts[$key]['subscriptions'][$keyp]['stb_max'];
 			
