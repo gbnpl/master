@@ -31,7 +31,7 @@
  */
 class JamboxCustomerHandler {
 	public function customerInfoBeforeDisplay(array $hook_data) {
-		global $LMSTV;
+		global $LMSTV, $SESSION;
 
 		$SMARTY = $hook_data['smarty'];
 		$customerid = $hook_data['customerinfo']['id'];
@@ -42,7 +42,7 @@ class JamboxCustomerHandler {
 	}
 
 	public function customerEditBeforeDisplay(array $hook_data) {
-		global $LMSTV;
+		global $LMSTV, $SESSION;
 
 		$SMARTY = $hook_data['smarty'];
 		$customerid = $hook_data['customerinfo']['id'];
