@@ -44,6 +44,7 @@ $parameters = array(
 	'h'	=>	'help',
 	'l:'	=>	'leftmonth:',
 	'f:'	=>	'fakedate:',
+	's'		=>	'subscription-in-advance',
 );
 
 foreach ($parameters as $key => $val) {
@@ -174,6 +175,8 @@ else
 if (empty($leftmonth))
 	$leftmonth = 1;
 
+$subscription_in_advance = array_key_exists('subscription-in-advance', $options);
+
 $currtime = localtime2();
 $curr_month = strftime("%m", $currtime);
 $curr_year = strftime("%Y", $currtime);
@@ -181,6 +184,9 @@ $enddate = mktime(23, 59, 59, $curr_month - $leftmonth + 1, 0, $curr_year);
 $date = mktime(12, 0, 0, $curr_month - $leftmonth, 1, $curr_year);
 $month = intval(strftime("%m", $date));
 $year = intval(strftime("%Y", $date));
+$date = mktime(12, 0, 0, $curr_month - $leftmonth + 1, 1, $curr_year);
+$year_sub = $subscription_in_advance ? intval(strftime("%Y", $date)) : $year;
+$month_sub = $subscription_in_advance ? intval(strftime("%m", $date)) : $month;
 $datetime = strftime("%Y-%m-%d %H:%M", $enddate);
 $date = strftime("%Y-%m-%d", $enddate);
 
@@ -240,7 +246,7 @@ foreach ($customers as $i => $customer) {
 			'discount'		=> '0',
 			'pdiscount'		=> '0',
 			'vdiscount'		=> '0',
-			'name'			=> 'Abonament VoIP: ' . $customers[$i]['terminals'][$j]['pricelist_name'] . (empty($numbers) ? '' : ' (' . implode(', ', $numbers) . ')') . ' za okres ' . $months[$month] . ' ' . $year,
+			'name'			=> 'Abonament VoIP: ' . $customers[$i]['terminals'][$j]['pricelist_name'] . (empty($numbers) ? '' : ' (' . implode(', ', $numbers) . ')') . ' za okres ' . $months[$month_sub] . ' ' . $year_sub,
 			'tariffid'		=> 0
 		);
 		if ($customers[$i]['terminals'][$j]['cost'] > 0) {
