@@ -442,9 +442,12 @@ class LMSHiperus {
     function GetCustomerLMSMinList($id=NULL)
     {
 	if (is_null($id))
-	return $this->DB->GetAll('SELECT id, lastname, name, email, address,zip,city,ten,ssn,regon,post_address,post_zip,post_city FROM customers WHERE deleted=0 AND status=3  ORDER BY lastname,name ASC  ;');
+	return $this->DB->GetAll('SELECT id, lastname, name, (SELECT contact FROM customercontacts WHERE customerid = customers.id AND type = ? LIMIT 1) AS email,
+		address,zip,city,ten,ssn,regon,post_address,post_zip,post_city FROM customers WHERE deleted=0 AND status=3
+		ORDER BY lastname,name ASC', array(CONTACT_EMAIL));
 	else
-	return $this->DB->GetRow('SELECT id, lastname, name, email, address,zip,city,ten,ssn,regon,post_address,post_zip,post_city FROM customers WHERE  id='.$id.' ;');
+	return $this->DB->GetRow('SELECT id, lastname, name, (SELECT contact FROM customercontacts WHERE customerid = customers.id AND type = ? LIMIT 1) AS email,
+		address,zip,city,ten,ssn,regon,post_address,post_zip,post_city FROM customers WHERE  id=?', array($id, CONTACT_EMAIL));
     }
     
     function GetPriceList()
