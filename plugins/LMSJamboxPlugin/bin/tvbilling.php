@@ -177,7 +177,7 @@ if (empty($numberplans))
 
 foreach ($to_insert as $key => $i){
 	$customerid = $i[0]['customerid'];
-	if (empty($customerid) || !$DB->GetOne("SELECT id FROM customers WHERE cust_number = ?", array($customerid)))
+	if (empty($customerid) || !$DB->GetOne("SELECT id FROM customers WHERE tv_cust_number = ?", array($customerid)))
 		continue;
 
 	$document = $DB->GetRow("SELECT MAX(d.id), MAX(itemid) AS itemid FROM documents d
