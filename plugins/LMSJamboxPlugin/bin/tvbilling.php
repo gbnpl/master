@@ -139,6 +139,8 @@ function localtime2() {
 		return time();
 }
 
+$addinvoices = ConfigHelper::checkConfig('jambox.tvbilling_addinvoices');
+
 $fakedate = (array_key_exists('fakedate', $options) ? $options['fakedate'] : NULL);
 $cdate = strftime("%s", localtime2());
 $year = strftime("%Y", localtime2());
@@ -150,8 +152,27 @@ $endtime = $starttime + 86400;
 
 $to_insert = array();
 
-$res = $DB->GetAll("SELECT * FROM tv_billingevent WHERE docid = 0 OR docid IS NULL
+// prepare customergroups in sql query
+$customergroups = " AND EXISTS (SELECT 1 FROM customergroups g, customerassignments ca 
+	WHERE c.id = ca.customerid 
+		AND g.id = ca.customergroupid 
+		AND (%groups)) ";
+$groupnames = ConfigHelper::getConfig('jambox.tvbilling_customergroups');
+$groupsql = "";
+$groups = preg_split("/[[:blank:]]+/", $groupnames, -1, PREG_SPLIT_NO_EMPTY);
+foreach ($groups as $group) {
+	if (!empty($groupsql))
+		$groupsql .= " OR ";
+	$groupsql .= "UPPER(g.name) = UPPER('".$group."')";
+}
+if (!empty($groupsql))
+	$customergroups = preg_replace("/\%groups/", $groupsql, $customergroups);
+
+$res = $DB->GetAll("SELECT b.* FROM tv_billingevent b
+	JOIN customers c ON c.id = b.customerid
+	WHERE (docid = 0 OR docid IS NULL)
 		AND be_selling_date >= ? AND be_selling_date <= ?
+		" . (!empty($groupnames) ? $customergroups : "") . "
 	ORDER BY account_id", array($start_date, $end_date));
 if (!empty($res))
 	foreach ($res as $key => $r) {
@@ -175,15 +196,19 @@ foreach ($results as $row)
 if (empty($numberplans))
 	die("No invoice number plans found!\n");
 
+//$DB->BeginTrans();
 foreach ($to_insert as $key => $i){
 	$customerid = $i[0]['customerid'];
-	if (empty($customerid) || !$DB->GetOne("SELECT id FROM customers WHERE tv_cust_number = ?", array($customerid)))
+	if (empty($customerid) || !$DB->GetOne("SELECT id FROM customers WHERE tv_cust_number = ?", array($i[0]['cust_number'])))
 		continue;
 
-	$document = $DB->GetRow("SELECT MAX(d.id), MAX(itemid) AS itemid FROM documents d
-			JOIN invoicecontents ic ON ic.docid = d.id
-			WHERE customerid = ? AND sdate >= ? AND sdate < ?
-			GROUP BY d.id", array($customerid, $starttime, $endtime));
+	if ($addinvoices)
+		$document = null;
+	else
+		$document = $DB->GetRow("SELECT MAX(d.id), MAX(itemid) AS itemid FROM documents d
+				JOIN invoicecontents ic ON ic.docid = d.id
+				WHERE customerid = ? AND sdate >= ? AND sdate < ?
+				GROUP BY d.id", array($customerid, $starttime, $endtime));
 	if (empty($document)) {
 		$customer = $DB->GetRow("SELECT lastname, name, address, city, zip, ssn, ten, countryid, divisionid, paytime, paytype
 			FROM customers WHERE id = ?", array($customerid));
@@ -201,12 +226,12 @@ foreach ($to_insert as $key => $i){
 			if (isset($PAYTYPES[$paytype]))
 				$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
 
-                $numberplanid = $customer['numberplanid'];
-                if (empty($numberplanid))
-                        $numberplanid = $numberplans[$customer['divisionid']];
-                if (!isset($numbertemplates[$numberplanid]))
-                        $numbertemplates[$numberplanid] = $DB->GetOne("SELECT template FROM numberplans WHERE id = ?", array($numberplanid));
-                $number = $LMS->GetNewDocumentNumber(DOC_INVOICE, $numberplanid, $cdate);
+		$numberplanid = $customer['numberplanid'];
+		if (empty($numberplanid))
+			$numberplanid = $numberplans[$customer['divisionid']];
+		if (!isset($numbertemplates[$numberplanid]))
+			$numbertemplates[$numberplanid] = $DB->GetOne("SELECT template FROM numberplans WHERE id = ?", array($numberplanid));
+		$number = $LMS->GetNewDocumentNumber(DOC_INVOICE, $numberplanid, $cdate);
 
 		$division = $DB->GetRow("SELECT name, shortname, address, city, zip, countryid, ten, regon,
 			account, inv_header, inv_footer, inv_author, inv_cplace 
@@ -239,24 +264,25 @@ foreach ($to_insert as $key => $i){
 		$taxval =  $item['be_vat'] * 100;
 		$taxid = $DB->GetOne("SELECT id FROM taxes WHERE value = ?
 			AND validfrom < ? AND (validto = 0 OR validto <= ?)",
-			array($taxval, $cdate, $cdate));	
+			array($taxval, $cdate, $cdate));
 
 		$itemid++;
 		$be_gross = str_replace(',', '.', $item['be_gross']);
 
 		$DB->Execute("INSERT INTO invoicecontents (docid, value, taxid, prodid,
-			content, count, description, tariffid, itemid)
-			VALUES (?, ?, ?, '', 'usl.', 1, ?, 'FIXMETVSGT', ?)",
+			content, count, description, itemid)
+			VALUES (?, ?, ?, '', 'usl.', 1, ?, ?)",
 			array($docid, $item['be_gross'], $taxid, $item['be_desc'], $itemid));
 
 		$value =  str_replace(",", ".", $item['be_gross'] * -1);
 		$DB->Execute("INSERT INTO cash (time, value, taxid, customerid, comment, docid, itemid)
 			VALUES (?, ?, ?, ?, ?, ?, ?)",
-			array($cdate, $value, $taxid, $customerid, 'usl.', $item['be_desc'], $docid, $itemid));
+			array($cdate, $value, $taxid, $customerid, $item['be_desc'], $docid, $itemid));
 
 		$DB->Execute("UPDATE tv_billingevent SET docid = ? WHERE id = ?", array($docid, $item['id']));
 	}
 }
+//$DB->RollbackTrans();
 
 $DB->Destroy();
 
