@@ -1309,29 +1309,31 @@ class LMSHiperus {
 	    else return $response->result_set;
     }
     
-    function GetConfigHiperus()
-    {
-	$hlib = new HiperusLib();
-        $r = new stdClass();
-        $response = $hlib->sendRequest("CheckLogin",$r);
-        if(!$response || !$response->success) return false;
-        else 
-        {
-	    $result = $response->result_set[0];
+	public function GetConfigHiperus()
+	{
+		$hlib = new HiperusLib();
+		$r = new stdClass();
+		$response = $hlib->sendRequest("CheckLogin", $r);
+		if (!$response || !$response->success)
+			return false;
+		else  {
+			$result = $response->result_set[0];
 
-	    if ($this->DB->GetOne('SELECT 1 FROM uiconfig WHERE section=? AND var=?',array('hiperus_c5','voip_services')))
-		$this->DB->Execute('UPDATE uiconfig SET value=? WHERE section=? AND var=?',array(($result['voip_services'] ? 1 : 0),'hiperus_c5','voip_services'));
-	    else
-		$this->DB->Execute('INSERT INTO uiconfig SET value=? WHERE section=? AND var=?',
-			array(($result['voip_services'] ? 1 : 0), 'hiperus_c5','voip_services'));
+			if ($this->DB->GetOne('SELECT 1 FROM uiconfig WHERE section=? AND var=?', array('hiperus_c5', 'voip_services')))
+				$this->DB->Execute('UPDATE uiconfig SET value=? WHERE section=? AND var=?',
+					array($result['voip_services'] ? 1 : 0, 'hiperus_c5', 'voip_services'));
+			else
+				$this->DB->Execute('INSERT INTO uiconfig (section, var, value) VALUES (?, ?, ?)',
+					array('hiperus_c5','voip_services', $result['voip_services'] ? 1 : 0));
 
-	    if ($this->DB->GetOne('SELECT 1 FROM uiconfig WHERE section=? AND var=?',array('hiperus_c5','wlr')))
-		$this->DB->Execute('UPDATE uiconfig SET value=? WHERE section=? AND var=?',array(($result['wlr_services'] ? 1 : 0),'hiperus_c5','wlr'));
-	    else
-		$this->DB->Execute('INSERT INTO uiconfig SET value=? WHERE section=? AND var=?',
-			array(($result['wlr_services'] ? 1 : 0), 'hiperus_c5','wlr'));
+			if ($this->DB->GetOne('SELECT 1 FROM uiconfig WHERE section=? AND var=?', array('hiperus_c5', 'wlr')))
+				$this->DB->Execute('UPDATE uiconfig SET value=? WHERE section=? AND var=?',
+					array($result['wlr_services'] ? 1 : 0, 'hiperus_c5', 'wlr'));
+			else
+				$this->DB->Execute('INSERT INTO uiconfig (section, var, value) VALUES (?, ?, ?)',
+					array('hiperus_c5', 'wlr', $result['wlr_services'] ? 1 : 0));
+		}
 	}
-    }
     
     
     
