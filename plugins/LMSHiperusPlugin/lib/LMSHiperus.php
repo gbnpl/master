@@ -1322,13 +1322,13 @@ class LMSHiperus {
 	    if ($this->DB->GetOne('SELECT 1 FROM uiconfig WHERE section=? AND var=?',array('hiperus_c5','voip_services')))
 		$this->DB->Execute('UPDATE uiconfig SET value=? WHERE section=? AND var=?',array(($result['voip_services'] ? 1 : 0),'hiperus_c5','voip_services'));
 	    else
-		$this->DB->Execute('INSEET INTO uiconfig SET value=? WHERE section=? AND var=?',
+		$this->DB->Execute('INSERT INTO uiconfig SET value=? WHERE section=? AND var=?',
 			array(($result['voip_services'] ? 1 : 0), 'hiperus_c5','voip_services'));
 
 	    if ($this->DB->GetOne('SELECT 1 FROM uiconfig WHERE section=? AND var=?',array('hiperus_c5','wlr')))
 		$this->DB->Execute('UPDATE uiconfig SET value=? WHERE section=? AND var=?',array(($result['wlr_services'] ? 1 : 0),'hiperus_c5','wlr'));
 	    else
-		$this->DB->Execute('INSEET INTO uiconfig SET value=? WHERE section=? AND var=?',
+		$this->DB->Execute('INSERT INTO uiconfig SET value=? WHERE section=? AND var=?',
 			array(($result['wlr_services'] ? 1 : 0), 'hiperus_c5','wlr'));
 	}
     }
