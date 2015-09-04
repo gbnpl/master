@@ -145,7 +145,7 @@ class LMSHiperus {
 							    (!empty($subscription['id_reseller']) ? $subscription['id_reseller'] : NULL),
 							    (!empty($subscription['invoice_value']) ? $subscription['invoice_value'] : '0.00')));
 					else
-						$this->DB->Execute('UPDATE hv_subscriptionlist name=?, value=?, f_dld=?, f_mobile=?, f_ild=?, id_reseller=?, invoice_value=? WHERE id=?',
+						$this->DB->Execute('UPDATE hv_subscriptionlist SET name=?, value=?, f_dld=?, f_mobile=?, f_ild=?, id_reseller=?, invoice_value=? WHERE id=?',
 							array(
 							    (!empty($subscription['name']) ? $subscription['name'] : NULL),
 							    (!empty($subscription['value']) ? $subscription['value'] : '0.00'),
