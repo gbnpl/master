@@ -26,18 +26,10 @@
 
 $this->BeginTrans();
 
-$this->Execute("
-	CREATE TABLE plicbdoperators (
-		name varchar(255) NOT NULL,
-		id int(11) NOT NULL,
-		rpt int(11) NOT NULL,
-		ten varchar(16) NOT NULL DEFAULT '',
-		INDEX id (id),
-		INDEX rpt (rpt)
-	) ENGINE=InnoDB;
-");
+$this->Execute("DROP TABLE plicbdlocalisation");
+$this->Execute("DROP TABLE plicbdoperators");
 
-$this->Execute("UPDATE dbinfo SET keyvalue = ? WHERE keytype = ?", array('2015090200', 'dbversion'));
+$this->Execute("UPDATE dbinfo SET keyvalue = ? WHERE keytype = ?", array('2015091300', 'dbversion'));
 
 $this->CommitTrans();
 
