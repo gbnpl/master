@@ -1,4 +1,5 @@
-{include file="header.html"}
+{extends file="layout.html"}
+{block name="module_content"}
 {include file="calendar_js.html"}
 <H1>{$layout.pagetitle}</H1>
 <P><FORM METHOD="POST" ACTION="?m=stckreceivenoteedit&id={$receivenoteedit.id}" NAME="receivenoteedit">
@@ -98,4 +99,4 @@ cal5.time_comp = false;
 document.forms['receivenoteedit'].elements['sinput'].focus();
 //-->
 </SCRIPT>
-{include file="footer.html"}
+{/block}

@@ -1,4 +1,5 @@
-{include file="header.html"}
+{extends file="layout.html"}
+{block name="module_content"}
 <H1>{$layout.pagetitle}</H1>
 <TABLE WIDTH="100%" CELLPADDING="3">
 	<TR>
@@ -14,4 +15,4 @@
 		</TD>
 	</TR>
 </TABLE>
-{include file="footer.html"}
+{/block}

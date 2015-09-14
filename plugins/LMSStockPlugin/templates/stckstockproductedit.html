@@ -1,4 +1,5 @@
-{include file="header.html"}
+{extends file="layout.html"}
+{block name="module_content"}
 {include file="calendar_js.html"}
 {if !$layout.popup}<h1>{$layout.pagetitle}</h1>
 {else}
@@ -115,4 +116,4 @@ document.forms['productedit'].elements['productedit[leavedate]'].value = '0';
 {/if}
 //-->
 </SCRIPT>
-{include file="footer.html"}
+{/block}
