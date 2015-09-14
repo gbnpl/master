@@ -5,44 +5,44 @@
 <TABLE CELLPADDING="3" width="100%">
 	<TR class="dark">
 		<TD COLSPAN="10" ALIGN="right" CLASS="fleftu frightu">
-			<A HREF="?m={$module}&amp;ssp={!$ssp}"{if $ssp} CLASS="bold"{/if}>{t}Show sold positions{/t}</A>
+			<A HREF="?m={$module}&amp;ssp={!$ssp}"{if $ssp} CLASS="bold"{/if}>{trans("Show sold positions")}</A>
 		</TD>
 	<TR class="dark" {tip text="Click on column name to change sorting order"}>
 		<TD CLASS="fleftu" width="30%">
-			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m={$module}&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{t}Name:{/t}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
+			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m={$module}&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{trans("Name:")}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
-			{t}Serial number:{/t}
+			{trans("Serial number:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
-			<A href="?m={$module}&o=warehouse{if $listdata.direction eq "asc" && $listdata.order eq "warehouse"},desc{/if}">{t}Warehouse{/t}:</A> {if $listdata.order eq "warehouse"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+			<A href="?m={$module}&o=warehouse{if $listdata.direction eq "asc" && $listdata.order eq "warehouse"},desc{/if}">{trans("Warehouse")}:</A> {if $listdata.order eq "warehouse"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
-			<A href="?m={$module}&o=supplier{if $listdata.direction eq "asc" && $listdata.order eq "supplier"},desc{/if}">{t}Supplier:{/t}</A> {if $listdata.order eq "supplier"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+			<A href="?m={$module}&o=supplier{if $listdata.direction eq "asc" && $listdata.order eq "supplier"},desc{/if}">{trans("Supplier:")}</A> {if $listdata.order eq "supplier"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
-			{t}Document number:{/t}
+			{trans("Document number:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
-			<A href="?m={$module}&o=creationdate{if $listdata.direction eq "asc" && $listdata.order eq "creationdate"},desc{/if}">{t}Creation date:{/t}</A> {if $listdata.order eq "creationdate"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+			<A href="?m={$module}&o=creationdate{if $listdata.direction eq "asc" && $listdata.order eq "creationdate"},desc{/if}">{trans("Creation date:")}</A> {if $listdata.order eq "creationdate"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 <!--		<TD CLASS="fbt" width="1%" align="center" valign="top">
-			<A href="?m=stckproductlist&o=quant{if $listdata.direction eq "asc" && $listdata.order eq "quant"},desc{/if}">{t}Quantity in unit:{/t}</A> {if $listdata.order eq "quant"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+			<A href="?m=stckproductlist&o=quant{if $listdata.direction eq "asc" && $listdata.order eq "quant"},desc{/if}">{trans("Quantity in unit:")}</A> {if $listdata.order eq "quant"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
-			{t}In stock:{/t}
+			{trans("In stock:")}
 		</TD>-->
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
-			{t}Net Value:{/t}
+			{trans("Net Value:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
-			{t}Gross Value:{/t}
+			{trans("Gross Value:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
 			<A href="?m=stckproductlist&o=id{if $listdata.direction eq "asc" && $listdata.order eq "id"},desc{/if}">ID:</A> {if $listdata.order eq "id"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD width="1%" class="frightu" align="right" nowrap>
-<!--			<A href="?m=stckproductadd">{t}Add product{/t} <IMG src="img/save.gif" alt=""> </A>	-->
+<!--			<A href="?m=stckproductadd">{trans("Add product")} <IMG src="img/save.gif" alt=""> </A>	-->
 		</TD>
 	</TR>
 	{if $listdata.total != 0}
@@ -91,8 +91,8 @@
 		</TD>
 		<TD WIDTH="1%" CLASS="fright" align="right">
 		 	<nobr>
-				<A HREF="javascript:modalwindow('stckstockproductedit&id={$productlist[pl].id}', 600, 370);"><IMG src="img/edit.gif" alt="[ {t}Edit{/t} ]" title="[ {t}Edit{/t} ]"></A>
-				<!--<a href="?m=stckproductinfo&id={$productlist[pl].id}"><IMG src="img/info.gif" alt="[ {t}Info{/t} ]" title="[ {t}Info{/t} ]"></A>
+				<A HREF="javascript:modalwindow('stckstockproductedit&id={$productlist[pl].id}', 600, 370);"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
+				<!--<a href="?m=stckproductinfo&id={$productlist[pl].id}"><IMG src="img/info.gif" alt="[ {trans("Info")} ]" title="[ {trans("Info")} ]"></A>
 			--></nobr>
 		</TD>
 	</TR>
@@ -100,7 +100,7 @@
 	<TR>
 		<TD colspan="10" CLASS="fall" align="center">
 			<p>&nbsp;</p>
-			<p><B>{t}There are no products in your database.{/t}</b></p>
+			<p><B>{trans("There are no products in your database.")}</b></p>
 			<p>&nbsp;</p>
 		</TD>
 	</TR>
@@ -115,7 +115,7 @@
 <!--	<TR class="light">
 		<TD CLASS="fleftu" ALIGN="right">
 			<B>
-				{t}Total:{/t}
+				{trans("Total:")}
 			</B>
 		</TD>
 		<TD CLASS="fbt" ALIGN="right">

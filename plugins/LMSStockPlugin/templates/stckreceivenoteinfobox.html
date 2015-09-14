@@ -19,7 +19,7 @@
 									<IMG SRC="img/producer.gif" ALT="">
 								</TD>
 								<TD WIDTH="1%" NOWRAP>
-									<B>{t}Supplier:{/t}</B>
+									<B>{trans("Supplier:")}</B>
 								</TD>
 								<TD WIDTH="98%">
 									<A HREF="?m=customerinfo&id={$receivenoteinfo.supplierid}">{$receivenoteinfo.sname}</A>
@@ -30,7 +30,7 @@
 									<IMG SRC="img/money.gif" ALT="">
 								</TD>
 								<TD WIDTH="1%" NOWRAP>
-								        <B>{t}Net Value:{/t}</B>
+								        <B>{trans("Net Value:")}</B>
 								</TD>
 								<TD WIDTH="98%">
 								        {$receivenoteinfo.netvalue|money_format}
@@ -41,7 +41,7 @@
 									<IMG SRC="img/money.gif" ALT="">
 								</TD>
 								<TD WIDTH="1%" NOWRAP>
-									<B>{t}Gross Value:{/t}</B>
+									<B>{trans("Gross Value:")}</B>
 								</TD>
 								<TD WIDTH="98%">
 									{$receivenoteinfo.grossvalue|money_format}
@@ -52,7 +52,7 @@
 									<IMG SRC="img/calendar.gif" ALT="">
 								</TD>
 								<TD WIDTH="1%" NOWRAP>
-									<B>{t}Settlement date:{/t}</B>
+									<B>{trans("Settlement date:")}</B>
 								</TD>
 								<TD WIDTH="98%">
 									{$receivenoteinfo.datesettlement|date_format: "%Y/%m/%d"}
@@ -63,7 +63,7 @@
 								<IMG SRC="img/calendar.gif" ALT="">
 								</TD>
 								<TD WIDTH="1%" NOWRAP>
-									<B>{t}Sale date:{/t}</B>
+									<B>{trans("Sale date:")}</B>
 								</TD>
 								<TD WIDTH="98%">
 									{$receivenoteinfo.datesale|date_format: "%Y/%m/%d"}
@@ -74,7 +74,7 @@
 									<IMG SRC="img/calendar.gif" ALT="">
 								</TD>
 								<TD WIDTH="1%" NOWRAP>
-									<B>{t}Deadline:{/t}</B>
+									<B>{trans("Deadline:")}</B>
 								</TD>
 								<TD WIDTH="98%">
 									{$receivenoteinfo.deadline|date_format: "%Y/%m/%d"}
@@ -86,7 +86,7 @@
 
 								</TD>
 								<TD WIDTH="1%" NOWRAP>
-									<B>{t}Payment type:{/t}</B>
+									<B>{trans("Payment type:")}</B>
 								</TD>
 								<TD WIDTH="98%">
 									{$_PAYTYPES[$receivenoteinfo.paytype]}
@@ -118,8 +118,8 @@
 								<TABLE WIDTH="100%" CELLPADDING="5">
 									<TR>
 										<TD WIDTH="1%">
-											<B>{t}Created:{/t}<BR>
-											{t}Modified:{/t}</B>
+											<B>{trans("Created:")}<BR>
+											{trans("Modified:")}</B>
 										</TD>
 										<TD WIDTH="99%">
 											{$receivenoteinfo.createdby}, {$receivenoteinfo.creationdate|date_format:"%Y/%m/%d %H:%M"}<BR>
@@ -137,8 +137,8 @@
 	</TR>
 	<TR class="light">
 		<TD WIDTH="100%" COLSPAN="2" CLASS="FBOTTOMU" ALIGN="RIGHT">
-			<A HREF="?m=stckreceivenoteinfo&id={$receivenoteinfo.id}&action=srna">{t}Account{/t} <IMG SRC="img/pay.gif" ALT=""></A>
-			<A href="?m=stckreceivenoteedit&id={$receivenoteinfo.id}" ACCESSKEY="E">{t}Edit{/t} <IMG src="img/edit.gif" ALT="[ {t}Edit{/t} ]"></A>
+			<A HREF="?m=stckreceivenoteinfo&id={$receivenoteinfo.id}&action=srna">{trans("Account")} <IMG SRC="img/pay.gif" ALT=""></A>
+			<A href="?m=stckreceivenoteedit&id={$receivenoteinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
                 </TD>
         </TR>
 </TABLE>

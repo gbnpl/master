@@ -11,7 +11,7 @@
 	<TR class="dark" COLSPAN="2">
 		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
 			<IMG SRC="img/producer.gif" ALT="">
-			<B>{t}Product name:{/t}</B>
+			<B>{trans("Product name:")}</B>
 		</TD>
 		<TD CLASS="frightu">
 			<INPUT TYPE="TEXT" SIZE="23" NAME="productadd[name]" VALUE="{$productadd.name}" {tip trigger="name" bold=1}>
@@ -20,7 +20,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/serialnumber.gif" ALT="">
-			<B>{t}Quantity in unit:{/t}</B>
+			<B>{trans("Quantity in unit:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT TYPE="TEXT" SIZE="5" NAME="productadd[quantity]" VALUE="{if $productadd.quantity}{$productadd.quantity}{else}1{/if}" {tip trigger="quantity" bold=1}>
@@ -29,7 +29,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/serialnumber.gif" ALT="">
-			<B>{t}EAN:{/t}</B>
+			<B>{trans("EAN:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT TYPE="TEXT" SIZE="23" NAME="productadd[ean]" VALUE="{$productadd.ean}" {tip trigger="ean" bold=1}>
@@ -38,7 +38,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/netdev_model.gif" ALT="">
-			<B>{t}Type:{/t}</B>
+			<B>{trans("Type:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<SELECT SIZE="1" NAME="productadd[typeid]" {tip text="Select warehouse" trigger="warehouseid"}>
@@ -51,7 +51,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/nodegroup.gif" ALT="">
-			<B>{t}Group:{/t}</B>
+			<B>{trans("Group:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<SELECT SIZE="1" NAME="productadd[groupid]" {tip text="Select product group" trigger="groupid"}>
@@ -64,7 +64,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/producer.gif" ALT="">
-			<B>{t}Manufacturer:{/t}</B>
+			<B>{trans("Manufacturer:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<SELECT SIZE="1" NAME="productadd[manufacturerid]" {tip text="Select manufaturer" trigger="manufacturerid"}>
@@ -77,7 +77,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/tax.gif" ALT="">
-			<B>{t}Tax:{/t}</B>
+			<B>{trans("Tax:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<SELECT SIZE="1" NAME="productadd[taxid]" {tip text="Select Tax rate" trigger="taxid"}>
@@ -90,7 +90,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/port.gif" ALT="">
-			<B>{t}Quantity name:{/t}</B>
+			<B>{trans("Quantity name:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<SELECT SIZE="1" NAME="productadd[quantityid]" {tip text="Select quantity name" trigger="quantityid"}>
@@ -103,23 +103,23 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/port.gif" ALT="">
-			<B>{t}Quantity check:{/t}</B>
+			<B>{trans("Quantity check:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			 <INPUT TYPE="checkbox" value="1" name="productadd[quantitycheck]"{if $productadd.quantitycheck} checked{/if}>
 		</TD>
 	</TR>
 	<TR class="light">
-		<TD WIDTH="1%" CLASS="fleft" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{t}Comment:{/t}</B></TD>
+		<TD WIDTH="1%" CLASS="fleft" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{trans("Comment:")}</B></TD>
 		<TD CLASS="fright">
 		  <TEXTAREA NAME="productadd[comment]" COLS="60" ROWS="7" {tip text="Enter comment (optional)"}>{$productadd.comment}</TEXTAREA>
 		</TD>
 	</TR>
 	<TR class="light">
 		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
-			<A HREF="#" id="fs" accesskey="s">{t}Submit{/t} <IMG SRC="img/save.gif" ALT=""></A>
-			<A HREF="{if $layout.popup}javascript:parent.$.modal.close();{else}?m=stckproducts{/if}">{t}Cancel{/t} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
-			<INPUT type="checkbox" name="productadd[reuse]" id="productadd[reuse]" value="ON" {if $productadd.reuse}checked{/if}><A HREF="javascript:checkElement('productadd[reuse]')"> {t}Display this form again, when this product is saved{/t}</A>
+			<A HREF="#" id="fs" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
+			<A HREF="{if $layout.popup}javascript:parent.$.modal.close();{else}?m=stckproducts{/if}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
+			<INPUT type="checkbox" name="productadd[reuse]" id="productadd[reuse]" value="ON" {if $productadd.reuse}checked{/if}><A HREF="javascript:checkElement('productadd[reuse]')"> {trans("Display this form again, when this product is saved")}</A>
 		</TD>
 	</TR>
 </TABLE>

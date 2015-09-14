@@ -4,9 +4,9 @@
 	<TR>
 		<TD WIDTH="1%" VALIGN="TOP" ALIGN="LEFT" NOWRAP>
 {if $type eq 'inventory'}
-			<H1>{t}Inventory for date{/t} {$params.rdate|date_format:"%Y/%m/%d"}</h1>
+			<H1>{trans("Inventory for date")} {$params.rdate|date_format:"%Y/%m/%d"}</h1>
 {else}
-			<H1>{t}Buy report{/t} {$params.sdate|date_format:"%Y/%m/%d"} - {$params.edate|date_format:"%Y/%m/%d"}</h1>
+			<H1>{trans("Buy report")} {$params.sdate|date_format:"%Y/%m/%d"} - {$params.edate|date_format:"%Y/%m/%d"}</h1>
 {/if}
 		</TD>
 		<TD WIDTH="99%" VALIGN="TOP" NOWRAP>
@@ -26,25 +26,25 @@
 <TABLE WIDTH="640" CELLPADDING="3" BORDER="1" ALIGN="CENTER">
 	<TR>
 		<TD ALIGN="CENTER" CLASS="HEAD">
-			{t}No.{/t}
+			{trans("No.")}
 		</TD>
 		<TD CLASS="HEAD" ALIGN="CENTER">
-			{t}Manufacturer{/t}
+			{trans("Manufacturer")}
 		</TD>
 		<TD CLASS="HEAD" ALIGN="CENTER">
-			{t}Name{/t}
+			{trans("Name")}
 		</TD>
 		<TD CLASS="HEAD" ALIGN="CENTER">
-			{t}Group{/t}
+			{trans("Group")}
 		</TD>
 		<TD CLASS="HEAD" ALIGN="CENTER">
-			{t}In stock:{/t}
+			{trans("In stock:")}
 		</TD>
 		<TD CLASS="HEAD" ALIGN="CENTER">
-			{t}Price buy net:{/t}
+			{trans("Price buy net:")}
 		</TD>
 		<TD CLASS="HEAD" ALIGN="CENTER">
-			{t}Net value{/t}:
+			{trans("Net value")}:
 		</TD>
 	</TR>
 	{cycle values="white,grey" print=false}
@@ -76,14 +76,14 @@
 	<TR>
 		<TD ALIGN="center" COLSPAN="8">
 			<P>&nbsp;</P>
-			<P><B>{t}No such cash receipts in database.{/t}</B></P>
+			<P><B>{trans("No such cash receipts in database.")}</B></P>
 			<P>&nbsp;</P>
 		</TD>
 	</TR>
 	{/section}
 	<TR class="grey">
 		<TD COLSPAN="6" ALIGN="RIGHT" VALIGN="TOP">
-			<B>{t}Total:{/t}</B>
+			<B>{trans("Total:")}</B>
 		</TD>
 		<TD ALIGN="RIGHT" nowrap>
 			<B>{$params.totalvn|money_format}</B>

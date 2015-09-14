@@ -19,7 +19,7 @@
 									<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_count.png" ALT="">
 								</TD>
 								<TD WIDTH="1%" NOWRAP>
-									<B>{t}Stock count:{/t}</B>
+									<B>{trans("Stock count:")}</B>
 								</TD>
 								<TD WIDTH="98%">
 									{$manufacturerinfo.count}
@@ -30,7 +30,7 @@
 									<IMG SRC="img/money.gif" ALT="">
 								</TD>
 								<TD WIDTH="1%" NOWRAP>
-								        <B>{t}Stock net value:{/t}</B>
+								        <B>{trans("Stock net value:")}</B>
 								</TD>
 								<TD WIDTH="98%">
 								        {$manufacturerinfo.valuenet|money_format}
@@ -41,7 +41,7 @@
 									<IMG SRC="img/money.gif" ALT="">
 								</TD>
 								<TD WIDTH="1%" NOWRAP>
-									<B>{t}Stock gross value:{/t}</B>
+									<B>{trans("Stock gross value:")}</B>
 								</TD>
 								<TD WIDTH="98%">
 									{$manufacturerinfo.valuegross|money_format}
@@ -73,8 +73,8 @@
 								<TABLE WIDTH="100%" CELLPADDING="5">
 									<TR>
 										<TD WIDTH="1%">
-											<B>{t}Created:{/t}<BR>
-											{t}Modified:{/t}</B>
+											<B>{trans("Created:")}<BR>
+											{trans("Modified:")}</B>
 										</TD>
 										<TD WIDTH="99%">
 											{$manufacturerinfo.createdby}, {$manufacturerinfo.creationdate|date_format:"%Y/%m/%d %H:%M"}<BR>
@@ -92,8 +92,8 @@
 	</TR>
 	<TR class="light">
 		<TD WIDTH="100%" COLSPAN="2" CLASS="FBOTTOMU" ALIGN="RIGHT">
-			<A href="?m=stckmanufactureredit&id={$manufacturerinfo.id}" ACCESSKEY="E">{t}Edit{/t} <IMG src="img/edit.gif" ALT="[ {t}Edit{/t} ]"></A>
-                        <A href="?m=stckmanufacturerdel&id={$manufacturerinfo.id}" OnClick="return confirmLink(this, '{t name=$manufacturerinfo.name}Are you sure, you want to remove manufacturer \'$name\' from database?{/t}');">{t}Delete{/t} <img src="img/delete.gif" ALT=""></A>
+			<A href="?m=stckmanufactureredit&id={$manufacturerinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
+                        <A href="?m=stckmanufacturerdel&id={$manufacturerinfo.id}" OnClick="return confirmLink(this, '{t name=$manufacturerinfo.name}Are you sure, you want to remove manufacturer \'$name\' from database?")}');">{trans("Delete")} <img src="img/delete.gif" ALT=""></A>
                 </TD>
         </TR>
 </TABLE>

@@ -7,7 +7,7 @@
 	<TR class="dark" COLSPAN="2">
 		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
 			<IMG SRC="img/producer.gif" ALT="">
-			<B>{t}Product group name:{/t}</B>
+			<B>{trans("Product group name:")}</B>
 		</TD>
 		<TD CLASS="frightu">
 			<INPUT TYPE="TEXT" SIZE="23" NAME="groupadd[name]" VALUE="{$groupadd.name}" {tip trigger="name" bold=1}>
@@ -15,7 +15,7 @@
 	</TR>
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
-			<IMG SRC="img/tax.gif" ALT=""><B>{t}Tax:{/t}</B>
+			<IMG SRC="img/tax.gif" ALT=""><B>{trans("Tax:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<SELECT SIZE="1" NAME="groupadd[taxid]" {tip text="Select Tax rate" trigger="taxid"}>
@@ -28,7 +28,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/port.gif" ALT="">
-			<B>{t}Quantity name:{/t}</B>
+			<B>{trans("Quantity name:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<SELECT SIZE="1" NAME="groupadd[quantityid]" {tip text="Select quantity name" trigger="quantityid"}>
@@ -41,23 +41,23 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/port.gif" ALT="">
-			<B>{t}Quantity check:{/t}</B>
+			<B>{trans("Quantity check:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT TYPE="checkbox" value="1" name="groupadd[quantitycheck]"{if $groupadd.quantitycheck} checked{/if}>
 		</TD>
 	</TR>
 	<TR class="light">
-		<TD WIDTH="1%" CLASS="fleft" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{t}Comment:{/t}</B></TD>
+		<TD WIDTH="1%" CLASS="fleft" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{trans("Comment:")}</B></TD>
 		<TD CLASS="fright">
 		  <TEXTAREA NAME="groupadd[comment]" COLS="60" ROWS="7" {tip text="Enter comment (optional)"}>{$groupadd.comment}</TEXTAREA>
 		</TD>
 	</TR>
 	<TR class="light">
 		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
-			<A HREF="javascript:document.groupadd.submit();" accesskey="s">{t}Submit{/t} <IMG SRC="img/save.gif" ALT=""></A>
-			<A HREF="?m=stckgroups">{t}Cancel{/t} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
-			<INPUT type="checkbox" name="groupadd[reuse]" id="groupadd[reuse]" value="ON" {if $groupadd.reuse}checked{/if}><A HREF="javascript:checkElement('groupadd[reuse]')"> {t}Display this form again, when this group is saved{/t}</A>
+			<A HREF="javascript:document.groupadd.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
+			<A HREF="?m=stckgroups">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
+			<INPUT type="checkbox" name="groupadd[reuse]" id="groupadd[reuse]" value="ON" {if $groupadd.reuse}checked{/if}><A HREF="javascript:checkElement('groupadd[reuse]')"> {trans("Display this form again, when this group is saved")}</A>
 		</TD>
 	</TR>
 </TABLE>

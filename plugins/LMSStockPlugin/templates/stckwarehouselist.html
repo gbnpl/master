@@ -5,22 +5,22 @@
 <TABLE CELLPADDING="3" width="100%">
 	<TR class="dark" {tip text="Click on column name to change sorting order"}>
 		<TD CLASS="fleftu" width="97%">
-			<IMG src="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">&nbsp;<A href="?m=stckwarehouselist&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{t}Name:{/t}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
+			<IMG src="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">&nbsp;<A href="?m=stckwarehouselist&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{trans("Name:")}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
-			{t}Stock:{/t}
+			{trans("Stock:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
-			{t}Net Value:{/t}
+			{trans("Net Value:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
-			{t}Gross Value:{/t}
+			{trans("Gross Value:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top">
 			<A href="?m=stckwarehouselist&o=id{if $listdata.direction eq "asc" && $listdata.order eq "id"},desc{/if}">ID:</A> {if $listdata.order eq "id"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD width="1%" class="frightu" align="right" nowrap>
-			<A href="?m=stckwarehouseadd">{t}Add warehouse{/t} <IMG src="img/save.gif" alt=""> </A>
+			<A href="?m=stckwarehouseadd">{trans("Add warehouse")} <IMG src="img/save.gif" alt=""> </A>
 		</TD>
 
 	</TR>
@@ -52,9 +52,9 @@
 		</TD>
 		<TD WIDTH="1%" CLASS="fright" align="right">
 		 	<nobr>
-				<a href="?m=stckwarehousedel&id={$warehouselist[warehouselist].id}" onClick="return confirmLink(this, '{t name=$warehouselist[warehouselist].name}Are you sure, you want to remove warehouse \'$name\' from database? Warehouses with current stock cannot be removed!{/t}')"><IMG src="img/delete.gif" alt="[ {t}Delete{/t} ]" title="[ {t}Delete{/t} ]"></A>
-				<a href="?m=stckwarehouseedit&id={$warehouselist[warehouselist].id}"><IMG src="img/edit.gif" alt="[ {t}Edit{/t} ]" title="[ {t}Edit{/t} ]"></A>
-				<a href="?m=stckwarehouseinfo&id={$warehouselist[warehouselist].id}"><IMG src="img/info.gif" alt="[ {t}Info{/t} ]" title="[ {t}Info{/t} ]"></A>
+				<a href="?m=stckwarehousedel&id={$warehouselist[warehouselist].id}" onClick="return confirmLink(this, '{t name=$warehouselist[warehouselist].name}Are you sure, you want to remove warehouse \'$name\' from database? Warehouses with current stock cannot be removed!")}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
+				<a href="?m=stckwarehouseedit&id={$warehouselist[warehouselist].id}"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
+				<a href="?m=stckwarehouseinfo&id={$warehouselist[warehouselist].id}"><IMG src="img/info.gif" alt="[ {trans("Info")} ]" title="[ {trans("Info")} ]"></A>
 			</nobr>
 		</TD>
 	</TR>
@@ -62,7 +62,7 @@
 	<TR>
 		<TD colspan="6" CLASS="fall" align="center">
 			<p>&nbsp;</p>
-			<p><B>{t}There are no warehouses in your database.{/t}</b></p>
+			<p><B>{trans("There are no warehouses in your database.")}</b></p>
 			<p>&nbsp;</p>
 		</TD>
 	</TR>
@@ -77,7 +77,7 @@
 	<TR class="light">
 		<TD WIDTH="99%" COLSPAN="6" CLASS="fleftu frightu" ALIGN="right">
 			<B>
-				{t}Total:{/t} {$listdata.total|default:"0"}
+				{trans("Total:")} {$listdata.total|default:"0"}
 			</B>
 		</TD>
 	</TR>			

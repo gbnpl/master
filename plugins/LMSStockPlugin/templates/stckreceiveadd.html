@@ -8,12 +8,12 @@
 	<TR class="dark" COLSPAN="2">
 		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
 			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
-			<B>{t}Supplier:{/t}</B>
+			<B>{trans("Supplier:")}</B>
 		</TD>
 		<TD CLASS="frightu">
 			<INPUT TYPE="TEXT" SIZE="60" NAME="receivenote[doc][supplier]" VALUE="{$receivenote.doc.supplier}" ID="sinput" {tip trigger="supplier" bold=1}> {if $receivenote.supplierid}({$receivenote.supplierid|string_format:"%04d"}){/if}
 			<INPUT TYPE="hidden" NAME="receivenote[doc][supplierid]" VALUE="{$receivenote.doc.supplierid}">
-			<INPUT type="checkbox" name="receivenote[doc][internal]" id="receivenote[internal]" value="1"{if $receivenote.doc.internal} CHECKED{/if}><A HREF="javascript:checkElement('receivenote[internal]')"> {t}internal{/t}</A>
+			<INPUT type="checkbox" name="receivenote[doc][internal]" id="receivenote[internal]" value="1"{if $receivenote.doc.internal} CHECKED{/if}><A HREF="javascript:checkElement('receivenote[internal]')"> {trans("internal")}</A>
 		</TD>
 	</TR>
 	<TR class="light">
@@ -25,7 +25,7 @@
 						<TR>
 							<TD WIDTH="1%" NOWRAP>
 								<IMG SRC="img/calendar.gif" ALT="">
-								<B>{t}Settlement date:{/t}</B>
+								<B>{trans("Settlement date:")}</B>
 							</TD>
 							<TD>
 								<INPUT type="TEXT" name="receivenote[doc][date][settlement]" value="{$receivenote.doc.date.settlement}" OnClick="cal3.popup();" {tip text="Document`s issue date" trigger="settlement"} SIZE="10">
@@ -34,7 +34,7 @@
 						<TR>
 							<TD WIDTH="1%" NOWRAP>
 								<IMG SRC="img/calendar.gif" ALT="">
-								<B>{t}Sale date:{/t}</B>
+								<B>{trans("Sale date:")}</B>
 							</TD>
 							<TD>
 								<INPUT type="TEXT" name="receivenote[doc][date][sale]" value="{$receivenote.doc.date.sale}" OnClick="cal4.popup();" {tip text="Document`s sale date" trigger="sale"} SIZE="10">
@@ -43,7 +43,7 @@
 						<TR>
 							<TD WIDTH="1%" NOWRAP>
 								<IMG SRC="img/calendar.gif" ALT="">
-								<B>{t}Deadline:{/t}</B>
+								<B>{trans("Deadline:")}</B>
 							</TD>
 							<TD>
 								<INPUT type="TEXT" name="receivenote[doc][date][deadline]" value="{$receivenote.doc.date.deadline}" OnClick="cal5.popup();" {tip text="Document`s deadline" trigger="deadline"} SIZE="10">
@@ -52,7 +52,7 @@
 						<TR>
 							<TD WIDTH="1%" NOWRAP>
 								<IMG SRC="img/serialnumber.gif" ALT="">
-								<b>{t}Document number:{/t}</b>
+								<b>{trans("Document number:")}</b>
 							</td>
 							<TD>
 								<INPUT type="TEXT" name="receivenote[doc][number]" value="{$receivenote.doc.number}" {tip text="Document`s number" trigger="number"}>
@@ -60,11 +60,11 @@
 						</TR>
 						<TR>
 							<TD WIDTH="1%" NOWRAP>
-								<B>{t}Payment type:{/t}</B>
+								<B>{trans("Payment type:")}</B>
 							</TD>
 							<TD>
 								<SELECT name="receivenote[doc][paytype]" {tip text="Select payment type" trigger="paytype"}>
-									<OPTION value=""{if !$invoice.paytype} selected{/if}>- {t}default{/t} -</OPTION>
+									<OPTION value=""{if !$invoice.paytype} selected{/if}>- {trans("default")} -</OPTION>
 									{foreach from=$_PAYTYPES item=item key=key}
 									<OPTION value="{$key}"{if $receivenote.doc.paytype==$key} selected{/if}>{$item}</OPTION>
 									{/foreach}
@@ -76,7 +76,7 @@
 					<TD WIDTH="50%" style="vertical-align:top;">
 					<TABLE WIDTH="100%" CELLPADDING="3">
 						<TR class="light">
-							<TD WIDTH="1%" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{t}Comment:{/t}</B></TD>
+							<TD WIDTH="1%" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{trans("Comment:")}</B></TD>
 							<TD>
 								<TEXTAREA NAME="receivenote[doc][comment]" COLS="60" ROWS="7" {tip text="Enter comment (optional)"}>{$receivenote.doc.comment}</TEXTAREA>
 							</TD>
@@ -89,8 +89,8 @@
 	</TR>
 	<TR class="dark">
 		<TD width="100%" CLASS="FALL" COLSPAN="2" align="right">
-			<A HREF="javascript:document.receivenote.submit();" accesskey="s">{t}Submit{/t} <IMG SRC="img/save.gif" ALT=""></A>
-			<A href="?m=stckreceiveproductlist&amp;action=cancel" ACCESSKEY="C" onClick="if(confirm('{t}Are you sure that you want to cancel receive note?{/t}')) { return true; } else { return false; } ">{t}Cancel{/t} <img src="img/cancel.gif" alt=""></A>
+			<A HREF="javascript:document.receivenote.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
+			<A href="?m=stckreceiveproductlist&amp;action=cancel" ACCESSKEY="C" onClick="if(confirm('{trans("Are you sure that you want to cancel receive note?")}')) { return true; } else { return false; } ">{trans("Cancel")} <img src="img/cancel.gif" alt=""></A>
 		</TD>
 	</TR>
 </TABLE>

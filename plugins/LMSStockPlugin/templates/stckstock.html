@@ -7,14 +7,14 @@
 			<FORM METHOD="POST" ACTION="?m=stckstock">
 			<TABLE>
 				<TR CLASS="bold">
-					<TD style="padding: 3px 3px 0 3px;">{t}Warehouse{/t}:</TD>
-					<TD style="padding: 3px 3px 0 3px;">{t}Manufacturer{/t}:</TD>
-					<TD style="padding: 3px 3px 0 3px;">{t}Group{/t}:</TD>
+					<TD style="padding: 3px 3px 0 3px;">{trans("Warehouse")}:</TD>
+					<TD style="padding: 3px 3px 0 3px;">{trans("Manufacturer")}:</TD>
+					<TD style="padding: 3px 3px 0 3px;">{trans("Group")}:</TD>
 				</TR>
 				<TR>
 					<TD style="padding: 3px;">
 						<select name="stock[warehouse]" onChange="this.form.submit()">
-							<option value="">{t}- select warehouse -{/t}</option>
+							<option value="">{trans("- select warehouse -")}</option>
 						{foreach from=$warehouses item=wh}
 							<option value="{$wh.id}"{if $wh.def && !$stockfl.warehouse} SELECTED{/if}{if $stockfl.warehouse eq $wh.id} SELECTED{/if}>{$wh.name}</option>
 						{/foreach}
@@ -22,7 +22,7 @@
 					</TD>
 					<TD style="padding: 3px;">
 						<select name="stock[manufacturer]" onChange="this.form.submit()">
-							<option value="">{t}- select manufacturer -{/t}</option>
+							<option value="">{trans("- select manufacturer -")}</option>
 						{foreach from=$manufacturers item=mf}
 							<option value="{$mf.id}"{if $stockfl.manufacturer eq $mf.id} SELECTED{/if}>{$mf.name}</option>
 						{/foreach}
@@ -30,7 +30,7 @@
 					</TD>
 					<TD style="padding: 3px;">
 						<select name="stock[group]" onChange="this.form.submit()">
-							<option value="">{t}- select group -{/t}</option>
+							<option value="">{trans("- select group -")}</option>
 						{foreach from=$groups item=g}
 							<option value="{$g.gid}"{if $stockfl.group eq $g.gid} SELECTED{/if}>{$g.gname}</option>
 						{/foreach}
@@ -43,34 +43,34 @@
 	</TR>
 	<TR class="dark" {tip text="Click on column name to change sorting order"}>
 		<TD CLASS="fleftu" width="30%">
-			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m=stckstock&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{t}Name:{/t}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
+			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m=stckstock&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{trans("Name:")}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
-			<A href="?m=stckstock&o=manufacturer{if $listdata.direction eq "asc" && $listdata.order eq "manufacturer"},desc{/if}">{t}Manufacturer:{/t}</A> {if $listdata.order eq "manufacturer"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+			<A href="?m=stckstock&o=manufacturer{if $listdata.direction eq "asc" && $listdata.order eq "manufacturer"},desc{/if}">{trans("Manufacturer:")}</A> {if $listdata.order eq "manufacturer"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
-			<A href="?m=stckstock&o=group{if $listdata.direction eq "asc" && $listdata.order eq "group"},desc{/if}">{t}Group:{/t}</A> {if $listdata.order eq "group"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+			<A href="?m=stckstock&o=group{if $listdata.direction eq "asc" && $listdata.order eq "group"},desc{/if}">{trans("Group:")}</A> {if $listdata.order eq "group"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
-			<A href="?m=stckstock&o=type{if $listdata.direction eq "asc" && $listdata.order eq "type"},desc{/if}">{t}Type:{/t}</A> {if $listdata.order eq "type"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+			<A href="?m=stckstock&o=type{if $listdata.direction eq "asc" && $listdata.order eq "type"},desc{/if}">{trans("Type:")}</A> {if $listdata.order eq "type"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="center" valign="top">
-			<A href="?m=stckstock&o=quant{if $listdata.direction eq "asc" && $listdata.order eq "quant"},desc{/if}">{t}Quantity in unit:{/t}</A> {if $listdata.order eq "quant"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+			<A href="?m=stckstock&o=quant{if $listdata.direction eq "asc" && $listdata.order eq "quant"},desc{/if}">{trans("Quantity in unit:")}</A> {if $listdata.order eq "quant"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
-			{t}In stock:{/t}
+			{trans("In stock:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
-			{t}Net Value:{/t}
+			{trans("Net Value:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
-			{t}Gross Value:{/t}
+			{trans("Gross Value:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
 			<A href="?m=stckstock&o=id{if $listdata.direction eq "asc" && $listdata.order eq "id"},desc{/if}">ID:</A> {if $listdata.order eq "id"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD width="1%" class="frightu" align="right" nowrap>
-			<A href="?m=stckproductadd">{t}Add product{/t} <IMG src="img/save.gif" alt=""> </A>	
+			<A href="?m=stckproductadd">{trans("Add product")} <IMG src="img/save.gif" alt=""> </A>	
 		</TD>
 	</TR>
 	{if $listdata.total != 0}
@@ -113,9 +113,9 @@
 		</TD>
 		<TD WIDTH="1%" CLASS="fright" align="right">
 		 	<nobr>
-				<a href="?m=stckproductdel&id={$productlist[pl].id}" onClick="return confirmLink(this, '{t name=$productlist[pl].name}Are you sure, you want to remove product \'$name\' from database? Products with current stock cannot be removed!{/t}')"><IMG src="img/delete.gif" alt="[ {t}Delete{/t} ]" title="[ {t}Delete{/t} ]"></A>
-				<a href="?m=stckproductedit&id={$productlist[pl].id}"><IMG src="img/edit.gif" alt="[ {t}Edit{/t} ]" title="[ {t}Edit{/t} ]"></A>
-				<a href="?m=stckproductinfo&id={$productlist[pl].id}"><IMG src="img/info.gif" alt="[ {t}Info{/t} ]" title="[ {t}Info{/t} ]"></A>
+				<a href="?m=stckproductdel&id={$productlist[pl].id}" onClick="return confirmLink(this, '{t name=$productlist[pl].name}Are you sure, you want to remove product \'$name\' from database? Products with current stock cannot be removed!")}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
+				<a href="?m=stckproductedit&id={$productlist[pl].id}"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
+				<a href="?m=stckproductinfo&id={$productlist[pl].id}"><IMG src="img/info.gif" alt="[ {trans("Info")} ]" title="[ {trans("Info")} ]"></A>
 			</nobr>
 		</TD>
 	</TR>
@@ -123,7 +123,7 @@
 	<TR>
 		<TD colspan="10" CLASS="fall" align="center">
 			<p>&nbsp;</p>
-			<p><B>{t}There are no products in your database.{/t}</b></p>
+			<p><B>{trans("There are no products in your database.")}</b></p>
 			<p>&nbsp;</p>
 		</TD>
 	</TR>
@@ -137,7 +137,7 @@
 	{/if}
 	<TR class="light">
 		<TD COLSPAN="4" CLASS="fleftu" ALIGN="right">
-			<B>{t}Total:{/t}</B>
+			<B>{trans("Total:")}</B>
 		</TD>
 		<TD CLASS="fbt" ALIGN="right">
 			<B>{$listdata.total|default:"0"}</B>

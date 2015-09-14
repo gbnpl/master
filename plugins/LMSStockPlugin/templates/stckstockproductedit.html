@@ -13,7 +13,7 @@
 	<TR class="dark" COLSPAN="2">
 		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
 			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
-			<B>{t}Product name:{/t}</B>
+			<B>{trans("Product name:")}</B>
 		</TD>
 		<TD CLASS="frightu">
 			<b{tip eid="general"}>{$productedit.pname|escape}</b>
@@ -22,7 +22,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
-			<B>{t}Warehouse{/t}:</B>
+			<B>{trans("Warehouse")}:</B>
 		</TD>
 		<TD CLASS="fright">
 			<select name="productedit[warehouseid]">
@@ -35,7 +35,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/serialnumber.gif" ALT="">
-			<B>{t}Serial number{/t}:</B>
+			<B>{trans("Serial number")}:</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT TYPE="TEXT" SIZE="23" NAME="productedit[serialnumber]" VALUE="{$productedit.serialnumber}">
@@ -44,7 +44,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/money.gif" ALT="">
-			<B>{t}Net value{/t}:</B>
+			<B>{trans("Net value")}:</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT type="text" name="productedit[pricebuynet]" SIZE="6" style="text-align: right;" VALUE="{$productedit.pricebuynet}" {tip text="Enter value" trigger="pricenet"}>
@@ -53,7 +53,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/tax.gif" ALT="">
-			<B>{t}Tax:{/t}</B>
+			<B>{trans("Tax:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<SELECT SIZE="1" NAME="productedit[taxid]" {tip text="Select Tax rate" trigger="taxid"}>
@@ -66,7 +66,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/money.gif" ALT="">
-			<B>{t}Gross value{/t}:</B>
+			<B>{trans("Gross value")}:</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT type="text" name="productedit[pricebuygross]" SIZE="6" style="text-align: right;" VALUE="{$productedit.pricebuygross}" {tip text="Enter value" trigger="pricegross"}>
@@ -75,7 +75,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/calendar.gif" ALT="">
-			<B>{t}Sell date{/t}:</B>
+			<B>{trans("Sell date")}:</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT type="TEXT" name="productedit[leavedate]" value="{$productedit.leavedate|date_format:"%Y/%m/%d"}" OnClick="cal3.popup();" {tip text="Product`s sale date" trigger="leavedate"} SIZE="10">
@@ -84,7 +84,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/money.gif" ALT="">
-			<B>{t}Sell price{/t}:</B>
+			<B>{trans("Sell price")}:</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT type="text" name="productedit[pricesell]" SIZE="6" style="text-align: right;" VALUE="{$productedit.pricesell}" {tip text="Enter value" trigger="pricesell"}>
@@ -93,7 +93,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/info1.gif" ALT="">
-			<B>{t}Comment:{/t}</B>
+			<B>{trans("Comment:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<textarea name="productedit[comment]" cols="60" rows="7" onmouseover="popup('Enter comment (optional)')" onmouseout="pophide()">{$productedit.comment}</textarea>
@@ -101,8 +101,8 @@
 	</TR>
 	<TR class="light">
 		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
-			<A HREF="javascript:document.productedit.submit();" accesskey="s">{t}Submit{/t} <IMG SRC="img/save.gif" ALT=""></A>
-			<A HREF="{if $layout.popup}javascript:parent.$.modal.close();{else}?m=stckproducts{/if}">{t}Cancel{/t} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
+			<A HREF="javascript:document.productedit.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
+			<A HREF="{if $layout.popup}javascript:parent.$.modal.close();{else}?m=stckproducts{/if}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
 		</TD>
 	</TR>
 </TABLE>

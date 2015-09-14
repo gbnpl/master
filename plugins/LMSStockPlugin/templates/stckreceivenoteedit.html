@@ -8,7 +8,7 @@
 	<TR class="dark" COLSPAN="2">
 		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
 			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
-			<B>{t}Supplier:{/t}</B>
+			<B>{trans("Supplier:")}</B>
 		</TD>
 		<TD CLASS="frightu">
 			<INPUT TYPE="TEXT" SIZE="23" NAME="receivenoteedit[sname]" VALUE="{$receivenoteedit.sname|escape}" ID="sinput" {tip trigger="supplier" bold=1}>
@@ -18,7 +18,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/serialnumber.gif" ALT="">
-			<B>{t}Document number:{/t}</B>
+			<B>{trans("Document number:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<input type="TEXT" name="receivenoteedit[number]" value="{$receivenoteedit.number}" {tip trigger="number"}>
@@ -27,7 +27,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/calendar.gif" ALT="">
-			<B>{t}Settlement date:{/t}</B>
+			<B>{trans("Settlement date:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<input type="TEXT" name="receivenoteedit[datesettlement]" value="{$receivenoteedit.datesettlement|date_format: "%Y/%m/%d"}" onclick="cal3.popup();" size="10"{tip trigger="datesettlement"}>
@@ -36,7 +36,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/calendar.gif" ALT="">
-			<B>{t}Sale date:{/t}</B>
+			<B>{trans("Sale date:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<input type="TEXT" name="receivenoteedit[datesale]" value="{$receivenoteedit.datesale|date_format: "%Y/%m/%d"}" onclick="cal4.popup();" size="10"{tip trigger="datesale"}>
@@ -45,7 +45,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/calendar.gif" ALT="">
-			<B>{t}Deadline:{/t}</B>
+			<B>{trans("Deadline:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<input type="TEXT" name="receivenoteedit[deadline]" value="{$receivenoteedit.deadline|date_format: "%Y/%m/%d"}" onclick="cal5.popup();" size="10"{tip trigger="deadline"}>
@@ -54,11 +54,11 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/money.gif" ALT="">
-			<B>{t}Payment type:{/t}</B>
+			<B>{trans("Payment type:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<SELECT name="receivenoteedit[paytype]" {tip text="Select payment type" trigger="paytype"}>
-				<OPTION value=""{if !$invoice.paytype} selected{/if}>- {t}default{/t} -</OPTION>
+				<OPTION value=""{if !$invoice.paytype} selected{/if}>- {trans("default")} -</OPTION>
 				{foreach from=$_PAYTYPES item=item key=key}
 				<OPTION value="{$key}"{if $receivenoteedit.paytype==$key} selected{/if}>{$item}</OPTION>
 				{/foreach}
@@ -66,15 +66,15 @@
 		</TD>
 	</TR>
 	<TR class="light">
-		<TD WIDTH="1%" CLASS="fleft" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{t}Comment:{/t}</B></TD>
+		<TD WIDTH="1%" CLASS="fleft" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{trans("Comment:")}</B></TD>
 		<TD CLASS="fright">
 		  <TEXTAREA NAME="receivenoteedit[comment]" COLS="60" ROWS="7" {tip text="Enter comment (optional)"}>{$receivenoteedit.comment}</TEXTAREA>
 		</TD>
 	</TR>
 	<TR class="light">
 		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
-			<A HREF="javascript:document.receivenoteedit.submit();" accesskey="s">{t}Submit{/t} <IMG SRC="img/save.gif" ALT=""></A>
-			<A HREF="?m=stckreceivenoteinfo&id={$receivenoteedit.id}">{t}Cancel{/t} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
+			<A HREF="javascript:document.receivenoteedit.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
+			<A HREF="?m=stckreceivenoteinfo&id={$receivenoteedit.id}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
 		</TD>
 	</TR>
 </TABLE>
