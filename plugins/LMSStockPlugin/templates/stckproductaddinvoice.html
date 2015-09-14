@@ -2,7 +2,7 @@
 {block name="module_content"}
 <H1>{$layout.pagetitle}</H1>
 <TABLE CELLPADDING="3" width="100%">
-	<TR CLASS="dark" {tip text="Click on column name to change sorting order"}>
+	<TR class="dark" {tip text="Click on column name to change sorting order"}>
 		<TD CLASS="fleftu" width="97%">
 			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m=stckproductlist&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{t}Name:{/t}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
@@ -35,7 +35,7 @@
 		</TD>
 	</TR>
 	{if $listdata.total != 0}
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD CLASS="fall" colspan="10" WIDTH="100%">
 			{include file="scroller.html" loop=$productlist}
 		</TD>
@@ -90,13 +90,13 @@
 	</TR>
 	{/section}
 	{if $listdata.total != 0}
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD CLASS="fall" colspan="10" WIDTH="100%">
 			{include file="scroller.html" loop=$productlist}
 		</TD>
 	</TR>
 	{/if}
-	<TR CLASS="light">
+	<TR class="light">
 		<TD WIDTH="99%" COLSPAN="10" CLASS="fleftu frightu" ALIGN="right">
 			<B>
 				{t}Total:{/t} {$listdata.total|default:"0"}

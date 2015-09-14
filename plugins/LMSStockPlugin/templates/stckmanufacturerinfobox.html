@@ -8,13 +8,13 @@
 			<B>{$manufacturerinfo.name} ({$manufacturerinfo.id|string_format:"%04d"})</B>
 		</TD>
 	</TR>
-	<TR class="LIGHT">
+	<TR class="light">
 	        <TD WIDTH="100%" COLSPAN="2" CLASS="flr">
 			<TABLE WIDTH="100%" CELLPADDING="0">
-				<TR CLASS="LIGHT">
+				<TR class="light">
 					<TD WIDTH="50%" style="vertical-align:top;">
 						<TABLE WIDTH="100%" CELLPADDING="3">
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_count.png" ALT="">
 								</TD>
@@ -25,7 +25,7 @@
 									{$manufacturerinfo.count}
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/money.gif" ALT="">
 								</TD>
@@ -36,7 +36,7 @@
 								        {$manufacturerinfo.valuenet|money_format}
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/money.gif" ALT="">
 								</TD>
@@ -51,7 +51,7 @@
 					</TD>
 					<TD WIDTH="50%" style="vertical-align:top;">
                 				<TABLE WIDTH="100%" CELLPADDING="3">
-						<TR CLASS="LIGHT">
+						<TR class="light">
 							<TD WIDTH="1%">
 								<IMG SRC="img/desc.gif" ALT="">
 							</TD>
@@ -90,7 +90,7 @@
 			</TABLE>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="100%" COLSPAN="2" CLASS="FBOTTOMU" ALIGN="RIGHT">
 			<A href="?m=stckmanufactureredit&id={$manufacturerinfo.id}" ACCESSKEY="E">{t}Edit{/t} <IMG src="img/edit.gif" ALT="[ {t}Edit{/t} ]"></A>
                         <A href="?m=stckmanufacturerdel&id={$manufacturerinfo.id}" OnClick="return confirmLink(this, '{t name=$manufacturerinfo.name}Are you sure, you want to remove manufacturer \'$name\' from database?{/t}');">{t}Delete{/t} <img src="img/delete.gif" ALT=""></A>

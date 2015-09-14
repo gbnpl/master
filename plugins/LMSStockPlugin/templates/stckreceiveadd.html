@@ -5,7 +5,7 @@
 <FORM METHOD="POST" ACTION="?m=stckreceiveadd" NAME="receivenote" id="receivenote">
 <INPUT type="submit" class="hiddenbtn">
 <TABLE WIDTH="100%" CELLPADDING="3">
-	<TR CLASS="DARK" COLSPAN="2">
+	<TR class="dark" COLSPAN="2">
 		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
 			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
 			<B>{t}Supplier:{/t}</B>
@@ -16,10 +16,10 @@
 			<INPUT type="checkbox" name="receivenote[doc][internal]" id="receivenote[internal]" value="1"{if $receivenote.doc.internal} CHECKED{/if}><A HREF="javascript:checkElement('receivenote[internal]')"> {t}internal{/t}</A>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD COLSPAN="2" WIDTH="100%" CLASS="flr">
 			<TABLE WIDTH="100%" CELLPADDING="0">
-				<TR CLASS="LIGHT">
+				<TR class="light">
 					<TD WIDTH="50%" style="vertical-align:top;">
 					<TABLE WIDTH="100%" CELLPADDING="3">
 						<TR>
@@ -75,7 +75,7 @@
 					</TD>
 					<TD WIDTH="50%" style="vertical-align:top;">
 					<TABLE WIDTH="100%" CELLPADDING="3">
-						<TR CLASS="LIGHT">
+						<TR class="light">
 							<TD WIDTH="1%" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{t}Comment:{/t}</B></TD>
 							<TD>
 								<TEXTAREA NAME="receivenote[doc][comment]" COLS="60" ROWS="7" {tip text="Enter comment (optional)"}>{$receivenote.doc.comment}</TEXTAREA>
@@ -87,7 +87,7 @@
 			</TABLE>
 		</TD>	
 	</TR>
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD width="100%" CLASS="FALL" COLSPAN="2" align="right">
 			<A HREF="javascript:document.receivenote.submit();" accesskey="s">{t}Submit{/t} <IMG SRC="img/save.gif" ALT=""></A>
 			<A href="?m=stckreceiveproductlist&amp;action=cancel" ACCESSKEY="C" onClick="if(confirm('{t}Are you sure that you want to cancel receive note?{/t}')) { return true; } else { return false; } ">{t}Cancel{/t} <img src="img/cancel.gif" alt=""></A>

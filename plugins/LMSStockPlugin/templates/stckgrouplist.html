@@ -3,7 +3,7 @@
 <!--// $Id$ //-->
 <H1>{$layout.pagetitle}</H1>
 <TABLE CELLPADDING="3" width="100%">
-	<TR CLASS="dark" {tip text="Click on column name to change sorting order"}>
+	<TR class="dark" {tip text="Click on column name to change sorting order"}>
 		<TD CLASS="fleftu" width="97%">
 			<IMG src="img/nodegroup.gif" ALT="">&nbsp;<A href="?m=stckgrouplist&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{t}Name:{/t}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
@@ -25,7 +25,7 @@
 
 	</TR>
 	{if $listdata.total != 0}
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD CLASS="fall" colspan="7" WIDTH="100%">
 			{include file="scroller.html" loop=$grouplist}
 		</TD>
@@ -68,13 +68,13 @@
 	</TR>
 	{/section}
 	{if $listdata.total != 0}
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD CLASS="fall" colspan="7" WIDTH="100%">
 			{include file="scroller.html" loop=$grouplist}
 		</TD>
 	</TR>
 	{/if}
-	<TR CLASS="light">
+	<TR class="light">
 		<TD WIDTH="99%" COLSPAN="7" CLASS="fleftu frightu" ALIGN="right">
 			<B>
 				{t}Total:{/t} {$listdata.total|default:"0"}

@@ -8,13 +8,13 @@
 			<B>{$productinfo.name} ({$productinfo.id|string_format:"%04d"})</B>
 		</TD>
 	</TR>
-	<TR class="LIGHT">
+	<TR class="light">
 	        <TD WIDTH="100%" COLSPAN="2" CLASS="flr">
 			<TABLE WIDTH="100%" CELLPADDING="0">
-				<TR CLASS="LIGHT">
+				<TR class="light">
 					<TD WIDTH="50%" style="vertical-align:top;">
 						<TABLE WIDTH="100%" CELLPADDING="3">
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/netdev_model.gif" ALT="">
 								</TD>
@@ -25,7 +25,7 @@
 									{$productinfo.tname}
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 							<TD WIDTH="1%">
 							<IMG SRC="img/port.gif" ALT="">
 							</TD>
@@ -36,7 +36,7 @@
 							{$productinfo.qname}
 							</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 							<TD WIDTH="1%">
 							<IMG SRC="img/port.gif" ALT="">
 							</TD>
@@ -48,7 +48,7 @@
 							</TD>
 							</TR>
 							{if $productinfo.quantitycheck}
-							<TR CLASS="LIGHT">
+							<TR class="light">
 							<TD WIDTH="1%">
 							<IMG SRC="img/money.gif" ALT="">
 							</TD>
@@ -59,7 +59,7 @@
 							{$productinfo.quantity}
 							</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_count.png" ALT="">
 								</TD>
@@ -70,7 +70,7 @@
 									{$productinfo.count}
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/money.gif" ALT="">
 								</TD>
@@ -82,7 +82,7 @@
 								</TD>
 							</TR>
 							{/if}
-							<TR CLASS="LIGHT">
+							<TR class="light">
 							<TD WIDTH="1%">
 							<IMG SRC="img/serialnumber.gif" ALT="">
 							</TD>
@@ -93,7 +93,7 @@
 							{$productinfo.ean}
 							</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/tax.gif" ALT="">
 								</TD>
@@ -108,7 +108,7 @@
 					</TD>
 					<TD WIDTH="50%" style="vertical-align:top;">
                 				<TABLE WIDTH="100%" CELLPADDING="3">
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/producer.gif" ALT="">
 								</TD>
@@ -119,7 +119,7 @@
 									<A HREF="?m=stckmanufacturerinfo&id={$productinfo.manufacturerid}">{$productinfo.mname}</A>
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/nodegroup.gif" ALT="">
 								</TD>
@@ -130,7 +130,7 @@
 									<A HREF="?m=stckgroupinfo&id={$productinfo.groupid}">{$productinfo.gname}</A>
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/desc.gif" ALT="">
 								</TD>
@@ -170,7 +170,7 @@
 			</TABLE>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="100%" COLSPAN="2" CLASS="FBOTTOMU" ALIGN="RIGHT">
 			<A href="?m=stckproductedit&id={$productinfo.id}" ACCESSKEY="E">{t}Edit{/t} <IMG src="img/edit.gif" ALT="[ {t}Edit{/t} ]"></A>
                         <A href="?m=stckproductdel&id={$productinfo.id}" OnClick="return confirmLink(this, '{t name=$productinfo.name}Are you sure, you want to remove product $name?{/t}');">{t}Delete{/t} <img src="img/delete.gif" ALT=""></A>

@@ -8,13 +8,13 @@
 			<B>{$receivenoteinfo.number} - {$receivenoteinfo.sname} ({$receivenoteinfo.id|string_format:"%04d"})</B> <IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_{if $receivenoteinfo.paid}true{else}false{/if}.png" alt="">
 		</TD>
 	</TR>
-	<TR class="LIGHT">
+	<TR class="light">
 	        <TD WIDTH="100%" COLSPAN="2" CLASS="flr">
 			<TABLE WIDTH="100%" CELLPADDING="0">
-				<TR CLASS="LIGHT">
+				<TR class="light">
 					<TD WIDTH="50%" style="vertical-align:top;">
 						<TABLE WIDTH="100%" CELLPADDING="3">
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/producer.gif" ALT="">
 								</TD>
@@ -25,7 +25,7 @@
 									<A HREF="?m=customerinfo&id={$receivenoteinfo.supplierid}">{$receivenoteinfo.sname}</A>
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/money.gif" ALT="">
 								</TD>
@@ -36,7 +36,7 @@
 								        {$receivenoteinfo.netvalue|money_format}
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/money.gif" ALT="">
 								</TD>
@@ -47,7 +47,7 @@
 									{$receivenoteinfo.grossvalue|money_format}
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/calendar.gif" ALT="">
 								</TD>
@@ -58,7 +58,7 @@
 									{$receivenoteinfo.datesettlement|date_format: "%Y/%m/%d"}
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 								<IMG SRC="img/calendar.gif" ALT="">
 								</TD>
@@ -69,7 +69,7 @@
 									{$receivenoteinfo.datesale|date_format: "%Y/%m/%d"}
 								</TD>
 							</TR>
-							<TR CLASS="LIGHT">
+							<TR class="light">
 								<TD WIDTH="1%">
 									<IMG SRC="img/calendar.gif" ALT="">
 								</TD>
@@ -96,7 +96,7 @@
 					</TD>
 					<TD WIDTH="50%" style="vertical-align:top;">
                 				<TABLE WIDTH="100%" CELLPADDING="3">
-						<TR CLASS="LIGHT">
+						<TR class="light">
 							<TD WIDTH="1%">
 								<IMG SRC="img/desc.gif" ALT="">
 							</TD>
@@ -135,7 +135,7 @@
 			</TABLE>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="100%" COLSPAN="2" CLASS="FBOTTOMU" ALIGN="RIGHT">
 			<A HREF="?m=stckreceivenoteinfo&id={$receivenoteinfo.id}&action=srna">{t}Account{/t} <IMG SRC="img/pay.gif" ALT=""></A>
 			<A href="?m=stckreceivenoteedit&id={$receivenoteinfo.id}" ACCESSKEY="E">{t}Edit{/t} <IMG src="img/edit.gif" ALT="[ {t}Edit{/t} ]"></A>

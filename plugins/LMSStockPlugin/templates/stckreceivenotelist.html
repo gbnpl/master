@@ -15,12 +15,12 @@ function pays() {
 <H1>{$layout.pagetitle}</H1>
 <FORM METHOD="post" NAME="srnl" ACTION="?m=balanceadd">
 <TABLE CELLPADDING="3" width="100%">
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD CLASS="frightu fleftu" COLSPAN="10" ALIGN="right">
 			<A HREF="?m=stckreceivenotelist&amp;sprn={!$sprn}"{if $sprn} CLASS="bold"{/if}>{t}Show paid receive notes{/t}</A>
 		</TD>
 	</TR>
-	<TR CLASS="dark" {tip text="Click on column name to change sorting order"}>
+	<TR class="dark" {tip text="Click on column name to change sorting order"}>
 		<TD CLASS="fleftu" width="97%">
 			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m=stckreceivenotelist&o=sname{if $listdata.direction eq "asc" && $listdata.order eq "sname"},desc{/if}"><B>{t}Supplier:{/t}</B></A> {if $listdata.order eq "sname"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
@@ -50,7 +50,7 @@ function pays() {
 
 	</TR>
 	{if $listdata.total != 0}
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD CLASS="fall" COLSPAN="10" WIDTH="100%">
 			{include file="scroller.html" loop=$receivenotelist}
 		</TD>
@@ -105,13 +105,13 @@ function pays() {
 	</TR>
 	{/section}
 	{if $listdata.total != 0}
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD CLASS="fall" COLSPAN="10" WIDTH="100%">
 			{include file="scroller.html" loop=$receivenotelist}
 		</TD>
 	</TR>
 	{/if}
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD COLSPAN="2" ALIGN="left" CLASS="fleftu">
 			<TABLE>
 				<TR>
@@ -130,7 +130,7 @@ function pays() {
 		<TD COLSPAN="4" CLASS="frightu">
 		</TD>
 	</TR>
-	<TR CLASS="light">
+	<TR class="light">
 		<TD WIDTH="99%" COLSPAN="10" CLASS="fleftu frightu" ALIGN="right">
 			<B>
 				{t}Total:{/t} {$listdata.total|default:"0"}

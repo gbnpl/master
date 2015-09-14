@@ -5,7 +5,7 @@
 <P><FORM METHOD="POST" ACTION="?m=stckproductedit&id={$productedit.id}" NAME="productedit">
 <INPUT type="submit" class="hiddenbtn">
 <TABLE WIDTH="100%" CELLPADDING="3">
-	<TR CLASS="DARK" COLSPAN="2">
+	<TR class="dark" COLSPAN="2">
 		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
 			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
 			<B>{t}Product name:{/t}</B>
@@ -14,7 +14,7 @@
 			<INPUT TYPE="TEXT" SIZE="23" NAME="productedit[name]" VALUE="{$productedit.name|escape}" {tip trigger="name" bold=1}>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/serialnumber.gif" ALT="">
 			<B>{t}Quantity in unit:{/t}</B>
@@ -23,7 +23,7 @@
 			<INPUT TYPE="TEXT" SIZE="5" NAME="productedit[quantity]" VALUE="{if $productedit.quantity}{$productedit.quantity}{else}1{/if}" {tip trigger="quantity" bold=1}>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/serialnumber.gif" ALT="">
 			<B>{t}EAN:{/t}</B>
@@ -32,7 +32,7 @@
 			<INPUT TYPE="TEXT" SIZE="23" NAME="productedit[ean]" VALUE="{$productedit.ean}" {tip trigger="ean" bold=1}>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/netdev_model.gif" ALT=""><B>{t}Type:{/t}</B>
 		</TD>
@@ -44,7 +44,7 @@
 			</SELECT>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/nodegroup.gif" ALT=""><B>{t}Group:{/t}</B>
 		</TD>
@@ -56,7 +56,7 @@
 			</SELECT>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/producer.gif" ALT=""><B>{t}Manufacturer:{/t}</B>
 		</TD>
@@ -68,7 +68,7 @@
 			</SELECT>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/tax.gif" ALT="">
 			<B>{t}Tax:{/t}</B>
@@ -81,7 +81,7 @@
 			</SELECT>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/port.gif" ALT=""><B>{t}Quantity name:{/t}</B>
 		</TD>
@@ -93,7 +93,7 @@
 			</SELECT>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/port.gif" ALT="">
 			<B>{t}Quantity check:{/t}</B>
@@ -102,13 +102,13 @@
 			<INPUT TYPE="checkbox" value="1" name="productedit[quantitycheck]"{if $productedit.quantitycheck} checked{/if}>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{t}Comment:{/t}</B></TD>
 		<TD CLASS="fright">
 		  <TEXTAREA NAME="productedit[comment]" COLS="60" ROWS="7" {tip text="Enter comment (optional)"}>{$productedit.comment}</TEXTAREA>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
 			<A HREF="javascript:document.productedit.submit();" accesskey="s">{t}Submit{/t} <IMG SRC="img/save.gif" ALT=""></A>
 			<A HREF="?m=stckproducts">{t}Cancel{/t} <IMG SRC="img/cancel.gif" ALT=""></A><BR>

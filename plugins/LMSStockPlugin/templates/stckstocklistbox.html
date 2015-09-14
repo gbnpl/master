@@ -3,11 +3,11 @@
 <link href="{LMSStockPlugin::plugin_directory_name}/img/js/jquery.simplemodal.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="{LMSStockPlugin::plugin_directory_name}/img/js/common.js"></script>
 <TABLE CELLPADDING="3" width="100%">
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD COLSPAN="10" ALIGN="right" CLASS="fleftu frightu">
 			<A HREF="?m={$module}&amp;ssp={!$ssp}"{if $ssp} CLASS="bold"{/if}>{t}Show sold positions{/t}</A>
 		</TD>
-	<TR CLASS="dark" {tip text="Click on column name to change sorting order"}>
+	<TR class="dark" {tip text="Click on column name to change sorting order"}>
 		<TD CLASS="fleftu" width="30%">
 			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m={$module}&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{t}Name:{/t}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
@@ -46,7 +46,7 @@
 		</TD>
 	</TR>
 	{if $listdata.total != 0}
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD CLASS="fall" colspan="10" WIDTH="100%">
 			{include file="scroller.html" loop=$productlist}
 		</TD>
@@ -106,13 +106,13 @@
 	</TR>
 	{/section}
 	{if $listdata.total != 0}
-	<TR CLASS="dark">
+	<TR class="dark">
 		<TD CLASS="fall" colspan="10" WIDTH="100%">
 			{include file="scroller.html" loop=$productlist}
 		</TD>
 	</TR>
 	{/if}
-<!--	<TR CLASS="light">
+<!--	<TR class="light">
 		<TD CLASS="fleftu" ALIGN="right">
 			<B>
 				{t}Total:{/t}

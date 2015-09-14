@@ -8,7 +8,7 @@
 <P><FORM METHOD="POST" ACTION="?m=stckproductadd{if $layout.popup}&popup=1{/if}" NAME="productadd">
 <INPUT type="submit" class="hiddenbtn">
 <TABLE WIDTH="100%" CELLPADDING="3">
-	<TR CLASS="DARK" COLSPAN="2">
+	<TR class="dark" COLSPAN="2">
 		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
 			<IMG SRC="img/producer.gif" ALT="">
 			<B>{t}Product name:{/t}</B>
@@ -17,7 +17,7 @@
 			<INPUT TYPE="TEXT" SIZE="23" NAME="productadd[name]" VALUE="{$productadd.name}" {tip trigger="name" bold=1}>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/serialnumber.gif" ALT="">
 			<B>{t}Quantity in unit:{/t}</B>
@@ -26,7 +26,7 @@
 			<INPUT TYPE="TEXT" SIZE="5" NAME="productadd[quantity]" VALUE="{if $productadd.quantity}{$productadd.quantity}{else}1{/if}" {tip trigger="quantity" bold=1}>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/serialnumber.gif" ALT="">
 			<B>{t}EAN:{/t}</B>
@@ -35,7 +35,7 @@
 			<INPUT TYPE="TEXT" SIZE="23" NAME="productadd[ean]" VALUE="{$productadd.ean}" {tip trigger="ean" bold=1}>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/netdev_model.gif" ALT="">
 			<B>{t}Type:{/t}</B>
@@ -48,7 +48,7 @@
 			</SELECT>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/nodegroup.gif" ALT="">
 			<B>{t}Group:{/t}</B>
@@ -61,7 +61,7 @@
 			</SELECT>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/producer.gif" ALT="">
 			<B>{t}Manufacturer:{/t}</B>
@@ -74,7 +74,7 @@
 			</SELECT>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/tax.gif" ALT="">
 			<B>{t}Tax:{/t}</B>
@@ -87,7 +87,7 @@
 			</SELECT>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/port.gif" ALT="">
 			<B>{t}Quantity name:{/t}</B>
@@ -100,7 +100,7 @@
 			</SELECT>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/port.gif" ALT="">
 			<B>{t}Quantity check:{/t}</B>
@@ -109,13 +109,13 @@
 			 <INPUT TYPE="checkbox" value="1" name="productadd[quantitycheck]"{if $productadd.quantitycheck} checked{/if}>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{t}Comment:{/t}</B></TD>
 		<TD CLASS="fright">
 		  <TEXTAREA NAME="productadd[comment]" COLS="60" ROWS="7" {tip text="Enter comment (optional)"}>{$productadd.comment}</TEXTAREA>
 		</TD>
 	</TR>
-	<TR CLASS="LIGHT">
+	<TR class="light">
 		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
 			<A HREF="#" id="fs" accesskey="s">{t}Submit{/t} <IMG SRC="img/save.gif" ALT=""></A>
 			<A HREF="{if $layout.popup}javascript:parent.$.modal.close();{else}?m=stckproducts{/if}">{t}Cancel{/t} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
