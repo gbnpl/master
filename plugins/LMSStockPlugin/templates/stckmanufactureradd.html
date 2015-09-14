@@ -25,7 +25,7 @@
 	<TR class="light">
 		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
 			<A HREF="javascript:document.manufactureradd.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
-			<A HREF="{if !$layout.popup}?m=stckmanufacturers{else}javascript:parent.$.modal.close();{/if}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
+			<A HREF="{if !$layout.popup}?m=stckmanufacturerlist{else}javascript:parent.$.modal.close();{/if}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
 			{if !$layout.popup}<INPUT type="checkbox" name="manufactureradd[reuse]" id="manufactureradd[reuse]" value="ON" {if $manufactureradd.reuse}checked{/if}><A HREF="javascript:checkElement('manufactureradd[reuse]')"> {trans("Display this form again, when this manufacturer is saved")}</A>{/if}
 		</TD>
 	</TR>

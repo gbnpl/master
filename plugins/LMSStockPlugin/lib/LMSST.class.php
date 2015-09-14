@@ -324,18 +324,19 @@ class LMSST {
 		($direction=='desc') ? $direction = 'desc' : $direction = 'asc';
 		switch($order) {
 			case 'id':
-				$sqlord = ' ORDER BY gid';
+				$sqlord = ' ORDER BY id';
 				break;
 			case 'name':
-				$sqlord = ' ORDER BY gname';
+				$sqlord = ' ORDER BY name';
 				break;
 			default:
-				$sqlord = ' ORDER BY gname';
+				$sqlord = ' ORDER BY name';
 				break;
 		}
                 if ($ggl = $this->db->GetAll('SELECT id AS gid, name AS gname, comment AS gcomment 
                         FROM stck_groups 
-			WHERE deleted = 0')) {
+			WHERE deleted = 0'
+				.($sqlord != '' ? $sqlord.' '.$direction : ''))) {
 				$ggl['total'] = sizeof($ggl);
 				$ggl['order'] = $order;
 				$ggl['direction'] = $direction;
@@ -424,7 +425,9 @@ class LMSST {
 	/* PRODUCTS */
 
 	public function ProductAdd($pa) {
-		if ($this->db->Execute("INSERT INTO stck_products(manufacturerid, groupid, taxid, typeid, quantityid, quantitycheck, ean, quantity, name, creationdate, creatorid) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?NOW?,?)", array(
+		if ($this->db->Execute("INSERT INTO stck_products(manufacturerid, groupid, taxid, typeid, quantityid,
+			quantitycheck, ean, quantity, name, comment, creationdate, creatorid)
+			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?NOW?,?)", array(
 			$pa['manufacturerid'],
 			$pa['groupid'],
 			$pa['taxid'],
@@ -434,6 +437,7 @@ class LMSST {
 			$pa['ean'],
 			$pa['quantity'],
 			$pa['name'],
+			$pa['comment'],
 			$this->auth->id))) {
 			return $this->db->GetLastInsertID('stck_products');
 		}
