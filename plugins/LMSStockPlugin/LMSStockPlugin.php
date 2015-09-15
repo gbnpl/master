@@ -59,15 +59,15 @@ class LMSStockPlugin extends LMSPlugin {
 				'method' => 'accessTableInit'
 			),
 			'quicksearch_after_submit' => array(
-				'class' => 'QuickSearchHandler',
+				'class' => 'StockQuickSearchHandler',
 				'method' => 'quickSearchAfterSubmit',
 			),
 			'invoicenew_save_before_submit' => array(
-				'class' => 'InvoiceHandler',
+				'class' => 'StockInvoiceHandler',
 				'method' => 'invoicenewSaveBeforeSubmit',
 			),
 			'invoicenew_save_after_submit' => array(
-				'class' => 'InvoiceHandler',
+				'class' => 'StockInvoiceHandler',
 				'method' => 'invoicenewSaveAfterSubmit',
 			),
 		)
