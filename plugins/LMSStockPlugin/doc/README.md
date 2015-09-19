@@ -1,5 +1,9 @@
 modul MAGAZYN dla LMS
 
+demo: http://sarenka.mojasiec.com/lms/
+l: demo
+h: demo
+
 autor - Krzysztof Michalski <k.michalski@maxcon.pl>
 poprawki - Grzegorz Cichowski <gcichowski@gmail.com>
 przeformatowanie do wtyczki, przystosowanie do jednoczesnej obsługi mysql i pgsql oraz
