@@ -80,7 +80,7 @@ class HiperusLib {
 
         $response = $this->sendRequest("Login",$req);
         
-        if(!$response->success) {
+        if (get_class($response) != 'stdClass' || !$response->success) {
             throw new Exception("HiperusLIB login failed: ".$response->error_message);
         } 
         
