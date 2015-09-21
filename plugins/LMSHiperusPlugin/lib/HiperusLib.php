@@ -89,7 +89,7 @@ class HiperusLib {
         if(!file_put_contents(H_SESSION_FILE,$this->_h_session)) {
             throw new Exception("HiperusLIB unable to save session");
         }
-        chmod(H_SESSION_FILE,0600);
+        chmod(H_SESSION_FILE,0660);
 
     }
 
