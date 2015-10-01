@@ -205,7 +205,7 @@ foreach ($to_insert as $key => $i){
 	if ($addinvoices)
 		$document = null;
 	else
-		$document = $DB->GetRow("SELECT MAX(d.id), MAX(itemid) AS itemid FROM documents d
+		$document = $DB->GetRow("SELECT MAX(d.id) AS id, MAX(itemid) AS itemid FROM documents d
 				JOIN invoicecontents ic ON ic.docid = d.id
 				WHERE customerid = ? AND sdate >= ? AND sdate < ?
 				GROUP BY d.id", array($customerid, $starttime, $endtime));
