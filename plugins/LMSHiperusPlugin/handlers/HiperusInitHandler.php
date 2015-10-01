@@ -138,17 +138,14 @@ class HiperusInitHandler {
     /**
      * Modifies access table
      * 
-     * @param array $hook_data contains access['table'] data
-     * @return array $hook_data with modified access['table']
      */
-	public function accessTableInit(array $hook_data = array()) {
-		$hook_data[102]['name']		= 'Obsługa VoIP HIPERUS C5 - Pełny dostęp';
-		$hook_data[102]['allow_reg']	= '^hv_*';
-
-		$hook_data[103]['name']		= 'Obsługa VoIP HIPERUS C5 - Tylko do odczytu';
-		$hook_data[103]['allow_reg']	= '^(hv_+(accountinfo|accountlist|billinginfoext|billinginfoext_print|pstnrangelist|pstnusagelist|searchemptypstn|searchterminallocation|terminallist))$';
-
-		return $hook_data;
+	public function accessTableInit() {
+		$access = AccessRights::getInstance();
+		$access->insertPermission(new Permission('hiperus_full_access', 'Obsługa VoIP HIPERUS C5 - Pełny dostęp',
+			'^hv_*'), AccessRights::FIRST_FORBIDDEN_PERMISSION);
+		$access->insertPermission(new Permission('hiperus_read_only', 'Obsługa VoIP HIPERUS C5 - Tylko do odczytu',
+			'^(hv_+(accountinfo|accountlist|billinginfoext|billinginfoext_print|pstnrangelist|pstnusagelist|searchemptypstn|searchterminallocation|terminallist))$'),
+			AccessRights::FIRST_FORBIDDEN_PERMISSION);
 	}
 }
 
