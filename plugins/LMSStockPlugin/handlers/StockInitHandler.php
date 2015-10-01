@@ -163,18 +163,15 @@ class StockInitHandler {
 
     /**
      * Modifies access table
-     * 
-     * @param array $hook_data contains access['table'] data
-     * @return array $hook_data with modified access['table']
+     *
      */
-	public function accessTableInit(array $hook_data = array()) {
-		$hook_data[135]['name']			= trans('stock managament');
-		$hook_data[135]['allow_reg']	= '^(stck)[a-z]+$';
+	public function accessTableInit() {
+		$access = AccessRights::getInstance();
 
-		$hook_data[136]['name']			= trans('stock reports');
-		$hook_data[136]['allow_reg']	= '^printstock$';
-
-		return $hook_data;
+		$access->insertPermission(new Permission('stock_full_access', trans('stock managament'),
+			'^stck.*$'), AccessRights::FIRST_FORBIDDEN_PERMISSION);
+		$access->insertPermission(new Permission('stock_reports', trans('stock reports'),
+			'^printstock$'), AccessRights::FIRST_FORBIDDEN_PERMISSION);
 	}
 }
 
