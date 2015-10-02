@@ -151,11 +151,11 @@ class HiperusLib {
 		$counter = 0;
 	}
 	$counter++;
-	if ($counter >= 25) {
+	if ($counter >= 8) {
 		ftruncate($fh, 0);
 		rewind($fh);
-		if (time() - $timestamp < 11)
-			sleep(11 - (time() - $timestamp));
+		if (time() - $timestamp < 6)
+			sleep(6 - (time() - $timestamp));
 	} else {
 		rewind($fh);
 		fwrite($fh, "$timestamp $counter");
