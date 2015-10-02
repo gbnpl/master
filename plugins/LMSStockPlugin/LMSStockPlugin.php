@@ -69,7 +69,7 @@ class LMSStockPlugin extends LMSPlugin {
 			'invoicenew_save_after_submit' => array(
 				'class' => 'StockInvoiceHandler',
 				'method' => 'invoicenewSaveAfterSubmit',
-			),
-		)
+			)
+		);
 	}
 }
