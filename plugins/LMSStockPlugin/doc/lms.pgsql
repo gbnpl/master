@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS stck_groups (
   comment text NOT NULL,
   deleted smallint NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
-  UNIQUE name (name)
+  UNIQUE (name)
 );
 
 /*
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS stck_manufacturers (
   comment text,
   deleted smallint NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
-  UNIQUE name (name)
+  UNIQUE (name)
 );
 
 /*
@@ -194,7 +194,7 @@ CREATE TABLE IF NOT EXISTS stck_warehouses (
   modid integer NOT NULL DEFAULT 0,
   deleted smallint NOT NULL,
   PRIMARY KEY (id),
-  UNIQUE name (name)
+  UNIQUE (name)
 );
 
 /*
