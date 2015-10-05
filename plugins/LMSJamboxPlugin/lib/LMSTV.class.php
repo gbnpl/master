@@ -205,7 +205,7 @@ class LMSTV extends LMS {
 		}
 	}
 	
-	public function GetCustomer($id){
+	public function GetCustomer($id, $short = false){
 		$data['tv_cust_number'] = $this->DB->GetOne('SELECT tv_cust_number FROM customers WHERE id = ?', array($id));
 		if ((int)$data['tv_cust_number']){
 			$data = $this->CustomerList($data['tv_cust_number']);
