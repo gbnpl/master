@@ -235,11 +235,11 @@ CREATE INDEX stck_stock_warehouseid_idx ON stck_stock (warehouseid);
 CREATE INDEX stck_stock_pricebuynet_idx ON stck_stock (pricebuynet, pricebuygross);
 
 /*
- structure of table stck_stockassigments
+ structure of table stck_stockassignments
 */
-DROP SEQUENCE IF EXISTS stck_stockassigments_id_seq;
-CREATE SEQUENCE stck_stockassigments_id_seq;
-CREATE TABLE IF NOT EXISTS stck_stockassigments (
+DROP SEQUENCE IF EXISTS stck_stockassignments_id_seq;
+CREATE SEQUENCE stck_stockassignments_id_seq;
+CREATE TABLE IF NOT EXISTS stck_stockassignments (
   id integer DEFAULT nextval('stck_stockassignments_id_seq'::text) NOT NULL,
   type integer NOT NULL,
   stockid integer NOT NULL

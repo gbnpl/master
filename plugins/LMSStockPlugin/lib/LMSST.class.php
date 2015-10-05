@@ -903,7 +903,7 @@ class LMSST {
 
 	private function BalanceAddStockID($stock, $balance) {
 		if ($this->db->Execute('UPDATE cash SET stockid = ? WHERE id = ?', array($stock, $balance)))
-			if ($this->db->Execute('INSERT INTO stck_stockassigments (type, stockid, assigmentid) VALUES(?, ?, ?)', array(
+			if ($this->db->Execute('INSERT INTO stck_stockassignments (type, stockid, assigmentid) VALUES(?, ?, ?)', array(
 				1,
 				$stock,
 				$balance

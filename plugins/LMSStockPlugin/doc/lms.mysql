@@ -218,9 +218,9 @@ CREATE TABLE IF NOT EXISTS stck_stock (
 ) ENGINE=InnoDB;
 
 #
-# structure of table stck_stockassigments
+# structure of table stck_stockassignments
 #
-CREATE TABLE IF NOT EXISTS stck_stockassigments (
+CREATE TABLE IF NOT EXISTS stck_stockassignments (
   id int(11) NOT NULL AUTO_INCREMENT,
   type int(11) NOT NULL,
   stockid int(11) NOT NULL,
