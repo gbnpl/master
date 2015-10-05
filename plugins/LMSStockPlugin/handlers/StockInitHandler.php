@@ -56,10 +56,6 @@ class StockInitHandler {
 		array_unshift($template_dirs, $plugin_templates);
 		$hook_data->setTemplateDir($template_dirs);
 
-		$SMARTY = $hook_data;
-		require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSStockPlugin::plugin_directory_name . DIRECTORY_SEPARATOR
-			. 'lib' . DIRECTORY_SEPARATOR . 'definitions.php');
-
 		return $hook_data;
 	}
 
