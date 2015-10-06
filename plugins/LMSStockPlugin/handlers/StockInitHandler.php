@@ -86,50 +86,50 @@ class StockInitHandler {
 				'prio' => 26,
 				'submenu' => array(
 					array(
-						'name' => trans('New receive note'),
-						'link' => '?m=stckreceiveadd',
-						'prio' => 6
-						),
+						'name' => trans('Stock'),
+						'link' => '?m=stckstock',
+						'prio' => 1
+					),
 					array(
 						'name' => trans('List receive notes'),
 						'link' => '?m=stckreceivenotelist',
 						'prio' => 5
 					),
 					array(
+						'name' => trans('New receive note'),
+						'link' => '?m=stckreceiveadd',
+						'prio' => 6
+					),
+					array(
 						'name' => trans('Manufacturers'),
 						'link' => '?m=stckmanufacturerlist',
 						'prio' => 10
-						),
+					),
 					array (
 						'name' => trans('Add manufacturer'),
 						'link' => '?m=stckmanufactureradd',
 						'prio' => 11
-						),
-					array(
-						'name' => trans('Stock'),
-						'link' => '?m=stckstock',
-						'prio' => 1
-						),
-					array (
-						'name' => trans('New product'),
-						'link' => '?m=stckproductadd',
-						'prio' => 22
-						),
+					),
 					array (
 						'name' => trans('Product list'),
 						'link' => '?m=stckproductlist',
 						'prio' => 21
-						),
+					),
+					array (
+						'name' => trans('New product'),
+						'link' => '?m=stckproductadd',
+						'prio' => 22
+					),
 					array (
 						'name' => trans('Groups'),
 						'link' => '?m=stckgrouplist',
 						'prio' => 30
-						),
+					),
 					array (
 						'name' => trans('New Group'),
 						'link' => '?m=stckgroupadd',
 						'prio' => 31
-						),
+					),
 					array (
 						'name' => trans('Warehouses'),
 						'link' => '?m=stckwarehouselist',
