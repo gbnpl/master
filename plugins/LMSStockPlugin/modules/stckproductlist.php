@@ -54,7 +54,7 @@ $productlist = $DB->GetAll('SELECT p.id AS gid, p.name AS gname, p.comment AS gc
         FROM stck_products p
 	LEFT JOIN stck_stock s ON s.productid = p.id
         WHERE p.deleted = 0 AND s.pricesell IS NULL
-        GROUP BY(p.id)'
+        GROUP BY p.id, p.name, p.comment'
         .($sqlord != '' ? $sqlord.' '.$direction : ''
         ));
 

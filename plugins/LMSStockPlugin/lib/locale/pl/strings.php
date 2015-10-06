@@ -29,7 +29,6 @@ $_LANG['New product'] = 'Nowy produkt';
 $_LANG['New Product'] = 'Nowy Produkt';
 $_LANG['Add product group'] = 'Dodaj grupę produktów';
 $_LANG['Product group name:'] = 'Nazwa grupy produktów:';
-$_LANG['There are no products in your database.'] = 'Brak produktów w bazie danych';
 $_LANG['Warehouses'] = 'Magazyny';
 $_LANG['Warehouse name:'] = 'Nazwa magazynu';
 $_LANG['New warehouse'] = 'Nowy magazyn';
@@ -91,9 +90,11 @@ $_LANG['Enter comment (optional)'] = 'Wprowadź komentarz (opcjonalnie)';
 $_LANG['Select manufacturer'] = 'Wybierz producenta';
 $_LANG['Select product group'] = 'Wybierz grupę produktów';
 $_LANG['Select quantity name'] = 'Wybierz nazwę jednostki';
+$_LANG['There are no products in your database.'] = 'Brak produktów w bazie danych.';
 $_LANG['There are no receive notes in your database.'] = 'Brak dokumentów przyjęcia w bazie danych.';
 $_LANG['There are no groups in your database.'] = 'Brak grup produktów w bazie danych.';
 $_LANG['There are no warehouses in your database.'] = 'Brak magazynów w bazie danych.';
+$_LANG['There are no manufacturers in your database.'] = 'Brak producentów w bazie danych.';
 $_LANG['Display this form again, when this warehouse is saved'] = 'Wyświetl formularz ponownie po dodaniu magazynu';
 
 ?>

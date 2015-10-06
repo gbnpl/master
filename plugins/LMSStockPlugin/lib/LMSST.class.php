@@ -65,7 +65,7 @@ class LMSST {
 			FROM stck_warehouses w
 			LEFT JOIN stck_stock s ON s.warehouseid = w.id AND s.pricesell IS NULL AND s.leavedate = 0
 			WHERE w.deleted = 0 
-			GROUP BY (w.id)'
+			GROUP BY w.id, w.name, w.comment, w.def'
 			.($sqlord != '' ? $sqlord.' '.$direction : ''))) {
 			$wgl['total'] = sizeof($wgl);
 			$wgl['order'] = $order;
@@ -310,7 +310,7 @@ class LMSST {
 			COALESCE(SUM(vps.pricebuynet), 0) as valuenet,  COALESCE(SUM(vps.pricebuygross), 0) as valuegross, COUNT(vps.id) as count
 			FROM stck_vpstock vps
 			WHERE vps.gdeleted = 0 
-			GROUP BY vps.gid'
+			GROUP BY vps.gid, vps.gname, vps.gcomment'
 			.($sqlord != '' ? $sqlord.' '.$direction : ''))) {
 				$ggl['total'] = sizeof($ggl);
 				$ggl['order'] = $order;
@@ -483,7 +483,7 @@ class LMSST {
 			.($manufacturer ? ' AND m.id = '.$manufacturer : '')
 			.($group ? ' AND g.id = '.$group : '')
 			.($docid ? ' AND s.enterdocumentid = '.$docid : '').'
-			GROUP BY(p.id)'
+			GROUP BY m.name, m.id, m.name, p.name, p.id, p.quantity, g.name, g.id, t.name'
 			.($sqlord != '' ? $sqlord.' '.$direction : ''))) {
 			foreach($pgl as $p) {
 				$totalpcs += $p['count'];
