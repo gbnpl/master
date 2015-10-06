@@ -52,7 +52,7 @@
 		</TD>
 		<TD WIDTH="1%" CLASS="fright" align="right">
 		 	<nobr>
-				<a href="?m=stckwarehousedel&id={$warehouselist[warehouselist].id}" onClick="return confirmLink(this, '{t name=$warehouselist[warehouselist].name}Are you sure, you want to remove warehouse \'$name\' from database? Warehouses with current stock cannot be removed!")}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
+				<a href="?m=stckwarehousedel&id={$warehouselist[warehouselist].id}" onClick="return confirmLink(this, '{t name=$warehouselist[warehouselist].name}Are you sure, you want to remove warehouse \'$name\' from database? Warehouses with current stock cannot be removed!{/t}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
 				<a href="?m=stckwarehouseedit&id={$warehouselist[warehouselist].id}"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
 				<a href="?m=stckwarehouseinfo&id={$warehouselist[warehouselist].id}"><IMG src="img/info.gif" alt="[ {trans("Info")} ]" title="[ {trans("Info")} ]"></A>
 			</nobr>

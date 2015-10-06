@@ -33,7 +33,7 @@
 		</TD>
 		<TD WIDTH="1%" CLASS="fright" align="right">
 		 	<nobr>
-				<a href="?m=stckmanufacturerdel&id={$manufacturerlist[manufacturerlist].id}" onClick="return confirmLink(this, '{t manuf=$manufacturerlist[manufacturerlist].name}Are you sure, you want to remove manufacturer \'$manuf\' from database? Manufacturers with current stock cannot be removed!")}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
+				<a href="?m=stckmanufacturerdel&id={$manufacturerlist[manufacturerlist].id}" onClick="return confirmLink(this, '{t manuf=$manufacturerlist[manufacturerlist].name}Are you sure, you want to remove manufacturer \'$manuf\' from database? Manufacturers with current stock cannot be removed!{/t}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
 				<a href="?m=stckmanufactureredit&id={$manufacturerlist[manufacturerlist].id}"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
 				<a href="?m=stckmanufacturerinfo&id={$manufacturerlist[manufacturerlist].id}"><IMG src="img/info.gif" alt="[ {trans("Info")} ]" title="[ {trans("Info")} ]"></A>
 			</nobr>
