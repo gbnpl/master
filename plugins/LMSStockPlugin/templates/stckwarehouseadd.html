@@ -33,7 +33,7 @@
 		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
 			<A HREF="javascript:document.warehouseadd.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
 			<A HREF="?m=stckwarehouselist">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
-			<INPUT type="checkbox" name="warehouseadd[reuse]" id="warehouseadd[reuse]" value="ON" {if $warehouseadd.reuse}checked{/if}><A HREF="javascript:checkElement('warehouseadd[reuse]')"> {trans("Display this form again, when this warehouse is saved")}</A>
+			<label><INPUT type="checkbox" name="warehouseadd[reuse]" id="warehouseadd[reuse]" value="ON" {if $warehouseadd.reuse}checked{/if}> {trans("Display this form again, when this warehouse is saved")}</label>
 		</TD>
 	</TR>
 </TABLE>

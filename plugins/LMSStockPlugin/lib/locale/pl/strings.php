@@ -83,4 +83,10 @@ $_LANG['Sold:'] = 'Sprzedano:';
 $_LANG['Form already sent!'] = 'Formularz już został wysłany!';
 $_LANG['Buy report'] = 'Zestawienie zakupów';
 
+$_LANG['Document issue date'] = 'Data wystawienia dokumentu';
+$_LANG['Document sale date'] = 'Data sprzedaży dokumentu';
+$_LANG['Document deadline'] = 'Termin płatności dokumentu';
+$_LANG['Document number'] = 'Numer dokumentu';
+$_LANG['Enter comment (optional)'] = 'Wprowadź komentarz (opcjonalnie)';
+
 ?>

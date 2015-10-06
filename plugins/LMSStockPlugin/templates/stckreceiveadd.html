@@ -13,7 +13,7 @@
 		<TD CLASS="frightu">
 			<INPUT TYPE="TEXT" SIZE="60" NAME="receivenote[doc][supplier]" VALUE="{$receivenote.doc.supplier}" ID="sinput" {tip trigger="supplier" bold=1}> {if $receivenote.supplierid}({$receivenote.supplierid|string_format:"%04d"}){/if}
 			<INPUT TYPE="hidden" NAME="receivenote[doc][supplierid]" VALUE="{$receivenote.doc.supplierid}">
-			<INPUT type="checkbox" name="receivenote[doc][internal]" id="receivenote[internal]" value="1"{if $receivenote.doc.internal} CHECKED{/if}><A HREF="javascript:checkElement('receivenote[internal]')"> {trans("internal")}</A>
+			<label><INPUT type="checkbox" name="receivenote[doc][internal]" id="receivenote[internal]" value="1"{if $receivenote.doc.internal} CHECKED{/if}> {trans("internal")}</label>
 		</TD>
 	</TR>
 	<TR class="light">
@@ -28,7 +28,7 @@
 								<B>{trans("Settlement date:")}</B>
 							</TD>
 							<TD>
-								<INPUT type="TEXT" name="receivenote[doc][date][settlement]" value="{$receivenote.doc.date.settlement}" OnClick="cal3.popup();" {tip text="Document`s issue date" trigger="settlement"} SIZE="10">
+								<INPUT type="TEXT" name="receivenote[doc][date][settlement]" value="{$receivenote.doc.date.settlement}" OnClick="cal3.popup();" {tip text="Document issue date" trigger="settlement"} SIZE="10">
 							</TD>
 						</TR>
 						<TR>
@@ -37,7 +37,7 @@
 								<B>{trans("Sale date:")}</B>
 							</TD>
 							<TD>
-								<INPUT type="TEXT" name="receivenote[doc][date][sale]" value="{$receivenote.doc.date.sale}" OnClick="cal4.popup();" {tip text="Document`s sale date" trigger="sale"} SIZE="10">
+								<INPUT type="TEXT" name="receivenote[doc][date][sale]" value="{$receivenote.doc.date.sale}" OnClick="cal4.popup();" {tip text="Document sale date" trigger="sale"} SIZE="10">
 							</TD>
 						</TR>
 						<TR>
@@ -46,7 +46,7 @@
 								<B>{trans("Deadline:")}</B>
 							</TD>
 							<TD>
-								<INPUT type="TEXT" name="receivenote[doc][date][deadline]" value="{$receivenote.doc.date.deadline}" OnClick="cal5.popup();" {tip text="Document`s deadline" trigger="deadline"} SIZE="10">
+								<INPUT type="TEXT" name="receivenote[doc][date][deadline]" value="{$receivenote.doc.date.deadline}" OnClick="cal5.popup();" {tip text="Document deadline" trigger="deadline"} SIZE="10">
 							</TD>
 						</TR>
 						<TR>
@@ -55,7 +55,7 @@
 								<b>{trans("Document number:")}</b>
 							</td>
 							<TD>
-								<INPUT type="TEXT" name="receivenote[doc][number]" value="{$receivenote.doc.number}" {tip text="Document`s number" trigger="number"}>
+								<INPUT type="TEXT" name="receivenote[doc][number]" value="{$receivenote.doc.number}" {tip text="Document number" trigger="number"}>
 							</TD>
 						</TR>
 						<TR>
@@ -88,7 +88,7 @@
 		</TD>	
 	</TR>
 	<TR class="dark">
-		<TD width="100%" CLASS="FALL" COLSPAN="2" align="right">
+		<TD width="100%" class="fall text-right" COLSPAN="2">
 			<A HREF="javascript:document.receivenote.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
 			<A href="?m=stckreceiveproductlist&amp;action=cancel" ACCESSKEY="C" onClick="if(confirm('{trans("Are you sure that you want to cancel receive note?")}')) { return true; } else { return false; } ">{trans("Cancel")} <img src="img/cancel.gif" alt=""></A>
 		</TD>
