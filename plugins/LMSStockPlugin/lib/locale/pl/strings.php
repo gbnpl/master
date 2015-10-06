@@ -96,5 +96,7 @@ $_LANG['There are no groups in your database.'] = 'Brak grup produktów w bazie 
 $_LANG['There are no warehouses in your database.'] = 'Brak magazynów w bazie danych.';
 $_LANG['There are no manufacturers in your database.'] = 'Brak producentów w bazie danych.';
 $_LANG['Display this form again, when this warehouse is saved'] = 'Wyświetl formularz ponownie po dodaniu magazynu';
+$_LANG['Stock management'] = 'Zarządzanie magazynem';
+$_LANG['stock management'] = 'zarządzanie magazynem';
 
 ?>
