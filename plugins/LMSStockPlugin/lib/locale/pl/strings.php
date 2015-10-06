@@ -88,5 +88,12 @@ $_LANG['Document sale date'] = 'Data sprzedaży dokumentu';
 $_LANG['Document deadline'] = 'Termin płatności dokumentu';
 $_LANG['Document number'] = 'Numer dokumentu';
 $_LANG['Enter comment (optional)'] = 'Wprowadź komentarz (opcjonalnie)';
+$_LANG['Select manufacturer'] = 'Wybierz producenta';
+$_LANG['Select product group'] = 'Wybierz grupę produktów';
+$_LANG['Select quantity name'] = 'Wybierz nazwę jednostki';
+$_LANG['There are no receive notes in your database.'] = 'Brak dokumentów przyjęcia w bazie danych.';
+$_LANG['There are no groups in your database.'] = 'Brak grup produktów w bazie danych.';
+$_LANG['There are no warehouses in your database.'] = 'Brak magazynów w bazie danych.';
+$_LANG['Display this form again, when this warehouse is saved'] = 'Wyświetl formularz ponownie po dodaniu magazynu';
 
 ?>
