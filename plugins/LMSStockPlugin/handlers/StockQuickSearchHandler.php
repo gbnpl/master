@@ -40,7 +40,8 @@ class StockQuickSearchHandler {
 		$SESSION = &$hook_data['session'];
 		$target = &$hook_data['target'];
 
-		require_once(LMSStockPlugin::plugin_directory_name . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'stckquicksearch.php');
+		require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSStockPlugin::plugin_directory_name
+			. DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . 'stckquicksearch.php');
 
 		return $hook_data;
 	}
