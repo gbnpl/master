@@ -61,8 +61,9 @@ unset($receivenotelist['total']);
 unset($receivenotelist['direction']);
 unset($receivenotelist['order']);
 
-foreach ($receivenotelist as $k => $v)
-	$receivenotelist[$k]['sbalance'] = $LMS->GetCustomerBalance($v['sid']);
+if (!empty($receivenotelist))
+	foreach ($receivenotelist as $k => $v)
+		$receivenotelist[$k]['sbalance'] = $LMS->GetCustomerBalance($v['sid']);
 
 if(!isset($_GET['page']))
         $SESSION->restore('srnlp', $_GET['page']);
