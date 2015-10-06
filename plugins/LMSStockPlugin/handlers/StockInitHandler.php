@@ -163,7 +163,7 @@ class StockInitHandler {
 	public function accessTableInit() {
 		$access = AccessRights::getInstance();
 
-		$access->insertPermission(new Permission('stock_full_access', trans('stock managament'),
+		$access->insertPermission(new Permission('stock_full_access', trans('stock management'),
 			'^stck.*$'), AccessRights::FIRST_FORBIDDEN_PERMISSION);
 		$access->insertPermission(new Permission('stock_reports', trans('stock reports'),
 			'^printstock$'), AccessRights::FIRST_FORBIDDEN_PERMISSION);
