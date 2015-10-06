@@ -117,7 +117,7 @@
 			<A HREF="?m=stckwarehouseedit&id={$warehouseinfo.id}&action=recover">{trans("Restore")} <IMG SRC="img/recover.gif" ALT="[ {trans("Restore")} ]"></A>
 			{else}
 			<A href="?m=stckwarehouseedit&id={$warehouseinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
-                        <A href="?m=stckwarehousedel&id={$warehouseinfo.id}" OnClick="return confirmLink(this, '{t name=$warehouseinfo.name}Are you sure, you want to remove warehouse \'$name\' from database?")}');">{trans("Delete")} <img src="img/delete.gif" ALT=""></A>
+                        <A href="?m=stckwarehousedel&id={$warehouseinfo.id}" OnClick="return confirmLink(this, '{t name=$warehouseinfo.name}Are you sure, you want to remove warehouse \'$name\' from database?{/t}');">{trans("Delete")} <img src="img/delete.gif" ALT=""></A>
                 	{/if}
 		</TD>
         </TR>

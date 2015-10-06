@@ -118,7 +118,7 @@
 			<A HREF="?m=stckgroupedit&id={$groupinfo.id}&action=recover">{trans("Restore")} <IMG SRC="img/recover.gif" ALT="[ {trans("Restore")} ]"></A>
 			{else}
 			<A href="?m=stckgroupedit&id={$groupinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
-                        <A href="?m=stckgroupdel&id={$groupinfo.id}" OnClick="return confirmLink(this, '{t name=$groupinfo.name}Are you sure, you want to remove group \'$name\' from database?")}');">{trans("Delete")} <img src="img/delete.gif" ALT=""></A>
+                        <A href="?m=stckgroupdel&id={$groupinfo.id}" OnClick="return confirmLink(this, '{t name=$groupinfo.name}Are you sure, you want to remove group \'$name\' from database?{/t}');">{trans("Delete")} <img src="img/delete.gif" ALT=""></A>
                 	{/if}
 		</TD>
         </TR>
