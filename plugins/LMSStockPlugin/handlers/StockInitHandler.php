@@ -38,7 +38,7 @@ class StockInitHandler {
 	public function lmsInit(LMS $hook_data) {
 		global $LMSST;
 
-		$LMSST = new LMSST($hook_data->getDb(), $hook_data->getAuth(), $hook_data->getSyslog());
+		$LMSST = new LMSST($hook_data->getDb(), $hook_data->getAuth(), $hook_data);
 
 		return $hook_data;
 	}
