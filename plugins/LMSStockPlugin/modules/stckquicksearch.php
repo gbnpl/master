@@ -1,5 +1,7 @@
 <?php
 
+$DB = LMSDB::getInstance();
+
 switch ($mode) {
 	case 'supplier':
 		$search = str_replace(' ', '%', $search);
