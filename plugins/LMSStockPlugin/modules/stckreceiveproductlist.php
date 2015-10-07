@@ -51,7 +51,7 @@ if (isset($_POST['receivenote']['product']) && !isset($_GET['action'])) {
 	$itemdata['warehousename'] = $LMSST->WarehouseGetNameById($itemdata['warehouse']);
 
 	if (!ctype_digit($itemdata['pid']))
-		$error['product'] = 'Product not in databse';
+		$error['product'] = 'Product not in database!';
 
 	if (!ctype_digit($itemdata['count']) || $itemdata['count'] < 1)
 		$error['count'] = 'Incorrect ammount!';

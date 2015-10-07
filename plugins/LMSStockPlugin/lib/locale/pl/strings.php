@@ -113,5 +113,9 @@ $_LANG['Deadline date can\'t be empty!'] = 'Termin płatności dokumentu nie mo�
 $_LANG['Document number can\'t be empty!'] = 'Numer dokumentu nie może być pusty!';
 
 $_LANG['Select unit'] = 'Wybierz jednostkę';
+$_LANG['Product not in database!'] = 'Brak produktu w bazie danych!';
+$_LANG['Incorrect ammount!'] = 'Nieprawidłowa ilość!';
+$_LANG['Incorrect warehouse!'] = 'Nieprawidłowy magazyn!';
+$_LANG['Wrong or missing price!'] = 'Zła lub brakująca cena!';
 
 ?>
