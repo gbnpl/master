@@ -440,7 +440,7 @@ class LMSST {
 		}
 	}
 
-	public function StockList($order='name,asc', $manufacturer = NULL, $group = NULL, $warehouse = 1, $docid = NULL) {
+	public function StockList($order='name,asc', $manufacturer = NULL, $group = NULL, $warehouse = null, $docid = NULL) {
 		list($order,$direction) = sscanf($order, '%[^,],%s');
 		$totalpcs = 0;
 		$totalvn = 0;

@@ -49,9 +49,6 @@ if (isset($_POST['stock'])) {
 	$SESSION->restore('splfl', $stock);
 }
 
-if (!$stock['warehouse'])
-	$stock['warehouse'] = 1;
-
 $productlist = $LMSST->StockList($o, $stock['manufacturer'], $stock['group'], $stock['warehouse']);
 $listdata['total'] = $productlist['total'];
 $listdata['totalvn'] = $productlist['totalvn'];
