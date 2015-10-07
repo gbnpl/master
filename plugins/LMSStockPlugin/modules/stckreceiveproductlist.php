@@ -46,20 +46,20 @@ if (isset($_POST['receivenote']['product']) && !isset($_GET['action'])) {
 	$itemdata = $_POST['receivenote']['product'];
 
 	if (!ctype_digit($itemdata['warehouse']))
-		$error['warehouse'] = 'Incorrect warehouse!';
+		$error['warehouse'] = trans('Incorrect warehouse!');
 
 	$itemdata['warehousename'] = $LMSST->WarehouseGetNameById($itemdata['warehouse']);
 
 	if (!ctype_digit($itemdata['pid']))
-		$error['product'] = 'Product not in database!';
+		$error['product'] = trans('Product not in database!');
 
 	if (!ctype_digit($itemdata['count']) || $itemdata['count'] < 1)
-		$error['count'] = 'Incorrect ammount!';
+		$error['count'] = trans('Incorrect ammount!');
 
 	$itemdata['unitname'] = $LMSST->QuantityGetNameById($itemdata['unit']);
 
 	if (!preg_match('/^\d+[,.]{0,1}\d{0,2}$/i', $itemdata['price']['net']) && !preg_match('/^\d+[,.]{0,1}\d{0,2}$/i', $itemdata['price']['gross']))
-		$error['price'] = 'Wrong or missing price!';
+		$error['price'] = trans('Wrong or missing price!');
 	
 	$itemdata['price']['tax'] = isset($itemdata['price']['taxid']) ? $taxeslist[$itemdata['price']['taxid']]['label'] : '';
 
