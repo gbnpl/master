@@ -119,6 +119,7 @@ $_LANG['Incorrect warehouse!'] = 'Nieprawidłowy magazyn!';
 $_LANG['Incorrect supplier!'] = 'Nieprawidłowy dostawca!';
 $_LANG['Wrong or missing price!'] = 'Zła lub brakująca cena!';
 $_LANG['Are you sure, you want to remove product \\\'$a\\\' from database? Products with current stock cannot be removed!'] = 'Jesteś pewien, że chcesz usunąć produkt \\\'$a\\\' z bazy danych? Produkty, które są na stanie magazynowym nie mogą zostać usunięte!';
+$_LANG['Are you sure, you want to check selected receive note as accounted?'] = 'Jesteś pewien, że chcesz oznaczyć wybrany dokument przyjęcia jako rozliczony?';
 
 $_LANG['INTERNAL'] = 'WEWNĘTRZNY';
 
