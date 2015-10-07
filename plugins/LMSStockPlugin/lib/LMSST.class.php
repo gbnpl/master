@@ -514,8 +514,7 @@ class LMSST {
 
 
 	public function ProductGetInfoById($id) {
-		if ($pi = $this->db->GetRow("SELECT p.id,
-			m.name as mname, g.name as gname, q.name as qname, t.name as tname,
+		if ($pi = $this->db->GetRow("SELECT m.name as mname, g.name as gname, q.name as qname, t.name as tname,
 			tx.value as tax, tx.label as txname,
 			COALESCE(SUM(s.pricebuynet), 0) as valuenet,  COALESCE(SUM(s.pricebuygross), 0) as valuegross, COUNT(s.id) as count
 			FROM stck_products p
@@ -525,7 +524,8 @@ class LMSST {
 			LEFT JOIN taxes tx ON tx.id = p.taxid
 			LEFT JOIN stck_quantities q ON q.id = p.quantityid
 			LEFT JOIN stck_stock s ON s.productid = p.id
-			WHERE p.id = ? AND s.pricesell IS NULL", array($id))) {
+			WHERE p.id = ? AND s.pricesell IS NULL
+			GROUP BY m.name, g.name, q.name, t.name, tx.value, tx.label", array($id))) {
 			$pi = array_merge($pi, $this->db->GetRow("SELECT * FROM stck_products WHERE id = ?", array($id)));
 			$pi['createdby'] = $this->lms->GetUserName($pi['creatorid']);
 			$pi['modifiedby'] = $this->lms->GetUserName($pi['modid']);
