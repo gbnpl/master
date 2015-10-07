@@ -79,7 +79,7 @@ function pays() {
 			{$receivenotelist[receivenotelist].grossvalue|money_format}
 		</TD>
 		<TD ALIGN="right" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" NOWRAP>
-			<IMG SRC="img/stck_{if $receivenotelist[receivenotelist].paid}true{else}false{/if}.png" alt="{trans("Paid")}">
+			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_{if $receivenotelist[receivenotelist].paid}true{else}false{/if}.png" alt="{trans("Paid")}">
 		</TD>
 		<TD ALIGN="right" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" NOWRAP>
 			{$receivenotelist[receivenotelist].creationdate|date_format:"%Y/%m/%d"}
