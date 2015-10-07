@@ -112,5 +112,6 @@ $_LANG['Sale date can\'t be empty!'] = 'Data sprzedaży dokumentu nie może być
 $_LANG['Deadline date can\'t be empty!'] = 'Termin płatności dokumentu nie może być pusty!';
 $_LANG['Document number can\'t be empty!'] = 'Numer dokumentu nie może być pusty!';
 
+$_LANG['Select unit'] = 'Wybierz jednostkę';
 
 ?>
