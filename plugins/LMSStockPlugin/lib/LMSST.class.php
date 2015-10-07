@@ -107,7 +107,7 @@ class LMSST {
 				COALESCE(SUM(s.pricebuygross), 0) as valuegross, COUNT(s.id) as count
 			FROM stck_warehouses w
 			LEFT JOIN stck_stock s ON s.warehouseid = w.id
-			WHERE w.id = ? AND u.id = w.creatorid AND s.pricesell IS NULL", array($id))) {
+			WHERE w.id = ? AND s.pricesell IS NULL", array($id))) {
 			$wi = array_merge($wi, $this->db->GetRow("SELECT * FROM stck_warhouses WHERE id = ?", array($id)));
 			$wi['createdby'] = $this->lms->GetUserName($wi['creatorid']);
 			$wi['modifiedby'] = $this->lms->GetUserName($wi['modid']);
@@ -179,8 +179,7 @@ class LMSST {
 			FROM stck_manufacturers m
 			LEFT JOIN stck_products p ON p.manufacturerid = m.id
 			LEFT JOIN stck_stock s ON s.productid = p.id
-			WHERE m.id = ? AND u.id = m.creatorid AND s.pricesell IS NULL", array($id))) {
-
+			WHERE m.id = ? AND s.pricesell IS NULL", array($id))) {
 			$mi = array_merge($mi, $this->db->GetRow("SELECT * FROM stck_manufacturers WHERE id = ?", array($id)));
 			$mi['createdby'] = $this->lms->GetUserName($mi['creatorid']);
 			$mi['modifiedby'] = $this->lms->GetUserName($mi['modid']);
@@ -243,13 +242,13 @@ class LMSST {
 	}
 
 	public function GroupGetInfoById($id) {
-		if ($gi = $this->db->GetRow("SELECT g.id, q.name as quantityname,
+		if ($gi = $this->db->GetRow("SELECT q.name as quantityname,
 			COALESCE(SUM(s.pricebuynet), 0) as valuenet,  COALESCE(SUM(s.pricebuygross), 0) as valuegross, COUNT(s.id) as count
 			FROM stck_groups g
 			LEFT JOIN stck_quantities q ON q.id = g.quantityid
 			LEFT JOIN stck_stock s ON s.groupid = g.id
 			WHERE g.id = ? AND s.pricesell IS NULL
-			GROUP BY g.id, u.name, q.name", array($id))) {
+			GROUP BY q.name", array($id))) {
 			$gi = array_merge($gi, $this->db->GetRow("SELECT * FROM stck_groups WHERE id = ?", array($id)));
 			$gi['createdby'] = $this->lms->GetUserName($gi['creatorid']);
 			$gi['modifiedby'] = $this->lms->GetUserName($gi['modid']);
