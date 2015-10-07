@@ -88,7 +88,7 @@ switch ($mode) {
 
 	case 'product':
 		if(isset($_GET['ajax'])) {
-			$candidates = $DB->GetAll("SELECT ".$DB->Concat('m.name', '" "', 'p.name')." AS name, p.id, p.ean, p.quantity
+			$candidates = $DB->GetAll("SELECT ".$DB->Concat('m.name', "' '", 'p.name')." AS name, p.id, p.ean, p.quantity
 			FROM stck_products p
 			LEFT JOIN stck_manufacturers m ON p.manufacturerid =  m.id
 			WHERE ".(preg_match('/^[0-9]+$/', $search) ? 'p.id = '.intval($search).' OR ' : '')."
