@@ -127,7 +127,7 @@ if (isset($_POST['rnepl']['product']) && !isset($_GET['action'])) {
 	$itemdata['warehousename'] = $LMSST->WarehouseGetNameById($itemdata['warehouse']);
 
 	if (!ctype_digit($itemdata['pid']))
-	$error['product'] = trans('Product not in databse!');
+	$error['product'] = trans('Product not in database!');
 
 	if (!ctype_digit($itemdata['count']) || $itemdata['count'] < 1)
 	$error['count'] = trans('Incorrect ammount!');
