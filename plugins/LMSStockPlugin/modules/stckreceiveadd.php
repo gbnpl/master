@@ -59,16 +59,16 @@ if (isset($_POST['receivenote']) && !$_GET['sid']) {
 		$receivenote['doc']['supplierid'] = -1;
 	
 	if ($receivenote['doc']['date']['settlement'] == '' || !isset($receivenote['doc']['date']['settlement']))
-		$error['settlement'] = trans('Settlement date can`t be empty!');
+		$error['settlement'] = trans('Settlement date can\'t be empty!');
 	
 	if ($receivenote['doc']['date']['sale'] == '' || !isset($receivenote['doc']['date']['sale']))
-		$error['sale'] = trans('Sale date can`t be empty!');
+		$error['sale'] = trans('Sale date can\'t be empty!');
 	
 	if ($receivenote['doc']['date']['deadline'] == '' || !isset($receivenote['doc']['date']['deadline']))
-		$error['deadline'] = trans('Deadline date can`t be empty!');
+		$error['deadline'] = trans('Deadline date can\'t be empty!');
 
 	if ($receivenote['doc']['number'] == '')
-		$error['number'] = trans('Document number can`t be empty!');
+		$error['number'] = trans('Document number can\'t be empty!');
 	else
 		$receivenote['doc']['number'] = strtoupper($receivenote['doc']['number']);
 	

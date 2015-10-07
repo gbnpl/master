@@ -36,7 +36,7 @@ if (isset($_POST['productadd'])) {
 	$productadd = $_POST['productadd'];
 
 	if ($productadd['name'] == '')
-		$error['name'] = trans('Manufacturer must have a name!');
+		$error['name'] = trans('Product must have a name!');
 	
 	if (!$error) {
 		if ($id = $LMSST->ProductAdd($productadd)) {
@@ -45,7 +45,7 @@ if (isset($_POST['productadd'])) {
 				$SESSION->redirect('?m=stckproductinfo&id='.$id);
 			} 
 		} else {
-			$error['name'] = trans('Manufacturer already exists in database!');
+			$error['name'] = trans('Product already exists in database!');
 		}
 
 	}

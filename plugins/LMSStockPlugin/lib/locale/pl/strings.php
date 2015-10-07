@@ -99,4 +99,18 @@ $_LANG['Display this form again, when this warehouse is saved'] = 'Wyświetl for
 $_LANG['Stock management'] = 'Zarządzanie magazynem';
 $_LANG['stock management'] = 'zarządzanie magazynem';
 
+$_LANG['Manufacturer must have a name!'] = 'Producent musi posiadać nazwę!';
+$_LANG['Manufacturer already exists in database!'] = 'Producent już istnieje w bazie danych!';
+$_LANG['Product must have a name!'] = 'Produkt musi posiadać nazwę!';
+$_LANG['Product already exists in database!'] = 'Produkt już istnieje w bazie danych!';
+$_LANG['Product group must have a name!'] = 'Grupa produktów musi posiadać nazwę!';
+$_LANG['Group with this name already exists!'] = 'Grupa o podanej nazwie już istnieje!';
+$_LANG['Warehouse must have a name!'] = 'Magazyn musi posiadać nazwę!';
+$_LANG['Warehouse with this name already exists!'] = 'Magazyn o podanej nazwie już istnieje!';
+$_LANG['Settlement date can\'t be empty!'] = 'Data wystawienia dokumentu nie może być pusta!';
+$_LANG['Sale date can\'t be empty!'] = 'Data sprzedaży dokumentu nie może być pusta!';
+$_LANG['Deadline date can\'t be empty!'] = 'Termin płatności dokumentu nie może być pusty!';
+$_LANG['Document number can\'t be empty!'] = 'Numer dokumentu nie może być pusty!';
+
+
 ?>
