@@ -39,7 +39,7 @@ class StockInitHandler {
 		global $LMSST;
 
 		$db = $hook_data->getDb();
-		$auth = $hook_data->getAuth()
+		$auth = $hook_data->getAuth();
 		$LMSST = new LMSST($db, $auth, $hook_data);
 
 		return $hook_data;
