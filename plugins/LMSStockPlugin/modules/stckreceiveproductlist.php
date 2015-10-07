@@ -130,7 +130,8 @@ if (isset($_POST['receivenote']['product']) && !isset($_GET['action'])) {
 			$SESSION->redirect('?m=stckstock');
 			break;
 		case 'save':
-			//print_r($receivenote);
+			if (empty($receivenote['doc']['paytype']))
+				$receivenote['doc']['paytype'] = 1;
 			$LMSST->ReceiveNoteAdd($receivenote);
 			$SESSION->remove('receivenote');
 			$SESSION->redirect('?m=stckstock');
