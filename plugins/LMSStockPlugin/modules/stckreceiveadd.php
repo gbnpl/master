@@ -56,7 +56,7 @@ if (isset($_POST['receivenote']) && !$_GET['sid']) {
 		$error['supplier'] = trans('Incorrect supplier2!');
 	
 	if ($receivenote['doc']['internal'])
-		$receivenote['doc']['supplierid'] = -1;
+		$receivenote['doc']['supplierid'] = null;
 	
 	if ($receivenote['doc']['date']['settlement'] == '' || !isset($receivenote['doc']['date']['settlement']))
 		$error['settlement'] = trans('Settlement date can\'t be empty!');

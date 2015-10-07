@@ -61,8 +61,8 @@ CREATE SEQUENCE stck_receivenotes_id_seq;
 DROP TABLE IF EXISTS stck_receivenotes;
 CREATE TABLE stck_receivenotes (
   id integer DEFAULT nextval('stck_receivenotes_id_seq'::text) NOT NULL,
-  supplierid integer NOT NULL
-		REFERENCES customers (id) ON UPDATE CASCADE,
+  supplierid integer
+		REFERENCES customers (id) ON UPDATE CASCADE ON DELETE SET NULL,
   number varchar(255) NOT NULL,
   creatorid integer NOT NULL,
   modid integer NOT NULL DEFAULT 0,

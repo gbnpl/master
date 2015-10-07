@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS stck_quantities (
 #
 CREATE TABLE IF NOT EXISTS stck_receivenotes (
   id int(11) NOT NULL AUTO_INCREMENT,
-  supplierid int(11) NOT NULL,
+  supplierid int(11),
   number varchar(255) NOT NULL,
   creatorid int(11) NOT NULL,
   modid int(11) NOT NULL DEFAULT '0',
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS stck_receivenotes (
   deleted tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   KEY supplierid (supplierid),
-  FOREIGN KEY (supplierid) REFERENCES customers (id) ON UPDATE CASCADE
+  FOREIGN KEY (supplierid) REFERENCES customers (id) ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 #
