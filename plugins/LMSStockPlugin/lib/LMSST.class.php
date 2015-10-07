@@ -108,7 +108,7 @@ class LMSST {
 			FROM stck_warehouses w
 			LEFT JOIN stck_stock s ON s.warehouseid = w.id
 			WHERE w.id = ? AND s.pricesell IS NULL", array($id))) {
-			$wi = array_merge($wi, $this->db->GetRow("SELECT * FROM stck_warhouses WHERE id = ?", array($id)));
+			$wi = array_merge($wi, $this->db->GetRow("SELECT * FROM stck_warehouses WHERE id = ?", array($id)));
 			$wi['createdby'] = $this->lms->GetUserName($wi['creatorid']);
 			$wi['modifiedby'] = $this->lms->GetUserName($wi['modid']);
 			return $wi;
