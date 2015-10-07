@@ -881,6 +881,8 @@ class LMSST {
 	}
 
 	public function ReceiveNoteAccount($id) {
+		global $PAYTYPES;
+
 		$rn = $this->db->GetRow('SELECT id, grossvalue, supplierid, number, paytype, paid FROM stck_receivenotes WHERE id = ?', array($id));
 		if (!$rn['paid']) {
 			$this->lms->AddBalance(array(
