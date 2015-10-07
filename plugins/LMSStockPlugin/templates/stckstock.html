@@ -113,7 +113,7 @@
 		</TD>
 		<TD WIDTH="1%" CLASS="fright" align="right">
 		 	<nobr>
-				<a href="?m=stckproductdel&id={$productlist[pl].id}" onClick="return confirmLink(this, '{t a=$productlist[pl].name}Are you sure, you want to remove product \'$a\' from database? Products with current stock cannot be removed!{/t}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
+				<a href="?m=stckproductdel&id={$productlist[pl].id}" onClick="return confirmLink(this, '{t a=$productlist[pl].pname}Are you sure, you want to remove product \'$a\' from database? Products with current stock cannot be removed!{/t}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
 				<a href="?m=stckproductedit&id={$productlist[pl].id}"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
 				<a href="?m=stckproductinfo&id={$productlist[pl].id}"><IMG src="img/info.gif" alt="[ {trans("Info")} ]" title="[ {trans("Info")} ]"></A>
 			</nobr>
