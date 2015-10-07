@@ -123,4 +123,6 @@ $_LANG['Are you sure, you want to check selected receive note as accounted?'] = 
 
 $_LANG['INTERNAL'] = 'WEWNĘTRZNY';
 
+$_LANG['Edit receive note'] = 'Edycja dokumentu przyjęcia';
+
 ?>
