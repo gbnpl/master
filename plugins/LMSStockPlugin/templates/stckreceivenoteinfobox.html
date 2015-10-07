@@ -1,15 +1,15 @@
 <!--// $Id$ //-->
 <TABLE WIDTH="100%" CELLPADDING="3">
 	<TR class="dark">
-		<TD WIDTH="1%" CLASS="FLEFTU">
+		<TD WIDTH="1%" class="fleftu">
 			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
 		</TD>
-		<TD WIDTH="99%" CLASS="FRIGHTU">
+		<TD WIDTH="99%" class="frightu">
 			<B>{$receivenoteinfo.number} - {$receivenoteinfo.sname} ({$receivenoteinfo.id|string_format:"%04d"})</B> <IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_{if $receivenoteinfo.paid}true{else}false{/if}.png" alt="">
 		</TD>
 	</TR>
 	<TR class="light">
-	        <TD WIDTH="100%" COLSPAN="2" CLASS="flr">
+	        <TD WIDTH="100%" COLSPAN="2" class="flr">
 			<TABLE WIDTH="100%" CELLPADDING="0">
 				<TR class="light">
 					<TD WIDTH="50%" style="vertical-align:top;">
@@ -136,7 +136,7 @@
 		</TD>
 	</TR>
 	<TR class="light">
-		<TD WIDTH="100%" COLSPAN="2" CLASS="FBOTTOMU" ALIGN="RIGHT">
+		<TD WIDTH="100%" COLSPAN="2" class="fbottomu" ALIGN="RIGHT">
 			<A HREF="?m=stckreceivenoteinfo&id={$receivenoteinfo.id}&action=srna">{trans("Account")} <IMG SRC="img/pay.gif" ALT=""></A>
 			<A href="?m=stckreceivenoteedit&id={$receivenoteinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
                 </TD>

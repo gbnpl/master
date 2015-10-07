@@ -9,18 +9,18 @@
 <INPUT type="submit" class="hiddenbtn">
 <TABLE WIDTH="100%" CELLPADDING="3">
 	<TR class="dark" COLSPAN="2">
-		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
+		<TD WIDTH="1%" class="fleftu" NOWRAP>
 			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
 			<B>{trans("Supplier:")}</b>
 			{if $receivenote.doc.supplierid > 0}{$receivenote.doc.supplier}{else}{trans("INTERNAL")}{/if}
 			<b>{trans("Sale date:")}</b> {$receivenote.doc.date.sale|date_format:"%Y/%m/%d"}
 			<b>{trans("Document number:")}</b> {$receivenote.doc.number}
 		</TD>
-		<TD CLASS="frightu">
+		<TD class="frightu">
 		</TD>
 	</TR>
 	<TR class="light">
-		<TD COLSPAN="2" WIDTH="100%" CLASS="flr">
+		<TD COLSPAN="2" WIDTH="100%" class="flr">
 			<TABLE WIDTH="100%" CELLPADDING="2">
 				<tr class="dark" style="text-align: center;">
 					<td class="fleftu">{trans("Warehouse")}</td>
@@ -100,7 +100,7 @@
 		</TD>	
 	</TR>
 	<TR class="light">
-		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
+		<TD width="100%" class="fbottomu" COLSPAN="2" align="right">
 			<A HREF="javascript:document.receivenote.submit();" accesskey="s">{trans("Add")} <IMG SRC="img/save.gif" ALT=""></A>
 		</TD>
 	</TR>
@@ -142,7 +142,7 @@
 	</TR>
 {/foreach}
 	<TR class="light">
-		<TD COLSPAN="5" WIDTH="70%" CLASS="fleftu" ALIGN="right">
+		<TD COLSPAN="5" WIDTH="70%" class="fleftu" ALIGN="right">
 			<B>{trans("Total:")} {$p@total|default:"0"}</B>
 		</TD>
 		<TD CLASS="ftop" align="right">
@@ -152,10 +152,10 @@
 		<TD CLASS="ftop" ALIGN="right">
 			<B>{$receivenote.doc.gross|default:"0"|money_format}</B>
 		</TD>
-		<TD CLASS="frightu">&nbsp;</TD>
+		<TD class="frightu">&nbsp;</TD>
 	</TR>
 	<TR>
-		<TD WIDTH="99%" COLSPAN="9" CLASS="fleftu frightu" ALIGN="right">
+		<TD WIDTH="99%" COLSPAN="9" class="fleftu frightu" ALIGN="right">
 			<A href="?m=stckreceiveproductlist&amp;action=save" ACCESSKEY="S" onClick="if(confirm('{trans("Are you sure that you want to save receive note?")}')) { return true; } else { return false; } ">{trans("Submit")} <img src="img/save.gif" alt=""></A>
 			<A href="?m=stckreceiveproductlist&amp;action=cancel" ACCESSKEY="C" onClick="if(confirm('{trans("Are you sure that you want to cancel receive note?")}')) { return true; } else { return false; } ">{trans("Cancel")} <img src="img/cancel.gif" alt=""></A>
 		</TD>

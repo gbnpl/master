@@ -16,12 +16,12 @@ function pays() {
 <FORM METHOD="post" NAME="srnl" ACTION="?m=balanceadd">
 <TABLE CELLPADDING="3" width="100%">
 	<TR class="dark">
-		<TD CLASS="frightu fleftu" COLSPAN="10" ALIGN="right">
+		<TD class="frightu fleftu" COLSPAN="10" ALIGN="right">
 			<A HREF="?m=stckreceivenotelist&amp;sprn={!$sprn}"{if $sprn} CLASS="bold"{/if}>{trans("Show paid receive notes")}</A>
 		</TD>
 	</TR>
 	<TR class="dark" {tip text="Click on column name to change sorting order"}>
-		<TD CLASS="fleftu" width="97%">
+		<TD class="fleftu" width="97%">
 			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m=stckreceivenotelist&o=sname{if $listdata.direction eq "asc" && $listdata.order eq "sname"},desc{/if}"><B>{trans("Supplier:")}</B></A> {if $listdata.order eq "sname"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
 		<TD CLASS="fbt" ALIGN="left" valign="top">
@@ -51,7 +51,7 @@ function pays() {
 	</TR>
 	{if $listdata.total != 0}
 	<TR class="dark">
-		<TD CLASS="fall" COLSPAN="10" WIDTH="100%">
+		<TD class="fall" COLSPAN="10" WIDTH="100%">
 			{include file="scroller.html" loop=$receivenotelist}
 		</TD>
 	</TR>
@@ -97,7 +97,7 @@ function pays() {
 	</TR>
 	{sectionelse}
 	<TR>
-		<TD COLSPAN="10" CLASS="fall" align="center">
+		<TD COLSPAN="10" class="fall" align="center">
 			<p>&nbsp;</p>
 			<p><B>{trans("There are no receive notes in your database.")}</b></p>
 			<p>&nbsp;</p>
@@ -106,13 +106,13 @@ function pays() {
 	{/section}
 	{if $listdata.total != 0}
 	<TR class="dark">
-		<TD CLASS="fall" COLSPAN="10" WIDTH="100%">
+		<TD class="fall" COLSPAN="10" WIDTH="100%">
 			{include file="scroller.html" loop=$receivenotelist}
 		</TD>
 	</TR>
 	{/if}
 	<TR class="dark">
-		<TD COLSPAN="2" ALIGN="left" CLASS="fleftu">
+		<TD COLSPAN="2" ALIGN="left" class="fleftu">
 			<TABLE>
 				<TR>
 					<TD ALIGN="left">
@@ -127,11 +127,11 @@ function pays() {
 		<TD CLASS="fbt" ALIGN="right">
 			<b>{$listdata.totalvu|money_format}</b>
 		</TD>
-		<TD COLSPAN="4" CLASS="frightu">
+		<TD COLSPAN="4" class="frightu">
 		</TD>
 	</TR>
 	<TR class="light">
-		<TD WIDTH="99%" COLSPAN="10" CLASS="fleftu frightu" ALIGN="right">
+		<TD WIDTH="99%" COLSPAN="10" class="fleftu frightu" ALIGN="right">
 			<B>
 				{trans("Total:")} {$listdata.total|default:"0"}
 			</B>

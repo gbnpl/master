@@ -8,11 +8,11 @@
 <INPUT type="submit" class="hiddenbtn">
 <TABLE WIDTH="100%" CELLPADDING="3">
 	<TR class="dark" COLSPAN="2">
-		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
+		<TD WIDTH="1%" class="fleftu" NOWRAP>
 			<IMG SRC="img/producer.gif" ALT="">
 			<B>{trans("Manufacturer name:")}</B>
 		</TD>
-		<TD CLASS="frightu">
+		<TD class="frightu">
 			<INPUT TYPE="TEXT" SIZE="23" NAME="manufactureradd[name]" VALUE="{$manufactureradd.name}" {tip trigger="name" bold=1}>
 		</TD>
 	</TR>
@@ -23,7 +23,7 @@
 		</TD>
 	</TR>
 	<TR class="light">
-		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
+		<TD width="100%" class="fbottomu" COLSPAN="2" align="right">
 			<A HREF="javascript:document.manufactureradd.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
 			<A HREF="{if !$layout.popup}?m=stckmanufacturerlist{else}javascript:parent.$.modal.close();{/if}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
 			{if !$layout.popup}<label><INPUT type="checkbox" name="manufactureradd[reuse]" id="manufactureradd[reuse]" value="ON" {if $manufactureradd.reuse}checked{/if}> {trans("Display this form again, when this manufacturer is saved")}</label>{/if}

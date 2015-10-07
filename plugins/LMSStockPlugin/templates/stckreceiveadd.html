@@ -6,18 +6,18 @@
 <INPUT type="submit" class="hiddenbtn">
 <TABLE WIDTH="100%" CELLPADDING="3">
 	<TR class="dark" COLSPAN="2">
-		<TD WIDTH="1%" CLASS="fleftu" NOWRAP>
+		<TD WIDTH="1%" class="fleftu" NOWRAP>
 			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
 			<B>{trans("Supplier:")}</B>
 		</TD>
-		<TD CLASS="frightu">
+		<TD class="frightu">
 			<INPUT TYPE="TEXT" SIZE="60" NAME="receivenote[doc][supplier]" VALUE="{$receivenote.doc.supplier}" ID="sinput" {tip trigger="supplier" bold=1}> {if $receivenote.supplierid}({$receivenote.supplierid|string_format:"%04d"}){/if}
 			<INPUT TYPE="hidden" NAME="receivenote[doc][supplierid]" VALUE="{$receivenote.doc.supplierid}">
 			<label><INPUT type="checkbox" name="receivenote[doc][internal]" id="receivenote[internal]" value="1"{if $receivenote.doc.internal} CHECKED{/if}> {trans("internal")}</label>
 		</TD>
 	</TR>
 	<TR class="light">
-		<TD COLSPAN="2" WIDTH="100%" CLASS="flr">
+		<TD COLSPAN="2" WIDTH="100%" class="flr">
 			<TABLE WIDTH="100%" CELLPADDING="0">
 				<TR class="light">
 					<TD WIDTH="50%" style="vertical-align:top;">

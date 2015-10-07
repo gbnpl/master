@@ -4,11 +4,11 @@
 <script type="text/javascript" src="{LMSStockPlugin::plugin_directory_name}/img/js/common.js"></script>
 <TABLE CELLPADDING="3" width="100%">
 	<TR class="dark">
-		<TD COLSPAN="10" ALIGN="right" CLASS="fleftu frightu">
+		<TD COLSPAN="10" ALIGN="right" class="fleftu frightu">
 			<A HREF="?m={$module}&amp;ssp={!$ssp}"{if $ssp} CLASS="bold"{/if}>{trans("Show sold positions")}</A>
 		</TD>
 	<TR class="dark" {tip text="Click on column name to change sorting order"}>
-		<TD CLASS="fleftu" width="30%">
+		<TD class="fleftu" width="30%">
 			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m={$module}&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{trans("Name:")}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
@@ -47,7 +47,7 @@
 	</TR>
 	{if $listdata.total != 0}
 	<TR class="dark">
-		<TD CLASS="fall" colspan="10" WIDTH="100%">
+		<TD class="fall" colspan="10" WIDTH="100%">
 			{include file="scroller.html" loop=$productlist}
 		</TD>
 	</TR>
@@ -98,7 +98,7 @@
 	</TR>
 	{sectionelse}
 	<TR>
-		<TD colspan="10" CLASS="fall" align="center">
+		<TD colspan="10" class="fall" align="center">
 			<p>&nbsp;</p>
 			<p><B>{trans("There are no products in your database.")}</b></p>
 			<p>&nbsp;</p>
@@ -107,13 +107,13 @@
 	{/section}
 	{if $listdata.total != 0}
 	<TR class="dark">
-		<TD CLASS="fall" colspan="10" WIDTH="100%">
+		<TD class="fall" colspan="10" WIDTH="100%">
 			{include file="scroller.html" loop=$productlist}
 		</TD>
 	</TR>
 	{/if}
 <!--	<TR class="light">
-		<TD CLASS="fleftu" ALIGN="right">
+		<TD class="fleftu" ALIGN="right">
 			<B>
 				{trans("Total:")}
 			</B>
@@ -127,7 +127,7 @@
 		<TD CLASS="fbt" ALIGN="right">
 			<B>{$listdata.totalvn|default:"0"|money_format}</B>
 		</TD>
-		<TD CLASS="frightu" ALIGN="right">
+		<TD class="frightu" ALIGN="right">
 			<B>{$listdata.totalvg|default:"0"|money_format}</B>
 		</TD>
 	</TR>-->

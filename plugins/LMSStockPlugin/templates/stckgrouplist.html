@@ -4,7 +4,7 @@
 <H1>{$layout.pagetitle}</H1>
 <TABLE CELLPADDING="3" width="100%">
 	<TR class="dark" {tip text="Click on column name to change sorting order"}>
-		<TD CLASS="fleftu" width="97%">
+		<TD class="fleftu" width="97%">
 			<IMG src="img/nodegroup.gif" ALT="">&nbsp;<A href="?m=stckgrouplist&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{trans("Name:")}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
@@ -26,7 +26,7 @@
 	</TR>
 	{if $listdata.total != 0}
 	<TR class="dark">
-		<TD CLASS="fall" colspan="7" WIDTH="100%">
+		<TD class="fall" colspan="7" WIDTH="100%">
 			{include file="scroller.html" loop=$grouplist}
 		</TD>
 	</TR>
@@ -60,7 +60,7 @@
 	</TR>
 	{sectionelse}
 	<TR>
-		<TD colspan="7" CLASS="fall" align="center">
+		<TD colspan="7" class="fall" align="center">
 			<p>&nbsp;</p>
 			<p><B>{trans("There are no groups in your database.")}</b></p>
 			<p>&nbsp;</p>
@@ -69,13 +69,13 @@
 	{/section}
 	{if $listdata.total != 0}
 	<TR class="dark">
-		<TD CLASS="fall" colspan="7" WIDTH="100%">
+		<TD class="fall" colspan="7" WIDTH="100%">
 			{include file="scroller.html" loop=$grouplist}
 		</TD>
 	</TR>
 	{/if}
 	<TR class="light">
-		<TD WIDTH="99%" COLSPAN="7" CLASS="fleftu frightu" ALIGN="right">
+		<TD WIDTH="99%" COLSPAN="7" class="fleftu frightu" ALIGN="right">
 			<B>
 				{trans("Total:")} {$listdata.total|default:"0"}
 			</B>

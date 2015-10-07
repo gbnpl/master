@@ -6,7 +6,7 @@
 <INPUT type="submit" class="hiddenbtn">
 <TABLE WIDTH="100%" CELLPADDING="3">
 	<TR class="light">
-		<TD COLSPAN="2" WIDTH="100%" CLASS="frightu fleftu">
+		<TD COLSPAN="2" WIDTH="100%" class="frightu fleftu">
 			<TABLE WIDTH="100%" CELLPADDING="2">
 				<tr class="dark" style="text-align: center;">
 					<td class="fleftu">{trans("Warehouse")}</td>
@@ -82,7 +82,7 @@
 		</TD>	
 	</TR>
 	<TR class="light">
-		<TD width="100%" CLASS="fbottomu" COLSPAN="2" align="right">
+		<TD width="100%" class="fbottomu" COLSPAN="2" align="right">
 			<A HREF="javascript:document.rnepl.submit();" accesskey="s">{trans("Add")} <IMG SRC="img/save.gif" ALT=""></A>
 		</TD>
 	</TR>
@@ -122,7 +122,7 @@
 	</TR>
 {/foreach}
 	<TR class="light">
-		<TD COLSPAN="4" WIDTH="70%" CLASS="fleftu" ALIGN="right">
+		<TD COLSPAN="4" WIDTH="70%" class="fleftu" ALIGN="right">
 			<B>{trans("Total:")} {$p@total|default:"0"}</B>
 		</TD>
 		<TD CLASS="ftop" align="right">
@@ -132,10 +132,10 @@
 		<TD CLASS="ftop" ALIGN="right">
 			<B>{$rnepl.doc.gross|default:"0"|money_format}</B>
 		</TD>
-		<TD CLASS="frightu">&nbsp;</TD>
+		<TD class="frightu">&nbsp;</TD>
 	</TR>
 	<TR>
-		<TD WIDTH="99%" COLSPAN="9" CLASS="fleftu frightu" ALIGN="right">
+		<TD WIDTH="99%" COLSPAN="9" class="fleftu frightu" ALIGN="right">
 			<A href="?m={$layout.module}&id={$receivenoteedit.id}&amp;action=save" ACCESSKEY="S" onClick="if(confirm('{trans("Are you sure that you want to save receive note?")}')) { return true; } else { return false; } ">{trans("Submit")} <img src="img/save.gif" alt=""></A>
 			<A href="?m={$layout.module}&id={$receivenoteedit.id}&amp;action=cancel" ACCESSKEY="C" onClick="if(confirm('{trans("Are you sure that you want to cancel receive note?")}')) { return true; } else { return false; } ">{trans("Cancel")} <img src="img/cancel.gif" alt=""></A>
 		</TD>
