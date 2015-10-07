@@ -59,7 +59,7 @@ if (isset($_POST['receivenoteedit'])) {
 		$error['supplier'] = trans('Incorrect supplier!');
 
 	if ($receivenoteedit['datesettlement'] == '' || !isset($receivenoteedit['datesettlement']))
-		$error['datesettlement'] = trans('Settlement date can`t be empty!');
+		$error['datesettlement'] = trans('Settlement date can\'t be empty!');
 
 	if(preg_match('/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}$/', $receivenoteedit['datesettlement'])) {
 		list($y, $m, $d) = explode('/', $receivenoteedit['datesettlement']);
@@ -75,7 +75,7 @@ if (isset($_POST['receivenoteedit'])) {
 		$error['datesettlement'] = trans('Incorrect date format! Enter date in YYYY/MM/DD format!');
 
 	if ($receivenoteedit['datesale'] == '' || !isset($receivenoteedit['datesale']))
-		$error['sale'] = trans('Sale date can`t be empty!');
+		$error['sale'] = trans('Sale date can\'t be empty!');
 
 	if(preg_match('/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}$/', $receivenoteedit['datesale'])) {
 		list($y, $m, $d) = explode('/', $receivenoteedit['datesale']);
@@ -91,7 +91,7 @@ if (isset($_POST['receivenoteedit'])) {
 		$error['datesale'] = trans('Incorrect date format! Enter date in YYYY/MM/DD format!');
 
 	if ($receivenoteedit['deadline'] == '' || !isset($receivenoteedit['deadline']))
-		$error['deadline'] = trans('Deadline date can`t be empty!');
+		$error['deadline'] = trans('Deadline date can\'t be empty!');
 
 	if(preg_match('/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}$/', $receivenoteedit['deadline'])) {
 		list($y, $m, $d) = explode('/', $receivenoteedit['deadline']);
@@ -104,7 +104,7 @@ if (isset($_POST['receivenoteedit'])) {
 		$error['deadline'] = trans('Incorrect date format! Enter date in YYYY/MM/DD format!');
 
 	if ($receivenoteedit['number'] == '')
-		$error['number'] = trans('Document number can`t be empty!');
+		$error['number'] = trans('Document number can\'t be empty!');
 	else
 		$receivenoteedit['number'] = strtoupper($receivenoteedit['number']);
 
@@ -122,20 +122,20 @@ if (isset($_POST['rnepl']['product']) && !isset($_GET['action'])) {
 	$itemdata = $_POST['rnepl']['product'];
 
 	if (!ctype_digit($itemdata['warehouse']))
-	$error['warehouse'] = 'Incorrect warehouse!';
+	$error['warehouse'] = trans('Incorrect warehouse!');
 
 	$itemdata['warehousename'] = $LMSST->WarehouseGetNameById($itemdata['warehouse']);
 
 	if (!ctype_digit($itemdata['pid']))
-	$error['product'] = 'Product not in databse';
+	$error['product'] = trans('Product not in databse!');
 
 	if (!ctype_digit($itemdata['count']) || $itemdata['count'] < 1)
-	$error['count'] = 'Incorrect ammount!';
+	$error['count'] = trans('Incorrect ammount!');
 
 	$itemdata['unitname'] = $LMSST->QuantityGetNameById($itemdata['unit']);
 
 	if (!preg_match('/^\d+[,.]{0,1}\d{0,2}$/i', $itemdata['price']['net']) && !preg_match('/^\d+[,.]{0,1}\d{0,2}$/i', $itemdata['price']['gross']))
-	$error['price'] = 'Wrong or missing price!';
+	$error['price'] = trans('Wrong or missing price!');
 
 	$itemdata['price']['tax'] = isset($itemdata['price']['taxid']) ? $taxeslist[$itemdata['price']['taxid']]['label'] : '';
 
