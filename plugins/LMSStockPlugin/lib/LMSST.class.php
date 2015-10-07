@@ -734,14 +734,16 @@ class LMSST {
 			foreach($receivenote['product'] as $product) {
 				$product['group'] = $this->db->GetOne('SELECT groupid FROM stck_products WHERE id = ?', array($product['pid']));
 				$sid = $this->StockAdd($product, $receivenote['doc'], $receivenote['doc']['date']['sale']);
-				$this->lms->AddBalance(array(
-					'value' => $product['price']['gross'],
-					'taxid' => $product['price']['taxid'],
-					'customerid' => $receivenote['doc']['supplierid'],
-					'comment' => $product['product'],
-					));
-				$bid = $this->db->GetLastInsertID('cash');
-				$this->BalanceAddStockID($sid, $bid);
+				if (!empty($receivenote['doc']['supplierid'])) {
+					$this->lms->AddBalance(array(
+						'value' => $product['price']['gross'],
+						'taxid' => $product['price']['taxid'],
+						'customerid' => $receivenote['doc']['supplierid'],
+						'comment' => $product['product'],
+						));
+					$bid = $this->db->GetLastInsertID('cash');
+					$this->BalanceAddStockID($sid, $bid);
+				}
 			}
 			if ($receivenote['doc']['paytype'] == 1) {
 			/*	$this->lms->AddBalance(array(
@@ -884,7 +886,7 @@ class LMSST {
 		global $PAYTYPES;
 
 		$rn = $this->db->GetRow('SELECT id, grossvalue, supplierid, number, paytype, paid FROM stck_receivenotes WHERE id = ?', array($id));
-		if (!$rn['paid']) {
+		if (empty($rn['paid']) && !empty($rn['supplierid'])) {
 			$this->lms->AddBalance(array(
 				'value' => $rn['grossvalue']*-1,
 				'customerid' => $rn['supplierid'],
