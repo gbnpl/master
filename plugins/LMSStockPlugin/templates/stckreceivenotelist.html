@@ -60,7 +60,7 @@ function pays() {
 	{section name=receivenotelist loop=$receivenotelist start=$start max=$pagelimit}
 	<TR class="{cycle}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
 		<TD width="97%" CLASS="fleft" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" VALIGN="TOP">
-			<IMG src="img/producer.gif" ALT=""> <a href="?m=customerinfo&&id={$receivenotelist[receivenotelist].sid}"><B>{$receivenotelist[receivenotelist].sname}</B></A> ({$receivenotelist[receivenotelist].sbalance|money_format})<BR>
+			<IMG src="img/producer.gif" ALT=""> <a href="?m=customerinfo&id={$receivenotelist[receivenotelist].sid}"><B>{$receivenotelist[receivenotelist].sname}</B></A> ({$receivenotelist[receivenotelist].sbalance|money_format})<BR>
 			{$receivenotelist[receivenotelist].comment}
 		</TD>
 		<TD ALIGN="left" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" NOWRAP>
