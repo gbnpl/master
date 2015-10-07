@@ -116,7 +116,10 @@ $_LANG['Select unit'] = 'Wybierz jednostkę';
 $_LANG['Product not in database!'] = 'Brak produktu w bazie danych!';
 $_LANG['Incorrect ammount!'] = 'Nieprawidłowa ilość!';
 $_LANG['Incorrect warehouse!'] = 'Nieprawidłowy magazyn!';
+$_LANG['Incorrect supplier!'] = 'Nieprawidłowy dostawca!';
 $_LANG['Wrong or missing price!'] = 'Zła lub brakująca cena!';
 $_LANG['Are you sure, you want to remove product \\\'$a\\\' from database? Products with current stock cannot be removed!'] = 'Jesteś pewien, że chcesz usunąć produkt \\\'$a\\\' z bazy danych? Produkty, które są na stanie magazynowym nie mogą zostać usunięte!';
+
+$_LANG['INTERNAL'] = 'WEWNĘTRZNY';
 
 ?>

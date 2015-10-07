@@ -50,10 +50,10 @@ if (isset($_POST['receivenote']) && !$_GET['sid']) {
 //		$error['supplier'] = trans('Incorrect supplier!');
 	
 	if (!ctype_digit($receivenote['doc']['supplierid']) && !$receivenote['doc']['internal'])
-		$error['supplier'] = trans('Incorrect supplier1!');
+		$error['supplier'] = trans('Incorrect supplier!');
 	
 	if ($receivenote['doc']['supplierid'] == '' && !$receivenote['doc']['internal'])
-		$error['supplier'] = trans('Incorrect supplier2!');
+		$error['supplier'] = trans('Incorrect supplier!');
 	
 	if ($receivenote['doc']['internal'])
 		$receivenote['doc']['supplierid'] = null;
