@@ -24,3 +24,4 @@ TODO
 rezerwacja sprzetu
 dzierzawa od dostawcy
 dzierzawa dla klienta
+zdjęcia towaru np. tak jak w allegro (minimum jedno może dwa max trzy)
