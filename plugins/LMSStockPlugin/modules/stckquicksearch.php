@@ -5,7 +5,6 @@ $DB = LMSDB::getInstance();
 switch ($mode) {
 	case 'supplier':
 		$search = str_replace(' ', '%', $search);
-		$sql_search = $DB->Escape("%$search%");
 		if(isset($_GET['ajax'])) {
 			$candidates = $DB->GetAll("SELECT s.id, s.productid, s.serialnumber, s.pricebuynet, s.pricebuygross, s.bdate,
 				".$DB->Concat('m.name',"' '",'p.name')." as name, p.ean
@@ -140,7 +139,6 @@ switch ($mode) {
 
 	case 'productinv':
 			$search = str_replace(' ', '%', $search);
-			$sql_search = $DB->Escape("%$search%");
 			if(isset($_GET['ajax'])) {
 				$candidates = $DB->GetAll("SELECT s.id, s.productid, s.serialnumber, s.pricebuynet, s.pricebuygross, s.bdate,
 					".$DB->Concat('m.name',"' '",'p.name')." as name, p.ean
@@ -189,7 +187,6 @@ switch ($mode) {
 
 	case 'productprice':
 			$search = str_replace(' ', '%', $search);
-			$sql_search = $DB->Escape("%$search%");
 			if(isset($_GET['ajax'])) {
 				$candidates = $DB->GetAll("SELECT s.id, s.productid, s.serialnumber, s.pricesell, s.leavedate, s.warranty,
 					".$DB->Concat('m.name',"' '",'p.name')." as name, p.ean
