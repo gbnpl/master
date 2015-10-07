@@ -175,17 +175,17 @@ class LMSST {
 	}
 
 	public function ManufacturerGetInfoById($id) {
-		if ($mi = $this->db->GetRow("SELECT m.*, u.name as createdby,
-			COALESCE(SUM(s.pricebuynet), 0) as valuenet,  COALESCE(SUM(s.pricebuygross), 0) as valuegross, COUNT(s.id) as count
+		if ($mi = $this->db->GetRow("SELECT COALESCE(SUM(s.pricebuynet), 0) as valuenet,
+				COALESCE(SUM(s.pricebuygross), 0) as valuegross, COUNT(s.id) as count
 			FROM stck_manufacturers m
 			LEFT JOIN users u ON u.id = m.creatorid
 			LEFT JOIN stck_products p ON p.manufacturerid = m.id
 			LEFT JOIN stck_stock s ON s.productid = p.id
 			WHERE m.id = ? AND u.id = m.creatorid AND s.pricesell IS NULL", array($id))) {
-			
-/*			$mi['count'] = $this->ManufacturerStockCount($id);
-			$mi['value'] = $this->ManufacturerStockValue($id);
-*/			$mi['modifiedby'] = $this->lms->GetUserName($mi['modid']);
+
+			$mi = array_merge($mi, $this->db->GetRow("SELECT * FROM stck_manufacturers WHERE id = ?", array($id)));
+			$mi['createdby'] = $this->lms->GetUserName($mi['creatorid']);
+			$mi['modifiedby'] = $this->lms->GetUserName($mi['modid']);
 			return $mi;
 		}
 	}
@@ -690,7 +690,7 @@ class LMSST {
 			LEFT JOIN stck_manufacturers m ON m.id = p.manufacturerid
 			LEFT JOIN taxes tx ON tx.id = p.taxid
 			LEFT JOIN stck_receivenotes rn ON s.enterdocumentid = rn.id
-			WHERE 1'
+			WHERE 1=1'
 			.($prodid ? ' AND s.productid = '.$prodid : '')
 			.($docid ? ' AND s.enterdocumentid = '.$docid : '')
 			.($ssp ? '' : ' AND s.pricesell IS NULL')
