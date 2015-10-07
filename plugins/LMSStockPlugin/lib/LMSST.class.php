@@ -103,14 +103,13 @@ class LMSST {
 	}
 
 	public function WarehouseGetInfoById($id) {
-		if ($wi = $this->db->GetRow("SELECT w.*, u.name as createdby,
-			COALESCE(SUM(s.pricebuynet), 0) as valuenet,  COALESCE(SUM(s.pricebuygross), 0) as valuegross, COUNT(s.id) as count
+		if ($wi = $this->db->GetRow("SELECT COALESCE(SUM(s.pricebuynet), 0) as valuenet,
+				COALESCE(SUM(s.pricebuygross), 0) as valuegross, COUNT(s.id) as count
 			FROM stck_warehouses w
-			LEFT JOIN users u ON w.creatorid = u.id
 			LEFT JOIN stck_stock s ON s.warehouseid = w.id
 			WHERE w.id = ? AND u.id = w.creatorid AND s.pricesell IS NULL", array($id))) {
-			//$wi['count'] = $this->WarehouseStockCount($id);
-			//$wi['value'] = $this->WarehouseStockValue($id);
+			$wi = array_merge($wi, $this->db->GetRow("SELECT * FROM stck_warhouses WHERE id = ?", array($id)));
+			$wi['createdby'] = $this->lms->GetUserName($wi['creatorid']);
 			$wi['modifiedby'] = $this->lms->GetUserName($wi['modid']);
 			return $wi;
 		}
@@ -178,7 +177,6 @@ class LMSST {
 		if ($mi = $this->db->GetRow("SELECT COALESCE(SUM(s.pricebuynet), 0) as valuenet,
 				COALESCE(SUM(s.pricebuygross), 0) as valuegross, COUNT(s.id) as count
 			FROM stck_manufacturers m
-			LEFT JOIN users u ON u.id = m.creatorid
 			LEFT JOIN stck_products p ON p.manufacturerid = m.id
 			LEFT JOIN stck_stock s ON s.productid = p.id
 			WHERE m.id = ? AND u.id = m.creatorid AND s.pricesell IS NULL", array($id))) {
@@ -245,15 +243,15 @@ class LMSST {
 	}
 
 	public function GroupGetInfoById($id) {
-		if ($gi = $this->db->GetRow("SELECT g.*, u.name as createdby, q.name as quantityname,
+		if ($gi = $this->db->GetRow("SELECT g.id, q.name as quantityname,
 			COALESCE(SUM(s.pricebuynet), 0) as valuenet,  COALESCE(SUM(s.pricebuygross), 0) as valuegross, COUNT(s.id) as count
 			FROM stck_groups g
-			LEFT JOIN users u ON u.id = g.creatorid
 			LEFT JOIN stck_quantities q ON q.id = g.quantityid
 			LEFT JOIN stck_stock s ON s.groupid = g.id
-			WHERE g.id = ? AND s.pricesell IS NULL", array($id))) {
-//			$gi['count'] = $this->GroupStockCount($id);
-//			$gi['value'] = $this->GroupStockValue($id);
+			WHERE g.id = ? AND s.pricesell IS NULL
+			GROUP BY g.id, u.name, q.name", array($id))) {
+			$gi = array_merge($gi, $this->db->GetRow("SELECT * FROM stck_groups WHERE id = ?", array($id)));
+			$gi['createdby'] = $this->lms->GetUserName($gi['creatorid']);
 			$gi['modifiedby'] = $this->lms->GetUserName($gi['modid']);
 			return $gi;
 		}
@@ -517,12 +515,8 @@ class LMSST {
 
 
 	public function ProductGetInfoById($id) {
-		if ($pi = $this->db->GetRow("SELECT p.*,
-			m.name as mname,
-			g.name as gname,
-			u.name as createdby,
-			q.name as qname,
-			t.name as tname,
+		if ($pi = $this->db->GetRow("SELECT p.id,
+			m.name as mname, g.name as gname, q.name as qname, t.name as tname,
 			tx.value as tax, tx.label as txname,
 			COALESCE(SUM(s.pricebuynet), 0) as valuenet,  COALESCE(SUM(s.pricebuygross), 0) as valuegross, COUNT(s.id) as count
 			FROM stck_products p
@@ -530,10 +524,11 @@ class LMSST {
 			LEFT JOIN stck_groups g ON g.id = p.groupid
 			LEFT JOIN stck_types t ON t.id = p.typeid
 			LEFT JOIN taxes tx ON tx.id = p.taxid
-			LEFT JOIN users u ON u.id = p.creatorid
 			LEFT JOIN stck_quantities q ON q.id = p.quantityid
 			LEFT JOIN stck_stock s ON s.productid = p.id
 			WHERE p.id = ? AND s.pricesell IS NULL", array($id))) {
+			$pi = array_merge($pi, $this->db->GetRow("SELECT * FROM stck_products WHERE id = ?", array($id)));
+			$pi['createdby'] = $this->lms->GetUserName($pi['creatorid']);
 			$pi['modifiedby'] = $this->lms->GetUserName($pi['modid']);
 			return $pi;
 		}
