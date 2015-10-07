@@ -172,17 +172,17 @@ CREATE TABLE stck_vpstock (
 	taxid integer,
 	pricebuygross numeric(9,2),
 	pricesell numeric(9,2),
-	deleted smallint,
+	deleted smallint DEFAULT 0,
 	comment text,
 	pid integer,
 	pname text,
 	manufacturerid integer,
 	pcomment text,
-	pdeleted smallint,
+	pdeleted smallint DEFAULT 0,
 	gid integer,
 	gname varchar(100),
 	gcomment text,
-	gdeleted smallint
+	gdeleted smallint DEFAULT 0
 );
 
 /*
@@ -201,7 +201,7 @@ CREATE TABLE stck_warehouses (
   moddate integer NOT NULL DEFAULT 0,
   creatorid integer NOT NULL DEFAULT 0,
   modid integer NOT NULL DEFAULT 0,
-  deleted smallint NOT NULL,
+  deleted smallint NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   UNIQUE (name)
 );
