@@ -218,8 +218,8 @@ CREATE TABLE stck_stock (
 		REFERENCES stck_warehouses (id) ON UPDATE CASCADE,
   groupid integer NOT NULL,
   productid integer NOT NULL,
-  supplierid integer NOT NULL
-		REFERENCES customers (id) ON UPDATE CASCADE,
+  supplierid integer
+		REFERENCES customers (id) ON UPDATE CASCADE ON DELETE SET NULL,
   enterdocumentid integer NOT NULL
 		REFERENCES stck_receivenotes (id) ON UPDATE CASCADE,
   quitdocumentid integer DEFAULT NULL,

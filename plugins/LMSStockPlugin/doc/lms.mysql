@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS stck_stock (
   warehouseid int(11) NOT NULL,
   groupid int(11) NOT NULL,
   productid int(11) NOT NULL,
-  supplierid int(11) NOT NULL,
+  supplierid int(11),
   enterdocumentid int(11) NOT NULL,
   quitdocumentid int(11) DEFAULT NULL,
   creationdate int(11) NOT NULL DEFAULT '0',
@@ -213,7 +213,7 @@ CREATE TABLE IF NOT EXISTS stck_stock (
   KEY warehouseid (warehouseid),
   KEY idx1 (pricebuynet,pricebuygross),
   FOREIGN KEY (enterdocumentid) REFERENCES stck_receivenotes (id) ON UPDATE CASCADE,
-  FOREIGN KEY (supplierid) REFERENCES customers (id) ON UPDATE CASCADE,
+  FOREIGN KEY (supplierid) REFERENCES customers (id) ON UPDATE CASCADE ON DELETE SET NULL,
   FOREIGN KEY (warehouseid) REFERENCES stck_warehouses (id) ON UPDATE CASCADE
 ) ENGINE=InnoDB;
 
