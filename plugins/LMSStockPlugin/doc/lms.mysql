@@ -151,17 +151,17 @@ CREATE TABLE IF NOT EXISTS stck_vpstock (
 	taxid int(11),
 	pricebuygross decimal(9,2),
 	pricesell decimal(9,2),
-	deleted tinyint(4),
+	deleted tinyint(4) DEFAULT '0',
 	comment text,
 	pid int(11),
 	pname text,
 	manufacturerid int(11),
 	pcomment text,
-	pdeleted tinyint(1),
+	pdeleted tinyint(1) DEFAULT '0',
 	gid int(11),
 	gname varchar(100),
 	gcomment text,
-	gdeleted tinyint(1)
+	gdeleted tinyint(1) DEFAULT '0'
 );
 
 #
@@ -177,7 +177,7 @@ CREATE TABLE IF NOT EXISTS stck_warehouses (
   moddate int(11) NOT NULL DEFAULT '0',
   creatorid int(11) NOT NULL DEFAULT '0',
   modid int(11) NOT NULL DEFAULT '0',
-  deleted tinyint(4) NOT NULL,
+  deleted tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (id),
   UNIQUE KEY name (name)
 ) ENGINE=InnoDB;
