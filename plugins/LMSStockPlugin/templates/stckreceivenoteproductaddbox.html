@@ -8,7 +8,7 @@
 	<TR class="light">
 		<TD COLSPAN="2" WIDTH="100%" class="frightu fleftu">
 			<TABLE WIDTH="100%" CELLPADDING="2">
-				<tr class="dark" style="text-align: center;">
+				<tr class="dark">
 					<td class="fleftu">{trans("Warehouse")}</td>
 					<td class="fbt">{trans("Product")}</td>
 					<td class="fbt">{trans("Amount:")}</td>
@@ -17,7 +17,7 @@
 					<td class="fbt">{trans("Net Value:")}</td>
 					<td class="fbt">{trans("Tax:")}</td>
 					<td class="fbt">{trans("Gross Value:")}</td>
-					<td class="frightu">{trans("Serial number:")}</td>
+					<td class="frightu text-right">{trans("Serial number:")}</td>
 				</tr>
 				<TR CLASS="lucid">
 					<TD>
@@ -55,20 +55,20 @@
 							{/foreach}
 						</SELECT>
 					</TD>-->
-					<TD align="center">
+					<TD>
 						<INPUT type="text" name="rnepl[product][price][net]" SIZE="6" style="text-align: right;" VALUE="{$itemdata.price.net}" {tip text="Enter value" trigger="price"}>
 					</TD>
-					<td align="right">
+					<td>
 						<SELECT size="1" name="rnepl[product][price][taxid]" {tip text="Select Tax rate"}>
 							{foreach item=tax from=$taxeslist}
 								<OPTION value="{$tax.id}"{if $tax.value == $_config.phpui.default_taxrate} selected{/if}>{$tax.label}</OPTION>
 							{/foreach}
 						</SELECT>
 					</td>
-					<td align="center">
+					<td>
 						<INPUT type="text" name="rnepl[product][price][gross]" SIZE="6" style="text-align: right;" VALUE="{$itemdata.price.gross}" {tip text="Enter value" trigger="price"}>
 					</td>
-					<TD align="right">
+					<TD class="text-right">
 						<div id="pserial">
 							{if $itemdata.serial}
 								{foreach $itemdata.serial as $s}

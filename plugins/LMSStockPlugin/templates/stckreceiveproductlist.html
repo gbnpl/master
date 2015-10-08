@@ -22,7 +22,7 @@
 	<TR class="light">
 		<TD COLSPAN="2" WIDTH="100%" class="flr">
 			<TABLE WIDTH="100%" CELLPADDING="2">
-				<tr class="dark" style="text-align: center;">
+				<tr class="dark">
 					<td class="fleftu">{trans("Warehouse")}</td>
 					<td class="fbt">{trans("Product")}</td>
 					<td class="fbt">{trans("Amount:")}</td>
@@ -70,23 +70,23 @@
 							{/foreach}
 						</SELECT>
 					</TD>-->
-					<TD align="center">
+					<TD>
 						<INPUT type="text" name="receivenote[product][price][net]" SIZE="6" style="text-align: right;" VALUE="{$itemdata.price.net}" {tip text="Enter value" trigger="price"}>
 					</TD>
-					<td align="right">
+					<td>
 						<SELECT size="1" name="receivenote[product][price][taxid]" {tip text="Select Tax rate"}>
 							{foreach item=tax from=$taxeslist}
 								<OPTION value="{$tax.id}"{if $tax.value == $_config.phpui.default_taxrate} || $tax.id == $productedit.taxid} selected{/if}>{$tax.label}</OPTION>
 							{/foreach}
 						</SELECT>
 					</td>
-					<td align="center">
+					<td>
 						<INPUT type="text" name="receivenote[product][price][gross]" SIZE="6" style="text-align: right;" VALUE="{$itemdata.price.gross}" {tip text="Enter value" trigger="price"}>
 					</td>
-					<td align="center">
+					<td>
 						<INPUT type="text" name="receivenote[product][warranty]" size="6" style="text-align: right;" VALUE="{$itemdata.warranty}" {tip text="Eneter warranty period in months" trigger="warranty"}>
 					</td>
-					<TD align="right">
+					<TD class="text-right">
 						<div id="pserial">
 							{if $itemdata.serial}
 								{foreach $itemdata.serial as $s}
