@@ -12,6 +12,9 @@ DROP TABLE IF EXISTS stck_quantities;
 DROP TABLE IF EXISTS stck_manufacturers;
 DROP TABLE IF EXISTS stck_groups;
 
+ALTER TABLE cash DROP COLUMN stockid;
+ALTER TABLE invoicecontents DROP COLUMN stockid;
+
 DELETE FROM dbinfo WHERE keytype = 'dbversion_LMSStockPlugin';
 
 #

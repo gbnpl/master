@@ -22,6 +22,9 @@ DROP SEQUENCE IF EXISTS stck_manufacturers_id_seq;
 DROP TABLE IF EXISTS stck_groups;
 DROP SEQUENCE IF EXISTS stck_groups_id_seq;
 
+ALTER TABLE cash DROP COLUMN stockid;
+ALTER TABLE invoicecontents DROP COLUMN stockid;
+
 DELETE FROM dbinfo WHERE keytype = 'dbversion_LMSStockPlugin';
 
 /*
