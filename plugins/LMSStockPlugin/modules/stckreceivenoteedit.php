@@ -252,6 +252,7 @@ $SMARTY->assign('taxeslist', $taxeslist);
 $SMARTY->assign('quantities', $quantities);
 $SMARTY->assign('error', $error);
 $SMARTY->assign('receivenoteedit', $receivenoteedit);
+$SMARTY->assign('itemdata', $itemdata);
 $SMARTY->display('stckreceivenoteedit.html');
 
 ?>
