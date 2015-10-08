@@ -122,20 +122,20 @@
 	</TR>
 {/foreach}
 	<TR class="light">
-		<TD COLSPAN="4" WIDTH="70%" class="fleftu" ALIGN="right">
+		<TD COLSPAN="4" WIDTH="70%" class="fleftu text-right">
 			<B>{trans("Total:")} {$p@total|default:"0"}</B>
 		</TD>
-		<TD CLASS="ftop" align="right">
+		<TD CLASS="ftop">
 			<B>{$rnepl.doc.net|default:"0"|money_format}</B>
 		</TD>
 		<TD CLASS="ftop">&nbsp;</TD>
-		<TD CLASS="ftop" ALIGN="right">
+		<TD CLASS="ftop">
 			<B>{$rnepl.doc.gross|default:"0"|money_format}</B>
 		</TD>
 		<TD class="frightu">&nbsp;</TD>
 	</TR>
 	<TR>
-		<TD WIDTH="99%" COLSPAN="9" class="fleftu frightu" ALIGN="right">
+		<TD WIDTH="99%" COLSPAN="9" class="fleftu frightu text-right">
 			<A href="?m={$layout.module}&id={$receivenoteedit.id}&amp;action=save" ACCESSKEY="S" onClick="if(confirm('{trans("Are you sure that you want to save receive note?")}')) { return true; } else { return false; } ">{trans("Submit")} <img src="img/save.gif" alt=""></A>
 			<A href="?m={$layout.module}&id={$receivenoteedit.id}&amp;action=cancel" ACCESSKEY="C" onClick="if(confirm('{trans("Are you sure that you want to cancel receive note?")}')) { return true; } else { return false; } ">{trans("Cancel")} <img src="img/cancel.gif" alt=""></A>
 		</TD>
