@@ -12,6 +12,8 @@ DROP TABLE IF EXISTS stck_quantities;
 DROP TABLE IF EXISTS stck_manufacturers;
 DROP TABLE IF EXISTS stck_groups;
 
+DELETE FROM dbinfo WHERE keytype = 'dbversion_LMSStockPlugin';
+
 #
 # structure of table stck_groups
 #
