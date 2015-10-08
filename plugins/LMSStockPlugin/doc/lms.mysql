@@ -1,7 +1,21 @@
+DROP VIEW IF EXISTS stck_vpstock;
+
+DROP TABLE IF EXISTS stck_stockassignments;
+DROP TABLE IF EXISTS stck_stock;
+DROP TABLE IF EXISTS stck_warehouses;
+DROP TABLE IF EXISTS stck_vpstock;
+DROP TABLE IF EXISTS stck_products;
+DROP TABLE IF EXISTS stck_types;
+DROP TABLE IF EXISTS stck_supplierassignments;
+DROP TABLE IF EXISTS stck_receivenotes;
+DROP TABLE IF EXISTS stck_quantities;
+DROP TABLE IF EXISTS stck_manufacturers;
+DROP TABLE IF EXISTS stck_groups;
+
 #
 # structure of table stck_groups
 #
-CREATE TABLE IF NOT EXISTS stck_groups (
+CREATE TABLE stck_groups (
   id int(11) NOT NULL AUTO_INCREMENT,
   quantityid int(11) NOT NULL,
   quantitycheck tinyint(1) NOT NULL DEFAULT '1',
@@ -19,7 +33,7 @@ CREATE TABLE IF NOT EXISTS stck_groups (
 #
 # structure of table stck_manufacturers
 #
-CREATE TABLE IF NOT EXISTS stck_manufacturers (
+CREATE TABLE stck_manufacturers (
   id int(11) NOT NULL AUTO_INCREMENT,
   creationdate int(11) NOT NULL,
   moddate int(11) NOT NULL DEFAULT '0',
@@ -35,7 +49,7 @@ CREATE TABLE IF NOT EXISTS stck_manufacturers (
 #
 # structure of table stck_quantities
 #
-CREATE TABLE IF NOT EXISTS stck_quantities (
+CREATE TABLE stck_quantities (
   id int(11) NOT NULL AUTO_INCREMENT,
   def tinyint(1) NOT NULL DEFAULT '0',
   name varchar(10) NOT NULL,
@@ -47,7 +61,7 @@ CREATE TABLE IF NOT EXISTS stck_quantities (
 #
 # structure of table stck_receivenotes
 #
-CREATE TABLE IF NOT EXISTS stck_receivenotes (
+CREATE TABLE stck_receivenotes (
   id int(11) NOT NULL AUTO_INCREMENT,
   supplierid int(11),
   number varchar(255) NOT NULL,
@@ -72,7 +86,7 @@ CREATE TABLE IF NOT EXISTS stck_receivenotes (
 #
 # structure of table stck_supplierassignments
 #
-CREATE TABLE IF NOT EXISTS stck_supplierassignments (
+CREATE TABLE stck_supplierassignments (
   IDSupplierAssignment int(11) NOT NULL AUTO_INCREMENT,
   IDCustomer int(11) NOT NULL,
   IDSupplier int(11) DEFAULT NULL,
@@ -82,7 +96,7 @@ CREATE TABLE IF NOT EXISTS stck_supplierassignments (
 #
 # structure of table stck_types
 #
-CREATE TABLE IF NOT EXISTS stck_types (
+CREATE TABLE stck_types (
   id int(11) NOT NULL AUTO_INCREMENT,
   def tinyint(1) NOT NULL DEFAULT '0',
   name varchar(100) NOT NULL,
@@ -98,7 +112,7 @@ CREATE TABLE IF NOT EXISTS stck_types (
 #
 # structure of table stck_products
 #
-CREATE TABLE IF NOT EXISTS stck_products (
+CREATE TABLE stck_products (
   id int(11) NOT NULL AUTO_INCREMENT,
   manufacturerid int(11) NOT NULL DEFAULT '0',
   groupid int(11) NOT NULL DEFAULT '0',
@@ -131,7 +145,7 @@ CREATE TABLE IF NOT EXISTS stck_products (
 #
 # structure of table stck_vpstock; replaced later by stck_vpstock view
 #
-CREATE TABLE IF NOT EXISTS stck_vpstock (
+CREATE TABLE stck_vpstock (
 	id int(11),
 	warehouseid int(11),
 	groupid int(11),
@@ -167,7 +181,7 @@ CREATE TABLE IF NOT EXISTS stck_vpstock (
 #
 # structure of table stck_warehouses
 #
-CREATE TABLE IF NOT EXISTS stck_warehouses (
+CREATE TABLE stck_warehouses (
   id int(11) NOT NULL AUTO_INCREMENT,
   name varchar(100) NOT NULL,
   comment text,
@@ -185,7 +199,7 @@ CREATE TABLE IF NOT EXISTS stck_warehouses (
 #
 # structure of table stck_stock
 #
-CREATE TABLE IF NOT EXISTS stck_stock (
+CREATE TABLE stck_stock (
   id int(11) NOT NULL AUTO_INCREMENT,
   warehouseid int(11) NOT NULL,
   groupid int(11) NOT NULL,
@@ -220,7 +234,7 @@ CREATE TABLE IF NOT EXISTS stck_stock (
 #
 # structure of table stck_stockassignments
 #
-CREATE TABLE IF NOT EXISTS stck_stockassignments (
+CREATE TABLE stck_stockassignments (
   id int(11) NOT NULL AUTO_INCREMENT,
   type int(11) NOT NULL,
   stockid int(11) NOT NULL,

@@ -1,9 +1,31 @@
+DROP VIEW IF EXISTS stck_vpstock;
+
+DROP TABLE IF EXISTS stck_stockassignments;
+DROP SEQUENCE IF EXISTS stck_stockassignments_id_seq;
+DROP TABLE IF EXISTS stck_stock;
+DROP SEQUENCE IF EXISTS stck_stock_id_seq;
+DROP TABLE IF EXISTS stck_warehouses;
+DROP SEQUENCE IF EXISTS stck_warehouses_id_seq;
+DROP TABLE IF EXISTS stck_vpstock;
+DROP TABLE IF EXISTS stck_products;
+DROP SEQUENCE IF EXISTS stck_products_id_seq;
+DROP TABLE IF EXISTS stck_types;
+DROP SEQUENCE IF EXISTS stck_types_id_seq;
+DROP TABLE IF EXISTS stck_supplierassignments;
+DROP SEQUENCE IF EXISTS stck_supplierassignments_id_seq;
+DROP TABLE IF EXISTS stck_receivenotes;
+DROP SEQUENCE IF EXISTS stck_receivenotes_id_seq;
+DROP TABLE IF EXISTS stck_quantities;
+DROP SEQUENCE IF EXISTS stck_quantities_id_seq;
+DROP TABLE IF EXISTS stck_manufacturers;
+DROP SEQUENCE IF EXISTS stck_manufacturers_id_seq;
+DROP TABLE IF EXISTS stck_groups;
+DROP SEQUENCE IF EXISTS stck_groups_id_seq;
+
 /*
  structure of table stck_groups
 */
-DROP SEQUENCE IF EXISTS stck_groups_id_seq;
 CREATE SEQUENCE stck_groups_id_seq;
-DROP TABLE IF EXISTS stck_groups;
 CREATE TABLE stck_groups (
   id integer DEFAULT nextval('stck_groups_id_seq'::text) NOT NULL,
   quantityid integer NOT NULL,
@@ -22,9 +44,7 @@ CREATE TABLE stck_groups (
 /*
  structure of table stck_manufacturers
 */
-DROP SEQUENCE IF EXISTS stck_manufacturers_id_seq;
 CREATE SEQUENCE stck_manufacturers_id_seq;
-DROP TABLE IF EXISTS stck_manufacturers;
 CREATE TABLE stck_manufacturers (
   id integer DEFAULT nextval('stck_manufacturers_id_seq'::text) NOT NULL,
   creationdate integer NOT NULL,
@@ -41,9 +61,7 @@ CREATE TABLE stck_manufacturers (
 /*
  structure of table stck_quantities
 */
-DROP SEQUENCE IF EXISTS stck_quantities_id_seq;
 CREATE SEQUENCE stck_quantities_id_seq;
-DROP TABLE IF EXISTS stck_quantities;
 CREATE TABLE stck_quantities (
   id integer DEFAULT nextval('stck_quantities_id_seq'::text) NOT NULL,
   def smallint NOT NULL DEFAULT 0,
@@ -56,9 +74,7 @@ CREATE TABLE stck_quantities (
 /*
  structure of table stck_receivenotes
 */
-DROP SEQUENCE IF EXISTS stck_receivenotes_id_seq;
 CREATE SEQUENCE stck_receivenotes_id_seq;
-DROP TABLE IF EXISTS stck_receivenotes;
 CREATE TABLE stck_receivenotes (
   id integer DEFAULT nextval('stck_receivenotes_id_seq'::text) NOT NULL,
   supplierid integer
@@ -84,9 +100,7 @@ CREATE INDEX stck_receivenotes_supplierid_idx ON stck_receivenotes (supplierid);
 /*
  structure of table stck_supplierassignments
 */
-DROP SEQUENCE IF EXISTS stck_supplierassignments_id_seq;
 CREATE SEQUENCE stck_supplierassignments_id_seq;
-DROP TABLE IF EXISTS stck_supplierassignments;
 CREATE TABLE stck_supplierassignments (
   IDSupplierAssignment integer DEFAULT nextval('stck_supplierassignments_id_seq'::text) NOT NULL,
   IDCustomer integer NOT NULL,
@@ -97,9 +111,7 @@ CREATE TABLE stck_supplierassignments (
 /*
  structure of table stck_types
 */
-DROP SEQUENCE IF EXISTS stck_types_id_seq;
 CREATE SEQUENCE stck_types_id_seq;
-DROP TABLE IF EXISTS stck_types;
 CREATE TABLE stck_types (
   id integer DEFAULT nextval('stck_types_id_seq'::text) NOT NULL,
   def smallint NOT NULL DEFAULT 0,
@@ -116,9 +128,7 @@ CREATE TABLE stck_types (
 /*
  structure of table stck_products
 */
-DROP SEQUENCE IF EXISTS stck_products_id_seq;
 CREATE SEQUENCE stck_products_id_seq;
-DROP TABLE IF EXISTS stck_products;
 CREATE TABLE stck_products (
   id integer DEFAULT nextval('stck_products_id_seq'::text) NOT NULL,
   manufacturerid integer NOT NULL DEFAULT 0
@@ -188,9 +198,7 @@ CREATE TABLE stck_vpstock (
 /*
  structure of table stck_warehouses
 */
-DROP SEQUENCE IF EXISTS stck_warehouses_id_seq;
 CREATE SEQUENCE stck_warehouses_id_seq;
-DROP TABLE IF EXISTS stck_warehouses;
 CREATE TABLE stck_warehouses (
   id integer DEFAULT nextval('stck_warehouses_id_seq'::text) NOT NULL,
   name varchar(100) NOT NULL,
@@ -209,9 +217,7 @@ CREATE TABLE stck_warehouses (
 /*
  structure of table stck_stock
 */
-DROP SEQUENCE IF EXISTS stck_stock_id_seq;
 CREATE SEQUENCE stck_stock_id_seq;
-DROP TABLE IF EXISTS stck_stock;
 CREATE TABLE stck_stock (
   id integer DEFAULT nextval('stck_stock_id_seq'::text) NOT NULL,
   warehouseid integer NOT NULL
@@ -247,9 +253,7 @@ CREATE INDEX stck_stock_pricebuynet_idx ON stck_stock (pricebuynet, pricebuygros
 /*
  structure of table stck_stockassignments
 */
-DROP SEQUENCE IF EXISTS stck_stockassignments_id_seq;
 CREATE SEQUENCE stck_stockassignments_id_seq;
-DROP TABLE IF EXISTS stck_stockassignments;
 CREATE TABLE stck_stockassignments (
   id integer DEFAULT nextval('stck_stockassignments_id_seq'::text) NOT NULL,
   type integer NOT NULL,
