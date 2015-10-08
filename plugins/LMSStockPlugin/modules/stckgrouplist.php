@@ -45,7 +45,7 @@ if(!isset($_GET['page']))
         $SESSION->restore('sglp', $_GET['page']);
 
 $page = (! $_GET['page'] ? 1 : $_GET['page']);
-$pagelimit = (! $CONFIG['phpui']['grouplist_pagelimit'] ? $listdata['total'] : $CONFIG['phpui']['grouplist_pagelimit']);
+$pagelimit = ConfigHelper::getConfig('stock.grouplist_pagelimit', $listdata['total']);
 $start = ($page - 1) * $pagelimit;
 
 $SESSION->save('swlp', $page);

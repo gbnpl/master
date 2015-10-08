@@ -69,7 +69,7 @@ if(!isset($_GET['page']))
         $SESSION->restore('srnlp', $_GET['page']);
 
 $page = (! $_GET['page'] ? 1 : $_GET['page']);
-$pagelimit = (! $CONFIG['phpui']['receivenotelist_pagelimit'] ? $listdata['total'] : $CONFIG['phpui']['receivenotelist_pagelimit']);
+$pagelimit = ConfigHelper::getConfig('stock.receivenotelist_pagelimit', $listdata['total']);
 $start = ($page - 1) * $pagelimit;
 
 $SESSION->save('srnlp', $page);

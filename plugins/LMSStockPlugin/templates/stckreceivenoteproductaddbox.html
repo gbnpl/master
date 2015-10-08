@@ -61,7 +61,7 @@
 					<td>
 						<SELECT size="1" name="rnepl[product][price][taxid]" {tip text="Select Tax rate"}>
 							{foreach item=tax from=$taxeslist}
-								<OPTION value="{$tax.id}"{if $tax.value == $_config.phpui.default_taxrate} selected{/if}>{$tax.label}</OPTION>
+								<OPTION value="{$tax.id}"{if $tax.value == ConfigHelper::getConfig('phpui.default_taxrate')} selected{/if}>{$tax.label}</OPTION>
 							{/foreach}
 						</SELECT>
 					</td>

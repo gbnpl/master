@@ -45,7 +45,7 @@ if(!isset($_GET['page']))
         $SESSION->restore('swlp', $_GET['page']);
 
 $page = (! $_GET['page'] ? 1 : $_GET['page']);
-$pagelimit = (! $CONFIG['phpui']['warehouselist_pagelimit'] ? $listdata['total'] : $CONFIG['phpui']['warehouselist_pagelimit']);
+$pagelimit = ConfigHelper::getConfig('stock.warehouselist_pagelimit', $listdata['total']);
 $start = ($page - 1) * $pagelimit;
 
 $SESSION->save('swlp', $page);

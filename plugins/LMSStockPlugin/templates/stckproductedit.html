@@ -76,7 +76,7 @@
 		<TD CLASS="fright">
 			<SELECT SIZE="1" NAME="productedit[taxid]" {tip text="Select Tax rate" trigger="taxid"}>
 			{foreach item=tax from=$txlist}
-				<OPTION VALUE="{$tax.id}"{if $tax.value == $_config.phpui.default_taxrate || $tax.id == $productedit.taxid} selected{/if}>{$tax.label}</OPTION>
+				<OPTION VALUE="{$tax.id}"{if $tax.value == ConfigHelper::getConfig('phpui.default_taxrate') || $tax.id == $productedit.taxid} selected{/if}>{$tax.label}</OPTION>
 			{/foreach}
 			</SELECT>
 		</TD>
