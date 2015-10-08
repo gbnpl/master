@@ -107,7 +107,7 @@
 </TABLE>
 </FORM>
 <TABLE CELLPADDING="3" width="100%" style="margin-top: 10px;">
-	<tr class="dark" style="text-align: center;">
+	<tr class="dark">
 		<td class="fleftu">{trans("Warehouse")}</td>
 		<td class="fbt">{trans("Product")}</td>
 		<td class="fbt">{trans("Warranty:")}</td>
@@ -122,20 +122,20 @@
 {cycle values="light,lucid" print=false}
 {foreach $receivenote.product as $p}
 	<TR class="{cycle}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
-		<TD class="fleft" align="center">{$p.warehousename}</TD>
+		<TD class="fleft">{$p.warehousename}</TD>
 		<TD>{$p.product}</TD>
-		<TD align="right">{$p.warranty}</TD>
-		<TD align="right">
+		<TD>{$p.warranty}</TD>
+		<TD>
 			{foreach item=s from=$p.serial}
 				{$s}<br />
 			{/foreach}
 		</TD>
-		<TD align="right">{$p.count} {$p.unitname}</TD>
+		<TD>{$p.count} {$p.unitname}</TD>
 		<!--<TD align="right">{$p.packaging.count} {$p.packaging.unitname}</TD>-->
-		<TD align="right">{$p.price.net|money_format}</TD>
-		<TD align="right">{$p.price.tax}</TD>
-		<TD align="right">{$p.price.gross|money_format}</TD>
-		<TD class="fright" align="right">
+		<TD>{$p.price.net|money_format}</TD>
+		<TD>{$p.price.tax}</TD>
+		<TD>{$p.price.gross|money_format}</TD>
+		<TD class="fright text-right">
 			<a href="?m=stckreceiveproductlist&amp;action=edit&amp;id={$p@key}"><img src="img/edit.gif" alt="[ {trans("Edit")} ]"></a>
 			<a href="?m=stckreceiveproductlist&amp;action=del&amp;id={$p@key}"><img src="img/delete.gif" alt="[ {trans("Delete")} ]"></a>
 		</TD>
