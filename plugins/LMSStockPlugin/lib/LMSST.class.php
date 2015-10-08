@@ -767,13 +767,15 @@ class LMSST {
 				$rnel['doc']['bdate'] = $this->db->GetOne('SELECT datesale FROM stck_receivenotes WHERE id = ?', array($product['docnumber']));
 			$sid = $this->StockAdd($product, $rnel['doc'], $rnel['doc']['bdate']);
 			$this->ReceiveNoteUpdateValue($rnel['doc']['number']);
-			$this->lms->AddBalance(array(
-				'value' => $product['price']['gross'],
-				'customerid' => $rnel['doc']['supplierid'],
-				'comment' => $product['product'],
-			));
-			$bid = $this->db->GetLastInsertID('cash');
-			$this->BalanceAddStockID($sid, $bid);
+			if (!empty($rnel['doc']['supplierid'])) {
+				$this->lms->AddBalance(array(
+					'value' => $product['price']['gross'],
+					'customerid' => $rnel['doc']['supplierid'],
+					'comment' => $product['product'],
+				));
+				$bid = $this->db->GetLastInsertID('cash');
+				$this->BalanceAddStockID($sid, $bid);
+			}
 		}
 	}
 
