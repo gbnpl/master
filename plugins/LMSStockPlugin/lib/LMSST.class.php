@@ -17,8 +17,8 @@ class LMSST {
 	}
 
 	private function SetDefault($table, $id) {
-		$this->db->Execute("ALTER TABLE ".$table." SET def = 0 WHERE def = 1");
-		$this->db->Execute("ALTER TABLE ".$table." SET def = 1 WHERE id = ?", array($id));
+		$this->db->Execute("UPDATE ".$table." SET def = 0 WHERE def = 1");
+		$this->db->Execute("UPDATE ".$table." SET def = 1 WHERE id = ?", array($id));
 	}
 
 	private function STStats() {
