@@ -555,15 +555,13 @@ class LMSST {
 	/* STOCK */
 
 	public function StockSell($number, $id, $price, $date) {
-		$this->db->Execute("UPDATE stck_stock SET quitdocumentid = ?, pricesell = ?, leavedate = ?, moddate = ?NOW?, modid = ? WHERE id = ?", array($number, (string)$price, $date, $this->auth->id, $id));
-		/*if ($this->db->_error) {
-			$this->db->RollbackTrans();
-			exit;
-		}*/
+		$this->db->Execute("UPDATE stck_stock SET quitdocumentid = ?, pricesell = ?, leavedate = ?, moddate = ?NOW?, modid = ? WHERE id = ?",
+			array($number, $price, $date, $this->auth->id, $id));
 	}
 
 	public function StockUnSell($id) {
-		$this->db->Execute("UPDATE stck_stock SET quitdocumentid = NULL, pricesell = NULL, leavedate = 0, moddate = ?NOW?, modid = ? WHERE id = ?", array($this->auth->id, $id));
+		$this->db->Execute("UPDATE stck_stock SET quitdocumentid = NULL, pricesell = NULL, leavedate = 0, moddate = ?NOW?, modid = ? WHERE id = ?",
+			array($this->auth->id, $id));
 	}
 
 	public function StockAdd($product, $doc = NULL, $bdate) {
