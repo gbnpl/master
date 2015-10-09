@@ -25,7 +25,6 @@
 */
 
 if(! $LMSST->GroupExists($_GET['id']) || !ctype_digit($_GET['id'])) {
-	echo "ODSYLAM";exit;
 	$SESSION->redirect('?m=stckgrouplist');
 }
 
