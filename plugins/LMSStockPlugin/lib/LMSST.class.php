@@ -275,7 +275,7 @@ class LMSST {
 */
 
 	public function GroupExists($id) {
-		switch($this->db->GetOne('SELECT deleted FROM stck_manufacturers WHERE id=?', array($id))) {
+		switch($this->db->GetOne('SELECT deleted FROM stck_groups WHERE id=?', array($id))) {
 			case '0':
 				return TRUE;
 				break;
