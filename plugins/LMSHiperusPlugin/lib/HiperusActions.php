@@ -19,12 +19,14 @@ define("CDR_FILE_PATH","/tmp");
 
 
 class HiperusActions {
+	static private $hlib = null;
 
     /**
      * CreateCustomer
      */
     public static function CreateCustomer($c_data) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         /*
         Element wymagany: name, pozostale elementy $c_data
 		    email, address, street_number, flat_number, postcode, city, country,
@@ -37,7 +39,7 @@ class HiperusActions {
             $req->$key = $val;
         }
 
-        $ret = $hlib->sendRequest("AddCustomer",$req);
+        $ret = $this->hlib->sendRequest("AddCustomer",$req);
        
         if(!$ret) {
             throw new Exception("Nie można utworzyć klienta: ".$c_name);
@@ -65,13 +67,14 @@ class HiperusActions {
             throw new Exception("Identyfikator cennika lub nazwa cennika jest wymagana");
 
             
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $req = new stdClass();
         
         if($customer_name) {
             $creq = new stdClass();
             $creq->name = $customer_name;
-            $ret = $hlib->sendRequest("SearchCustomer",$creq);
+            $ret = self::$hlib->sendRequest("SearchCustomer",$creq);
             if(!$ret->success === false)
                 throw new Exception("Błąd podczas wyszukiwania klienta: $customer_name\n".$response->error_message);
             $customers = array();
@@ -90,7 +93,7 @@ class HiperusActions {
         }
         
         if($pricelist_name) {
-            $ret = $hlib->sendRequest("GetCustomerPricelistList",new stdClass());
+            $ret = self::$hlib->sendRequest("GetCustomerPricelistList",new stdClass());
             $pricelists = array();
             foreach($ret->result_set as $p_result) {
                 if(strpos(strtolower($p_result['name']),strtolower($pricelist_name))===0) {
@@ -111,7 +114,7 @@ class HiperusActions {
         $req->password = $password;
         $req->screen_numbers = true;
         $req->t38_fax = false;
-        $ret = $hlib->sendRequest("AddTerminal",$req);
+        $ret = self::$hlib->sendRequest("AddTerminal",$req);
         if(!$ret)
             throw new Exception('Nie można utworzyć terminala SIP');
         if(!$ret->success) {
@@ -161,14 +164,15 @@ class HiperusActions {
             $subscription_name = $subscription_data['subscription_name'];
         }
         
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
 
         if(!$number) {
             /*if(!$sn)
                 throw new Exception("Nie podano strefy numeracyjnej, nie można pobrać wolnego numeru PSTN");*/
             $r = new stdClass();
             $r->sn=$sn;
-            $ret = $hlib->sendRequest("GetFirstFreePlatformNumber",$r);
+            $ret = self::$hlib->sendRequest("GetFirstFreePlatformNumber",$r);
             if($ret->success===false)
                 throw new Exception("Nie można ustalić wolnego numeru PSTN.\n".$response->error_message);
                 
@@ -183,7 +187,7 @@ class HiperusActions {
 
             if(!$id_pricelist) { // jezeli brak wskazanego cennika szukamy po nazwie
                 $r = new stdClass();
-                $ret = $hlib->sendRequest("GetCustomerPricelistList",$r);
+                $ret = self::$hlib->sendRequest("GetCustomerPricelistList",$r);
                 if($ret->success===false)
                     throw new Exception("Nie można pobrać listy cenników klienckich");
                 if(!$pricelist_name) { // jezeli nazwa nie podana zwracamy pierwszy cennik
@@ -214,7 +218,7 @@ class HiperusActions {
         if(!$id_subscription) {
             if($subscription_name) {
                 $r = new stdClass();
-                $ret = $hlib->sendRequest("GetSubscriptionList",$r);
+                $ret = self::$hlib->sendRequest("GetSubscriptionList",$r);
                 if($ret->success===false)
                     throw new Exception("Nie można pobrać listy abonamentów");
                 foreach($ret->result_set as $rs) {
@@ -229,7 +233,7 @@ class HiperusActions {
         if($useremail) {
             $r = new stdClass();
             $r->id_customer = $id_customer;
-            $ret = $hlib->sendRequest("GetEndUserAuthList",$r);
+            $ret = self::$hlib->sendRequest("GetEndUserAuthList",$r);
             if($ret->success===false)
                 throw new Exception("Nie można pobrać listy użytkowników końcowych");
             foreach($ret->result_set as $rs) {
@@ -265,7 +269,7 @@ class HiperusActions {
         $r->id_subscription = $id_subscription;
         
          
-        $ret = $hlib->sendRequest("AddExtension",$r);
+        $ret = self::$hlib->sendRequest("AddExtension",$r);
         if(!$ret)
             throw new Exception("Nie można utworzyć numeru PSTN");
         if($ret->success === false)
@@ -273,7 +277,7 @@ class HiperusActions {
             
         $r = new stdClass();
         $r->id_extension = $ret->result_set[0]['id_extension'];
-        $ret = $hlib->sendRequest("GetExtensionData",$r);
+        $ret = self::$hlib->sendRequest("GetExtensionData",$r);
         if(!$ret)
             throw new Exception("Nie moge pobrać danych utworzonego numeru PSTN");
         if($ret->success === false)
@@ -287,11 +291,12 @@ class HiperusActions {
      * GetCustomerData
      */
     public static function GetCustomerData($id_customer) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
                 
         $r = new stdClass();        
         $r->id_customer = $id_customer;
-        $response = $hlib->sendRequest("GetCustomerData",$r);
+        $response = self::$hlib->sendRequest("GetCustomerData",$r);
         return $response->result_set[0];
     }
 
@@ -299,11 +304,12 @@ class HiperusActions {
      * GetCustomerDataExtID
      */
     public static function GetCustomerDataExtID($ext_billing_id) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         
         $r = new stdClass();
         $r->ext_billing_id = $ext_billing_id;
-        $response = $hlib->sendRequest("GetCustomerIDByExtBillingID",$r);
+        $response = self::$hlib->sendRequest("GetCustomerIDByExtBillingID",$r);
         if(!$response->success) {
             throw new Exception("Nie można pobrać danych klienta bazując na identyfikatorze z systemu zewnętrznego.\n".$response->error_message);
         }
@@ -315,13 +321,14 @@ class HiperusActions {
      * ChangeCustomerData
      */
     public static function ChangeCustomerData($c_data) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         foreach($c_data as $key=>$val) {
             $r->$key = $val;
         }
         $r->id_customer = $r->id;
-        $response = $hlib->sendRequest("SaveCustomerData",$r);
+        $response = self::$hlib->sendRequest("SaveCustomerData",$r);
         if($response->success===false) {
             throw new Exception("Nie można zapisać danych klienta.\n".$response->error_message);
         }
@@ -332,7 +339,8 @@ class HiperusActions {
      * ChangeTerminalData
      */
     public static function ChangeTerminalData($t_data) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         foreach($t_data as $key=>$val) {
             $r->$key = $val;
@@ -340,7 +348,7 @@ class HiperusActions {
         if($r->id)
             $r->id_terminal = $r->id;
         
-        $response = $hlib->sendRequest("SaveTerminalData",$r);
+        $response = self::$hlib->sendRequest("SaveTerminalData",$r);
         if($response->success===false) {
             throw new Exception("Nie można zapisać danych terminala SIP.\n".$response->error_message);
         }
@@ -351,7 +359,8 @@ class HiperusActions {
      * ChangePSTNNumberData
      */
     public static function ChangePSTNNumberData($e_data) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         $r->number = $e_data['number'];
         $r->country_code = $e_data['country_code'];
@@ -362,7 +371,7 @@ class HiperusActions {
         $r->id_auth = ($e_data['id_auth'] ? $e_data['id_auth'] : null);
         $r->id_extension = $e_data['id'];        
         
-        $response = $hlib->sendRequest("SaveExtensionData",$r);
+        $response = self::$hlib->sendRequest("SaveExtensionData",$r);
         if($response->success===false) {
             throw new Exception("Nie można zapisać danych numeru PSTN. \n".$response->error_message);
         }
@@ -374,12 +383,13 @@ class HiperusActions {
      * GetCustomerList
      */
     public static function GetCustomerList($offset=null,$limit=null,$query=null) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         $r->offset = $offset;
         $r->limit = $limit;
         $r->query = $query;
-        $response = $hlib->sendRequest("GetCustomerList",$r);
+        $response = self::$hlib->sendRequest("GetCustomerList",$r);
         if(!$response->success) {
             throw new Exception("Nie można pobrać listy klientów.\n".$response->error_message);
         }
@@ -390,10 +400,11 @@ class HiperusActions {
      * GetTerminalList
      */
     public static function GetTerminalList($id_customer,$offset=null,$limit=null) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         $r->id_customer = $id_customer;
-        $response = $hlib->sendRequest("GetTerminalList",$r);
+        $response = self::$hlib->sendRequest("GetTerminalList",$r);
         if(!$response)
             throw new Exception("Nie można pobrać listy terminali SIP");
         if(!$response->success)
@@ -406,10 +417,11 @@ class HiperusActions {
      * GetPSTNNumberList
      */
     public static function GetPSTNNumberList($id_customer,$offset=null,$limit=null) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         $r->id_customer = $id_customer;
-        $response = $hlib->sendRequest("GetExtensionList",$r);
+        $response = self::$hlib->sendRequest("GetExtensionList",$r);
         if(!$response)
             throw new Exception("Nie można pobrać listy numerów PSTN");
         if(!$response->success)
@@ -422,9 +434,10 @@ class HiperusActions {
      * GetPricelistList
      */
     public static function GetPricelistList($offset=null,$limit=null) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
-        $response = $hlib->sendRequest("GetCustomerPricelistList",$r);
+        $response = self::$hlib->sendRequest("GetCustomerPricelistList",$r);
         if(!$response)
             throw new Exception("Nie można pobrać listy cenników klienckich");
         if(!$response->success)
@@ -437,9 +450,10 @@ class HiperusActions {
      * GetSubscrptionList
      */
     public static function GetSubscriptionList() {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
-        $response = $hlib->sendRequest("GetSubscriptionList",$r);
+        $response = self::$hlib->sendRequest("GetSubscriptionList",$r);
         if(!$response)
             throw new Exception("Nie można pobrać listy abonamentów");
         if(!$response->success)
@@ -453,10 +467,11 @@ class HiperusActions {
      * GetEndUserList
      */
     public static function GetEndUserList($id_customer,$offset=null,$limit=null) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         $r->id_customer = $id_customer;
-        $response = $hlib->sendRequest("GetEndUserAuthList",$r);
+        $response = self::$hlib->sendRequest("GetEndUserAuthList",$r);
         if(!$response)
             throw new Exception("Nie można pobrać listy końcowych użytkowników");
         if(!$response->success)
@@ -469,12 +484,13 @@ class HiperusActions {
      * GetBillingFile
      */
     public static function GetBillingFile($from,$to,$offset=null,$limit=null,$success_calls=true,$id_customer=null,$calltype=null) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         $r->from = $from;
         $r->to = $to;
         $r->compress = true;
-        $response = $hlib->sendRequest("GetBilling",$r);
+        $response = self::$hlib->sendRequest("GetBilling",$r);
         if(!$response)
             throw new Exception("Nie można pobrać danych billingowych");
         if(!$response->success)
@@ -491,7 +507,8 @@ class HiperusActions {
      * GetBilling
      */
     public static function GetBilling($from,$to,$offset=null,$limit=null,$success_calls=true,$id_customer=null,$calltype=null) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         $r->from = $from;
         $r->to = $to;
@@ -501,7 +518,7 @@ class HiperusActions {
         $r->success_calls = $success_calls;
         $r->calltype = $calltype;
         $r->id_customer = $id_customer;
-        $response = $hlib->sendRequest("GetBilling",$r);
+        $response = self::$hlib->sendRequest("GetBilling",$r);
         if(!$response)
             throw new Exception("Nie można pobrać danych billingowych");
         if(!$response->success)
@@ -513,10 +530,11 @@ class HiperusActions {
      * DelTerminal
      */
     public static function DelTerminal($id_terminal) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         $r->id_terminal = $id_terminal;
-        $response = $hlib->sendRequest("DelTerminal",$r);
+        $response = self::$hlib->sendRequest("DelTerminal",$r);
         if(!$response)
             throw new Exception("Nie można usunąć terminala SIP");
         if(!$response->success)
@@ -528,10 +546,11 @@ class HiperusActions {
      * DelPSTNNumber
      */
     public static function DelPSTNNumber($id_extension) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         $r->id_extension = $id_extension;
-        $response = $hlib->sendRequest("DelExtension",$r);
+        $response = self::$hlib->sendRequest("DelExtension",$r);
         if(!$response)
             throw new Exception("Nie można usunąć numeru PSTN");
         if(!$response->success)
@@ -543,10 +562,11 @@ class HiperusActions {
      * DelCustomer
      */
     public static function DelCustomer($id_customer) {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
         $r->id_customer = $id_customer;
-        $response = $hlib->sendRequest("DelCustomer",$r);
+        $response = self::$hlib->sendRequest("DelCustomer",$r);
         if(!$response)
             throw new Exception("Nie można usunąć klienta");
         if(!$response->success)
@@ -559,17 +579,17 @@ class HiperusActions {
      * ReloadSettings
      */
     public static function ReloadSettings() {
-        $hlib = new HiperusLib();
+		if (is_null(self::$hlib))
+			self::$hlib = new HiperusLib();
         $r = new stdClass();
-        $response = $hlib->sendRequest("Logout",$r);
+        $response = self::$hlib->sendRequest("Logout",$r);
         if(!$response)
             throw new Exception("Błąd wylogowywania");
         if(!$response->success)
             throw new Exception("Błąd wylogowywania.\n".$response->error_message);
             
-        $hlib = new HiperusLib();
         $r = new stdClass();
-        $response = $hlib->sendRequest("CheckLogin",$r);
+        $response = self::$hlib->sendRequest("CheckLogin",$r);
         if(!$response)
             throw new Exception("Błąd.");
         if(!$response->success)

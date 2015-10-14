@@ -21,6 +21,8 @@ if (!defined('H_LOCK_FILE')) define('H_LOCK_FILE', '/var/lib/hiperus/hiperus1.lo
 
 define('H_URI','https://backend.hiperus.pl:8080/hiperusapi.php');
 
+//define('DEBUG_API', 1);
+
 /**
  * 
  */
@@ -35,10 +37,14 @@ class HiperusLib {
     private $_h_id_reseller;
     private $_h_debug = false;
 
+	private $soapClient = null;
+
     /**
      * __construct()
      */
     public function __construct($realm='PLATFORM_MNGM',$username=null,$password=null,$domain=null) {
+		if (defined('DEBUG_API'))
+			echo __METHOD__ . PHP_EOL;
         $this->_h_realm = $realm;
         $this->_h_username = $username;
         $this->_h_password = $password;
@@ -144,18 +150,29 @@ class HiperusLib {
 			$counter = 0;
 		} else {
 			$timestamp = intval($params[0]);
-			$counter = intval($params[1]);
+			if (time() - $timestamp > 5) {
+				$timestamp = time();
+				$counter = 0;
+			} else
+				$counter = intval($params[1]);
 		}
 	} else {
 		$timestamp = time();
 		$counter = 0;
 	}
 	$counter++;
-	if ($counter >= 8) {
+	if (defined('DEBUG_API'))
+		echo __METHOD__ . ': API call number=' . $counter . PHP_EOL;
+	if ($counter >= 7) {
 		ftruncate($fh, 0);
 		rewind($fh);
-		if (time() - $timestamp < 6)
-			sleep(6 - (time() - $timestamp));
+		if (time() - $timestamp < 5) {
+			if (defined('DEBUG_API')) {
+				echo __METHOD__ . ': time interval between first API call and last API call: ' . (time() - $timestamp). ' seconds' . PHP_EOL;
+				echo __METHOD__ . ': API call number >= 7 in 5 seconds, sleeping for ' . (5 - (time() - $timestamp)) . ' seconds' . PHP_EOL;
+			}
+			sleep(5 - (time() - $timestamp));
+		}
 	} else {
 		rewind($fh);
 		fwrite($fh, "$timestamp $counter");
@@ -164,12 +181,13 @@ class HiperusLib {
 	flock($fh, LOCK_UN);
 	fclose($fh);
 
-        $soapClient = new SoapClient(null,array(
-            'uri'=>H_URI,
-            'location'=>H_URI
-        ));
-        
-        $ret = $soapClient->request($realm,$action,$req,$sessid);
+		if (is_null($this->soapClient))
+			$this->soapClient = new SoapClient(null, array(
+				'uri' => H_URI,
+				'location' => H_URI,
+			));
+
+		$ret = $this->soapClient->request($realm, $action, $req, $sessid);
 
         if($this->_h_debug) {
             _h_debug("REQUEST ====>\n");
