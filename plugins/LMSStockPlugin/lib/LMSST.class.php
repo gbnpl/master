@@ -440,6 +440,10 @@ class LMSST {
 		}
 	}
 
+	public function ProductDel($id) {
+		$this->db->Execute("UPDATE stck_products SET deleted = 1, moddate = ?NOW?, modid = ? WHERE id = ?", array($this->auth->id, $id));
+	}
+
 	public function StockList($order='name,asc', $manufacturer = NULL, $group = NULL, $warehouse = null, $docid = NULL) {
 		list($order,$direction) = sscanf($order, '%[^,],%s');
 		$totalpcs = 0;
@@ -512,6 +516,12 @@ class LMSST {
 		}
 	}
 
+	public function ProductStockCount($id) {
+		return $this->db->GetOne("SELECT COUNT(p.id)
+			FROM stck_stock s
+			JOIN stck_products p ON p.id = s.productid
+			WHERE p.id = ? AND p.deleted = 0", array($id));
+	}
 
 	public function ProductGetInfoById($id) {
 		if ($pi = $this->db->GetRow("SELECT m.name as mname, g.name as gname, q.name as qname, t.name as tname,
