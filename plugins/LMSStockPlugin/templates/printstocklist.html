@@ -74,13 +74,15 @@
 	</TR>
 	{sectionelse}
 	<TR>
-		<TD COLSPAN="8" class="empty-table">
+		<TD COLSPAN="8" style="text-align: center;">
 			<P>&nbsp;</P>
+			<P><span class="bold">
 			{if $type == 'inventory'}
-			<P>{trans("Empty inventory for such date.")}</P>
+			{trans("Empty inventory for such date.")}
 			{else}
-			<P>{trans("No purchases in database.")}</P>
+			{trans("No purchases in database.")}
 			{/if}
+			</span></P>
 			<P>&nbsp;</P>
 		</TD>
 	</TR>
