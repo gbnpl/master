@@ -74,13 +74,15 @@ $_LANG['Edit product on stock'] = 'Edytuj produkt na stanie';
 $_LANG['Total (unpaid):'] = 'Suma (niezapłacone):';
 $_LANG['Inventory'] = 'Remanent';
 $_LANG['Inventory for date'] = 'Remanent na dzień';
+$_LANG['Empty inventory for such date.'] = 'Pusty remanent dla wybranej daty.';
 $_LANG['Price buy net:'] = 'Cena zakupu netto:';
 $_LANG['Price buy gross:'] = 'Cena zakupu brutto:';
 $_LANG['Gross:'] = 'Brutto:';
 $_LANG['Bought:'] = 'Zakupiono:';
 $_LANG['Sold:'] = 'Sprzedano:';
 $_LANG['Form already sent!'] = 'Formularz już został wysłany!';
-$_LANG['Buy report'] = 'Zestawienie zakupów';
+$_LANG['Purchase report'] = 'Zestawienie zakupów';
+$_LANG['No purchases in database.'] = 'Brak zakupów w bazie danych.';
 
 $_LANG['Document issue date'] = 'Data wystawienia dokumentu';
 $_LANG['Document sale date'] = 'Data sprzedaży dokumentu';

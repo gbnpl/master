@@ -3,10 +3,10 @@
 <TABLE WIDTH="100%">
 	<TR>
 		<TD WIDTH="1%" VALIGN="TOP" ALIGN="LEFT" NOWRAP>
-{if $type eq 'inventory'}
+{if $type == 'inventory'}
 			<H1>{trans("Inventory for date")} {$params.rdate|date_format:"%Y/%m/%d"}</h1>
 {else}
-			<H1>{trans("Buy report")} {$params.sdate|date_format:"%Y/%m/%d"} - {$params.edate|date_format:"%Y/%m/%d"}</h1>
+			<H1>{trans("Purchase report")} {$params.sdate|date_format:"%Y/%m/%d"} - {$params.edate|date_format:"%Y/%m/%d"}</h1>
 {/if}
 		</TD>
 		<TD WIDTH="99%" VALIGN="TOP" NOWRAP>
@@ -74,9 +74,13 @@
 	</TR>
 	{sectionelse}
 	<TR>
-		<TD ALIGN="center" COLSPAN="8">
+		<TD COLSPAN="8" class="empty-table">
 			<P>&nbsp;</P>
-			<P><B>{trans("No such cash receipts in database.")}</B></P>
+			{if $type == 'inventory'}
+			<P>{trans("Empty inventory for such date.")}</P>
+			{else}
+			<P>{trans("No purchases in database.")}</P>
+			{/if}
 			<P>&nbsp;</P>
 		</TD>
 	</TR>

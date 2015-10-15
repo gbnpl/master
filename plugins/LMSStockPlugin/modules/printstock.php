@@ -67,7 +67,7 @@ switch($type)
 				break;
 		}
 	}
-	if ($pgl = $DB->GetAll('SELECT m.name AS mname, m.id AS mid, ' . $DB->Concat('m.name', "' '", 'p.name') . ' AS pname,
+	$pgl = $DB->GetAll('SELECT m.name AS mname, m.id AS mid, ' . $DB->Concat('m.name', "' '", 'p.name') . ' AS pname,
 			p.id, p.quantity, g.name AS gname, g.id AS gid, COALESCE(SUM(s.pricebuynet), 0) AS valuenet, s.pricebuynet,
 			COUNT(s.id) AS count, t.name AS type
 		FROM stck_products p
@@ -80,19 +80,19 @@ switch($type)
 		. ($params['warehouse'] ? ' AND s.warehouseid = '.$params['warehouse'] : '')
 		. ' GROUP BY p.id, m.name, m.id, p.name, p.quantity, gname, g.id, s.pricebuynet, t.name'
 		. ($sqlord != '' ? $sqlord.' '.$direction : ''),
-			array($params['date'], $params['date']))) {
+			array($params['date'], $params['date']));
 
-		foreach($pgl as $p) {
+	if ($pgl)
+		foreach ($pgl as $p) {
 			$params['totalvn'] += $p['valuenet'];
 			$params['totalvg'] += $p['valuegross'];
 		}
-		
-		$SMARTY->assign('type', $type);
-		$SMARTY->assign('params', $params);
-		$SMARTY->assign('productlist', $pgl);
 
-		$SMARTY->display('printstocklist.html');
-	}
+	$SMARTY->assign('type', $type);
+	$SMARTY->assign('params', $params);
+	$SMARTY->assign('productlist', $pgl);
+
+	$SMARTY->display('printstocklist.html');
 
 	break;
 
@@ -125,7 +125,7 @@ switch($type)
 
 		$params['edate'] = $id; 
 
-		if ($pgl = $DB->GetAll('SELECT m.name AS mname, m.id AS mid, ' . $DB->Concat('m.name', "' '", 'p.name') . ' AS pname,
+		$pgl = $DB->GetAll('SELECT m.name AS mname, m.id AS mid, ' . $DB->Concat('m.name', "' '", 'p.name') . ' AS pname,
 				p.id, p.quantity, g.name AS gname, g.id AS gid, COALESCE(SUM(s.pricebuynet), 0) AS valuenet,
 				COUNT(s.id) AS count, t.name AS type
 			FROM stck_products p
@@ -138,21 +138,19 @@ switch($type)
 			. ($params['manufacturer'] ? ' AND m.id = '.$params['manufacturer'] : '')
 			. ($params['group'] ? ' AND g.id = '.$params['group'] : '')
 			. ' GROUP BY p.id, m.name, m.id, m.name, p.name, p.quantity, g.name, g.id, t.name',
-				array($params['edate'], $params['sdate']))) {
+				array($params['edate'], $params['sdate']));
 
+		if ($pgl)
 			foreach($pgl as $p) {
 				$params['totalvn'] += $p['valuenet'];
 				$params['totalvg'] += $p['valuegross'];
 			}
 
-			$SMARTY->assign('type', $type);
-			$SMARTY->assign('params', $params);
-			$SMARTY->assign('productlist', $pgl);
-			
-			$SMARTY->display('printstocklist.html');
-		}
+		$SMARTY->assign('type', $type);
+		$SMARTY->assign('params', $params);
+		$SMARTY->assign('productlist', $pgl);
 
-		//print_r($params);
+		$SMARTY->display('printstocklist.html');
 	}
 
 	break;
