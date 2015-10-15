@@ -67,8 +67,8 @@ switch($type)
 				break;
 		}
 	}
-	if ($pgl = $DB->GetAll('SELECT m.name as mname, m.id as mid, ' . $DB->Concat('m.name', "' '", 'p.name') . ' AS pname,
-			p.id, p.quantity, g.name as gname, g.id AS gid, COALESCE(SUM(s.pricebuynet), 0) AS valuenet, s.pricebuynet,
+	if ($pgl = $DB->GetAll('SELECT m.name AS mname, m.id AS mid, ' . $DB->Concat('m.name', "' '", 'p.name') . ' AS pname,
+			p.id, p.quantity, g.name AS gname, g.id AS gid, COALESCE(SUM(s.pricebuynet), 0) AS valuenet, s.pricebuynet,
 			COUNT(s.id) AS count, t.name AS type
 		FROM stck_products p
 		LEFT JOIN stck_manufacturers m ON p.manufacturerid = m.id
@@ -76,11 +76,12 @@ switch($type)
 		LEFT JOIN stck_stock s ON s.productid = p.id
 		LEFT JOIN stck_types t ON p.typeid = t.id
 		WHERE p.deleted = 0
-		AND s.bdate < '.$params['date'].' AND (s.leavedate > '.$params['date'].' OR s.leavedate = 0) '
-		.($params['warehouse'] ? ' AND s.warehouseid = '.$params['warehouse'] : '').'
-		GROUP BY p.id, s.pricebuynet'
-		.($sqlord != '' ? $sqlord.' '.$direction : ''))) {
-		
+		AND s.bdate < ? AND (s.leavedate > ? OR s.leavedate = 0) '
+		. ($params['warehouse'] ? ' AND s.warehouseid = '.$params['warehouse'] : '')
+		. ' GROUP BY p.id, m.name, m.id, p.name, p.quantity, gname, g.id, s.pricebuynet, t.name'
+		. ($sqlord != '' ? $sqlord.' '.$direction : ''),
+			array($params['date'], $params['date']))) {
+
 		foreach($pgl as $p) {
 			$params['totalvn'] += $p['valuenet'];
 			$params['totalvg'] += $p['valuegross'];
@@ -124,7 +125,7 @@ switch($type)
 
 		$params['edate'] = $id; 
 
-		if ($pgl = $DB->GetAll('SELECT m.name as mname, m.id as mid, ' . $DB->Concat('m.name', "' '", 'p.name') . ' AS pname,
+		if ($pgl = $DB->GetAll('SELECT m.name AS mname, m.id AS mid, ' . $DB->Concat('m.name', "' '", 'p.name') . ' AS pname,
 				p.id, p.quantity, g.name AS gname, g.id AS gid, COALESCE(SUM(s.pricebuynet), 0) AS valuenet,
 				COUNT(s.id) AS count, t.name AS type
 			FROM stck_products p
@@ -133,11 +134,12 @@ switch($type)
 			LEFT JOIN stck_stock s ON s.productid = p.id
 			LEFT JOIN stck_types t ON p.typeid = t.id
 			WHERE p.deleted = 0
-			AND s.creationdate < '.$params['edate'].' AND s.creationdate > '.$params['sdate'].
-			($params['manufacturer'] ? ' AND m.id = '.$params['manufacturer'] : '').
-			($params['group'] ? ' AND g.id = '.$params['group'] : '').
-			' GROUP BY p.id')) {
-			
+			AND s.creationdate < ? AND s.creationdate > ? '
+			. ($params['manufacturer'] ? ' AND m.id = '.$params['manufacturer'] : '')
+			. ($params['group'] ? ' AND g.id = '.$params['group'] : '')
+			. ' GROUP BY p.id, m.name, m.id, m.name, p.name, p.quantity, g.name, g.id, t.name',
+				array($params['edate'], $params['sdate']))) {
+
 			foreach($pgl as $p) {
 				$params['totalvn'] += $p['valuenet'];
 				$params['totalvg'] += $p['valuegross'];
