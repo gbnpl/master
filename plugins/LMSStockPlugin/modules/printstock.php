@@ -67,7 +67,9 @@ switch($type)
 				break;
 		}
 	}
-	if ($pgl = $DB->GetAll('SELECT m.name as mname, m.id as mid, CONCAT(m.name, \' \', p.name) as pname, p.id, p.quantity, g.name as gname, g.id as gid, COALESCE(SUM(s.pricebuynet), 0) as valuenet, s.pricebuynet, COUNT(s.id) as count, t.name as type
+	if ($pgl = $DB->GetAll('SELECT m.name as mname, m.id as mid, ' . $DB->GroupConcat('m.name', "' '", 'p.name') . ' AS pname,
+			p.id, p.quantity, g.name as gname, g.id AS gid, COALESCE(SUM(s.pricebuynet), 0) AS valuenet, s.pricebuynet,
+			COUNT(s.id) AS count, t.name AS type
 		FROM stck_products p
 		LEFT JOIN stck_manufacturers m ON p.manufacturerid = m.id
 		LEFT JOIN stck_groups g ON p.groupid = g.id
@@ -122,7 +124,9 @@ switch($type)
 
 		$params['edate'] = $id; 
 
-		if ($pgl = $DB->GetAll('SELECT m.name as mname, m.id as mid, CONCAT(m.name, \' \', p.name) as pname, p.id, p.quantity, g.name as gname, g.id as gid, COALESCE(SUM(s.pricebuynet), 0) as valuenet, COUNT(s.id) as count, t.name as type
+		if ($pgl = $DB->GetAll('SELECT m.name as mname, m.id as mid, ' . $DB->GroupConcat('m.name', "' '", 'p.name') . ' AS pname,
+				p.id, p.quantity, g.name AS gname, g.id AS gid, COALESCE(SUM(s.pricebuynet), 0) AS valuenet,
+				COUNT(s.id) AS count, t.name AS type
 			FROM stck_products p
 			LEFT JOIN stck_manufacturers m ON p.manufacturerid = m.id
 			LEFT JOIN stck_groups g ON p.groupid = g.id
