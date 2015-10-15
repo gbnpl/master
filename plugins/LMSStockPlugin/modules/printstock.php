@@ -67,7 +67,7 @@ switch($type)
 				break;
 		}
 	}
-	if ($pgl = $DB->GetAll('SELECT m.name as mname, m.id as mid, ' . $DB->GroupConcat('m.name', "' '", 'p.name') . ' AS pname,
+	if ($pgl = $DB->GetAll('SELECT m.name as mname, m.id as mid, ' . $DB->Concat('m.name', "' '", 'p.name') . ' AS pname,
 			p.id, p.quantity, g.name as gname, g.id AS gid, COALESCE(SUM(s.pricebuynet), 0) AS valuenet, s.pricebuynet,
 			COUNT(s.id) AS count, t.name AS type
 		FROM stck_products p
@@ -124,7 +124,7 @@ switch($type)
 
 		$params['edate'] = $id; 
 
-		if ($pgl = $DB->GetAll('SELECT m.name as mname, m.id as mid, ' . $DB->GroupConcat('m.name', "' '", 'p.name') . ' AS pname,
+		if ($pgl = $DB->GetAll('SELECT m.name as mname, m.id as mid, ' . $DB->Concat('m.name', "' '", 'p.name') . ' AS pname,
 				p.id, p.quantity, g.name AS gname, g.id AS gid, COALESCE(SUM(s.pricebuynet), 0) AS valuenet,
 				COUNT(s.id) AS count, t.name AS type
 			FROM stck_products p
