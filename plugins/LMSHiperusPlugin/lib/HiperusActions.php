@@ -39,7 +39,7 @@ class HiperusActions {
             $req->$key = $val;
         }
 
-        $ret = $this->hlib->sendRequest("AddCustomer",$req);
+        $ret = self::$hlib->sendRequest("AddCustomer",$req);
        
         if(!$ret) {
             throw new Exception("Nie można utworzyć klienta: ".$c_name);
