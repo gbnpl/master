@@ -213,7 +213,7 @@ class LMSHiperus {
 
 		if (is_null($cid)) {
 			if (!$quiet)
-				print  "Pobieram dla wszystkich klientów ..." . PHP_EOL;
+				print  "Pobieram dla wszystkich klientów (typ połączenia: " . $type . ") ..." . PHP_EOL;
 
 			$customers = $this->DB->GetAllByKey('SELECT id, ext_billing_id FROM hv_customers
 				WHERE ext_billing_id IS NOT NULL', 'ext_billing_id');
@@ -249,7 +249,7 @@ class LMSHiperus {
 		} else {
 			$customername = $this->DB->GetOne('SELECT name FROM hv_customers WHERE id = ?', array($cid));
 			if (!$quiet)
-				print  "Pobieram dla: " . $customername . PHP_EOL;
+				print  "Pobieram dla: " . $customername . " (typ połączenia: " . $type . ") ..." . PHP_EOL;
 
 			if ($success === 'yes' || $success === 'all') {
 				$records = HiperusActions::GetBilling($from, $to, null, null, true, $cid, $type);

@@ -354,7 +354,12 @@ if ($billing) {
 
 	if (!$quiet)
 		print "Pobieram billing od dnia $from do $to\n";
-	$HIPERUS->ImportBilling($from, $to, $billing_success, $billing_type, NULL, $quiet);
+	if ($billing_type == 'all')
+		$billing_types = array('incoming', 'outgoing', 'disa', 'forwarded', 'internal', 'vpbx');
+	else
+		$billing_types = array($billing_type);
+	foreach ($billing_types as $billing_type)
+		$HIPERUS->ImportBilling($from, $to, $billing_success, $billing_type, NULL, $quiet);
 }
 
 if ($wlr)
