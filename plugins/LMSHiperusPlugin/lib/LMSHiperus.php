@@ -126,7 +126,7 @@ class LMSHiperus {
 	}
 
 
-	public function ImportSubscriptionList() {	
+	public function ImportSubscriptionList() {
 		$subscriptions = HiperusActions::GetSubscriptionlist();
 		$sids = array();
 		if (is_array($subscriptions) && !empty($subscriptions))
@@ -160,186 +160,124 @@ class LMSHiperus {
 		$this->DB->Execute('DELETE FROM hv_subscriptionlist' . (empty($sids) ? '' : ' WHERE id NOT IN (' . implode(',', $sids) . ')'));
 	}
 
-    private function insertbilling($lista,$cusid,$success)
-    {
-	if (is_array($lista)) $count = count($lista); else $count=0;
-	if ($count!==0) for ($j=0;$j<$count;$j++)
-	{
-		if (!$this->DB->GetOne('SELECT 1 FROM hv_billing WHERE id=? LIMIT 1',array($lista[$j]['id']))) { //wstawiamy dane
-		    $this->DB->Execute('INSERT INTO hv_billing (id,customerid,rel_cause,start_time,start_time_unix,customer_name,terminal_name,ext_billing_id,caller,bill_cpb,duration,calltype,
-			    country,description,operator,type,cost,price,init_charge,reseller_price,reseller_cost,reseller_init_charge,margin,subscription_used,platform_type,success_call) 
-			    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ;',
-			    array(
-				    $lista[$j]['id'],
-				    $cusid,
-				    $lista[$j]['rel_cause'],
-				    $lista[$j]['start_time'],
-				    strtotime($lista[$j]['start_time']),
-				    $lista[$j]['customer_name'],
-				    (!empty($lista[$j]['terminal_name'])		? $lista[$j]['terminal_name'] 		: NULL), 
-				    (!empty($lista[$j]['ext_billing_id'])		? $lista[$j]['ext_billing_id'] 		: 0),
-				    (!empty($lista[$j]['caller'])			? $lista[$j]['caller']			: NULL),
-				    (!empty($lista[$j]['bill_cpb'])			? $lista[$j]['bill_cpb']		: NULL),
-				    (!empty($lista[$j]['duration'])			? $lista[$j]['duration']		: 0),
-				    (!empty($lista[$j]['calltype'])			? $lista[$j]['calltype']		: NULL),
-				    (!empty($lista[$j]['country'])			? $lista[$j]['country']			: NULL),
-				    (!empty($lista[$j]['description'])			? $lista[$j]['description']		: NULL),
-				    (!empty($lista[$j]['operator'])			? $lista[$j]['operator']		: NULL),
-				    (!empty($lista[$j]['type'])				? $lista[$j]['type']			: NULL),
-				    (!empty($lista[$j]['cost'])				? $lista[$j]['cost']			: 0),
-				    (!empty($lista[$j]['price'])			? $lista[$j]['price']			: 0),
-				    (!empty($lista[$j]['init_charge'])			? $lista[$j]['init_charge']		: 0),
-				    (!empty($lista[$j]['reseller_price'])		? $lista[$j]['reseller_price']		: 0),
-				    (!empty($lista[$j]['reseller_cost'])		? $lista[$j]['reseller_cost']		: 0),
-				    (!empty($lista[$j]['reseller_init_charge'])		? $lista[$j]['reseller_init_charge']	: 0),
-				    (!empty($lista[$j]['margin'])			? $lista[$j]['margin']			: 0),
-				    $lista[$j]['subscription_used'],
-				    (!empty($lista[$j]['platform_type'])		? $lista[$j]['platform_type']		: NULL),
-				    $success
-				  )
-			);
-		} 
+	private function InsertBilling($record, $cusid, $success) {
+		if (empty($record) || $this->DB->GetOne('SELECT 1 FROM hv_billing WHERE id = ?',
+			array($record['id'])))
+			return;
+		$this->DB->Execute('INSERT INTO hv_billing (id,customerid,rel_cause,start_time,start_time_unix,customer_name,terminal_name,ext_billing_id,caller,bill_cpb,duration,calltype,
+			country,description,operator,type,cost,price,init_charge,reseller_price,reseller_cost,reseller_init_charge,margin,subscription_used,platform_type,success_call)
+			VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+			array(
+				$record['id'],
+				$cusid,
+				$record['rel_cause'],
+				$record['start_time'],
+				strtotime($record['start_time']),
+				$record['customer_name'],
+				(!empty($record['terminal_name']) ? $record['terminal_name'] : NULL),
+				(!empty($record['ext_billing_id']) ? $record['ext_billing_id'] : 0),
+				(!empty($record['caller']) ? $record['caller'] : NULL),
+				(!empty($record['bill_cpb']) ? $record['bill_cpb'] : NULL),
+				(!empty($record['duration']) ? $record['duration'] : 0),
+				(!empty($record['calltype']) ? $record['calltype'] : NULL),
+				(!empty($record['country']) ? $record['country'] : NULL),
+				(!empty($record['description']) ? $record['description'] : NULL),
+				(!empty($record['operator']) ? $record['operator'] : NULL),
+				(!empty($record['type']) ? $record['type'] : NULL),
+				(!empty($record['cost']) ? $record['cost'] : 0),
+				(!empty($record['price']) ? $record['price'] : 0),
+				(!empty($record['init_charge']) ? $record['init_charge'] : 0),
+				(!empty($record['reseller_price']) ? $record['reseller_price'] : 0),
+				(!empty($record['reseller_cost']) ? $record['reseller_cost'] : 0),
+				(!empty($record['reseller_init_charge']) ? $record['reseller_init_charge'] : 0),
+				(!empty($record['margin']) ? $record['margin'] : 0),
+				$record['subscription_used'],
+				(!empty($record['platform_type']) ? $record['platform_type'] : NULL),
+				$success
+			));
 	}
-    }
-
 
 	public function ImportBilling($from = NULL, $to = NULL, $success = 'yes', $type = 'outgoing', $cid = NULL, $quiet = true) {
-		if (is_null($from) || is_null($to)) { 
-			$from = date('Y-m-d',time()); 
+		if (is_null($from) || is_null($to)) {
+			$from = date('Y-m-d', time());
 			$to = $from;
 		}
 
 		$success = strtolower($success);
 		if (!in_array($success, array('all', 'yes', 'no')))
-			$success='yes';
+			$success = 'yes';
 		$type = strtolower($type);
 
 		if (!in_array($type, array('all', 'incoming', 'outgoing', 'disa', 'forwarded', 'internal', 'vpbx')))
 			$type = 'outgoing';
 
 		if (is_null($cid)) {
-			$customers = $this->DB->GetAll('SELECT id, create_date, name FROM hv_customers ORDER BY id');
-			foreach ($customers as $idx => $customer)
-				$customers[$idx]['create_date'] = substr($customer['create_date'], 0, 10);
-		} else
-			$customers = array(0 => array('id' => $cid));
+			if (!$quiet)
+				print  "Pobieram dla wszystkich klientów ..." . PHP_EOL;
 
-		foreach ($customers as $customer) {
-			if (!$quiet) print  "Pobieram dla: " . $customer['name'] . " ";
+			$customers = $this->DB->GetAllByKey('SELECT id, ext_billing_id FROM hv_customers
+				WHERE ext_billing_id IS NOT NULL', 'ext_billing_id');
+			if (empty($customers))
+				return;
 
 			if ($success === 'yes' || $success === 'all') {
-				if ($type === 'incoming' || $success === 'all') {
+				$records = HiperusActions::GetBilling($from, $to, null, null, true, null, $type);
+				if (!empty($records)) {
 					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, true, $customer['id'], 'incoming'),
-						$customer['id'],
-						't');
+						print "Pobrano " . count($records) . " rekordów bilingowych dla połączeń zakończonych sukcesem." . PHP_EOL;
+					foreach ($records as $record)
+						if (empty($record['ext_billing_id'])) {
+							if (!$quiet)
+								print "Brak powiązania z klientem w LMS dla rekordu " . $record['id'] . " (" . $record['customer_name'] . ")!" . PHP_EOL;
+						} else
+							$this->InsertBilling($record, $customers[$record['ext_billing_id']]['id'], 't');
 				}
-				if ($type === 'outgoing' || $success === 'all') {
+			}
+			if ($success === 'no' || $success === 'all') {
+				$records = HiperusActions::GetBilling($from, $to, null, null, false, null, $type);
+				if (!empty($records)) {
 					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, true,$customer['id'], 'outgoing'),
-						$customer['id'],
-						't');
+						print "Pobrano " . count($records) . " rekordów bilingowych dla połączeń zakończonych niepowodzeniem." . PHP_EOL;
+					foreach ($records as $record)
+						if (empty($record['ext_billing_id'])) {
+							if (!$quiet)
+								print "Brak powiązania z klientem w LMS dla rekordu " . $record['id'] . " (" . $record['customer_name'] . ")!" . PHP_EOL;
+						} else
+							$this->InsertBilling($record, $customers[$record['ext_billing_id']]['id'], 'f');
 				}
-				if ($type === 'disa' || $success === 'all') {
+			}
+		} else {
+			$customername = $this->DB->GetOne('SELECT name FROM hv_customers WHERE id = ?', array($cid));
+			if (!$quiet)
+				print  "Pobieram dla: " . $customername . PHP_EOL;
+
+			if ($success === 'yes' || $success === 'all') {
+				$records = HiperusActions::GetBilling($from, $to, null, null, true, $cid, $type);
+				if (!empty($records)) {
 					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, true, $customer['id'], 'disa'),
-						$customer['id'],
-						't');
+						print "Pobrano " . count($records) . " rekordów bilingowych dla połączeń zakończonych sukcesem." . PHP_EOL;
+					foreach ($records as $record)
+						$this->InsertBilling($record, $cid, 't');
 				}
-				if ($type === 'forwarded' || $success === 'all') {
+			}
+			if ($success === 'no' || $success === 'all') {
+				$records = HiperusActions::GetBilling($from, $to, null, null, false, $cid, $type);
+				if (!empty($records)) {
 					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, true, $customer['id'], 'forwarded'),
-						$customer['id'],
-						't');
-				}
-				if ($type === 'internal' || $success === 'all') {
-					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, true, $customer['id'], 'internal'),
-						$customer['id'],
-						't');
-				}
-				if ($type === 'vpbx' || $success === 'all') {
-					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, true, $customer['id'], 'vpbx'),
-						$customer['id'],
-						't');
+						print "Pobrano " . count($records) . " rekordów bilingowych dla połączeń zakończonych niepowodzeniem." . PHP_EOL;
+					foreach ($records as $record)
+						$this->InsertBilling($record, $cid, 'f');
 				}
 			}
 
-			if ($success === 'no' || $success === 'all') {
-	    			if ($type === 'incoming' || $success === 'all') {
-					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, false, $customer['id'], 'incoming'),
-						$customer['id'],
-						'f');
-				}
-				if ($type === 'outgoing' || $success === 'all') {
-					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, false, $customer['id'], 'outgoing'),
-						$customer['id'],
-						'f');
-				}
-				if ($type === 'disa' || $success === 'all') {
-					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, false, $customer['id'], 'disa'),
-						$customer['id'],
-						'f');
-				}
-				if ($type === 'forwarded' || $success === 'all') {
-					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, false, $customer['id'], 'forwarded'),
-						$customer['id'],
-						'f');
-				}
-				if ($type === 'internal' || $success === 'all') {
-					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, false, $customer['id'], 'internal'),
-						$customer['id'],
-						'f');
-				}
-				if ($type === 'vpbx' || $success === 'all') {
-					if (!$quiet)
-						print ".";
-					$this->insertbilling(
-						HiperusActions::GetBilling($from, $to, null, null, false, $customer['id'], 'vpbx'),
-						$customer['id'],
-						'f');
-				}
-			}
-	
 			if (!$quiet)
-				print "\n";
+				print PHP_EOL;
 		}
 	}
 
-
-    function ImportBillingToFile($from,$to)  {
-	
-	$lista = HiperusActions::GetbillingFile($from,$to);
-	
-    }
+	public function ImportBillingToFile($from,$to)  {
+		$lista = HiperusActions::GetbillingFile($from,$to);
+	}
 
 
     function AllImportBilling($from=NULL,$to=NULL) {
