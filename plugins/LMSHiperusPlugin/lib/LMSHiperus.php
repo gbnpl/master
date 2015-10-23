@@ -275,18 +275,15 @@ class LMSHiperus {
 		}
 	}
 
-	public function ImportBillingToFile($from,$to)  {
-		$lista = HiperusActions::GetbillingFile($from,$to);
+	public function ImportBillingToFile($from, $to) {
+		return HiperusActions::GetBillingFile($from, $to);
 	}
 
 
-    function AllImportBilling($from=NULL,$to=NULL) {
+	public function AllImportBilling($from = NULL, $to = NULL) {
+		return HiperusActions::GetBilling($from, $to);
+	}
 
-	$lista = HiperusActions::Getbilling($from,$to);
-
-    }
-    
-    
     function GetCustomerList() {
     
 	return $this->DB->GetAll('SELECT * FROM hv_customers');
