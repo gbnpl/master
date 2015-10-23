@@ -215,8 +215,8 @@ class LMSHiperus {
 			if (!$quiet)
 				print  "Pobieram dla wszystkich klientów (typ połączenia: " . $type . ") ..." . PHP_EOL;
 
-			$customers = $this->DB->GetAllByKey('SELECT id, ext_billing_id FROM hv_customers
-				WHERE ext_billing_id IS NOT NULL', 'ext_billing_id');
+			$customers = $this->DB->GetAllByKey('SELECT customerid, username FROM hv_terminal',
+				'username');
 			if (empty($customers))
 				return;
 
@@ -226,11 +226,11 @@ class LMSHiperus {
 					if (!$quiet)
 						print "Pobrano " . count($records) . " rekordów bilingowych dla połączeń zakończonych sukcesem." . PHP_EOL;
 					foreach ($records as $record)
-						if (empty($record['ext_billing_id'])) {
+						if (empty($record['terminal_name'])) {
 							if (!$quiet)
 								print "Brak powiązania z klientem w LMS dla rekordu " . $record['id'] . " (" . $record['customer_name'] . ")!" . PHP_EOL;
 						} else
-							$this->InsertBilling($record, $customers[$record['ext_billing_id']]['id'], 't');
+							$this->InsertBilling($record, $customers[$record['terminal_name']]['customerid'], 't');
 				}
 			}
 			if ($success === 'no' || $success === 'all') {
@@ -239,11 +239,11 @@ class LMSHiperus {
 					if (!$quiet)
 						print "Pobrano " . count($records) . " rekordów bilingowych dla połączeń zakończonych niepowodzeniem." . PHP_EOL;
 					foreach ($records as $record)
-						if (empty($record['ext_billing_id'])) {
+						if (empty($record['terminal_name'])) {
 							if (!$quiet)
 								print "Brak powiązania z klientem w LMS dla rekordu " . $record['id'] . " (" . $record['customer_name'] . ")!" . PHP_EOL;
 						} else
-							$this->InsertBilling($record, $customers[$record['ext_billing_id']]['id'], 'f');
+							$this->InsertBilling($record, $customers[$record['terminal_name']]['customerid'], 'f');
 				}
 			}
 		} else {
