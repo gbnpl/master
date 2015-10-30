@@ -434,72 +434,57 @@ class LMSHiperus {
 		.' GROUP BY  msc, rok ORDER BY rok DESC, msc DESC ;';
 	return $this->DB->GetAll($zap);
     }
-    
 
-    
-    
-    function GetListBillingByCustomer2($customerid,$rok=NULL,$msc=NULL,$terminal=NULL)
-    {
-	$call_success = NULL;
-	if (!is_null($terminal) && empty($terminal)) $terminal=NULL;
-	if (!is_null($rok) && empty($rok)) $rok=NULL;
-	if (!is_null($msc) && empty($msc)) $msc=NULL;
-	$abonament = $this->GetSubscriptionByTerminalName($terminal);
-	$zap = 'SELECT 
-		SUM(b.cost) AS cost, 
-		SUM(b.init_charge) AS init_charge, 
-		SUM(b.reseller_cost) AS reseller_cost, 
-		SUM(b.reseller_init_charge) AS reseller_init_charge, '
-		.' '.$this->DB->month('b.start_time').' AS msc,'
-		.''.$this->DB->year('b.start_time').' as rok, '
-		.'\''.$abonament.'\' AS subscription 
-		FROM hv_billing b 
-		WHERE customerid='.$customerid.' '
-		.(!is_null($terminal) ? ' AND terminal_name = \''.$terminal.'\' ': '')
-		.(!is_null($rok) ? ' AND '.$this->DB->YEAR('start_time').' = \''.$rok.'\' ' : '')
-		.(!is_null($msc) ? ' AND '.$this->DB->MONTH('start_time').' = \''.$msc.'\' ' : '')
-		.' GROUP BY  msc, rok ORDER BY rok DESC, msc DESC ;';
-	return $this->DB->GetAll($zap);
-    }
-    
-    function GetBillingByCustomer($customerid,$rok=NULL,$msc=NULL,$calltype=NULL,$callsuccess=NULL,$terminal=NULL)
-    {
-	$call_success = NULL;
-	if (!is_null($rok) && empty($rok)) $rok=NULL;
-	if (!is_null($msc) && empty($msc)) $msc=NULL;
-	if (!is_null($calltype) && empty($calltype)) $calltype=NULL;
-	if (!is_null($callsuccess) && empty($callsuccess)) $callsuccess=NULL;
-	if (!is_null($terminal) && empty($terminal)) $terminal=NULL;
-	if (!is_null($callsuccess))
-	{
-	    if (is_bool($callsuccess)===true)
-	    {
-		if ($callsuccess===true) $call_success='t';
-		elseif ($callsuccess===false) $call_success='f';
-		else $call_success = NULL;
-	    }
-	    elseif (is_string($callsuccess)===true)
-	    {
-		if (strtolower($callsuccess)=='t') $call_success='t';
-		elseif (strtolower($callsuccess)=='f') $call_success='f';
-		else $call_success=NULL;
-	    }
-	    else $call_success = NULL;
+	public function GetListBillingByCustomer2($customerid, $year = NULL, $month = NULL, $terminal = NULL) {
+		$call_success = NULL;
+		if (!is_null($terminal) && empty($terminal)) $terminal = NULL;
+		if (!is_null($year) && empty($year)) $year = NULL;
+		if (!is_null($month) && empty($month)) $month = NULL;
+		$subscription = $this->GetSubscriptionByTerminalName($terminal);
+		$query = 'SELECT SUM(b.cost) AS cost, SUM(b.init_charge) AS init_charge,
+			SUM(b.reseller_cost) AS reseller_cost, SUM(b.reseller_init_charge) AS reseller_init_charge,
+			' . $this->DB->Month('b.start_time') . ' AS month,
+			' . $this->DB->Year('b.start_time') . ' AS year,
+			? AS subscription
+			FROM hv_billing b
+			WHERE customerid = ? '
+			. (!is_null($terminal) ? ' AND terminal_name = \''.$terminal.'\' ': '')
+			. (!is_null($year) ? ' AND ' . $this->DB->Year('start_time') . ' = \'' . $year . '\' ' : '')
+			. (!is_null($month) ? ' AND ' . $this->DB->Month('start_time') . ' = \'' . $month . '\' ' : '')
+			.' GROUP BY month, year ORDER BY year DESC, month DESC';
+		return $this->DB->GetAll($query, array($subscription, $customerid));
 	}
-	    else $call_success = NULL;
-	    
-	
-	$zap = 'SELECT * FROM hv_billing 
-		WHERE customerid='.$customerid.' '
-		.(!is_null($terminal) ? ' AND terminal_name = \''.$terminal.'\' ': '')
-		.(!is_null($rok) ? ' AND '.$this->DB->YEAR('start_time').' = \''.$rok.'\' ' : '')
-		.(!is_null($msc) ? ' AND '.$this->DB->MONTH('start_time').' = \''.$msc.'\' ' : '')
-		.(!is_null($calltype) ? ' AND calltype=\''.$calltype.'\' ' : '') 
-		.(!is_null($call_success) ? ' AND success_call = \''.$call_success.'\' ' : '')
-		.' ORDER BY start_time DESC ;';
-	return $this->DB->GetAll($zap);
-    }
-    
+
+	public function GetBillingByCustomer($customerid, $year = NULL, $month = NULL, $calltype = NULL, $callsuccess = NULL, $terminal = NULL) {
+		$call_success = NULL;
+		if (!is_null($year) && empty($year)) $year = NULL;
+		if (!is_null($month) && empty($month)) $month = NULL;
+		if (!is_null($calltype) && empty($calltype)) $calltype = NULL;
+		if (!is_null($callsuccess) && empty($callsuccess)) $callsuccess = NULL;
+		if (!is_null($terminal) && empty($terminal)) $terminal = NULL;
+		if (!is_null($callsuccess)) {
+			if (is_bool($callsuccess)) {
+				if ($callsuccess === true) $call_success = 't';
+				elseif ($callsuccess === false) $call_success = 'f';
+				else $call_success = NULL;
+			} elseif (is_string($callsuccess) === true) {
+				if (strtolower($callsuccess) == 't') $call_success = 't';
+				elseif (strtolower($callsuccess) == 'f') $call_success = 'f';
+				else $call_success = NULL;
+			} else $call_success = NULL;
+		} else $call_success = NULL;
+
+		$query = 'SELECT * FROM hv_billing
+			WHERE customerid = ? '
+			.(!is_null($terminal) ? ' AND terminal_name = \'' . $terminal . '\'' : '')
+			.(!is_null($year) ? ' AND '.$this->DB->Year('start_time') . ' = \'' . $year . '\'' : '')
+			.(!is_null($month) ? ' AND '.$this->DB->Month('start_time') . ' = \'' . $month . '\'' : '')
+			.(!is_null($calltype) ? ' AND calltype = \'' . $calltype . '\'' : '')
+			.(!is_null($call_success) ? ' AND success_call = \'' . $call_success . '\'' : '')
+			. ' ORDER BY start_time DESC';
+		return $this->DB->GetAll($query, array($customerid));
+	}
+
     function GetSubscriptionByTerminalName($terminal=NULL)
     {
 	if (is_null($terminal) || !is_string($terminal)) return false;
