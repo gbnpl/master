@@ -1,0 +1,28 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<script type="text/javascript" src="swfobject.js"></script>
+	</head>
+	<body style="font: 14px Tahoma; color: black; text-align: center;">
+		<div style="width: 800px; height: 500px; margin: 20px auto; text-align: center;">
+
+			<!-- kod testera prędkości -->
+
+			<div id="speedtest">Jeśli nie widzisz testera prędkości, sprawdź wtyczkę Adobe Flash Player w swojej przeglądarce.</div>
+			<!--<a style="font: 12px Verdana;" href="http://www.speedtest.pl/">Internet Speed Test</a>//-->
+
+			<script type="text/javascript">
+			<!--
+				var flashvars = { resultUrl: '{ConfigHelper::getConfig('userpanel.speedtest_url')}', version: 2.0};
+				var params = { allownetworking: 'all', allowfullscreen: 'false', allowscriptaccess: 'always', wmode: 'transparent' };
+				var attributes = { id: 'speedtest', name: 'speedtest' };
+				swfobject.embedSWF("logics.swf?nc={$rand}", "speedtest", "800", "500", "10.0.0", false, flashvars, params, attributes);
+			//-->
+			</script>
+
+			<!-- koniec kodu testera prędkości -->
+
+		</div>
+	</body>
+</html>

@@ -1,0 +1,1 @@
+latencyTestJS1.pingTest();
