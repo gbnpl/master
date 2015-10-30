@@ -21,4 +21,4 @@ z adresów źródłowych klientów bez NAT.
 Wtyczka powstała we współpracy ze http://speedtest.pl.
 Możliwe jest dostosowanie aplikacji wykonującej test do własnych wymagań
 - więcej informacji znajduje się pod adresem:
-http://v-speed.eu
+http://www.speedtest.pl/testery/
