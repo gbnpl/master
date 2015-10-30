@@ -53,7 +53,7 @@
 	{assign var='sumsubscription' value=0}
 	{assign var='sumprzychod' value=0}
 	{section name=lb loop=$lb}
-	    {assign var='mscname' value=$lb[lb].msc}
+	    {assign var='mscname' value=$lb[lb].month}
 	    {math assign='cuscost' equation="(x+y+z)" x=$lb[lb].cost y=$lb[lb].init_charge z=$lb[lb].subscription}
 	    {math assign='rescost' equation="(x+y)" x=$lb[lb].reseller_cost y=$lb[lb].reseller_init_charge}
 	    {math assign='sumcuscost' equation="x+y" x=$sumcuscost y=$lb[lb].cost }
@@ -65,7 +65,7 @@
 	    {if $lb[lb].subscription ne 0}{math assign='przychod' equation="(x-y)" x=$cuscost y=$rescost}{else}{math assign='przychod' equation="x*(-1)" x=$rescost}{/if}
 	    {math assign='sumprzychod' equation="x+y" x=$sumprzychod y=$przychod}
 	    <tr class="{cycle} lista" onmouseover="addClass(this,'highlight');" onmouseout="removeClass(this,'highlight');">
-		<td width="1%" nowrap align="left" class="fleft">&nbsp;{$lb[lb].rok}&nbsp;</td>
+		<td width="1%" nowrap align="left" class="fleft">&nbsp;{$lb[lb].year}&nbsp;</td>
 		<td width="auto" nowrap align="left">&nbsp;{$miesiace[$mscname]}&nbsp;</td>
 		<td width="1%" nowrap align="right" class="fleft">
 		    {math assign='tempek' equation="x*y" x=$stvat y=$lb[lb].subscription}
@@ -99,7 +99,7 @@
 		    {math assign='tempek' equation="x*y" x=$stvat y=$przychod}
 		    {$tempek|string_format:"%.04f"}&nbsp;&nbsp;
 		</td>
-		<td width="1%" nowrap align="right" class="flr"><img src="img/{LMSHiperusPlugin::plugin_directory_name}/box.png" border="0" {tip text="Kliknij aby otworzyć wykaz połączeń"} onclick="wyswietlbiling('{$info.account.id}','{$lb[lb].rok}','{$lb[lb].msc}','{$pbf.te}');" style="cursor:pointer;"></td>
+		<td width="1%" nowrap align="right" class="flr"><img src="img/{LMSHiperusPlugin::plugin_directory_name}/box.png" border="0" {tip text="Kliknij aby otworzyć wykaz połączeń"} onclick="wyswietlbiling('{$info.account.id}','{$lb[lb].year}','{$lb[lb].month}','{$pbf.te}');" style="cursor:pointer;"></td>
 	    </tr>
 	{sectionelse}
 	    <tr class="light"><td colspan="11" class="fall" align="center"><br><h2>Brak bilingów</h2></td></tr>
