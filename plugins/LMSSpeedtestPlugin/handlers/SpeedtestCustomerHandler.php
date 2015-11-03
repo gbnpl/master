@@ -34,8 +34,9 @@ class SpeedtestCustomerHandler {
 		$speedtests = LMSDB::getInstance()->GetAll('SELECT s.*, INET_NTOA(n.ipaddr) AS ip,
 				n.name, n.id AS nodeid FROM speedtests s
 			JOIN nodes n ON n.id = s.nodeid
-			JOIN customers c ON c.id = ? ORDER BY s.dt DESC
-			LIMIT ?', array($cid, ConfigHelper::getConfig('speedtest.display_limit', 20)));
+			JOIN customers c ON c.id = n.ownerid
+			WHERE c.id = ?
+			ORDER BY s.dt DESC LIMIT ?', array($cid, ConfigHelper::getConfig('speedtest.display_limit', 20)));
 		if (!empty($speedtests))
 			foreach ($speedtests as &$test)
 				foreach (array('download', 'upload') as $idx)
