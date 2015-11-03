@@ -98,12 +98,12 @@
 		    <tr>
 			<td width="1%" align="left" nowrap>Nazwa</td>
 			<td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td>
-			<td width="98%" align="left"><input type="text" name="terminaladd[username]" value="{$dane.username}"></td>
+			<td width="98%" align="left"><input type="text" name="terminaladd[username]" value="{$terminal.username}"></td>
 		    </tr>
 		    <tr>
 			<td width="1%" align="left" nowrap>Hasło</td>
 			<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
-			<td width="98%" align="left" ><input type="text" name="terminaladd[password]" value="{$dane.password}">&nbsp;<a href="javascript:GenPasswdTerminal();" {tip text="Generuj 10 znakowe hasło dla terminala"}>&raquo;&raquo;&raquo;</a></td>
+			<td width="98%" align="left" ><input type="text" name="terminaladd[password]" value="{$terminal.password}">&nbsp;<a href="javascript:GenPasswdTerminal();" {tip text="Generuj 10 znakowe hasło dla terminala"}>&raquo;&raquo;&raquo;</a></td>
 		    </tr>
 		    <tr>
 			<td width="1%" align="left" nowrap>Widoczny numer</td>
@@ -126,6 +126,18 @@
 			    </select>
 			</td>
 		    </tr>
+			<tr>
+				<td colspan="2" align="left" nowrap>{trans("Location:")}</td>
+				<td align="left">
+					<input type="text" size="40" value="{$terminal.location}" id="location" NAME="terminaladd[location]"  {tip text="Enter location (optional)" trigger="location"}>
+					<a href="javascript: void(0);" onclick="return locationchoosewin('terminaladd', 'terminaladd', document.forms['terminaladd'].elements['terminaladd[location_city]'].value,  document.forms['terminaladd'].elements['terminaladd[location_street]'].value)" {tip text="Click to select location"}>&raquo;&raquo;&raquo;</a>
+					<input type="hidden" name="terminaladd[location_city]" value="{$terminal.location_city}">
+					<input type="hidden" name="terminaladd[location_street]" value="{$terminal.location_street}">
+					<input type="hidden" name="terminaladd[location_house]" value="{$terminal.location_house}">
+					<input type="hidden" name="terminaladd[location_flat]" value="{$terminal.location_flat}">
+				</td>
+			</tr>
+
 		    <tr><td colspan="3">&nbsp;</td></tr>
 		</table>
 	    </td>
@@ -160,14 +172,14 @@
 			<td width="1%" align="left" nowrap>Abonament od</td>
 			<td width="1%"><b>&nbsp;:&nbsp;</b></td>
 			<td width="98%" align="left" >
-			    <input readonly type="text" name="terminaladd[subscription_from]" size="12" value="{$dane.subscription_from}">&nbsp;<img src="img/calendar.gif" border="0" {tip text="Kliknij aby otworzyć kalendarz"} onclick="tncal1.popup();" style="cursor:pointer;">&nbsp;<img src="img/delete.gif" onclick="javascript:document.terminaladd.elements['terminaladd[subscription_from]'].value='';" style="cursor:pointer;" {tip text="Wyczyść datę"}>
+			    <input readonly type="text" name="terminaladd[subscription_from]" size="12" value="{$terminal.subscription_from}">&nbsp;<img src="img/calendar.gif" border="0" {tip text="Kliknij aby otworzyć kalendarz"} onclick="tncal1.popup();" style="cursor:pointer;">&nbsp;<img src="img/delete.gif" onclick="javascript:document.terminaladd.elements['terminaladd[subscription_from]'].value='';" style="cursor:pointer;" {tip text="Wyczyść datę"}>
 			</td>
 		    </tr>
 		    <tr>
 			<td width="1%" align="left" nowrap>Abonament do</td>
 			<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
 			<td width="98%" align="left" >
-			    <input type="text" readonly name="terminaladd[subscription_to]" size="12" value="{$dane.subscription_to}">&nbsp;<img src="img/calendar.gif" border="0" {tip text="Kliknij aby otworzyć kalendarz"} onclick="tncal2.popup();" style="cursor:pointer;">&nbsp;<img src="img/delete.gif" onclick="javascript:document.terminaladd.elements['terminaladd[subscription_to]'].value='';" style="cursor:pointer;" {tip text="Wyczyść datę"}>
+			    <input type="text" readonly name="terminaladd[subscription_to]" size="12" value="{$terminal.subscription_to}">&nbsp;<img src="img/calendar.gif" border="0" {tip text="Kliknij aby otworzyć kalendarz"} onclick="tncal2.popup();" style="cursor:pointer;">&nbsp;<img src="img/delete.gif" onclick="javascript:document.terminaladd.elements['terminaladd[subscription_to]'].value='';" style="cursor:pointer;" {tip text="Wyczyść datę"}>
 			</td>
 		    </tr>
 		</table>
@@ -180,28 +192,28 @@
 				<td width="1%" align="left" nowrap />Województwo</td>
 				<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
 				<td width="98%" align="left" >
-				    <input type="text" readonly name="terminaladd[province]" id="id_province" value="{$dane.province}">
+				    <input type="text" readonly name="terminaladd[province]" id="id_province" value="{$terminal.province}">
 				</td>
 			    </tr>
 			    <tr>
 				<td width="1%" align="left" nowrap />Powiat</td>
 				<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
 				<td width="98%" align="left" >
-				    <input type="text" readonly name="terminaladd[county]" id="id_county" value="{$dane.county}">
+				    <input type="text" readonly name="terminaladd[county]" id="id_county" value="{$terminal.county}">
 				</td>
 			    </tr>
 			    <tr>
 				<td width="1%" align="left" nowrap />Gmina</td>
 				<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
 				<td width="98%" align="left" >
-				    <input type="text" readonly name="terminaladd[borough]" id="id_borough" value="{$dane.borough}">
+				    <input type="text" readonly name="terminaladd[borough]" id="id_borough" value="{$terminal.borough}">
 				</td>
 			    </tr>
 			    <tr>
 				<td width="1%" align="left" nowrap />ID Lokalizacja</td>
 				<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
 				<td width="98%" align="left" >
-				    <input type="text" readonly name="terminaladd[id_terminal_location]" id="id_id_terminal_location" value="{$dane.id_terminal_location}">
+				    <input type="text" readonly name="terminaladd[id_terminal_location]" id="id_id_terminal_location" value="{$terminal.id_terminal_location}">
 				</td>
 			    </tr>
 			</table>

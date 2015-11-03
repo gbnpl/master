@@ -1075,150 +1075,168 @@ class LMSHiperus {
 		}
 		$this->DB->Execute('DELETE FROM hv_terminal' . (empty($tids) ? '' : ' WHERE id NOT IN (' . implode(',', $tids) . ')'));
 	}
-    
-    function GetTerminalOneOrList($terminalid=NULL,$customerid=NULL, $sort=NULL, $filtr=NULL)
-    {
-	if (!is_null($terminalid)) return $this->DB->GetRow('SELECT t.* FROM hv_terminal AS t WHERE t.id='.intval($terminalid).' LIMIT 1;');
-	elseif (!is_null($customerid)) return $this->DB->GetAll('SELECT t.* FROM hv_terminal AS t WHERE t.customerid='.intval($customerid).' ;');
-	else
-	{
-	    if (is_null($sort) || !is_string($sort)) $sort = 'id,asc';
-	    switch ($sort)
-	    {
-		case 'id,asc'		: $sort = ' ORDER BY t.id ASC '; break;
-		case 'id,desc'		: $sort = ' ORDER BY t.id DESC '; break;
-		case 'numbers,asc'	: $sort = ' ORDER BY t.extensions ASC '; break;
-		case 'numbers,desc'	: $sort = ' ORDER BY t.extensions DESC '; break;
-		case 'username,asc'	: $sort = ' ORDER BY t.username ASC '; break;
-		case 'username,desc'	: $sort = ' ORDER BY t.username DESC '; break;
-		case 'customername,asc'	: $sort = ' ORDER BY t.customer_name ASC '; break;
-		case 'customername,desc': $sort = ' ORDER BY t.customer_name DESC '; break;
-		default			: $sort = ' ORDER BY t.id ASC '; break;
-	    }
-	    
-	    $price = '';
-	    $subscription = '';
-	    
-	    if (!is_null($filtr) && is_array($filtr))
-	    {
-		if (isset($filtr['price']))
-		{
-		    if ($filtr['price'] == 'noprice') $price = ' AND t.id_pricelist IS NULL '; 
-		    elseif ($filtr['price'] == '') $price = ' ';
-		    else $price = ' AND t.id_pricelist = '.$filtr['price'].' ';
+
+	public function GetTerminalOneOrList($terminalid = NULL, $customerid = NULL, $sort = NULL, $filter = NULL) {
+		if (!is_null($terminalid))
+			return $this->DB->GetRow('SELECT t.* FROM hv_terminal AS t WHERE t.id = ?', array($terminalid));
+		elseif (!is_null($customerid))
+			return $this->DB->GetAll('SELECT t.* FROM hv_terminal AS t WHERE t.customerid = ?', array($customerid));
+		else {
+			if (is_null($sort) || !is_string($sort)) $sort = 'id,asc';
+			switch ($sort) {
+				case 'id,asc':
+					$sort = ' ORDER BY t.id ASC'; break;
+				case 'id,desc':
+					$sort = ' ORDER BY t.id DESC'; break;
+				case 'numbers,asc':
+					$sort = ' ORDER BY t.extensions ASC'; break;
+				case 'numbers,desc':
+					$sort = ' ORDER BY t.extensions DESC'; break;
+				case 'username,asc':
+					$sort = ' ORDER BY t.username ASC'; break;
+				case 'username,desc':
+					$sort = ' ORDER BY t.username DESC'; break;
+				case 'customername,asc':
+					$sort = ' ORDER BY t.customer_name ASC'; break;
+				case 'customername,desc':
+					$sort = ' ORDER BY t.customer_name DESC'; break;
+				default:
+					$sort = ' ORDER BY t.id ASC'; break;
+			}
+
+			$price = '';
+			$subscription = '';
+
+			if (!is_null($filter) && is_array($filter)) {
+				if (isset($filter['price'])) {
+					if ($filter['price'] == 'noprice') $price = ' AND t.id_pricelist IS NULL';
+					elseif ($filter['price'] == '') $price = ' ';
+					else $price = ' AND t.id_pricelist = ' . $filter['price'];
+				}
+
+				if (isset($filter['subscription'])) {
+					if ($filter['subscription'] == 'nosubscription') $subscription = ' AND t.id_subscription IS NULL';
+					elseif ($filter['subscription'] == '') $subscription = ' ';
+					else $subscription = ' AND t.id_subscription = ' . $filter['subscription'];
+				}
+			}
+
+			$sql = 'SELECT t.* FROM hv_terminal AS t WHERE 1=1'
+				. $price
+				. $subscription
+				. $sort;
+			return $this->DB->GetAll($sql);
 		}
-		
-		if (isset($filtr['subscription']))
-		{
-		    if ($filtr['subscription'] == 'nosubscription') $subscription = ' AND t.id_subscription IS NULL '; 
-		    elseif ($filtr['subscription'] == '') $subscription = ' ';
-		    else $subscription = ' AND t.id_subscription = '.$filtr['subscription'].' ';
+	}
+
+	public function GetIDLocationTerminal($p, $c, $b) {
+		return $this->DB->GetOne('SELECT id FROM hv_pcb WHERE province = ? AND county = ? AND borough = ?',
+			array($p, $c, $b));
+	}
+
+	public function CreateTerminal($terminal) {
+		extract($terminal);
+		if (!isset($screen))
+			$screen = null;
+		if (!isset($t38))
+			$t38 = null;
+		if (!isset($subscription_id))
+			$subscription_id = null;
+		if (!isset($subscription_from))
+			$subscription_from = null;
+		if (!isset($subscription_to))
+			$subscription_to = null;
+		if (!isset($id_terminal_location))
+			$id_terminal_location = null;
+
+		$hlib = new HiperusLib();
+		$req = new stdClass();
+		$req->id_customer = $customer_id;
+		$req->username = $username;
+		$req->password = $password;
+		$req->id_pricelist = $id_pricelist;
+		if (is_null($screen)) $req->screen_numbers = true;
+		if (!is_bool($screen)) {
+			$screen = strtolower($screen);
+			if ($screen == 't') $req->screen_numbers = true;
+			elseif ($screen == 'f') $req->screen_numbers = false;
+			else $req->screen_numbers = true;
 		}
-		
-	    }
-	    
-	    $sql = 'SELECT t.* FROM hv_terminal AS t WHERE 1=1 '
-	    .$price
-	    .$subscription
-	    .$sort 
-	    .' ;';
-	    return $this->DB->GetAll($sql);
+		if (is_null($t38)) $req->t38_fax = false;
+		if (!is_bool($t38)) {
+			$t38 = strtolower($t38);
+			if ($t38 == 't') $req->t38_fax = true;
+			elseif ($t38 == 'f') $req->t38_fax = false;
+			else $req->t38_fax = false;
+		}
+		if (!is_null($subscription_id))
+			$req->id_subscription = $subscription_id;
+		if (!is_null($subscription_from))
+			$req->subscription_from = str_replace('/', '-', $subscription_from);
+		if (!is_null($subscription_to))
+			$req->subscription_to = str_replace('/', '-', $subscription_to);
+		if (!is_null($id_terminal_location))
+			$req->id_terminal_location = $id_terminal_location;
+		$ret = $hlib->sendRequest("AddTerminal", $req);
+		if (!$ret || !$ret->success || !$ret->result_set[0]->id_terminal)
+			return null;
+		return $ret->result_set[0]->id_terminal;
 	}
-    }
-    
-    
-    function GetIDLocationTerminal($p,$c,$b)
-    {
-	return $this->DB->GetOne('SELECT id FROM hv_pcb WHERE province='.intval($p).' AND county='.intval($c).' AND borough='.intval($b).' LIMIT 1; ');
-    }
-    
-    function CreateTerminal($customer_id,$username,$password,$pricelist_id,$screen=NULL,$t38=NULL,$subscription_id=NULL,$subscription_from=NULL,$subscription_to=NULL,$id_terminal_location=NULL)
-    {
-            
-        $hlib = new HiperusLib();
-        $req = new stdClass();
-	$req->id_customer = $customer_id;
-	$req->username = $username;
-        $req->password = $password;
-        $req->id_pricelist = $pricelist_id;
-        if (is_null($screen)) $req->screen_numbers = true;
-        if (!is_bool($screen))
-        {
-	    $screen = strtolower($screen);
-	    if ($screen == 't') $req->screen_numbers = true;
-	    elseif ($screen=='f') $req->screen_numbers = false;
-	    else $req->screen_numbers = true;
-        }
-        if (is_null($t38)) $req->t38_fax = false;
-        if (!is_bool($t38))
-        {
-	    $t38 = strtolower($t38);
-	    if ($t38 == 't') $req->t38_fax = true;
-	    elseif ($t38 == 'f') $req->t38_fax = false;
-	    else $req->t38_fax = false;
-        }
-        if (!is_null($subscription_id)) $req->id_subscription = $subscription_id;
-        if (!is_null($subscription_from)) $req->subscription_from = str_replace('/','-',$subscription_from);
-        if (!is_null($subscription_to)) $req->subscription_to = str_replace('/','-',$subscription_to);
-        if (!is_null($id_terminal_location)) $req->id_terminal_location = $id_terminal_location;
-        $ret = $hlib->sendRequest("AddTerminal",$req);
-	if (!$ret || !$ret->success) return false; else return true;
-    }
-    
-    function UpdateTerminal($dane=NULL)
-    {
-	if (is_null($dane) || !is_array($dane)) return false;
-	
-	if (!isset($dane['screen_numbers'])) $dane['screen_numbers'] = true;
-	if (!isset($dane['t38_fax'])) $dane['t38_fax'] = false;
-	if (!is_bool($dane['screen_numbers']))
-	{
-	    $dane['screen_numbers'] = strtolower($dane['screen_numbers']);
-	    if ($dane['screen_numbers']=='t') $dane['screen_numbers'] = true;
-	    elseif($dane['screen_numbers']=='f') $dane['screen_numbers'] = false;
-	    else $dane['screen_numbers'] = true;
+
+	public function UpdateTerminal($terminal = null) {
+		if (is_null($terminal) || !is_array($terminal)) return false;
+
+		if (!isset($terminal['screen_numbers'])) $terminal['screen_numbers'] = true;
+		if (!isset($terminal['t38_fax'])) $terminal['t38_fax'] = false;
+		if (!is_bool($terminal['screen_numbers'])) {
+			$terminal['screen_numbers'] = strtolower($terminal['screen_numbers']);
+			if ($terminal['screen_numbers'] == 't') $terminal['screen_numbers'] = true;
+			elseif($terminal['screen_numbers'] == 'f') $terminal['screen_numbers'] = false;
+			else $terminal['screen_numbers'] = true;
+		}
+		if (!is_bool($terminal['t38_fax'])) {
+			$terminal['t38_fax'] = strtolower($terminal['t38_fax']);
+			if ($terminal['t38_fax'] == 't') $terminal['t38_fax'] = true;
+			elseif($terminal['t38_fax'] == 'f') $terminal['t38_fax'] = false;
+			else $terminal['t38_fax'] = true;
+		}
+
+		$this->DB->Execute('UPDATE hv_terminal SET location = ?, location_city = ?, location_street = ?,
+			location_house = ?, location_flat = ? WHERE id = ?', array($terminal['location'],
+			$terminal['location_city'], $terminal['location_street'], $terminal['location_house'],
+			$terminal['location_flat'], $terminal['id_terminal']));
+		if (HiperusActions::ChangeTerminalData($terminal)) {
+			$oldname = $this->DB->GetOne('SELECT username FROM hv_terminal WHERE id = ?', array($terminal['id_terminal']));
+			if ($terminal['username'] !== $oldname) {
+				$this->DB->Execute('UPDATE hv_billing SET terminal_name = ? WHERE terminal_name = ?',
+					array($terminal['username'], $oldname));
+				$this->DB->Execute('UPDATE hv_pstn SET terminal_name = ? WHERE terminal_name = ?',
+					array($terminal['username'], $oldname));
+				$this->DB->Execute('UPDATE hv_terminal SET username = ? WHERE username = ?',
+					array($terminal['username'], $oldname));
+			}
+			return true;
+		} else
+			return false;
 	}
-	if (!is_bool($dane['t38_fax']))
-	{
-	    $dane['t38_fax'] = strtolower($dane['t38_fax']);
-	    if ($dane['t38_fax']=='t') $dane['t38_fax'] = true;
-	    elseif($dane['t38_fax']=='f') $dane['t38_fax'] = false;
-	    else $dane['t38_fax'] = true;
+
+	public function DeleteTerminal($id = null) {
+		if (is_null($id))
+			return false;
+		$pstn = $this->DB->GetOne('SELECT extensions FROM hv_terminal WHERE id = ?', array($id));
+		$id = intval($id);
+		$numbers = explode("\n", $pstn);
+		array_pop($numbers);
+		if (HiperusActions::DelTerminal($id)) {
+			foreach ($numbers as $number) {
+				$this->DB->Execute('UPDATE hv_pstnusage SET customerid = ?, customer_name = ? WHERE extension = ?',
+					array(0, null, $number));
+				$this->DB->Execute('DELETE FROM hv_pstn WHERE extension = ?', array($number));
+			}
+			$this->DB->Execute('DELETE FROM hv_terminal WHERE id = ?', array($id));
+		}
 	}
-	
-	if (HiperusActions::ChangeTerminalData($dane)) 
-	{
-	    $oldname = $this->DB->GetOne('SELECT username FROM hv_terminal WHERE id='.$dane['id_terminal'].' LIMIT 1 ;');
-	    if ($dane['username']!==$oldname)
-	    {
-		$this->DB->Execute('UPDATE hv_billing SET terminal_name=? WHERE terminal_name=? ;',array($dane['username'],$oldname));
-		$this->DB->Execute('UPDATE hv_pstn SET terminal_name=? WHERE terminal_name=? ;',array($dane['username'],$oldname));
-		$this->DB->Execute('UPDATE hv_terminal SET username=? WHERE username=? ;',array($dane['username'],$oldname));
-	    }
-	    return true; 
-	} else return false;
-    }
-    
-    function DeleteTerminal($id=NULL)
-    {
-	if (is_null($id)) return false;
-	$id = intval($id);
-	$pstn = $this->DB->GetOne('SELECT extensions FROM hv_terminal WHERE id=? LIMIT 1;',array($id));
-	$numery = array();
-	$numery = explode("\n",$pstn);
-	unset($numery[sizeof($numery)-1]);
-	if (HiperusActions::DelTerminal($id))
-	{
-	    for ($i=0;$i<sizeof($numery);$i++) 
-	    {
-		$this->DB->Execute('UPDATE hv_pstnusage SET customerid=0, customer_name=NULL WHERE extension=? ;',array($numery[$i]));
-		$this->DB->Execute('DELETE FROM hv_pstn WHERE extension=? ;',array($numery[$i]));
-	    }
-	    $this->DB->Execute('DELETE FROM hv_terminal WHERE id=? ;',array($id));
-	}
-    }
-    
-    
+
     function GetInvoiceList()
     {
 	$hlib = new HiperusLib();

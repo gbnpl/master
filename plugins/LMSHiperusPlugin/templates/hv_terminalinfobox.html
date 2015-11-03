@@ -28,6 +28,12 @@
 			    <tr><td width="1%" align="left" nowrap>FAX T.38</td><td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" >{if $infot[lt].t38_fax=='t'}TAK{else}NIE{/if}</td></tr>
 			    <tr><td width="1%" align="left" nowrap>Cennik</td><td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" >{$infot[lt].pricelist_name}</td></tr>
 			    <tr><td width="1%" align="left" nowrap>Środki (prepaid)</td><td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" >{$infot[lt].balance_value}</td></tr>
+				{if $infot[lt].location}
+				<tr>
+					<td colspan="2" align="left" nowrap>{trans("Location:")}</td>
+					<td align="left">{$infot[lt].location}</td>
+				</tr>
+				{/if}
 			</table>
 		    </td>
 		    <td width="33%" style="text-align:left;vertical-align:top;">

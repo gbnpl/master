@@ -174,8 +174,17 @@ CREATE TABLE IF NOT EXISTS hv_terminal (
   sip_proxy varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
   subscriptions varchar(255) COLLATE utf8_polish_ci DEFAULT NULL ,
   extensions text COLLATE utf8_polish_ci,
+  location varchar(255) DEFAULT NULL,
+  location_city int(11),
+  location_street int(11),
+  location_house varchar(32),
+  location_flat varchar(32),
   PRIMARY KEY (id),
-  KEY customerid (customerid)
+  KEY customerid (customerid),
+  KEY location_city (location_city, location_street, location_house, location_flat),
+  KEY location_street (location_street),
+  FOREIGN KEY (location_city) REFERENCES location_cities (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  FOREIGN KEY (location_street) REFERENCES location_streets (id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_polish_ci;
 
 CREATE TABLE IF NOT EXISTS hv_province (
@@ -694,4 +703,4 @@ INSERT INTO hv_pcb (id,province,county,borough) VALUES
 (2301,16,417,2301),(2302,16,417,2302),(2303,16,417,2303),(2304,16,417,2304),(2305,16,417,2305),(2306,16,418,2308),(2307,16,419,2309),(2308,16,419,2310),(2309,16,419,2311),(2310,16,419,2312),(2311,16,419,2313),
 (2312,16,420,697),(2313,16,420,2315),(2314,16,420,2316),(2315,16,420,2317),(2316,16,420,2318),(2317,16,421,2319),(2318,16,421,2320),(2319,16,422,2321),(2320,16,422,2322),(2321,16,422,2323),(2322,16,422,2324);
 
-INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSHiperusPlugin', '2015071800');
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSHiperusPlugin', '2015110300');

@@ -57,6 +57,17 @@ function GenPasswdTerminal(){var passwd=new Array();var items="abcdefghijklmnopq
 			    </select>
 			</td>
 		    </tr>
+			<tr>
+				<td colspan="2" align="left" nowrap>{trans("Location:")}</td>
+				<td align="left">
+					<input type="text" size="40" value="{$terminalinfo.location}" id="location" NAME="terminaledit[location]"  {tip text="Enter location (optional)" trigger="location"}>
+					<a href="javascript: void(0);" onclick="return locationchoosewin('terminaledit', 'terminaledit', document.forms['terminaledit'].elements['terminaledit[location_city]'].value,  document.forms['terminaledit'].elements['terminaledit[location_street]'].value)" {tip text="Click to select location"}>&raquo;&raquo;&raquo;</a>
+					<input type="hidden" name="terminaledit[location_city]" value="{$terminalinfo.location_city}">
+					<input type="hidden" name="terminaledit[location_street]" value="{$terminalinfo.location_street}">
+					<input type="hidden" name="terminaledit[location_house]" value="{$terminalinfo.location_house}">
+					<input type="hidden" name="terminaledit[location_flat]" value="{$terminalinfo.location_flat}">
+				</td>
+			</tr>
 		    <tr><td colspan="3">&nbsp;</td></tr>
 		</table>
 	    </td>

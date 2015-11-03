@@ -29,21 +29,22 @@
 $cusid = intval($_GET['cusid']);
 $account = $HIPERUS->GetCustomer($cusid);
 $layout['pagetitle'] = 'Nowy Terminal dla : '.$account['name'];
-$dane = array();
+$terminal = array();
 $blad = false;
 
 if (isset($_POST['terminaladd'])) {
-
-    $dane = $_POST['terminaladd'];
-
-    if ($HIPERUS->CreateTerminal($dane['customer_id'],$dane['username'],$dane['password'],$dane['id_pricelist'],$dane['screen_numbers'],$dane['t38_fax'],$dane['id_subscription'],$dane['subscription_from'],$dane['subscription_to'],$dane['id_terminal_location'])) {
-	$HIPERUS->ImportTerminalList($dane['customer_id']);
-	$SESSION->redirect('?m=hv_accountinfo&id='.$dane['customer_id']);
-    } else {
-	$blad = true;
-	$dane['username'] = '';
-    }
-
+	$terminal = $_POST['terminaladd'];
+	if ($tid = $HIPERUS->CreateTerminal($terminal)) {
+		$HIPERUS->ImportTerminalList($terminal['customer_id']);
+		$DB->Execute('UPDATE hv_terminal SET location = ?, location_city = ?, location_street = ?,
+			location_house = ?, location_flat = ? WHERE id = ?', array($terminal['location'],
+			$terminal['location_city'], $terminal['location_street'], $terminal['location_house'],
+			$terminal['location_flat'], $tid));
+		$SESSION->redirect('?m=hv_accountinfo&id=' . $terminal['customer_id']);
+	} else {
+		$blad = true;
+		$terminal['username'] = '';
+	}
 } else {
 	$default_location = ConfigHelper::getConfig('hiperus_c5.default_location');
 	if (!empty($default_location)) {
@@ -53,19 +54,19 @@ if (isset($_POST['terminaladd'])) {
 			JOIN hv_borough b ON b.id = borough
 			WHERE hv_pcb.id = ?', array(intval($default_location)));
 		if ($location) {
-			$dane = array_merge($dane, $location);
-			$dane['id_terminal_location'] = $default_location;
+			$terminal = array_merge($terminal, $location);
+			$terminal['id_terminal_location'] = $default_location;
 		}
 	}
 	$default_terminal_username = ConfigHelper::getConfig('hiperus_c5.default_terminal_username');
 	if (!empty($default_terminal_username)) {
 		$terminalcount = 1 + $DB->GetOne("SELECT COUNT(*) FROM hv_terminal WHERE customerid = ?", array($cusid));
-		$dane['username'] = preg_replace(array('/%cid/', '/%tcount/'), array($account['ext_billing_id'], $terminalcount), $default_terminal_username);
+		$terminal['username'] = preg_replace(array('/%cid/', '/%tcount/'), array($account['ext_billing_id'], $terminalcount), $default_terminal_username);
 	}
-	$dane['subscription_from'] = strftime("%Y/%m/%d");
+	$terminal['subscription_from'] = strftime("%Y/%m/%d");
 }
 
-$SMARTY->assign('dane',$dane);
+$SMARTY->assign('terminal', $terminal);
 $SMARTY->assign('blad',$blad);
 $SMARTY->assign('account',$account);
 $SMARTY->assign('price',$HIPERUS->GetPriceList());

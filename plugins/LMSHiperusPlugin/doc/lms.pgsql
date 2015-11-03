@@ -177,9 +177,18 @@ CREATE TABLE hv_terminal (
   sip_proxy varchar(255) DEFAULT NULL,
   subscriptions varchar(255) DEFAULT NULL,
   extensions text,
+  location varchar(255) DEFAULT NULL,
+  location_city integer
+		REFERENCES location_cities (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  location_street integer
+		REFERENCES location_streets (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  location_house varchar(32) DEFAULT NULL,
+  location_flat varchar(32) DEFAULT NULL,
   PRIMARY KEY (id)
 );
 CREATE INDEX hv_terminal_customerid_idx ON hv_terminal (customerid);
+CREATE INDEX hv_terminal_location_street_idx ON hv_terminal (location_street);
+CREATE INDEX hv_terminal_location_city_idx ON hv_terminal (location_city, location_street, location_house, location_flat);
 
 CREATE SEQUENCE hv_province_id_seq;
 CREATE TABLE hv_province (
@@ -705,4 +714,4 @@ SELECT setval('hv_province_id_seq', (SELECT MAX(id) FROM hv_province));
 SELECT setval('hv_county_id_seq', (SELECT MAX(id) FROM hv_county));
 SELECT setval('hv_borough_id_seq', (SELECT MAX(id) FROM hv_borough));
 
-INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSHiperusPlugin', '2015071800');
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSHiperusPlugin', '2015110300');
