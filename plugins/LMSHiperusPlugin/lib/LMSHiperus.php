@@ -1072,8 +1072,9 @@ class LMSHiperus {
 							(!empty($terminal['extensions']) ? $terminal['extensions'] : NULL),
 							$terminal['id']));
 				}
+			$this->DB->Execute('DELETE FROM hv_terminal WHERE customerid = ?' . (empty($tids) ? '' : ' AND id NOT IN (' . implode(',', $tids) . ')'),
+				array($cid));
 		}
-		$this->DB->Execute('DELETE FROM hv_terminal' . (empty($tids) ? '' : ' WHERE id NOT IN (' . implode(',', $tids) . ')'));
 	}
 
 	public function GetTerminalOneOrList($terminalid = NULL, $customerid = NULL, $sort = NULL, $filter = NULL) {
