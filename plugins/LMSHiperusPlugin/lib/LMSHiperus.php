@@ -65,6 +65,7 @@ class LMSHiperus {
 		$euids = array();
 		foreach ($cids as $cid) {
 			$endusers = HiperusActions::GetEndUserList($cid);
+			sleep(1);
 			if (!is_array($endusers) || empty($endusers))
 				continue;
 			foreach ($endusers as $enduser)
@@ -607,6 +608,7 @@ class LMSHiperus {
 		if (is_array($cids) && !empty($cids))
 			foreach ($cids as $cid) {
 				$numbers = HiperusActions::GetPSTNNumberList($cid);
+				sleep(2);
 				if (!is_array($numbers) || empty($numbers))
 					continue;
 				foreach ($numbers as $number)
@@ -685,6 +687,7 @@ class LMSHiperus {
 			$response = $hlib->sendRequest("GetPlatformNumberingUsage",$r);
 			if (!$response || !$response->success) $usages = array();
 			else $usages = $response->result_set;
+			sleep(2);
 			if (!is_array($usages) || empty($usages))
 				continue;
 
@@ -1010,6 +1013,7 @@ class LMSHiperus {
 		$tids = array();
 		foreach ($cids as $cid) {
 			$terminals = HiperusActions::GetTerminalList($cid);
+			sleep(1);
 			if (!is_array($terminals) || empty($terminals))
 				continue;
 			foreach ($terminals as $terminal)
