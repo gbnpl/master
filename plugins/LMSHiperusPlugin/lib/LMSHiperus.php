@@ -274,6 +274,8 @@ class LMSHiperus {
 			if (!$quiet)
 				print PHP_EOL;
 		}
+
+		sleep(5);
 	}
 
 	public function ImportBillingToFile($from, $to) {
