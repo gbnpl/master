@@ -1375,6 +1375,7 @@ CREATE TABLE events (
 	closed 		smallint 	DEFAULT 0 NOT NULL,
 	moddate		integer		DEFAULT 0 NOT NULL,
 	moduserid	integer		DEFAULT 0 NOT NULL,
+	type		smallint	DEFAULT 1 NOT NULL,
 	PRIMARY KEY (id)
 );
 CREATE INDEX events_date_idx ON events(date);
@@ -2530,4 +2531,4 @@ INSERT INTO netdevicemodels (name, alternative_name, netdeviceproducerid) VALUES
 ('XR7', 'XR7 MINI PCI PCBA', 2),
 ('XR9', 'MINI PCI 600MW 900MHZ', 2);
 
-INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion', '2015111300');
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion', '2015111800');
