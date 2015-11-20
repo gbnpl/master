@@ -34,7 +34,8 @@ class StockInvoiceHandler {
      * @param array $hook_data Hook data
      */
 	public function invoicenewSaveBeforeSubmit(array $hook_data) {
-		LMSDB::getInstance()->LockTables(array('stck_stockassignments', 'stck_stock'));
+		LMSDB::getInstance()->LockTables(array('documents', 'cash', 'invoicecontents', 'numberplans', 'divisions',
+			'stck_stockassignments', 'stck_stock'));
 
 		return $hook_data;
 	}
