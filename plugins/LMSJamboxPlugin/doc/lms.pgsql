@@ -18,6 +18,6 @@ CREATE TABLE tv_billingevent (
 
 CREATE UNIQUE INDEX hash ON tv_billingevent (hash);
 
-ALTER TABLE customers ADD COLUMN tv_cust_number varchar(9) DEFAULT NULL;
+ALTER TABLE customers ADD COLUMN tv_cust_number varchar(12) DEFAULT NULL;
 
-INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2015071800');
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2015112200');

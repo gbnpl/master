@@ -31,7 +31,7 @@
  */
 class LMSJamboxPlugin extends LMSPlugin {
 	const plugin_directory_name = 'LMSJamboxPlugin';
-	const PLUGIN_DBVERSION = '2015071800';
+	const PLUGIN_DBVERSION = '2015112200';
 	const PLUGIN_NAME = 'Jambox';
 	const PLUGIN_DESCRIPTION = 'Jambox Platform Support';
 	const PLUGIN_AUTHOR = 'SGT/ITM Soft,<br>Tomasz Chiliński &lt;tomasz.chilinski@chilan.com&gt;';

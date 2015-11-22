@@ -17,6 +17,6 @@ CREATE TABLE tv_billingevent (
   UNIQUE KEY hash (hash)
 ) ENGINE=InnoDB; 
 
-ALTER TABLE customers ADD COLUMN tv_cust_number varchar(9) DEFAULT NULL;
+ALTER TABLE customers ADD COLUMN tv_cust_number varchar(12) DEFAULT NULL;
 
-INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2015071800');
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2015112200');
