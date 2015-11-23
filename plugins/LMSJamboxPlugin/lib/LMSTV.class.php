@@ -87,7 +87,7 @@ class LMSTV extends LMS {
 		$this->smsurl =substr(ConfigHelper::getConfig('jambox.server', 'https://sms.sgtsa.pl/sms/xmlrpc'), 0, -6);
 	
 		$frontendOptions = array(
-				'lifetime' => ConfigHelper::getConfig('jambox.cache_lifetime'),
+				'lifetime' => ConfigHelper::getConfig('jambox.cache_lifetime', 472000),
 				'debug_header' => true, // for debugging
 				'regexps' => array(
 				'^/$' => array('cache' => true),
@@ -103,7 +103,7 @@ class LMSTV extends LMS {
 		
 		$this->tv_cache = Zend_Cache::factory('Page', 'File', $frontendOptions, $backendOptions);
 	
-		$_SESSION['tv_cache'] = ConfigHelper::getConfig('jambox.cache');
+		$_SESSION['tv_cache'] = ConfigHelper::checkValue(ConfigHelper::getConfig('jambox.cache', '1'));
 	}
 	
 	public function cleanCache() {
