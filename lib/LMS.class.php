@@ -678,10 +678,10 @@ class LMS
         return $manager->GetNode($id);
     }
 
-    public function GetNodeList($order = 'name,asc', $search = NULL, $sqlskey = 'AND', $network = NULL, $status = NULL, $customergroup = NULL, $nodegroup = NULL)
+    public function GetNodeList($order = 'name,asc', $search = NULL, $sqlskey = 'AND', $network = NULL, $status = NULL, $customergroup = NULL, $nodegroup = NULL, $limit = null, $offset = null, $count = false)
     {
         $manager = $this->getNodeManager();
-        return $manager->GetNodeList($order, $search, $sqlskey, $network, $status, $customergroup, $nodegroup);
+        return $manager->GetNodeList($order, $search, $sqlskey, $network, $status, $customergroup, $nodegroup, $limit, $offset, $count);
     }
 
     public function NodeSet($id, $access = -1)
@@ -1364,22 +1364,10 @@ class LMS
         return $manager->GetTicketContents($id);
     }
 
-    public function SetTicketState($ticket, $state)
+    public function TicketChange($ticketid, array $props)
     {
         $manager = $this->getHelpdeskManager();
-        return $manager->SetTicketState($ticket, $state);
-    }
-
-    public function SetTicketOwner($ticket, $owner)
-    {
-        $manager = $this->getHelpdeskManager();
-        return $manager->SetTicketOwner($ticket, $owner);
-    }
-
-    public function SetTicketQueue($ticket, $queue)
-    {
-        $manager = $this->getHelpdeskManager();
-        return $manager->SetTicketQueue($ticket, $queue);
+        return $manager->TicketChange($ticketid, $props);
     }
 
     public function GetMessage($id)
