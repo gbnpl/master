@@ -259,7 +259,7 @@ if (!is_array($tocheck)) $tocheck = array();
 $SMARTY->assignByRef('tocheck', $tocheck);
 $SMARTY->assignByRef('toopen', $toopen);
 $SMARTY->assignByRef('tvmessagelist', $tvmessagelist);
-$SMARTY->assignByRef('todaydate', Date("Y/m/d"));
+$SMARTY->assignByRef('todaydate', (Date("Y/m/d")));
 $SMARTY->assignByRef('errormsg', $errormsg);
 $SMARTY->assignByRef('smsurl', $LMSTV->smsurl);
 
