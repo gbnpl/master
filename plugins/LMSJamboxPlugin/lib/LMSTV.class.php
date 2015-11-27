@@ -133,7 +133,13 @@ class LMSTV extends LMS {
 	}	
 
 	public function CustomerExport($customerid) {
-		$customeradd = $this->DB->GetRow('SELECT * FROM customers WHERE id = ?', array($customerid));
+		$customeradd = $this->DB->GetRow('SELECT c.*,
+			(SELECT cc.contact FROM customercontacts cc
+				WHERE cc.customerid = c.id AND (cc.type & ?) = ?
+				ORDER BY cc.id LIMIT 1
+			) AS email
+			FROM customers c
+			WHERE c.id = ?', array(CONTACT_EMAIL, CONTACT_EMAIL, $customerid));
 		if ($customeradd['tv_cust_number']) {
 			$mode = 'edit';
 			$cust_number = $customeradd['tv_cust_number'];
@@ -164,7 +170,7 @@ class LMSTV extends LMS {
 				'cust_c_street' 	=> $customeradd['address'],
 				'cust_c_home_nr' 	=> '.',
 				'cust_c_flat' 		=> '.',
-				'cust_email' 		=> empty($customeradd['emails']) ? '' : $customeradd['emails'][0],
+				'cust_email' 		=> empty($customeradd['email']) ? '' : $customeradd['email'],
 				'cust_external_id' => $customeradd['id'],
 			);
 			
