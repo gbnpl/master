@@ -130,9 +130,9 @@ class LMSCustomerManager extends LMSManager implements LMSCustomerManagerInterfa
         return $this->db->GetAllByKey(
             'SELECT id, ' . $this->db->Concat('lastname', "' '", 'name')  . ' AS customername 
             FROM customersview 
-            WHERE status > 1 AND deleted = 0 
+            WHERE status <> ? AND deleted = 0 
             ORDER BY lastname, name', 
-            'id'
+            'id', array(CSTATUS_INTERESTED)
         );
     }
     
@@ -262,11 +262,12 @@ class LMSCustomerManager extends LMSManager implements LMSCustomerManagerInterfa
      */
     public function customerStats()
     {
+		global $CSTATUSES;
+		$sql = '';
+		foreach ($CSTATUSES as $statusidx => $status)
+			$sql .= ' COUNT(CASE WHEN status = ' . $statusidx . ' THEN 1 END) AS ' . $status['alias'] . ',';
         $result = $this->db->GetRow(
-            'SELECT COUNT(id) AS total,
-                COUNT(CASE WHEN status = 3 THEN 1 END) AS connected,
-                COUNT(CASE WHEN status = 2 THEN 1 END) AS awaiting,
-                COUNT(CASE WHEN status = 1 THEN 1 END) AS interested
+            'SELECT ' . $sql . ' COUNT(id) AS total
             FROM customersview 
             WHERE deleted=0'
         );
@@ -406,7 +407,7 @@ class LMSCustomerManager extends LMSManager implements LMSCustomerManagerInterfa
         }
 
         switch ($state) {
-            case 4:
+            case 50:
                 // When customer is deleted we have no assigned groups or nodes, see DeleteCustomer().
                 // Return empty list in this case
                 if (!empty($network) || !empty($customergroup) || !empty($nodegroup)) {
@@ -418,24 +419,24 @@ class LMSCustomerManager extends LMSManager implements LMSCustomerManagerInterfa
                 }
                 $deleted = 1;
                 break;
-            case 5: $disabled = 1;
+            case 51: $disabled = 1;
                 break;
-            case 6: $indebted = 1;
+            case 52: $indebted = 1;
                 break;
-            case 7: $online = 1;
+            case 53: $online = 1;
                 break;
-            case 8: $groupless = 1;
+            case 54: $groupless = 1;
                 break;
-            case 9: $tariffless = 1;
+            case 55: $tariffless = 1;
                 break;
-            case 10: $suspended = 1;
+            case 56: $suspended = 1;
                 break;
-            case 11: $indebted2 = 1;
+            case 57: $indebted2 = 1;
                 break;
-            case 12: $indebted3 = 1;
+            case 58: $indebted3 = 1;
                 break;
-            case 13: case 14: case 15:
-                     $contracts = $state - 12;
+            case 59: case 60: case 61:
+                     $contracts = $state - 58;
                      $contracts_days = intval(ConfigHelper::getConfig('contracts.contracts_days'));
                      break;
         }
@@ -635,7 +636,7 @@ class LMSCustomerManager extends LMSManager implements LMSCustomerManagerInterfa
                             AND type IN (' . DOC_CONTRACT . ',' . DOC_ANNEX . ')
                     ) d ON d.customerid = c.id' : '')
                 . ' WHERE c.deleted = ' . intval($deleted)
-                . ($state <= 3 && $state > 0 ? ' AND c.status = ' . intval($state) : '')
+                . (($state <= 50 && $state > 0) ? ' AND c.status = ' . intval($state) : '')
                 . ($division ? ' AND c.divisionid = ' . intval($division) : '')
                 . ($online ? ' AND s.online = 1' : '')
                 . ($indebted ? ' AND b.value < 0' : '')
