@@ -133,13 +133,17 @@ class LMSTV extends LMS {
 	}	
 
 	public function CustomerExport($customerid) {
-		$customeradd = $this->DB->GetRow('SELECT c.*,
-			(SELECT cc.contact FROM customercontacts cc
-				WHERE cc.customerid = c.id AND (cc.type & ?) = ?
-				ORDER BY cc.id LIMIT 1
-			) AS email
-			FROM customers c
-			WHERE c.id = ?', array(CONTACT_EMAIL, CONTACT_EMAIL, $customerid));
+		$customeradd = $this->DB->GetRow('SELECT c.* FROM customers c
+			WHERE c.id = ?', array($customerid));
+		$customeradd['emails'] = $this->DB->GetCol('SELECT contact FROM customercontacts
+			WHERE customerid = ? AND (type & ?) > 0', array($customerid, CONTACT_EMAIL));
+		if (empty($customeradd['emails']))
+			$customeradd['emails'] = array();
+		$customeradd['phones'] = $this->DB->GetCol('SELECT contact FROM customercontacts
+			WHERE customerid = ? AND (type & ?) > 0', array($customerid, CONTACT_MOBILE | CONTACT_LANDLINE));
+		if (empty($customeradd['phones']))
+			$customeradd['phones'] = array();
+
 		if ($customeradd['tv_cust_number']) {
 			$mode = 'edit';
 			$cust_number = $customeradd['tv_cust_number'];
@@ -170,10 +174,13 @@ class LMSTV extends LMS {
 				'cust_c_street' 	=> $customeradd['address'],
 				'cust_c_home_nr' 	=> '.',
 				'cust_c_flat' 		=> '.',
-				'cust_email' 		=> empty($customeradd['email']) ? '' : $customeradd['email'],
 				'cust_external_id' => $customeradd['id'],
 			);
-			
+
+			$cust_data['cust_email'] = empty($customeradd['emails']) ? '' : $customeradd['emails'][0];
+			$cust_data['cust_phone1'] = empty($customeradd['phones']) ? '' : $customeradd['phones'][0];
+			$cust_data['cust_phone2'] = count($customeradd['phones']) >= 2 ? $customeradd['phones'][1] : '';
+
 		if ($mode == 'edit') {		
 			//$this->DB->Execute('UPDATE customers SET cust_number=? WHERE id=?', array($cust_number, $customerid));
 			$this->s->get('custEdit', array($cust_number, $cust_data));
