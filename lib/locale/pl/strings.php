@@ -3036,8 +3036,20 @@ $_LANG['Ticket\'s subject has been changed from $a to $b.'] = 'Temat zgłoszenia
 $_LANG['Ticket has been moved from customer $a ($b) to customer $c ($d).'] = 'Zgłoszenie zostało przeniesione od klienta $a ($b) do klienta $c ($d).';
 $_LANG['Ticket has been moved from $a to customer $b ($c).'] = 'Zgłoszenie zostało przeniesione od $a do klienta $b ($c).';
 $_LANG['Changes of customers waiting for approval:'] = 'Zmiany klientów oczekujące na zatwierdzenie:';
-
 $_LANG['Disconnected:<!summary>'] = 'Odłączeni:';
 $_LANG['with disconnected nodes'] = 'z odłączonymi komputerami';
+
+$_LANG['Select group to assign to customer'] = 'Wybierz grupę by przypisać do niej klienta';
+$_LANG['If isset "true" when adding new customer select group is required. Default "false"'] = 'Ustawienie opcji na "true" wymusza wybór grupy przypisanej do klienta. Domyślnie wyłączone';
+
+$_LANG['permanent customer removal'] = 'trwałe usunięcie klienta';
+$_LANG['Remove permanently'] = 'Usuń trwale';
+$_LANG['Permanent Customer Remove: $a'] = 'Trwałe usunięcie klienta: $a';
+$_LANG['Do you want to permanently remove $a customer?'] = 'Czy chcesz trwale usunąć klienta $a?';
+$_LANG['This operation will be irreversible!'] = 'Ta operacja będzie nieodwracalna!';
+$_LANG['Customer $a has been permanently removed.'] = 'Klient $a został trwale usunięty.';
+
+$_LANG['Check if you want do send message copy to sender'] = 'Zaznacz, jeśli ma być wysyłana kopia wiadomości do nadawcy';
+$_LANG['send copy to sender'] = 'wyślij kopię do nadawcy';
 
 ?>
