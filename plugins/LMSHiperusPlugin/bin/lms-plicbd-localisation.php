@@ -237,14 +237,16 @@ foreach (array_slice($dircomponents, 0, 3) as $dirpart) {
 }
 $dirlist .= DIRECTORY_SEPARATOR . "DIRLIST_${type}_${date}_${hour}.XML";
 
+$countrycode = ConfigHelper::getConfig('plicbd.country_code', '48');
+
 function create_data_record($voipaccount) {
-	global $fulldate;
+	global $fulldate, $countrycode;
 
 	$buffer = '';
 	$buffer .= "\t<emerep ver=\"3.2.0\">\n";
 	$buffer .= "\t\t<eme_event eme_trigger=\"EME_ORG\">\n";
 	$buffer .= "\t\t\t<eme_pos>\n";
-	$buffer .= "\t\t\t\t<msid type=\"MSISDN\">${voipaccount['phone']}</msid>\n";
+	$buffer .= "\t\t\t\t<msid type=\"MSISDN\">${countrycode}${voipaccount['phone']}</msid>\n";
 	$buffer .= "\t\t\t\t<public>false</public>\n";
 	$buffer .= "\t\t\t\t<pbx>false</pbx>\n";
 	$buffer .= "\t\t\t\t<pd>\n";
