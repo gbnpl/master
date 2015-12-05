@@ -36,7 +36,8 @@ class SpeedtestNodeHandler {
 			JOIN nodes n ON n.id = s.nodeid
 			WHERE s.nodeid = ?
 			ORDER BY s.dt DESC
-			LIMIT ?', array($nodeid, ConfigHelper::getConfig('speedtest.display_limit', 20)));
+			LIMIT ' . intval(ConfigHelper::getConfig('speedtest.display_limit', 20)),
+			array($nodeid));
 		if (!empty($speedtests))
 			foreach ($speedtests as &$test)
 				foreach (array('download', 'upload') as $idx)

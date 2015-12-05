@@ -36,7 +36,8 @@ class SpeedtestCustomerHandler {
 			JOIN nodes n ON n.id = s.nodeid
 			JOIN customers c ON c.id = n.ownerid
 			WHERE c.id = ?
-			ORDER BY s.dt DESC LIMIT ?', array($cid, ConfigHelper::getConfig('speedtest.display_limit', 20)));
+			ORDER BY s.dt DESC LIMIT ' . intval(ConfigHelper::getConfig('speedtest.display_limit', 20)),
+			array($cid));
 		if (!empty($speedtests))
 			foreach ($speedtests as &$test)
 				foreach (array('download', 'upload') as $idx)
