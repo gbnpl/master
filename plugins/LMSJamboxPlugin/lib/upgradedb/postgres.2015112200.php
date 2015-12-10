@@ -24,8 +24,26 @@
  *  $Id$
  */
 
-$this->Execute("ALTER TABLE customers ALTER COLUMN tv_cust_number TYPE varchar(12)");
+$this->BeginTrans();
 
-$this->Execute("UPDATE dbinfo SET keyvalue = ? WHERE keytype = ?", array('2015112200', 'dbversion'));
+$this->Execute("
+	DROP VIEW customersview;
+	DROP VIEW contractorview;
+	ALTER TABLE customers ALTER COLUMN tv_cust_number TYPE varchar(12);
+	CREATE VIEW customersview AS
+		SELECT c.* FROM customers c
+			WHERE NOT EXISTS (
+				SELECT 1 FROM customerassignments a 
+				JOIN excludedgroups e ON (a.customergroupid = e.customergroupid) 
+				WHERE e.userid = lms_current_user() AND a.customerid = c.id) 
+					AND c.type < 2;
+	CREATE VIEW contractorview AS
+		SELECT c.* FROM customers c
+		WHERE c.type = '2'
+");
+
+$this->Execute("UPDATE dbinfo SET keyvalue = ? WHERE keytype = ?", array('2015112200', 'dbversion_LMSJamboxPlugin'));
+
+$this->CommitTrans();
 
 ?>
