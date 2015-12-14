@@ -107,16 +107,16 @@ Ogólny opis jak to działa.
 	
 	w przypadku aktualizacji danych czy ich kasowania, schemat postępowania jest dokładnie taki sam.
 	
-    Nie zaleca się używania w kliku LMS'ach obsługi VoIP dotyczącej tego samego konta resellera,
-    Jeżeli kiedyś może Telekomunikacja Bliżej wprowadzi callback informujący jakie zmiany zostały przeprowadzone itd,
+    Nie zaleca się używania w kilku LMS'ach obsługi VoIP dotyczącej tego samego konta resellera.
+    Jeżeli kiedyś Telekomunikacja Bliżej wprowadzi callback informujący jakie zmiany zostały przeprowadzone itd,
     gdzie będzie można wpisać kilka adresów z namiarami do LMSa gdzie jest ten moduł to taki myk będzie można zrobić.
     
-    Co zrobić jeżeli ktoś dokonał zmian w kontach VoIP przez panel zew. a w LMS nie widać zmian ?
-    należy z poziomu shell zaktualizować dane, np. dane zostały zmienione w kilku kontach, informacje o konice VoIP, np. adres użytkownika
+    Co zrobić jeżeli ktoś dokonał zmian w kontach VoIP przez panel zewnętrzny, a w LMS nie widać zmian ?
+    Należy z poziomu shell zaktualizować dane, np. dane zostały zmienione w kilku kontach, informacje o koncie VoIP, np. adres użytkownika
     
     root@debian:/#/usr/bin/php /var/www/lms/bin/lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --customers
     
-    zostaną dane zaktualizowane, !!! nie używamy przełącznika --import !!!
+    zostaną dane zaktualizowane !!! nie używamy przełącznika --import !!!
     
     podobnie postępujemy w przypadku innych zmian.
 
