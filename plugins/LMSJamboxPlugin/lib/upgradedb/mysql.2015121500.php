@@ -29,7 +29,7 @@ $this->BeginTrans();
 $this->Execute("DROP VIEW customersview");
 $this->Execute("DROP VIEW contractorview");
 
-$this->Execute("ALTER TABLE customers MODIFY tv_cust_number varchar(12) DEFAULT NULL");
+$this->Execute("ALTER TABLE customers ADD COLUMN tv_suspend_billing smallint DEFAULT 0 NOT NULL");
 
 $this->Execute("
 	CREATE VIEW customersview AS
@@ -46,7 +46,7 @@ $this->Execute("
 		WHERE c.type = 2
 ");
 
-$this->Execute("UPDATE dbinfo SET keyvalue = ? WHERE keytype = ?", array('2015112200', 'dbversion_LMSJamboxPlugin'));
+$this->Execute("UPDATE dbinfo SET keyvalue = ? WHERE keytype = ?", array('2015121500', 'dbversion_LMSJamboxPlugin'));
 
 $this->CommitTrans();
 
