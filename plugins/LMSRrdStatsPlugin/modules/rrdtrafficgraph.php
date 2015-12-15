@@ -140,6 +140,12 @@ if (empty($_GET['popup'])) {
 		case 'hour':
 			$tfrom = $tto - 60 * 60;
 			break;
+		case '3hours':
+			$tfrom = $tto - 3 * 60 * 60;
+			break;
+		case '6hours':
+			$tfrom = $tto - 6 * 60 * 60;
+			break;
 		case 'halfday':
 			$tfrom = $tto - 60 * 60 * 12;
 			break;

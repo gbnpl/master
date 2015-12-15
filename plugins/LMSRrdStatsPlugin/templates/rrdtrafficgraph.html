@@ -41,6 +41,8 @@
 		{trans("<!rrdstats>Range:")}
 		<select name="range" onchange="javascript:moveGraphByTime(0, this.options[this.selectedIndex].value);">
 			<option value="hour"{if $bar == 'hour'} selected{/if}>{trans("hour")}</option>
+			<option value="3hours"{if $bar == '3hours'} selected{/if}>{trans("3 hours")}</option>
+			<option value="6hours"{if $bar == '6hours'} selected{/if}>{trans("6 hours")}</option>
 			<option value="halfday"{if $bar == 'halfday'} selected{/if}>{trans("halfday")}</option>
 			<option value="day"{if $bar == 'day'} selected{/if}>{trans("day")}</option>
 			<option value="week"{if $bar == 'week'} selected{/if}>{trans("week")}</option>

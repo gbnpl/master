@@ -36,6 +36,8 @@ $_LANG['There is no RRD traffic file!'] = 'Brak pliku RRD z całkowitym ruchem!'
 
 $_LANG['<!rrdstats>Range:'] = 'Zakres:';
 $_LANG['hour'] = 'godzina';
+$_LANG['3 hours'] = '3 godziny';
+$_LANG['6 hours'] = '6 godzin';
 $_LANG['halfday'] = 'pół dnia';
 $_LANG['day'] = 'dzień';
 
