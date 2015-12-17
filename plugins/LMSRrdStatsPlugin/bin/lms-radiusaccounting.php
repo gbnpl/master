@@ -208,7 +208,7 @@ while (!feof($fh)) {
 	} else
 		$download = $upload = 0;
 
-	if (isset($m['sessiontag']))
+	if (isset($sessions[$m['sessiontag']]))
 		$session = $sessions[$m['sessiontag']];
 	else
 		$session = $DB->GetRow('SELECT * FROM nodesessions WHERE tag = ?',
