@@ -35,8 +35,8 @@ Pobranie danych z zew. serwisu do LMSa
 
 	 LUB
 
-	--billing-from=YYYY-MM-DD -> data początkowa 
-	--billing-to=YYYY-MM-DD -> data końcowa 
+	--billing-from=YYYY/MM/DD -> data początkowa 
+	--billing-to=YYYY/MM/DD -> data końcowa 
 	
 	!!! Użycie przełącznika --billing-date powoduje zignorowanie przełączników --billing-from i --billing-to !!!
 	
@@ -49,12 +49,12 @@ Pobranie danych z zew. serwisu do LMSa
 	PRZYKŁAD, pobieramy bilingi z 3 lat, jeżeli mamy dość sporo klientów warto by było nieco bardziej
 	rozdrobnić ramy czasowe pobieranych bilingów
 	
-	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2010-01-01 --billing-to=2010-06-30
-	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2010-07-01 --billing-to=2010-12-31
-	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2011-01-01 --billing-to=2011-06-30
-	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2011-07-01 --billing-to=2011-12-31
-	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2012-01-01 --billing-to=2012-06-30
-	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2012-07-01 --billing-to=2012-12-30
+	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2010/01/01 --billing-to=2010/06/30
+	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2010/07/01 --billing-to=2010/12/31
+	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2011/01/01 --billing-to=2011/06/30
+	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2011/07/01 --billing-to=2011/12/31
+	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2012/01/01 --billing-to=2012/06/30
+	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-from=2012/07/01 --billing-to=2012/12/30
 	./lms_hiperus_c5_import.php --config-file=/etc/lms/lms.ini --billing --billing-type=all --billing-success=all --billing-date=currday
 	
 	
