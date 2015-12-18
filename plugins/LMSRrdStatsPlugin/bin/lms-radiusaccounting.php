@@ -242,7 +242,7 @@ while (!feof($fh)) {
 	}
 	//$session['nasip'] = $m['nasip'];
 	//$session['nasid'] = $m['nasid'];
-	$sessions[$tag] = $session;
+	$sessions[$m['sessiontag']] = $session;
 
 	$delta_download = $download - $prev_download;
 	$delta_upload = $upload - $prev_upload;
