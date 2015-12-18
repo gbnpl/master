@@ -286,7 +286,6 @@ while (!feof($fh)) {
 	}
 }
 fclose($fh);
-die;
 
 $total_download = sprintf("%.0f", $total_download);
 $total_upload = sprintf("%.0f", $total_upload);
@@ -317,7 +316,7 @@ if (!empty($sessions))
 		$DB->Execute('UPDATE nodesessions SET stop = ?, mac = ?, download = ?, upload = ? WHERE id = ?',
 			array($session['stop'], $session['mac'], $session['download'], $session['upload'], $session['id']));
 		if ($online_update)
-			$DB->Execute('UPDATE nodes SET lastonline = ?, WHERE id = ?',
+			$DB->Execute('UPDATE nodes SET lastonline = ? WHERE id = ?',
 				array($session['stop'], $session['nodeid']));
 	}
 
