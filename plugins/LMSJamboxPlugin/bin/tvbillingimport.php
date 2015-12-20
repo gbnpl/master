@@ -118,7 +118,7 @@ try {
 	$DB = LMSDB::getInstance();
 } catch (Exception $ex) {
 	trigger_error($ex->getMessage(), E_USER_WARNING);
-	// can't working without database
+	// can't work without database
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
@@ -139,8 +139,8 @@ $LMSTV = new LMSTV($DB, $AUTH, $SYSLOG);
 
 $year = strftime("%Y", localtime2());
 $month = intval(strftime("%m", localtime2()));
-$start_date = date("Y-m-d", mktime(12, 0, 0, $month - 1, 1, $year));
-$end_date = date("Y-m-d", mktime(12, 0, 0, $month, 0, $year));
+$start_date = date("Y-m-d", mktime(0, 0, 0, $month - 1, 1, $year));
+$end_date = date("Y-m-d", mktime(23, 59, 59, $month, 0, $year));
 //echo "$start_date\n";
 //echo "$end_date\n";
 
