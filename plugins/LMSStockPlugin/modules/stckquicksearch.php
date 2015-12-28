@@ -8,7 +8,7 @@ switch ($mode) {
 		{
 			$candidates = $DB->GetAll("SELECT c.id, cc.contact AS email, address, post_name, post_address, deleted,
 			    ".$DB->Concat('UPPER(lastname)',"' '",'c.name')." AS username
-				FROM customersview c
+				FROM customerview c
 				LEFT JOIN customercontacts cc ON cc.customerid = c.id AND cc.type = " . CONTACT_EMAIL . "
 				WHERE ".(preg_match('/^[0-9]+$/', $search) ? 'c.id = '.intval($search).' OR ' : '')."
 					LOWER(".$DB->Concat('lastname',"' '",'c.name').") ?LIKE? LOWER($sql_search)
@@ -72,7 +72,7 @@ switch ($mode) {
 
 		if(is_numeric($search)) // maybe it's customer ID
 		{
-			if($customerid = $DB->GetOne('SELECT id FROM customersview WHERE id = '.$search))
+			if($customerid = $DB->GetOne('SELECT id FROM customerview WHERE id = '.$search))
 			{
 				$target = '?m=customerinfo&id='.$customerid;
 				break;
