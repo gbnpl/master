@@ -122,7 +122,7 @@ try {
 require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
 require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
 
-require_once(LIB_DIR . '/SYSLOG.class.php');
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'SYSLOG.class.php');
 $SYSLOG = new SYSLOG($DB);
 
 $AUTH = null;
@@ -146,7 +146,8 @@ $cdate = strftime("%s", localtime2());
 $year = strftime("%Y", localtime2());
 $month = intval(strftime("%m", localtime2()));
 $start_date = date("Y-m-d", mktime(12, 0, 0, $month - 1, 1, $year));
-$end_date = date("Y-m-d", mktime(12, 0, 0, $month, 0, $year));
+//$end_date = date("Y-m-d", mktime(12, 0, 0, $month, 0, $year));
+$end_date = date("Y-m-d");
 $starttime = intval($cdate / 86400) * 86400;
 $endtime = $starttime + 86400;
 

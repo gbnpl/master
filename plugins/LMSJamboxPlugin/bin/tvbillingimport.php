@@ -140,7 +140,8 @@ $LMSTV = new LMSTV($DB, $AUTH, $SYSLOG);
 $year = strftime("%Y", localtime2());
 $month = intval(strftime("%m", localtime2()));
 $start_date = date("Y-m-d", mktime(0, 0, 0, $month - 1, 1, $year));
-$end_date = date("Y-m-d", mktime(23, 59, 59, $month, 0, $year));
+//$end_date = date("Y-m-d", mktime(23, 59, 59, $month, 0, $year));
+$end_date = date("Y-m-d");
 //echo "$start_date\n";
 //echo "$end_date\n";
 
