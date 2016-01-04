@@ -237,19 +237,21 @@ foreach ($customers as $i => $customer) {
 			array($terminal['username'], $datetime));
 		$customers[$i]['terminals'][$j]['cost'] = ($cost[0]['cost'] ? $cost[0]['cost'] : 0);
 		$customers[$i]['sum_cost'] += ($customers[$i]['terminals'][$j]['invoice_value'] + $customers[$i]['terminals'][$j]['cost']) * $vat;
-		$customers[$i]['content'][] = array(
-			'valuebrutto'		=> str_replace(',', '.', $customers[$i]['terminals'][$j]['invoice_value'] * $vat),
-			'taxid'			=> $taxid,
-			'prodid'		=> ConfigHelper::getConfig('hiperus_c5.prodid',''),
-			'jm'			=> ConfigHelper::getConfig('hiperus_c5.content','szt'),
-			'count'			=> '1',
-			'discount'		=> '0',
-			'pdiscount'		=> '0',
-			'vdiscount'		=> '0',
-			'name'			=> 'Abonament VoIP: ' . $customers[$i]['terminals'][$j]['pricelist_name'] . (empty($numbers) ? '' : ' (' . implode(', ', $numbers) . ')') . ' za okres ' . $months[$month_sub] . ' ' . $year_sub,
-			'tariffid'		=> 0
-		);
-		if ($customers[$i]['terminals'][$j]['cost'] > 0) {
+		$invoice_value = str_replace(',', '.', $customers[$i]['terminals'][$j]['invoice_value'] * $vat);
+		if ($invoice_$value > 0)
+			$customers[$i]['content'][] = array(
+				'valuebrutto'	=> $invoice_value,
+				'taxid'			=> $taxid,
+				'prodid'		=> ConfigHelper::getConfig('hiperus_c5.prodid',''),
+				'jm'			=> ConfigHelper::getConfig('hiperus_c5.content','szt'),
+				'count'			=> '1',
+				'discount'		=> '0',
+				'pdiscount'		=> '0',
+				'vdiscount'		=> '0',
+				'name'			=> 'Abonament VoIP: ' . $customers[$i]['terminals'][$j]['pricelist_name'] . (empty($numbers) ? '' : ' (' . implode(', ', $numbers) . ')') . ' za okres ' . $months[$month_sub] . ' ' . $year_sub,
+				'tariffid'		=> 0
+			);
+		if ($customers[$i]['terminals'][$j]['cost'] > 0)
 			$customers[$i]['content'][] = array(
 				'valuebrutto'		=> str_replace(',', '.', $customers[$i]['terminals'][$j]['cost'] * $vat),
 				'taxid'			=> $taxid,
@@ -262,7 +264,6 @@ foreach ($customers as $i => $customer) {
 				'name'			=> 'Koszt rozmów poza abonamentem ' . $customers[$i]['terminals'][$j]['pricelist_name']  . (empty($numbers) ? '' : ' (' . implode(', ', $numbers) . ')') . ' za okres ' . $months[$month] . ' ' . $year,
 				'tariffid'		=> 0
 			);
-		}
 	}
 	$customers[$i]['sum_cost'] = str_replace(',', '.', $customers[$i]['sum_cost']);
 }
