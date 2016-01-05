@@ -238,7 +238,7 @@ foreach ($customers as $i => $customer) {
 		$customers[$i]['terminals'][$j]['cost'] = ($cost[0]['cost'] ? $cost[0]['cost'] : 0);
 		$customers[$i]['sum_cost'] += ($customers[$i]['terminals'][$j]['invoice_value'] + $customers[$i]['terminals'][$j]['cost']) * $vat;
 		$invoice_value = str_replace(',', '.', $customers[$i]['terminals'][$j]['invoice_value'] * $vat);
-		if ($invoice_$value > 0)
+		if ($invoice_value > 0)
 			$customers[$i]['content'][] = array(
 				'valuebrutto'	=> $invoice_value,
 				'taxid'			=> $taxid,
