@@ -54,7 +54,7 @@ if ($cusid) {
     $dane['postcode'] = $dane['b_postcode'] = $tmp['zip'];
     $dane['city'] = $dane['b_city'] = $tmp['city'];
     $dane['country'] = $dane['b_country'] = 'Polska';
-    $dane['email'] = $tmp['email'];
+    $dane['email'] = empty($tmp['emails']) ? '' : $tmp['emails'][0]['email'];
 
     if ($tmp['type']=='1') {
 	$dane['b_nip'] = $tmp['ten'];
