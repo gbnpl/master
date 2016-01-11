@@ -306,7 +306,7 @@ foreach ($customers as $i => $customer) {
 				GROUP BY d2.id
 			) d3 ON d3.id = d.id
 			WHERE d.customerid = ? AND d.type = ? AND sdate >= ? AND sdate < ?
-			GROUP BY d.id
+			GROUP BY d.id, cdate, d3.id
 			ORDER BY d.cdate DESC LIMIT 1", 
 			array(DOC_INVOICE, $starttime, $endtime,
 				'Abonament VoIP%', 'Koszt rozmów poza abonamentem%',
