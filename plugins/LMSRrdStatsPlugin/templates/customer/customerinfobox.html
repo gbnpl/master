@@ -1,0 +1,4 @@
+{extends file="customer/customerinfobox.html"}
+{block name="customerinfobox-buttons" prepend}
+<A href="?m=rrdtrafficprint&type=customertraffic&customer={$customerinfo.id}" rel="external">{trans("RRD Stats")} <IMG src="img/traffic.gif" alt="[ {trans("RRD Stats")} ]"></A>
+{/block}
