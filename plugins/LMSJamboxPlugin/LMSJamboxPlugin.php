@@ -66,6 +66,10 @@ class LMSJamboxPlugin extends LMSPlugin {
 				'class' => 'JamboxCustomerHandler',
 				'method' => 'customerEditAfterSubmit'
 			),
+			'quicksearch_after_submit' => array(
+				'class' => 'JamboxQuickSearchHandler',
+				'method' => 'quicksearchAfterSubmit',
+			),
 		);
 	 }
 }
