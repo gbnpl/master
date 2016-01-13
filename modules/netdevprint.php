@@ -41,6 +41,11 @@ switch($type) {
 		die;
 	break;
 
+	case 'wwpe':
+		include(MODULES_DIR . '/wwpe.php');
+		die;
+		break;
+
 	default:
 		$layout['pagetitle'] = trans('Reports');
 

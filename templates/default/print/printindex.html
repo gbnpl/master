@@ -1360,4 +1360,71 @@ multiselect('printnetdev', 'invprojects', '{trans("- all -")}');
 </SCRIPT>
 </P>
 {/if}
+
+{if $printmenu=="netdev"}
+<P><FORM method="post" name="printnetdevwwpe" id="printnetdevwwpe" action="?m=netdevprint&type=wwpe">
+<INPUT type="submit" class="hiddenbtn">
+<TABLE class="lmsbox">
+    <THEAD>
+	<TR>
+		<TD style="width: 100%;" colspan="2" class="bold">
+		    <IMG src="img/netdev.gif" alt=""> {trans("WWPE report")}
+		</TD>
+	</TR>
+    </THEAD>
+    <TBODY>
+	<TR>
+		<TD class="fleft container" style="width: 1%;">
+			<TABLE width="100%" cellpadding="3">
+				<TR>
+					<TD style="width: 1%;">
+						<IMG src="img/money.gif" alt="">
+					</TD>
+					<TD style="width: 1%;" class="bold nobr">
+						{trans("Investment project:")}
+					</TD>
+					<TD style="width: 98%;">
+						{if $invprojects}
+						<SELECT name="invproject" id="invproject" {tip text="Select investment project"}>
+							{foreach $invprojects as $invproject}
+							<OPTION value="{$invproject.id}">{$invproject.name}</OPTION>
+							{/foreach}
+						</SELECT>
+						{else}
+						{trans("all")}
+						<INPUT type="hidden" name="invprojects" value="0">
+						{/if}
+					</TD>
+				</TR>
+			</TABLE>
+		</TD>
+		<TD class="fright container" style="width: 99%;">
+			<TABLE width="100%" cellpadding="3">
+				<TR>
+					<TD style="width: 1%;">
+						<IMG src="img/calendar.gif" alt="">
+					</TD>
+					<TD style="width: 1%;" class="bold nobr">
+						{trans("Report date:")}
+					</TD>
+					<TD style="width: 98%;">
+						<div class="calendar">
+						<INPUT type="text" name="day" size="10" maxlength="10" {tip text="Enter date in 'yyyy/mm/dd' format or click to choose it from calendar"}>
+						</div>
+					</TD>
+				</TR>
+			</TABLE>
+		</TD>
+	</TR>
+	<TR>
+		<TD colspan="2" class="text-right">
+			<A href="javascript:document.printnetdevwwpe.submit();">{trans("Save")} <IMG src="img/save.gif" alt="" hspace="2"></A>
+		</TD>
+	</TR>
+    </TBODY>
+</TABLE>
+</FORM>
+</P>
+{/if}
+
 {/block}
