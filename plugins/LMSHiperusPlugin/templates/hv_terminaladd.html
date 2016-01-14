@@ -144,30 +144,30 @@
 	
 	    <td width="33%" style="text-align:left;vertical-align:top;">
 		<table width="100%" cellpadding="3">
-		    <tr>
-			<td width="1%" align="left" nowrap>Cennik</td>
-			<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
-			<td width="98%" align="left" >
-			    {$infot[lt].pricelist_name}
-			    <select name="terminaladd[id_pricelist]">
-				{section name=lista loop=$price}
-				    <option value="{$price[lista].id}" {if $account.id_default_pricelist==$price[lista].id} selected{/if}>{$price[lista].name}</option>
-				{/section}
-			    </select>
-			</td>
-		    </tr>
-		    <tr>
-			<td width="1%" align="left" nowrap>Abonament</td>
-			<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
-			<td width="98%" align="left" >
-			    {$infot[lt].subscriptions}
-			    <select name="terminaladd[id_subscription]">
-				{section name=lista2 loop=$subscription}
-				    <option value="{$subscription[lista2].id}">{$subscription[lista2].name}</option>
-				{/section}
-			    </select>
-			</td>
-		    </tr>
+			<tr>
+				<td style="width: 1%;" class="text-left nobr">Cennik</td>
+				<td style="width: 1%;" class="text-left bold nobr">&nbsp;:&nbsp;</td>
+				<td style="width: 98%;" class="text-left">
+					{$infot[lt].pricelist_name}
+					<select name="terminaladd[id_pricelist]">
+						{foreach $pricelists as $item}
+						<option value="{$item.id}"{if $account.id_default_pricelist == $item.id} selected{/if}>{$item.name}</option>
+						{/foreach}
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td style="width: 1%;" class="text-left nobr">Abonament</td>
+				<td style="width: 1%;" class="text-left bold nobr">&nbsp;:&nbsp;</td>
+				<td style="width: 98%;" class="text-left">
+					{$infot[lt].subscriptions}
+					<select name="terminaladd[id_subscription]">
+						{foreach $subscriptions as $item}
+						<option value="{$item.id}">{$item.name}</option>
+						{/foreach}
+					</select>
+				</td>
+			</tr>
 		    <tr>
 			<td width="1%" align="left" nowrap>Abonament od</td>
 			<td width="1%"><b>&nbsp;:&nbsp;</b></td>
@@ -221,9 +221,12 @@
 	</tr>
 	
 	<tr class="dark">
-	    <td width="1%" class="fleftu" nowrap>
-		<input type="checkbox" name="skipsiplocation" value="1" id="skipsiplocation" onclick="hideshowsiplocation();"> Pomiń konfigurację lokalizacji terminala dla połączeń alarmowych
-	    </td>
+		<td width="1%" class="fleftu" nowrap>
+			<label>
+				<input type="checkbox" name="skipsiplocation" value="1" id="skipsiplocation" onclick="hideshowsiplocation();">
+				Pomiń konfigurację lokalizacji terminala dla połączeń alarmowych
+			</label>
+		</td>
 	    <td colspan="2" width="100%" class="frightu" align="right">
 		<a href="javascript:dodajterminal();">Dodaj terminal <img src="img/save.gif"></a>&nbsp;
 		<a href="?m=hv_accountinfo&id={$account.id}">Anuluj <img src="img/cancel.gif"></a>

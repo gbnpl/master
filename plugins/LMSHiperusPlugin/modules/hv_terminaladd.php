@@ -69,8 +69,8 @@ if (isset($_POST['terminaladd'])) {
 $SMARTY->assign('terminal', $terminal);
 $SMARTY->assign('blad',$blad);
 $SMARTY->assign('account',$account);
-$SMARTY->assign('price',$HIPERUS->GetPriceList());
-$SMARTY->assign('subscription',$HIPERUS->GetSubscriptionList());
+$SMARTY->assign('pricelists', $HIPERUS->GetPriceList());
+$SMARTY->assign('subscriptions', $HIPERUS->GetSubscriptionList());
 $SMARTY->display('hv_terminaladd.html');
 
 ?>

@@ -1147,8 +1147,8 @@ class LMSHiperus {
 			$screen = null;
 		if (!isset($t38))
 			$t38 = null;
-		if (!isset($subscription_id))
-			$subscription_id = null;
+		if (!isset($id_subscription))
+			$id_subscription = null;
 		if (!isset($subscription_from))
 			$subscription_from = null;
 		if (!isset($subscription_to))
@@ -1176,8 +1176,8 @@ class LMSHiperus {
 			elseif ($t38 == 'f') $req->t38_fax = false;
 			else $req->t38_fax = false;
 		}
-		if (!is_null($subscription_id))
-			$req->id_subscription = $subscription_id;
+		if (!is_null($id_subscription))
+			$req->id_subscription = $id_subscription;
 		if (!is_null($subscription_from))
 			$req->subscription_from = str_replace('/', '-', $subscription_from);
 		if (!is_null($subscription_to))

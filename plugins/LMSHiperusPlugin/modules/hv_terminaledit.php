@@ -1,6 +1,5 @@
 <?php
 
-
 /*
  * LMS iNET
  *
@@ -45,12 +44,12 @@ if (isset($_POST['terminaledit'])) {
     unset($dane['borough']);
     if ($HIPERUS->UpdateTerminal($dane)) $HIPERUS->ImportTerminalList($terminalinfo['customerid']);
     $SESSION->redirect('?m=hv_accountinfo&id='.$terminalinfo['customerid']);
-    
+
 }
 
-$SMARTY->assign('terminalinfo',$terminalinfo);
-$SMARTY->assign('price',$HIPERUS->GetPriceList());
-$SMARTY->assign('subscription',$HIPERUS->GetSubscriptionList());
+$SMARTY->assign('terminalinfo', $terminalinfo);
+$SMARTY->assign('pricelists', $HIPERUS->GetPriceList());
+$SMARTY->assign('subscriptions', $HIPERUS->GetSubscriptionList());
 
 $SMARTY->display('hv_terminaledit.html');
 
