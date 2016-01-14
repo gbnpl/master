@@ -52,7 +52,7 @@ class JamboxQuickSearchHandler {
 							$customer = $DB->GetRow("SELECT id, (" . $DB->Concat('lastname', "' '", 'name') . ") AS name
 								FROM customersview WHERE tv_cust_number = ?",
 								array($row['cust_number']));
-							$actions[$row['id']] = '?m=customerinfo&id=' . $customer['id'];
+							$actions[$row['id']] = '?m=customerinfo&id=' . $customer['id'] . '#tvaccountbox';
 							$eglible[$row['id']] = escape_js($row['stb_mac']);
 							$descriptions[$row['id']] = escape_js($customer['name']);
 						}
