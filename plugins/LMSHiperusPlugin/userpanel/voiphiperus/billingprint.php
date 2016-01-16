@@ -37,7 +37,7 @@ $ctype = (isset($_GET['ctype']) ? $_GET['ctype'] : NULL);
 $csuccess = (isset($_GET['csuccess']) ? $_GET['csuccess'] : NULL);
 $lmscustomer = $HIPERUS->GetLMSCustomerByVoIPID($cusid);
 
-$SMARTY->assign('stvat',((intval(get_conf('hiperus_c5.taxrate',get_conf('phpui.default_taxrate','23')))/100)+1));
+$SMARTY->assign('stvat', (intval(ConfigHelper::getConfig('hiperus_c5.taxrate', ConfigHelper::getConfig('phpui.default_taxrate', '23'))) / 100) + 1);
 $SMARTY->assign('lmscustomer',$lmscustomer);
 $SMARTY->assign('divisions',$DB->GetRow('SELECT name, address, city, zip FROM divisions WHERE id=? LIMIT 1 ;',array($lmscustomer['divisionid'])));
 $SMARTY->assign('terminal',$terminal);

@@ -48,7 +48,7 @@ function module_main() {
 	if (isset($_GET['terminal']) && !empty($_GET['terminal'])) $terminal = $_GET['terminal']; 
 	    else $terminal = $DB->GetOne('SELECT username FROM hv_terminal WHERE customerid=? LIMIT 1 ;',array($cusid));
 	
-	$SMARTY->assign('stvat',((intval(get_conf('hiperus_c5.taxrate',get_conf('phpui.default_taxrate','23')))/100)+1));
+	$SMARTY->assign('stvat', (intval(ConfigHelper::getConfig('hiperus_c5.taxrate', ConfigHelper::getConfig('phpui.default_taxrate', '23'))) / 100) + 1);
 	$SMARTY->assign('terminallist',$HIPERUS->GetTerminalOneOrList(NULL,$cusid));
 	$SMARTY->assign('terminal',$terminal);
 	$SMARTY->assign('rok',$rok);
