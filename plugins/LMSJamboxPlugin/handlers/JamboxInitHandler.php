@@ -142,10 +142,12 @@ class JamboxInitHandler {
 			),
 		);
 		$menu_keys = array_keys($hook_data);
-		$i = array_search('netdevices', $menu_keys);
-		array_splice($hook_data, $i + 1, 0, $menu_jambox);
+		$i = array_search('networks', $menu_keys);
 
-		return $hook_data;
+		return
+			array_slice($hook_data, 0, $i, true) +
+			$menu_jambox +
+			array_slice($hook_data, $i, null, true);
 	}
 }
 
