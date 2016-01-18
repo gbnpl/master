@@ -1210,7 +1210,7 @@ class LMSHiperus {
 
 		$this->DB->Execute('UPDATE hv_terminal SET location = ?, location_city = ?, location_street = ?,
 			location_house = ?, location_flat = ? WHERE id = ?', array($terminal['location'],
-			$terminal['location_city'], $terminal['location_street'], $terminal['location_house'],
+			$terminal['location_city'], empty($terminal['location_street']) ? null : $terminal['location_street'], $terminal['location_house'],
 			$terminal['location_flat'], $terminal['id_terminal']));
 		if (HiperusActions::ChangeTerminalData($terminal)) {
 			$oldname = $this->DB->GetOne('SELECT username FROM hv_terminal WHERE id = ?', array($terminal['id_terminal']));
