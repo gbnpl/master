@@ -144,10 +144,13 @@ class JamboxInitHandler {
 		$menu_keys = array_keys($hook_data);
 		$i = array_search('networks', $menu_keys);
 
-		return
-			array_slice($hook_data, 0, $i, true) +
-			$menu_jambox +
-			array_slice($hook_data, $i, null, true);
+		$hook_data = array_merge(
+			array_slice($hook_data, 0, $i, true),
+			$menu_jambox,
+			array_slice($hook_data, $i, null, true)
+		);
+
+		return $hook_data;
 	}
 }
 
