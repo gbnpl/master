@@ -1,0 +1,52 @@
+<!--// $Id$ //-->
+<TABLE class="lmsbox">
+	<THEAD>
+	<TR>
+		<TD class="fall hand" onclick="showOrHide('speedtestpanel');">
+			<IMG src="img/traffic.gif" alt="">
+			<span class="bold"><A name="speedtests">{trans("Speed tests:")}</A></span> {t a=ConfigHelper::getConfig('speedtest.display_limit', 20)}(last $a tests){/t}
+		</TD>
+	</TR>
+	</THEAD>
+	<TBODY>
+	<TR id="speedtestpanel" style="display:none;">
+		<TD WIDTH="100%" class="fall">
+			<TABLE cellpadding="5" cellspacing="0" WIDTH="100%">
+				<TR class="dark">
+					<TD class="fleftu bold nobr" style="width: 17%;">{trans("Date:")}</TD>
+					<TD class="fbt nobr" style="width: 17%;">{trans("IP Address:")}</TD>
+					<TD class="fbt nobr" style="width: 17%;">{trans("Node name:")}</TD>
+					<TD class="fbt nobr" style="width: 17%;">{trans("Download:")}</TD>
+					<TD class="fbt nobr" style="width: 17%;">{trans("Upload:")}</TD>
+					<TD class="frightu nobr" style="width: 15%;">{trans("Latency:")}</TD>
+				</TR>
+				{cycle name=testclass values="light,lucid" print=false}
+				{foreach $speedtests as $test}
+				<TR class="highlight {cycle name=testclass}">
+					<TD class="bold nobr">{$test.dt|date_format:"%Y.%m.%d %H:%M:%S"}</TD>
+					<TD class="nobr"><a href="?m=nodeinfo&id={$test.nodeid}">{$test.ip}</a></TD>
+					<TD class="nobr"><a href="?m=nodeinfo&id={$test.nodeid}">{$test.name}</a></TD>
+					<TD class="nobr">{$test.download}bit/s</TD>
+					<TD class="nobr">{$test.upload}bit/s</TD>
+					<TD class="nobr">{$test.latency} ms</TD>
+				</TR>
+				{foreachelse}
+				<TR>
+					<TD class="empty-table" style="width: 100%;" colspan="6">
+						<P>&nbsp;</P>
+						<P>{trans("There are no speed tests in database.")}</P>
+						<P>&nbsp;</P>
+					</TD>
+				</TR>
+				{/foreach}
+			</TABLE>
+		</TD>
+	</TR>
+	</TBODY>
+</TABLE>
+<SCRIPT type="text/javascript">
+<!--
+	if (getCookie('speedtestpanel')=='1')
+		document.getElementById('speedtestpanel').style.display = '';
+//-->
+</SCRIPT>
