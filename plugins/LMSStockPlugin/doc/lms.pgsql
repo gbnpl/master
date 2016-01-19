@@ -1,3 +1,4 @@
+/*
 DROP VIEW IF EXISTS stck_vpstock;
 
 DROP TABLE IF EXISTS stck_stockassignments;
@@ -24,6 +25,7 @@ DROP SEQUENCE IF EXISTS stck_groups_id_seq;
 
 ALTER TABLE cash DROP COLUMN IF EXISTS stockid;
 ALTER TABLE invoicecontents DROP COLUMN IF EXISTS stockid;
+*/
 
 DELETE FROM dbinfo WHERE keytype = 'dbversion_LMSStockPlugin';
 
