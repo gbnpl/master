@@ -1,0 +1,11 @@
+{extends file="customer/customereditbox.html"}
+{block name="customereditbox-options" append}
+<TR>
+	<TD>
+		<label for="chktv_suspend_billing">{trans("Wstrzymane fakturowanie za TV JAMBOX z SMS SGT <br />(zadziała od następnego fakturowania):")}</label>
+	</TD>
+	<TD>
+		<INPUT TYPE="checkbox" NAME="customerdata[tv_suspend_billing]" ID="chktv_suspend_billing" VALUE="1"{if $customerinfo.tv_suspend_billing} checked{/if}>
+	</TD>
+</TR>
+{/block}

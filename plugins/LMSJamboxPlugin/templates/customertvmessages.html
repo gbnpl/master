@@ -1,0 +1,72 @@
+<!--// $Id$ //-->
+<TABLE class="lmsbox">
+	<THEAD>
+	<TR>
+		<TD class="fleftu hand" onCLick="showOrHide('tvmessagespanel');">
+                        <IMG src="img/mailsms.gif" alt="">
+			<span class="bold">Wiadomości wysłane na TV</span>
+						{if $limit}
+                                ({t a=$limit}last $a messages{/t})
+                        {/if}
+                </TD>
+                <TD class="frightu text-right nobr">
+			<A href="?m=tvmessagessend&customerid={$customerinfo.id}">{trans("New Message")} &raquo;</A>
+			<a href="?m=customerinfo&id={$customerinfo.id}&meldinger_delete_all={$customerinfo.id}" onclick="return confirmLink(this, 'Czy na pewno chcesz wykasować wszystkie wiadomości temu klientowi?')">Usuń wszystkie <img src="img/cancel.gif"></A>
+                </TD>
+        </TR>
+        </THEAD>
+        <TBODY>
+	<TR id="tvmessagespanel"  style="display:none;">
+		<TD width="100%" colspan="2" class="fall">
+			<TABLE cellpadding="5" cellspacing="0" WIDTH="100%">
+	<tr class="dark">
+		<td></td>
+		<td>Nagłówek:</td>
+		<td>Wyświetleń:</td>
+		<td>Treść:</td>
+		<td>Wyświetleń:</td>
+		<td>Priorytet:</td>
+		<td>Data:</td>
+		<td>Nagł od:</td>
+		<td>Nagł do:</td>
+		<td>Treść od:</td>
+		<td>Treść do:</td>
+		<td>Przeczytana:</td>
+		<td>Funkcje</td>
+	</tr>
+	{foreach from=$tvmessagelist item=item}
+	<TR class="{cycle values="light,lucid"}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+		<TD></TD>
+		<TD class="valign-top"><div id="msg3{$item.id}" style="display: block">{$item.msg_body|substr:0:20}...</div> <div id="msg4{$item.id}" style="display: none">{$item.msg_body}</div></TD>
+		<TD class="valign-top">{$item.msg_teaser_impressions}</TD>
+		<TD class="valign-top" onclick="showOrHide('msg1{$item.id}');showOrHide('msg2{$item.id}');showOrHide('msg3{$item.id}');showOrHide('msg4{$item.id}');"><div id="msg1{$item.id}" style="display: block">{$item.msg_body_extended|substr:0:20}...</div> <div id="msg2{$item.id}" style="display: none">{$item.msg_body_extended}</div></TD>
+		<TD class="valign-top">{$item.msg_impressions}</TD>
+		<TD class="valign-top">{$item.msg_prio}</TD>
+		<TD class="valign-top">{$item.msg_created_date}</TD>
+		<TD class="valign-top">{$item.msg_valid_from}</TD>
+		<TD class="valign-top">{$item.msg_valid_to}</TD>
+		<TD class="valign-top">{$item.msg_teaser_valid_from}</TD>
+		<TD class="valign-top">{$item.msg_teaser_valid_to}</TD>
+		<TD class="valign-top">{$item.msg_status}</TD>
+		<TD><a href="?m=customerinfo&id={$customerinfo.id}&meldinger_delete={$item.id}" onclick="return confirmLink(this, 'Czy na pewno chcesz wykasować wiadomość?')">Usuń <img src="img/cancel.gif"></a></TD>
+		
+	</TR>	{foreachelse}
+				<TR>
+					<TD colspan="13" class="empty-table">
+						<P>&nbsp;</P>
+						<P>{trans("There are no messages in database.")}</P>
+						<P>&nbsp;</P>
+					</TD>
+				</TR>
+				{/foreach}
+			</TABLE>
+		</TD>
+	</TR>
+	</TBODY>
+</TABLE>
+<SCRIPT type="text/javascript">
+<!--
+if (getCookie('tvmessagespanel') == '1')
+	document.getElementById('tvmessagespanel').style.display = '';
+//-->
+</SCRIPT>

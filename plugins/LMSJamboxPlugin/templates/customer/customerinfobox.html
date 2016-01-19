@@ -1,0 +1,14 @@
+{extends file="customer/customerinfobox.html"}
+{block name="customerinfobox-options" append}
+<TR>
+	<TD>
+		{trans("Wstrzymane fakturowanie za TV JAMBOX z SMS SGT:")}
+	</TD>
+	<TD>
+		{if $customerinfo.tv_suspend_billing}{trans("yes")}{else}{trans("no")}{/if}
+	</TD>
+</TR>
+{/block}
+{block name="customerinfobox-buttons" prepend}
+<A HREF="?m=customerinfo&id={$customerinfo.id}&tvexport=1">Eksport do SMS</A> <IMG src="img/{LMSJamboxPlugin::plugin_directory_name}/tv_icon.png"></A>
+{/block}

@@ -1,0 +1,35 @@
+CREATE TABLE tv_billingevent (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  customerid int(11) NOT NULL,
+  account_id int(11) NOT NULL,
+  be_selling_date date NOT NULL,
+  be_desc text NOT NULL,
+  be_vat float(5,2) NOT NULL,
+  be_gross float(5,2) NOT NULL,
+  group_id int(11) NOT NULL,
+  cust_number varchar(10) NOT NULL,
+  package_id int(11) NOT NULL,
+  hash varchar(32) NOT NULL,
+  beid int(11) NOT NULL,
+  be_b2b_netto float(5,2) DEFAULT NULL,
+  docid int(11) DEFAULT NULL,
+  PRIMARY KEY (id),
+  UNIQUE KEY hash (hash)
+) ENGINE=InnoDB;
+
+DROP VIEW customersview;
+DROP VIEW contractorview;
+ALTER TABLE customers ADD COLUMN tv_cust_number varchar(12) DEFAULT NULL;
+ALTER TABLE customers ADD COLUMN tv_suspend_billing smallint DEFAULT 0 NOT NULL;
+CREATE VIEW customersview AS
+	SELECT c.* FROM customers c
+	WHERE NOT EXISTS (
+		SELECT 1 FROM customerassignments a
+			JOIN excludedgroups e ON (a.customergroupid = e.customergroupid)
+			WHERE e.userid = lms_current_user() AND a.customerid = c.id)
+		AND c.type < 2;
+CREATE VIEW contractorview AS
+	SELECT c.* FROM customers c
+	WHERE c.type = 2;
+
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2015121500');

@@ -1,0 +1,41 @@
+{extends file="layout.html"}
+{block name="module_content"}
+<!--// $Id$ //-->
+<H1>{$layout.pagetitle}</H1>
+<TABLE class="lmsbox">
+	<THEAD>
+	<tr>
+		<td>Grupa</td>
+		<td>ID</td>
+		<td>Nazwa produktu</td>
+		<td>Opis produktu</td>
+		<!--<td>Alternatywny opis</td>-->
+		<td class="nobr">Aktywny od</td>
+		<td class="nobr">Aktywny do</td>
+		<!--<td>Lista produktów wymaganych</td>-->
+		<!--<td>Lista produktów nie łączączych się</td>-->
+	</tr>
+	</THEAD>
+	<TBODY>
+	{foreach from=$list item=type}
+	<TR class="dark">
+		<td class="fleft bold nobr">{$type.pkgt_name}</td>
+		<td colspan="5" class="fright">&nbsp;</td>
+	</tr>
+	{foreach from=$type.packages item=item}
+	<TR class="{cycle values="light,lucid"}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">			
+		<TD></TD>
+		<TD class="valign-top bold">{$item.package_id}</TD>
+		<TD class="valign-top nobr">{$item.pkg_name}</TD>
+		<TD class="valign-top">{$item.pkg_desc}</TD>
+		<!--<TD class="valign-top">{$item.pkg_tvpanel_desc}</TD>-->
+		<TD class="valign-top nobr">{$item.pkg_valid_from}</TD>
+		<TD class="valign-top nobr">{$item.pkg_valid_to}</TD>
+		<!--<TD class="valign-top">{$item.pkg_autoinclude|replace:',':', '}</TD>-->
+		<!--<TD class="valign-top">{$item.pkg_denied|replace:',':', '}</TD>-->	
+	</TR>
+	{/foreach}
+	{/foreach}
+	</TBODY>
+</table>
+{/block}
