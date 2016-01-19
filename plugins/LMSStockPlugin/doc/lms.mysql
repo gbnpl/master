@@ -1,0 +1,291 @@
+DROP VIEW IF EXISTS stck_vpstock;
+
+DROP TABLE IF EXISTS stck_stockassignments;
+DROP TABLE IF EXISTS stck_stock;
+DROP TABLE IF EXISTS stck_warehouses;
+DROP TABLE IF EXISTS stck_vpstock;
+DROP TABLE IF EXISTS stck_products;
+DROP TABLE IF EXISTS stck_types;
+DROP TABLE IF EXISTS stck_supplierassignments;
+DROP TABLE IF EXISTS stck_receivenotes;
+DROP TABLE IF EXISTS stck_quantities;
+DROP TABLE IF EXISTS stck_manufacturers;
+DROP TABLE IF EXISTS stck_groups;
+
+ALTER TABLE cash DROP COLUMN IF EXISTS stockid;
+ALTER TABLE invoicecontents DROP COLUMN IF EXISTS stockid;
+
+DELETE FROM dbinfo WHERE keytype = 'dbversion_LMSStockPlugin';
+
+#
+# structure of table stck_groups
+#
+CREATE TABLE stck_groups (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  quantityid int(11) NOT NULL,
+  quantitycheck tinyint(1) NOT NULL DEFAULT '1',
+  name varchar(100) NOT NULL,
+  creatorid int(11) NOT NULL DEFAULT '0',
+  modid int(11) NOT NULL DEFAULT '0',
+  creationdate int(11) NOT NULL DEFAULT '0',
+  moddate int(11) NOT NULL DEFAULT '0',
+  comment text NOT NULL,
+  deleted tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  UNIQUE KEY name (name)
+) ENGINE=InnoDB;
+
+#
+# structure of table stck_manufacturers
+#
+CREATE TABLE stck_manufacturers (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  creationdate int(11) NOT NULL,
+  moddate int(11) NOT NULL DEFAULT '0',
+  creatorid int(11) NOT NULL,
+  modid int(11) NOT NULL DEFAULT '0',
+  name varchar(100) NOT NULL,
+  comment text,
+  deleted tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  UNIQUE KEY name (name)
+) ENGINE=InnoDB;
+
+#
+# structure of table stck_quantities
+#
+CREATE TABLE stck_quantities (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  def tinyint(1) NOT NULL DEFAULT '0',
+  name varchar(10) NOT NULL,
+  comment text NOT NULL,
+  deleted tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+#
+# structure of table stck_receivenotes
+#
+CREATE TABLE stck_receivenotes (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  supplierid int(11),
+  number varchar(255) NOT NULL,
+  creatorid int(11) NOT NULL,
+  modid int(11) NOT NULL DEFAULT '0',
+  creationdate int(11) NOT NULL,
+  moddate int(11) NOT NULL DEFAULT '0',
+  netvalue decimal(9,2) NOT NULL,
+  grossvalue decimal(9,2) NOT NULL,
+  paytype int(11) NOT NULL,
+  datesettlement int(11) NOT NULL,
+  datesale int(11) NOT NULL,
+  deadline int(11) NOT NULL,
+  paid int(11) DEFAULT NULL,
+  comment text,
+  deleted tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY supplierid (supplierid),
+  FOREIGN KEY (supplierid) REFERENCES customers (id) ON UPDATE CASCADE ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+#
+# structure of table stck_supplierassignments
+#
+CREATE TABLE stck_supplierassignments (
+  IDSupplierAssignment int(11) NOT NULL AUTO_INCREMENT,
+  IDCustomer int(11) NOT NULL,
+  IDSupplier int(11) DEFAULT NULL,
+  PRIMARY KEY (IDSupplierAssignment)
+) ENGINE=InnoDB;
+
+#
+# structure of table stck_types
+#
+CREATE TABLE stck_types (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  def tinyint(1) NOT NULL DEFAULT '0',
+  name varchar(100) NOT NULL,
+  quantitycheck tinyint(1) NOT NULL,
+  creationdate int(11) NOT NULL DEFAULT '0',
+  moddate int(11) NOT NULL DEFAULT '0',
+  creatorid int(11) NOT NULL DEFAULT '0',
+  modid int(11) NOT NULL DEFAULT '0',
+  deleted tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+#
+# structure of table stck_products
+#
+CREATE TABLE stck_products (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  manufacturerid int(11) NOT NULL DEFAULT '0',
+  groupid int(11) NOT NULL DEFAULT '0',
+  taxid int(11) NOT NULL DEFAULT '0',
+  typeid int(11) NOT NULL DEFAULT '0',
+  quantityid int(11) NOT NULL,
+  quantitycheck tinyint(1) NOT NULL DEFAULT '1',
+  ean varchar(30) DEFAULT NULL,
+  quantity int(11) NOT NULL DEFAULT '0',
+  name text NOT NULL,
+  creationdate int(11) NOT NULL DEFAULT '0',
+  creatorid int(11) NOT NULL DEFAULT '0',
+  moddate int(11) NOT NULL DEFAULT '0',
+  modid int(11) NOT NULL DEFAULT '0',
+  comment text,
+  deleted tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  KEY manufacturerid (manufacturerid),
+  KEY groupid (groupid),
+  KEY taxid (taxid),
+  KEY typeid (typeid),
+  KEY quantityid (quantityid),
+  FOREIGN KEY (manufacturerid) REFERENCES stck_manufacturers (id) ON UPDATE CASCADE,
+  FOREIGN KEY (groupid) REFERENCES stck_groups (id) ON UPDATE CASCADE,
+  FOREIGN KEY (typeid) REFERENCES stck_types (id) ON UPDATE CASCADE,
+  FOREIGN KEY (quantityid) REFERENCES stck_quantities (id) ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+
+#
+# structure of table stck_vpstock; replaced later by stck_vpstock view
+#
+CREATE TABLE stck_vpstock (
+	id int(11),
+	warehouseid int(11),
+	groupid int(11),
+	productid int(11),
+	supplierid int(11),
+	enterdocumentid int(11),
+	quitdocumentid int(11),
+	creationdate int(11),
+	bdate int(11),
+	moddate int(11) DEFAULT '0',
+	leavedate int(11),
+	creatorid int(11),
+	modid int(11) DEFAULT '0',
+	serialnumber varchar(255),
+	warranty int(11),
+	pricebuynet decimal(9,2),
+	taxid int(11),
+	pricebuygross decimal(9,2),
+	pricesell decimal(9,2),
+	deleted tinyint(4) DEFAULT '0',
+	comment text,
+	pid int(11),
+	pname text,
+	manufacturerid int(11),
+	pcomment text,
+	pdeleted tinyint(1) DEFAULT '0',
+	gid int(11),
+	gname varchar(100),
+	gcomment text,
+	gdeleted tinyint(1) DEFAULT '0'
+);
+
+#
+# structure of table stck_warehouses
+#
+CREATE TABLE stck_warehouses (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  name varchar(100) NOT NULL,
+  comment text,
+  def tinyint(1) NOT NULL DEFAULT '0',
+  commerce tinyint(1) NOT NULL DEFAULT '1',
+  creationdate int(11) NOT NULL DEFAULT '0',
+  moddate int(11) NOT NULL DEFAULT '0',
+  creatorid int(11) NOT NULL DEFAULT '0',
+  modid int(11) NOT NULL DEFAULT '0',
+  deleted tinyint(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (id),
+  UNIQUE KEY name (name)
+) ENGINE=InnoDB;
+
+#
+# structure of table stck_stock
+#
+CREATE TABLE stck_stock (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  warehouseid int(11) NOT NULL,
+  groupid int(11) NOT NULL,
+  productid int(11) NOT NULL,
+  supplierid int(11),
+  enterdocumentid int(11) NOT NULL,
+  quitdocumentid int(11) DEFAULT NULL,
+  creationdate int(11) NOT NULL DEFAULT '0',
+  bdate int(11) NOT NULL,
+  moddate int(11) NOT NULL DEFAULT '0',
+  leavedate int(11) NOT NULL DEFAULT '0',
+  creatorid int(11) NOT NULL DEFAULT '0',
+  modid int(11) NOT NULL DEFAULT '0',
+  serialnumber varchar(255) DEFAULT NULL,
+  warranty int(11) DEFAULT NULL,
+  pricebuynet decimal(9,2) NOT NULL DEFAULT '0.00',
+  taxid int(11) NOT NULL,
+  pricebuygross decimal(9,2) NOT NULL,
+  pricesell decimal(9,2) DEFAULT NULL,
+  deleted tinyint(4) NOT NULL DEFAULT '1',
+  comment text,
+  PRIMARY KEY (id),
+  KEY enterdocumentid (enterdocumentid),
+  KEY supplierid (supplierid),
+  KEY warehouseid (warehouseid),
+  KEY idx1 (pricebuynet,pricebuygross),
+  FOREIGN KEY (enterdocumentid) REFERENCES stck_receivenotes (id) ON UPDATE CASCADE,
+  FOREIGN KEY (supplierid) REFERENCES customers (id) ON UPDATE CASCADE ON DELETE SET NULL,
+  FOREIGN KEY (warehouseid) REFERENCES stck_warehouses (id) ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+#
+# structure of table stck_stockassignments
+#
+CREATE TABLE stck_stockassignments (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  type int(11) NOT NULL,
+  stockid int(11) NOT NULL,
+  assigmentid int(11) NOT NULL,
+  complete tinyint(1) NOT NULL DEFAULT '1',
+  PRIMARY KEY (id),
+  KEY stockid (stockid),
+  FOREIGN KEY (stockid) REFERENCES stck_stock (id) ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+#
+# structure of view stck_vpstock
+#
+DROP TABLE IF EXISTS stck_vpstock;
+
+CREATE VIEW stck_vpstock AS
+	SELECT 
+		s.id AS id,s.warehouseid AS warehouseid,s.groupid AS groupid,s.productid AS productid,
+		s.supplierid AS supplierid,s.enterdocumentid AS enterdocumentid,s.quitdocumentid AS quitdocumentid,
+		s.creationdate AS creationdate,s.bdate AS bdate,s.moddate AS moddate,s.leavedate AS leavedate,
+		s.creatorid AS creatorid,s.modid AS modid,s.serialnumber AS serialnumber,s.warranty AS warranty,
+		s.pricebuynet AS pricebuynet,s.taxid AS taxid,s.pricebuygross AS pricebuygross,
+		s.pricesell AS pricesell,s.deleted AS deleted,s.comment AS comment,
+		p.id AS pid,
+		p.name AS pname,p.manufacturerid AS manufacturerid,p.comment AS pcomment,p.deleted AS pdeleted,
+		g.id AS gid,g.name AS gname,g.comment AS gcomment,g.deleted AS gdeleted 
+	FROM stck_stock s
+	LEFT JOIN stck_products p ON s.productid = p.id
+	LEFT JOIN stck_groups g ON p.id = g.id;
+
+# add fields to existing lms tables
+ALTER TABLE cash ADD COLUMN stockid int(11) DEFAULT NULL;
+ALTER TABLE invoicecontents ADD COLUMN stockid int(11) DEFAULT NULL;
+
+#
+# basic data records
+#
+INSERT INTO stck_quantities (id, def, name, comment, deleted) VALUES
+	(1, 1, 'szt.', '', 0),
+	(2, 0, 'm.', '', 0),
+	(3, 0, 'g.', '', 0),
+	(4, 0, 'op.', 'Opakowanie', 0),
+	(5, 0, 'kpl.', 'Komplet', 0);
+
+INSERT INTO stck_types (id, def, name, quantitycheck, creationdate, moddate, creatorid, modid, deleted) VALUES
+	(1, 0, 'Towar', 0, 0, 0, 0, 0, 0),
+	(2, 0, 'Usluga', 0, 0, 0, 0, 0, 0);
+
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSStockPlugin', '2015091400');

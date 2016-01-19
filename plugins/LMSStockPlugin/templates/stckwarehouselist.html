@@ -1,0 +1,85 @@
+{extends file="layout.html"}
+{block name="module_content"}
+<!--// $Id$ //-->
+<H1>{$layout.pagetitle}</H1>
+<TABLE CELLPADDING="3" width="100%">
+	<TR class="dark" {tip text="Click on column name to change sorting order"}>
+		<TD class="fleftu" width="97%">
+			<IMG src="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">&nbsp;<A href="?m=stckwarehouselist&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{trans("Name:")}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
+		</TD>
+		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
+			{trans("Stock:")}
+		</TD>
+		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
+			{trans("Net Value:")}
+		</TD>
+		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
+			{trans("Gross Value:")}
+		</TD>
+		<TD CLASS="fbt" width="1%" align="right" valign="top">
+			<A href="?m=stckwarehouselist&o=id{if $listdata.direction eq "asc" && $listdata.order eq "id"},desc{/if}">ID:</A> {if $listdata.order eq "id"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+		</TD>
+		<TD width="1%" class="frightu" align="right" nowrap>
+			<A href="?m=stckwarehouseadd">{trans("Add warehouse")} <IMG src="img/save.gif" alt=""> </A>
+		</TD>
+
+	</TR>
+	{if $listdata.total != 0}
+	<TR class="dark">
+		<TD class="fall" colspan="6" WIDTH="100%">
+			{include file="scroller.html" loop=$warehouselist}
+		</TD>
+	</TR>
+	{/if}
+	{cycle values="light,lucid" print=false}
+	{section name=warehouselist loop=$warehouselist start=$start max=$pagelimit}
+	<TR class="{cycle}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+		<TD width="97%" CLASS="fleft" onClick="return self.location.href='?m=stckwarehouseinfo&id={$warehouselist[warehouselist].id}';" VALIGN="TOP">
+			<IMG src="img/{LMSStockPlugin::plugin_directory_name}/stck{if $warehouselist[warehouselist].def}_def{/if}.png" ALT=""> <a name="{$warehouselist[warehouselist].id}"><B>{$warehouselist[warehouselist].name}</B></A><BR>
+			{$warehouselist[warehouselist].comment}
+		</TD>
+		<TD WIDTH="1%" onClick="return self.location.href='?m=stckwarehouseinfo&id={$warehouselist[warehouselist].id}';" align="right" VALIGN="TOP">
+			{$warehouselist[warehouselist].count}
+		</TD>
+		<TD WIDTH="1%" onClick="return self.location.href='?m=stckwarehouseinfo&id={$warehouselist[warehouselist].id}';" align="right" VALIGN="TOP" NOWRAP>
+			{$warehouselist[warehouselist].valuenet|money_format}
+		</TD>
+		<TD WIDTH="1%" onClick="return self.location.href='?m=stckwarehouseinfo&id={$warehouselist[warehouselist].id}';" align="right" VALIGN="TOP" NOWRAP>
+			{$warehouselist[warehouselist].valuegross|money_format}
+		</TD>
+		<TD WIDTH="1%" onClick="return self.location.href='?m=stckwarehouseinfo&id={$warehouselist[warehouselist].id}';" align="right" VALIGN="TOP">
+			({$warehouselist[warehouselist].id|string_format:"%04d"})
+		</TD>
+		<TD WIDTH="1%" CLASS="fright" align="right">
+		 	<nobr>
+				<a href="?m=stckwarehousedel&id={$warehouselist[warehouselist].id}" onClick="return confirmLink(this, '{t name=$warehouselist[warehouselist].name}Are you sure, you want to remove warehouse \'$name\' from database? Warehouses with current stock cannot be removed!{/t}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
+				<a href="?m=stckwarehouseedit&id={$warehouselist[warehouselist].id}"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
+				<a href="?m=stckwarehouseinfo&id={$warehouselist[warehouselist].id}"><IMG src="img/info.gif" alt="[ {trans("Info")} ]" title="[ {trans("Info")} ]"></A>
+			</nobr>
+		</TD>
+	</TR>
+	{sectionelse}
+	<TR>
+		<TD colspan="6" class="fall" align="center">
+			<p>&nbsp;</p>
+			<p><B>{trans("There are no warehouses in your database.")}</b></p>
+			<p>&nbsp;</p>
+		</TD>
+	</TR>
+	{/section}
+	{if $listdata.total != 0}
+	<TR class="dark">
+		<TD class="fall" colspan="6" WIDTH="100%">
+			{include file="scroller.html" loop=$warehouselist}
+		</TD>
+	</TR>
+	{/if}
+	<TR class="light">
+		<TD WIDTH="99%" COLSPAN="6" class="fleftu frightu" ALIGN="right">
+			<B>
+				{trans("Total:")} {$listdata.total|default:"0"}
+			</B>
+		</TD>
+	</TR>			
+</TABLE>
+{/block}

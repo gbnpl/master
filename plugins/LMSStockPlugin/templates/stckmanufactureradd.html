@@ -1,0 +1,39 @@
+{extends file="layout.html"}
+{block name="module_content"}
+{if !$layout.popup}<h1>{$layout.pagetitle}</h1>
+{else}
+{include file="modal.html"}
+{/if}
+<P><FORM METHOD="POST" ACTION="?m=stckmanufactureradd{if $layout.popup}&popup=1{/if}" NAME="manufactureradd">
+<INPUT type="submit" class="hiddenbtn">
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="dark" COLSPAN="2">
+		<TD WIDTH="1%" class="fleftu" NOWRAP>
+			<IMG SRC="img/producer.gif" ALT="">
+			<B>{trans("Manufacturer name:")}</B>
+		</TD>
+		<TD class="frightu">
+			<INPUT TYPE="TEXT" SIZE="23" NAME="manufactureradd[name]" VALUE="{$manufactureradd.name}" {tip trigger="name" bold=1}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%" CLASS="fleft" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{trans("Comment:")}</B></TD>
+		<TD CLASS="fright">
+		  <TEXTAREA NAME="manufactureradd[comment]" COLS="60" ROWS="7" {tip text="Enter comment (optional)"}>{$manufactureradd.comment}</TEXTAREA>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD width="100%" class="fbottomu" COLSPAN="2" align="right">
+			<A HREF="javascript:document.manufactureradd.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
+			<A HREF="{if !$layout.popup}?m=stckmanufacturerlist{else}javascript:parent.$.modal.close();{/if}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
+			{if !$layout.popup}<label><INPUT type="checkbox" name="manufactureradd[reuse]" id="manufactureradd[reuse]" value="ON" {if $manufactureradd.reuse}checked{/if}> {trans("Display this form again, when this manufacturer is saved")}</label>{/if}
+		</TD>
+	</TR>
+</TABLE>
+</FORM></P>
+<SCRIPT type="text/javascript">
+<!--
+document.forms['manufactureradd'].elements['manufactureradd[name]'].focus();
+//-->
+</SCRIPT>
+{/block}

@@ -1,0 +1,126 @@
+<!--// $Id$ //-->
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="dark">
+		<TD WIDTH="1%" class="fleftu">
+			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
+		</TD>
+		<TD WIDTH="99%" class="frightu">
+			<B>{$warehouseinfo.name} ({$warehouseinfo.id|string_format:"%04d"}){if $warehouseinfo.deleted} <FONT COLOR="RED">({trans("deleted warehouse")})</FONT>{/if}</B>
+		</TD>
+	</TR>
+	<TR class="light">
+	        <TD WIDTH="100%" COLSPAN="2" class="flr">
+			<TABLE WIDTH="100%" CELLPADDING="0">
+				<TR class="light">
+					<TD WIDTH="50%" style="vertical-align:top;">
+						<TABLE WIDTH="100%" CELLPADDING="3">
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_count.png" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Stock count:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{$warehouseinfo.count}
+								</TD>
+							</TR>
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/money.gif" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+								        <B>{trans("Stock net value:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+								        {$warehouseinfo.valuenet|money_format}
+								</TD>
+							</TR>
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/money.gif" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Stock gross value:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{$warehouseinfo.valuegross|money_format}
+								</TD>
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_def.png" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Default:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{if $warehouseinfo.def}{trans("yes")}{else}{trans("no")}{/if}
+								</TD>
+							</TR>
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/money.gif">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Commercial:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{if $warehouseinfo.commerce}{trans("yes")}{else}{trans("no")}{/if}
+								</TD>
+							</TR>
+	                        		</TABLE>
+					</TD>
+					<TD WIDTH="50%" style="vertical-align:top;">
+                				<TABLE WIDTH="100%" CELLPADDING="3">
+						{if $warehouseinfo.comment}
+						<TR class="light">
+							<TD WIDTH="1%">
+								<IMG SRC="img/desc.gif" ALT="">
+							</TD>
+							<TD WIDTH="99%" COLSPAN="2">
+								<TABLE WIDTH="100%" CELLPADDING="5">
+									<TR>
+										<TD class="fall superlight">
+											{$warehouseinfo.comment|escape|replace:"\n":"<BR>"}
+										</TD>
+									</TR>
+								</TABLE>
+							</TD>
+						</TR>
+						{/if}
+						<TR>
+							<TD WIDTH="1%">
+								<IMG SRC="img/users.gif" ALT="">
+							</TD>
+							<TD WIDTH="98%">
+								<TABLE WIDTH="100%" CELLPADDING="5">
+									<TR>
+										<TD WIDTH="1%">
+											<B>{trans("Created:")}<BR>
+											{trans("Modified:")}</B>
+										</TD>
+										<TD WIDTH="99%">
+											{$warehouseinfo.createdby}, {$warehouseinfo.creationdate|date_format:"%Y/%m/%d %H:%M"}<BR>
+											{if $warehouseinfo.moddate}{$warehouseinfo.modifiedby}, {$warehouseinfo.moddate|date_format:"%Y/%m/%d %H:%M"}{else}-{/if}
+										</TD>
+									</TR>
+								</TABLE>
+							</TD>
+						</TR>
+						</TABLE>
+					</TD>
+        			</TR>
+			</TABLE>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="100%" COLSPAN="2" class="fbottomu" ALIGN="RIGHT">
+			{if $warehouseinfo.deleted}
+			<A HREF="?m=stckwarehouseedit&id={$warehouseinfo.id}&action=recover">{trans("Restore")} <IMG SRC="img/recover.gif" ALT="[ {trans("Restore")} ]"></A>
+			{else}
+			<A href="?m=stckwarehouseedit&id={$warehouseinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
+                        <A href="?m=stckwarehousedel&id={$warehouseinfo.id}" OnClick="return confirmLink(this, '{t name=$warehouseinfo.name}Are you sure, you want to remove warehouse \'$name\' from database?{/t}');">{trans("Delete")} <img src="img/delete.gif" ALT=""></A>
+                	{/if}
+		</TD>
+        </TR>
+</TABLE>

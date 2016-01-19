@@ -1,0 +1,15 @@
+{extends file="invoice/invoicenew.html"}
+{block name="module_content" prepend}
+<script type="text/javascript" src="img/{LMSStockPlugin::plugin_directory_name}/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript" src="img/{LMSStockPlugin::plugin_directory_name}/js/jquery.simplemodal.js"></script>
+<link href="img/{LMSStockPlugin::plugin_directory_name}/js/jquery.simplemodal.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="img/{LMSStockPlugin::plugin_directory_name}/js/common.js"></script>
+{/block}
+{block name="invoicenew-tariff-selection" append}
+<INPUT type="hidden" name="stckproductid" id="pid">
+<script type="text/javascript">
+<!--
+new AutoSuggest(document.getElementById('additem'), document.getElementById('name'), '?m=quicksearch&ajax=1&mode=productinv&what=', 0);
+//-->
+</script>
+{/block}

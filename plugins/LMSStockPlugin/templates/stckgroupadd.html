@@ -1,0 +1,70 @@
+{extends file="layout.html"}
+{block name="module_content"}
+<H1>{$layout.pagetitle}</H1>
+<P><FORM METHOD="POST" ACTION="?m=stckgroupadd" NAME="groupadd">
+<INPUT type="submit" class="hiddenbtn">
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="dark" COLSPAN="2">
+		<TD WIDTH="1%" class="fleftu" NOWRAP>
+			<IMG SRC="img/producer.gif" ALT="">
+			<B>{trans("Product group name:")}</B>
+		</TD>
+		<TD class="frightu">
+			<INPUT TYPE="TEXT" SIZE="23" NAME="groupadd[name]" VALUE="{$groupadd.name}" {tip trigger="name" bold=1}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
+			<IMG SRC="img/tax.gif" ALT=""><B>{trans("Tax:")}</B>
+		</TD>
+		<TD CLASS="fright">
+			<SELECT SIZE="1" NAME="groupadd[taxid]" {tip text="Select Tax rate" trigger="taxid"}>
+				{foreach item=tax from=$taxeslist}
+					<OPTION VALUE="{$tax.id}"{if $tax.value == ConfigHelper::getConfig('phpui.default_taxrate') || $tax.id == $groupadd.taxid} selected{/if}>{$tax.label}</OPTION>
+				{/foreach}
+			</SELECT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
+			<IMG SRC="img/port.gif" ALT="">
+			<B>{trans("Quantity name:")}</B>
+		</TD>
+		<TD CLASS="fright">
+			<SELECT SIZE="1" NAME="groupadd[quantityid]" {tip text="Select quantity name" trigger="quantityid"}>
+				{foreach item=quantity from=$quantitieslist}
+					<OPTION VALUE="{$quantity.id}"{if $quantity.id == $groupadd.quantityid || $quantity.def} selected{/if}>{$quantity.name}</OPTION>
+				{/foreach}
+			</SELECT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
+			<IMG SRC="img/port.gif" ALT="">
+			<B>{trans("Quantity check:")}</B>
+		</TD>
+		<TD CLASS="fright">
+			<INPUT TYPE="checkbox" value="1" name="groupadd[quantitycheck]"{if $groupadd.quantitycheck} checked{/if}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%" CLASS="fleft" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{trans("Comment:")}</B></TD>
+		<TD CLASS="fright">
+		  <TEXTAREA NAME="groupadd[comment]" COLS="60" ROWS="7" {tip text="Enter comment (optional)"}>{$groupadd.comment}</TEXTAREA>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD width="100%" class="fbottomu" COLSPAN="2" align="right">
+			<A HREF="javascript:document.groupadd.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
+			<A HREF="?m=stckgrouplist">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
+			<label><INPUT type="checkbox" name="groupadd[reuse]" id="groupadd[reuse]" value="ON" {if $groupadd.reuse}checked{/if}> {trans("Display this form again, when this group is saved")}</label>
+		</TD>
+	</TR>
+</TABLE>
+</FORM></P>
+<SCRIPT type="text/javascript">
+<!--
+document.forms['groupadd'].elements['groupadd[name]'].focus();
+//-->
+</SCRIPT>
+{/block}

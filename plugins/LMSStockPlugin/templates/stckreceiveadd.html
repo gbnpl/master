@@ -1,0 +1,110 @@
+{extends file="layout.html"}
+{block name="module_content"}
+{include file="calendar_js.html"}
+<H1>{$layout.pagetitle}</H1>
+<FORM METHOD="POST" ACTION="?m=stckreceiveadd" NAME="receivenote" id="receivenote">
+<INPUT type="submit" class="hiddenbtn">
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="dark" COLSPAN="2">
+		<TD WIDTH="1%" class="fleftu" NOWRAP>
+			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
+			<B>{trans("Supplier:")}</B>
+		</TD>
+		<TD class="frightu">
+			<INPUT TYPE="TEXT" SIZE="60" NAME="receivenote[doc][supplier]" VALUE="{$receivenote.doc.supplier}" ID="sinput" {tip trigger="supplier" bold=1}> {if $receivenote.supplierid}({$receivenote.supplierid|string_format:"%04d"}){/if}
+			<INPUT TYPE="hidden" NAME="receivenote[doc][supplierid]" VALUE="{$receivenote.doc.supplierid}">
+			<label><INPUT type="checkbox" name="receivenote[doc][internal]" id="receivenote[internal]" value="1"{if $receivenote.doc.internal} CHECKED{/if}> {trans("internal")}</label>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD COLSPAN="2" WIDTH="100%" class="flr">
+			<TABLE WIDTH="100%" CELLPADDING="0">
+				<TR class="light">
+					<TD WIDTH="50%" style="vertical-align:top;">
+					<TABLE WIDTH="100%" CELLPADDING="3">
+						<TR>
+							<TD WIDTH="1%" NOWRAP>
+								<IMG SRC="img/calendar.gif" ALT="">
+								<B>{trans("Settlement date:")}</B>
+							</TD>
+							<TD>
+								<INPUT type="TEXT" name="receivenote[doc][date][settlement]" value="{$receivenote.doc.date.settlement}" OnClick="cal3.popup();" {tip text="Document issue date" trigger="settlement"} SIZE="10">
+							</TD>
+						</TR>
+						<TR>
+							<TD WIDTH="1%" NOWRAP>
+								<IMG SRC="img/calendar.gif" ALT="">
+								<B>{trans("Sale date:")}</B>
+							</TD>
+							<TD>
+								<INPUT type="TEXT" name="receivenote[doc][date][sale]" value="{$receivenote.doc.date.sale}" OnClick="cal4.popup();" {tip text="Document sale date" trigger="sale"} SIZE="10">
+							</TD>
+						</TR>
+						<TR>
+							<TD WIDTH="1%" NOWRAP>
+								<IMG SRC="img/calendar.gif" ALT="">
+								<B>{trans("Deadline:")}</B>
+							</TD>
+							<TD>
+								<INPUT type="TEXT" name="receivenote[doc][date][deadline]" value="{$receivenote.doc.date.deadline}" OnClick="cal5.popup();" {tip text="Document deadline" trigger="deadline"} SIZE="10">
+							</TD>
+						</TR>
+						<TR>
+							<TD WIDTH="1%" NOWRAP>
+								<IMG SRC="img/serialnumber.gif" ALT="">
+								<b>{trans("Document number:")}</b>
+							</td>
+							<TD>
+								<INPUT type="TEXT" name="receivenote[doc][number]" value="{$receivenote.doc.number}" {tip text="Document number" trigger="number"}>
+							</TD>
+						</TR>
+						<TR>
+							<TD WIDTH="1%" NOWRAP>
+								<B>{trans("Payment type:")}</B>
+							</TD>
+							<TD>
+								<SELECT name="receivenote[doc][paytype]" {tip text="Select payment type" trigger="paytype"}>
+									<OPTION value=""{if !$invoice.paytype} selected{/if}>- {trans("default")} -</OPTION>
+									{foreach from=$_PAYTYPES item=item key=key}
+									<OPTION value="{$key}"{if $receivenote.doc.paytype==$key} selected{/if}>{$item}</OPTION>
+									{/foreach}
+								</SELECT>
+							</TD>
+						</TR>
+					</TABLE>
+					</TD>
+					<TD WIDTH="50%" style="vertical-align:top;">
+					<TABLE WIDTH="100%" CELLPADDING="3">
+						<TR class="light">
+							<TD WIDTH="1%" NOWRAP><IMG SRC="img/info1.gif" ALT=""> <B>{trans("Comment:")}</B></TD>
+							<TD>
+								<TEXTAREA NAME="receivenote[doc][comment]" COLS="60" ROWS="7" {tip text="Enter comment (optional)"}>{$receivenote.doc.comment}</TEXTAREA>
+							</TD>
+						</TR>
+					</TABLE>
+					</TD>
+				</TR>
+			</TABLE>
+		</TD>	
+	</TR>
+	<TR class="dark">
+		<TD width="100%" class="fall text-right" COLSPAN="2">
+			<A HREF="javascript:document.receivenote.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
+			<A href="?m=stckreceiveproductlist&amp;action=cancel" ACCESSKEY="C" onClick="if(confirm('{trans("Are you sure that you want to cancel receive note?")}')) { return true; } else { return false; } ">{trans("Cancel")} <img src="img/cancel.gif" alt=""></A>
+		</TD>
+	</TR>
+</TABLE>
+</FORM>
+<SCRIPT type="text/javascript">
+<!--
+new AutoSuggest(document.getElementById('receivenote'),document.getElementById('sinput'),'?m=quicksearch&ajax=1&mode=supplier&what=',1);
+var cal3 = new calendar(document.forms['receivenote'].elements['receivenote[doc][date][settlement]']);
+cal3.time_comp = false;
+var cal4 = new calendar(document.forms['receivenote'].elements['receivenote[doc][date][sale]']);
+cal4.time_comp = false;
+var cal5 = new calendar(document.forms['receivenote'].elements['receivenote[doc][date][deadline]']);
+cal5.time_comp = false;
+document.forms['receivenote'].elements['sinput'].focus();
+//-->
+</SCRIPT>
+{/block}

@@ -1,0 +1,99 @@
+{include file="clearheader.html"}
+<!--// $Id$ //-->
+<TABLE WIDTH="100%">
+	<TR>
+		<TD WIDTH="1%" VALIGN="TOP" ALIGN="LEFT" NOWRAP>
+{if $type == 'inventory'}
+			<H1>{trans("Inventory for date")} {$params.rdate|date_format:"%Y/%m/%d"}</h1>
+{else}
+			<H1>{trans("Purchase report")} {$params.sdate|date_format:"%Y/%m/%d"} - {$params.edate|date_format:"%Y/%m/%d"}</h1>
+{/if}
+		</TD>
+		<TD WIDTH="99%" VALIGN="TOP" NOWRAP>
+			<P class="hdf"><B>{$layout.pagetitle}</B>
+			{if $layout.username}<BR><font class="sdr"><B>{$layout.username}</B></font>{/if}
+			{if $layout.registry}<BR><font class="sdr"><B>{$layout.registry}</B></font>{/if}
+			{if $layout.group}<BR><font class="sdr"><B>{$layout.group}</B></font>{/if}
+			</P>
+		</TD>
+		<TD WIDTH="1%" ALIGN="RIGHT" NOWRAP>
+			LMS {$layout.lmsv} @ {$layout.hostname}<BR>
+			{$smarty.now|date_format:"%A, %x"}<BR>
+			{t a=$layout.logname}Prepared by: $a{/t}
+		</TD>
+	</TR>
+</TABLE>
+<TABLE WIDTH="640" CELLPADDING="3" BORDER="1" ALIGN="CENTER">
+	<TR>
+		<TD ALIGN="CENTER" CLASS="HEAD">
+			{trans("No.")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER">
+			{trans("Manufacturer")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER">
+			{trans("Name")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER">
+			{trans("Group")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER">
+			{trans("In stock:")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER">
+			{trans("Price buy net:")}
+		</TD>
+		<TD CLASS="HEAD" ALIGN="CENTER">
+			{trans("Net value")}:
+		</TD>
+	</TR>
+	{cycle values="white,grey" print=false}
+	{section name=p loop=$productlist}
+	<TR class="{cycle}">
+		<TD ALIGN="RIGHT">
+			{counter}
+		</TD>
+		<TD ALIGN="CENTER" NOWRAP>
+			{$productlist[p].mname}
+		</TD>
+		<TD ALIGN="LEFT" NOWRAP>
+			{$productlist[p].pname} ({$productlist[p].id})
+		</TD>
+		<TD ALIGN="LEFT">
+			{$productlist[p].gname}
+		</TD>
+		<TD ALIGN="CENTER">
+			{$productlist[p].count}
+		</TD>
+		<TD ALIGN="RIGHT" NOWRAP>
+			{$productlist[p].pricebuynet|money_format}
+		</TD>
+		<TD ALIGN="RIGHT" NOWRAP>
+			{$productlist[p].valuenet|money_format}
+		</TD>
+	</TR>
+	{sectionelse}
+	<TR>
+		<TD COLSPAN="8" style="text-align: center;">
+			<P>&nbsp;</P>
+			<P><span class="bold">
+			{if $type == 'inventory'}
+			{trans("Empty inventory for such date.")}
+			{else}
+			{trans("No purchases in database.")}
+			{/if}
+			</span></P>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	{/section}
+	<TR class="grey">
+		<TD COLSPAN="6" ALIGN="RIGHT" VALIGN="TOP">
+			<B>{trans("Total:")}</B>
+		</TD>
+		<TD ALIGN="RIGHT" nowrap>
+			<B>{$params.totalvn|money_format}</B>
+		</TD>
+	</TR>
+</TABLE>
+{include file="clearfooter.html"}

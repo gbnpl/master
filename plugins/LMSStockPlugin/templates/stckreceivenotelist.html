@@ -1,0 +1,142 @@
+{extends file="layout.html"}
+{block name="module_content"}
+<SCRIPT TYPE="text/javascript">
+<!--
+function pays() {
+	if (!confirm('{trans("Are you sure, you want to check selected receive note as accounted?")}'))
+		return;
+	
+	document.srnl.action="?m={$layout.module}&action=srna";
+	document.srnl.target="";
+	document.srnl.submit();
+}
+-->
+</SCRIPT>
+<H1>{$layout.pagetitle}</H1>
+<FORM METHOD="post" NAME="srnl" ACTION="?m=balanceadd">
+<TABLE CELLPADDING="3" width="100%">
+	<TR class="dark">
+		<TD class="frightu fleftu" COLSPAN="10" ALIGN="right">
+			<A HREF="?m=stckreceivenotelist&amp;sprn={!$sprn}"{if $sprn} CLASS="bold"{/if}>{trans("Show paid receive notes")}</A>
+		</TD>
+	</TR>
+	<TR class="dark" {tip text="Click on column name to change sorting order"}>
+		<TD class="fleftu" width="97%">
+			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m=stckreceivenotelist&o=sname{if $listdata.direction eq "asc" && $listdata.order eq "sname"},desc{/if}"><B>{trans("Supplier:")}</B></A> {if $listdata.order eq "sname"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
+		</TD>
+		<TD CLASS="fbt" ALIGN="left" valign="top">
+			{trans("Document number:")}
+		</TD>
+		<TD CLASS="fbt" ALIGN="right" valign="top" NOWRAP>
+			<A href="?m=stckreceivenotelist&o=stdate{if $listdata.direction eq "asc" && $listdata.order eq "stdate"},desc{/if}">{trans("Settlement date:")}</A> {if $listdata.order eq "stdate"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR/>
+		</TD>
+		<TD CLASS="fbt" ALIGN="right" valign="top" NOWRAP>
+			<A href="?m=stckreceivenotelist&o=sltdate{if $listdata.direction eq "asc" && $listdata.order eq "sldate"},desc{/if}">{trans("Sale date:")}</a> {if $listdata.order eq "sldate"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR/>
+		</TD>
+		<TD CLASS="fbt" ALIGN="right" valign="top" NOWRAP>
+			<A href="?m=stckreceivenotelist&o=dl{if $listdata.direction eq "asc" && $listdata.order eq "dl"},desc{/if}">{trans("Deadline:")}</a> {if $listdata.order eq "dl"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR/>
+		</TD>
+		<TD CLASS="fbt" ALIGN="right" valign="top" NOWRAP>
+			<A href="?m=stckreceivenotelist&o=gv{if $listdata.direction eq "asc" && $listdata.order eq "gv"},desc{/if}">{trans("Gross Value:")}</a>{if $listdata.order eq "gv"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR/>
+		</TD>
+		<TD class="fbt"></TD>
+		<TD CLASS="fbt" ALIGN="right" valign="top" NOWRAP>
+			 <A href="?m=stckreceivenotelist&o=gv{if $listdata.direction eq "asc" && $listdata.order eq "cd"},desc{/if}">{trans("Creation date:")}</a> {if $listdata.order eq "cd"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR/>
+		<TD CLASS="fbt" width="1%" align="right" valign="top">
+			<A href="?m=stckreceivenotelist&o=id{if $listdata.direction eq "asc" && $listdata.order eq "id"},desc{/if}">ID:</A> {if $listdata.order eq "id"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+		</TD>
+		<TD width="1%" class="frightu" align="right" nowrap>
+		</TD>
+
+	</TR>
+	{if $listdata.total != 0}
+	<TR class="dark">
+		<TD class="fall" COLSPAN="10" WIDTH="100%">
+			{include file="scroller.html" loop=$receivenotelist}
+		</TD>
+	</TR>
+	{/if}
+	{cycle values="light,lucid" print=false}
+	{section name=receivenotelist loop=$receivenotelist start=$start max=$pagelimit}
+	<TR class="{cycle}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+		<TD width="97%" CLASS="fleft" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" VALIGN="TOP">
+			<IMG src="img/producer.gif" ALT=""> <a href="?m=customerinfo&id={$receivenotelist[receivenotelist].supplierid}"><B>{$receivenotelist[receivenotelist].sname}</B></A> ({$receivenotelist[receivenotelist].sbalance|money_format})<BR>
+			{$receivenotelist[receivenotelist].comment}
+		</TD>
+		<TD ALIGN="left" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" NOWRAP>
+			{$receivenotelist[receivenotelist].number}
+		</TD>
+		<TD ALIGN="right" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" NOWRAP>
+			{$receivenotelist[receivenotelist].datesettlement|date_format:"%Y/%m/%d"}
+		</TD>
+		<TD ALIGN="right" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" NOWRAP>
+			{$receivenotelist[receivenotelist].datesale|date_format:"%Y/%m/%d"}
+		</TD>
+		<TD ALIGN="right" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" NOWRAP>
+			{$receivenotelist[receivenotelist].deadline|date_format:"%Y/%m/%d"}
+		</TD>
+		<TD ALIGN="right" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" NOWRAP>
+			{$receivenotelist[receivenotelist].grossvalue|money_format}
+		</TD>
+		<TD ALIGN="right" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" NOWRAP>
+			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_{if $receivenotelist[receivenotelist].paid}true{else}false{/if}.png" alt="{trans("Paid")}">
+		</TD>
+		<TD ALIGN="right" onClick="return self.location.href='?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}';" NOWRAP>
+			{$receivenotelist[receivenotelist].creationdate|date_format:"%Y/%m/%d"}
+		</TD>
+		<TD WIDTH="1%" onClick="return self.location.href='?m=stckmanufacturerinfo&id={$receivenotelist[receivenotelist].id}';" align="right" VALIGN="TOP">
+			({$receivenotelist[receivenotelist].id|string_format:"%04d"})
+		</TD>
+		<TD WIDTH="1%" CLASS="fright" align="right">
+		 	<nobr>
+				<a href="?m=stckreceivenoteedit&id={$receivenotelist[receivenotelist].id}"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
+				<a href="?m=stckreceivenoteinfo&id={$receivenotelist[receivenotelist].id}"><IMG src="img/info.gif" alt="[ {trans("Info")} ]" title="[ {trans("Info")} ]"></A>
+				<INPUT TYPE="checkbox" NAME="marks[{$receivenotelist[receivenotelist].id}]">
+			</nobr>
+		</TD>
+	</TR>
+	{sectionelse}
+	<TR>
+		<TD COLSPAN="10" class="fall" align="center">
+			<p>&nbsp;</p>
+			<p><B>{trans("There are no receive notes in your database.")}</b></p>
+			<p>&nbsp;</p>
+		</TD>
+	</TR>
+	{/section}
+	{if $listdata.total != 0}
+	<TR class="dark">
+		<TD class="fall" COLSPAN="10" WIDTH="100%">
+			{include file="scroller.html" loop=$receivenotelist}
+		</TD>
+	</TR>
+	{/if}
+	<TR class="dark">
+		<TD COLSPAN="2" ALIGN="left" class="fleftu">
+			<TABLE>
+				<TR>
+					<TD ALIGN="left">
+						<NOBR><A HREF="javascript:pays();">{trans("Account")} <IMG SRC="img/pay.gif" ALT=""></A></NOBR>
+					</TD>
+				</TR>
+			</TABLE>
+		</TD>
+		<TD COLSPAN="3" CLASS="fbt" ALIGN="right">
+			<b>{trans("Total (unpaid):")}</b>
+		</TD>
+		<TD CLASS="fbt" ALIGN="right">
+			<b>{$listdata.totalvu|money_format}</b>
+		</TD>
+		<TD COLSPAN="4" class="frightu">
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="99%" COLSPAN="10" class="fleftu frightu" ALIGN="right">
+			<B>
+				{trans("Total:")} {$listdata.total|default:"0"}
+			</B>
+		</TD>
+	</TR>
+</TABLE>
+</FORM>
+{/block}

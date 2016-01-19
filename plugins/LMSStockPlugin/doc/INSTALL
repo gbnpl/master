@@ -1,0 +1,4 @@
+
+1. Utworzyć dowiązanie symboliczne w katalogu img LMS o nazwie LMSStockPlugin:
+   ln -sf ../LMSStockPlugin/img img/LMSStockPlugin
+2. Uaktywnić wtyczkę LMSStockPlugin

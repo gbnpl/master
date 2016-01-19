@@ -1,0 +1,85 @@
+{extends file="layout.html"}
+{block name="module_content"}
+<!--// $Id$ //-->
+<H1>{$layout.pagetitle}</H1>
+<TABLE CELLPADDING="3" width="100%">
+	<TR class="dark" {tip text="Click on column name to change sorting order"}>
+		<TD class="fleftu" width="97%">
+			<IMG src="img/nodegroup.gif" ALT="">&nbsp;<A href="?m=stckgrouplist&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{trans("Name:")}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
+		</TD>
+		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
+			{trans("Stock:")}
+		</TD>
+		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
+			{trans("Net Value:")}
+		</TD>
+		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
+			{trans("Gross Value:")}
+		</TD>
+		<TD CLASS="fbt" width="1%" align="right" valign="top">
+			<A href="?m=stckgrouplist&o=id{if $listdata.direction eq "asc" && $listdata.order eq "id"},desc{/if}">ID:</A> {if $listdata.order eq "id"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+		</TD>
+		<TD width="1%" class="frightu" align="right" nowrap>
+			<A href="?m=stckgroupadd">{trans("New Group")} <IMG src="img/save.gif" alt=""> </A>
+		</TD>
+
+	</TR>
+	{if $listdata.total != 0}
+	<TR class="dark">
+		<TD class="fall" colspan="7" WIDTH="100%">
+			{include file="scroller.html" loop=$grouplist}
+		</TD>
+	</TR>
+	{/if}
+	{cycle values="light,lucid" print=false}
+	{section name=grouplist loop=$grouplist start=$start max=$pagelimit}
+	<TR class="{cycle}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+		<TD width="97%" CLASS="fleft" onClick="return self.location.href='?m=stckgroupinfo&id={$grouplist[grouplist].gid}';" VALIGN="TOP">
+			<IMG src="img/nodegroup.gif" ALT=""> <a name="{$grouplist[grouplist].gid}"><B>{$grouplist[grouplist].gname}</B></A><BR>
+			{$grouplist[grouplist].comment}
+		</TD>
+		<TD WIDTH="1%" onClick="return self.location.href='?m=stckgroupinfo&id={$grouplist[grouplist].gid}';" align="right" VALIGN="TOP">
+			{$grouplist[grouplist].count}
+		</TD>
+		<TD WIDTH="1%" onClick="return self.location.href='?m=stckgroupinfo&id={$grouplist[grouplist].gid}';" align="right" VALIGN="TOP" NOWRAP>
+			{$grouplist[grouplist].valuenet|money_format}
+		</TD>
+		<TD WIDTH="1%" onClick="return self.location.href='?m=stckgroupinfo&id={$grouplist[grouplist].gid}';" align="right" VALIGN="TOP" NOWRAP>
+			{$grouplist[grouplist].valuegross|money_format}
+		</TD>
+		<TD WIDTH="1%" onClick="return self.location.href='?m=stckgroupinfo&id={$grouplist[grouplist].gid}';" align="right" VALIGN="TOP">
+			({$grouplist[grouplist].gid|string_format:"%04d"})
+		</TD>
+		<TD WIDTH="1%" CLASS="fright" align="right">
+		 	<nobr>
+				<a href="?m=stckgroupdel&id={$grouplist[grouplist].gid}" onClick="return confirmLink(this, '{t name=$grouplist[grouplist].name}Are you sure, you want to remove group \'$name\' from database? Group with current stock cannot be removed!{/t}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
+				<a href="?m=stckgroupedit&id={$grouplist[grouplist].gid}"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
+				<a href="?m=stckgroupinfo&id={$grouplist[grouplist].gid}"><IMG src="img/info.gif" alt="[ {trans("Info")} ]" title="[ {trans("Info")} ]"></A>
+			</nobr>
+		</TD>
+	</TR>
+	{sectionelse}
+	<TR>
+		<TD colspan="7" class="fall" align="center">
+			<p>&nbsp;</p>
+			<p><B>{trans("There are no groups in your database.")}</b></p>
+			<p>&nbsp;</p>
+		</TD>
+	</TR>
+	{/section}
+	{if $listdata.total != 0}
+	<TR class="dark">
+		<TD class="fall" colspan="7" WIDTH="100%">
+			{include file="scroller.html" loop=$grouplist}
+		</TD>
+	</TR>
+	{/if}
+	<TR class="light">
+		<TD WIDTH="99%" COLSPAN="7" class="fleftu frightu" ALIGN="right">
+			<B>
+				{trans("Total:")} {$listdata.total|default:"0"}
+			</B>
+		</TD>
+	</TR>			
+</TABLE>
+{/block}

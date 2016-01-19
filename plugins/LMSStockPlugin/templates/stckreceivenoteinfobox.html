@@ -1,0 +1,146 @@
+<!--// $Id$ //-->
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="dark">
+		<TD WIDTH="1%" class="fleftu">
+			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
+		</TD>
+		<TD WIDTH="99%" class="frightu">
+			<B>{$receivenoteinfo.number} - {$receivenoteinfo.sname} ({$receivenoteinfo.id|string_format:"%04d"})</B> <IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_{if $receivenoteinfo.paid}true{else}false{/if}.png" alt="">
+		</TD>
+	</TR>
+	<TR class="light">
+	        <TD WIDTH="100%" COLSPAN="2" class="flr">
+			<TABLE WIDTH="100%" CELLPADDING="0">
+				<TR class="light">
+					<TD WIDTH="50%" style="vertical-align:top;">
+						<TABLE WIDTH="100%" CELLPADDING="3">
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/producer.gif" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Supplier:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									<A HREF="?m=customerinfo&id={$receivenoteinfo.supplierid}">{$receivenoteinfo.sname}</A>
+								</TD>
+							</TR>
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/money.gif" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+								        <B>{trans("Net Value:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+								        {$receivenoteinfo.netvalue|money_format}
+								</TD>
+							</TR>
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/money.gif" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Gross Value:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{$receivenoteinfo.grossvalue|money_format}
+								</TD>
+							</TR>
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/calendar.gif" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Settlement date:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{$receivenoteinfo.datesettlement|date_format: "%Y/%m/%d"}
+								</TD>
+							</TR>
+							<TR class="light">
+								<TD WIDTH="1%">
+								<IMG SRC="img/calendar.gif" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Sale date:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{$receivenoteinfo.datesale|date_format: "%Y/%m/%d"}
+								</TD>
+							</TR>
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/calendar.gif" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Deadline:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{$receivenoteinfo.deadline|date_format: "%Y/%m/%d"}
+								</TD>
+							</TR>
+							<TR>
+								<TD WIDTH="1%">
+									<IMG SRC="img/money.gif" ALT="">
+
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Payment type:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{$_PAYTYPES[$receivenoteinfo.paytype]}
+								</TD>
+							</TR>
+	                        		</TABLE>
+					</TD>
+					<TD WIDTH="50%" style="vertical-align:top;">
+                				<TABLE WIDTH="100%" CELLPADDING="3">
+						{if $receivenoteinfo.comment}
+						<TR class="light">
+							<TD WIDTH="1%">
+								<IMG SRC="img/desc.gif" ALT="">
+							</TD>
+							<TD WIDTH="99%" COLSPAN="2">
+								<TABLE WIDTH="100%" CELLPADDING="5">
+									<TR>
+										<TD class="fall superlight">
+											{$receivenoteinfo.comment|escape|replace:"\n":"<BR>"}
+										</TD>
+									</TR>
+								</TABLE>
+							</TD>
+						</TR>
+						{/if}
+						<TR>
+							<TD WIDTH="1%">
+								<IMG SRC="img/users.gif" ALT="">
+							</TD>
+							<TD WIDTH="98%">
+								<TABLE WIDTH="100%" CELLPADDING="5">
+									<TR>
+										<TD WIDTH="1%">
+											<B>{trans("Created:")}<BR>
+											{trans("Modified:")}</B>
+										</TD>
+										<TD WIDTH="99%">
+											{$receivenoteinfo.createdby}, {$receivenoteinfo.creationdate|date_format:"%Y/%m/%d %H:%M"}<BR>
+											{if $receivenoteinfo.moddate}{$receivenoteinfo.modifiedby}, {$receivenoteinfo.moddate|date_format:"%Y/%m/%d %H:%M"}{else}-{/if}
+										</TD>
+									</TR>
+								</TABLE>
+							</TD>
+						</TR>
+						</TABLE>
+					</TD>
+        			</TR>
+			</TABLE>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="100%" COLSPAN="2" class="fbottomu" ALIGN="RIGHT">
+			<A HREF="?m=stckreceivenoteinfo&id={$receivenoteinfo.id}&action=srna">{trans("Account")} <IMG SRC="img/pay.gif" ALT=""></A>
+			<A href="?m=stckreceivenoteedit&id={$receivenoteinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
+                </TD>
+        </TR>
+</TABLE>

@@ -1,0 +1,101 @@
+<!--// $Id$ //-->
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="dark">
+		<TD WIDTH="1%" class="fleftu">
+			<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck.png" ALT="">
+		</TD>
+		<TD WIDTH="99%" class="frightu">
+			<B>{$manufacturerinfo.name} ({$manufacturerinfo.id|string_format:"%04d"})</B>
+		</TD>
+	</TR>
+	<TR class="light">
+	        <TD WIDTH="100%" COLSPAN="2" class="flr">
+			<TABLE WIDTH="100%" CELLPADDING="0">
+				<TR class="light">
+					<TD WIDTH="50%" style="vertical-align:top;">
+						<TABLE WIDTH="100%" CELLPADDING="3">
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/{LMSStockPlugin::plugin_directory_name}/stck_count.png" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Stock count:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{$manufacturerinfo.count}
+								</TD>
+							</TR>
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/money.gif" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+								        <B>{trans("Stock net value:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+								        {$manufacturerinfo.valuenet|money_format}
+								</TD>
+							</TR>
+							<TR class="light">
+								<TD WIDTH="1%">
+									<IMG SRC="img/money.gif" ALT="">
+								</TD>
+								<TD WIDTH="1%" NOWRAP>
+									<B>{trans("Stock gross value:")}</B>
+								</TD>
+								<TD WIDTH="98%">
+									{$manufacturerinfo.valuegross|money_format}
+								</TD>
+							</TR>
+	                        		</TABLE>
+					</TD>
+					<TD WIDTH="50%" style="vertical-align:top;">
+                				<TABLE WIDTH="100%" CELLPADDING="3">
+						{if $manufacturerinfo.comment}
+						<TR class="light">
+							<TD WIDTH="1%">
+								<IMG SRC="img/desc.gif" ALT="">
+							</TD>
+							<TD WIDTH="99%" COLSPAN="2">
+								<TABLE WIDTH="100%" CELLPADDING="5">
+									<TR>
+										<TD class="fall superlight">
+											{$manufacturerinfo.comment|escape|replace:"\n":"<BR>"}
+										</TD>
+									</TR>
+								</TABLE>
+							</TD>
+						</TR>
+						{/if}
+						<TR>
+							<TD WIDTH="1%">
+								<IMG SRC="img/users.gif" ALT="">
+							</TD>
+							<TD WIDTH="98%">
+								<TABLE WIDTH="100%" CELLPADDING="5">
+									<TR>
+										<TD WIDTH="1%">
+											<B>{trans("Created:")}<BR>
+											{trans("Modified:")}</B>
+										</TD>
+										<TD WIDTH="99%">
+											{$manufacturerinfo.createdby}, {$manufacturerinfo.creationdate|date_format:"%Y/%m/%d %H:%M"}<BR>
+											{if $manufacturerinfo.moddate}{$manufacturerinfo.modifiedby}, {$manufacturerinfo.moddate|date_format:"%Y/%m/%d %H:%M"}{else}-{/if}
+										</TD>
+									</TR>
+								</TABLE>
+							</TD>
+						</TR>
+						</TABLE>
+					</TD>
+        			</TR>
+			</TABLE>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="100%" COLSPAN="2" class="fbottomu" ALIGN="RIGHT">
+			<A href="?m=stckmanufactureredit&id={$manufacturerinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
+                        <A href="?m=stckmanufacturerdel&id={$manufacturerinfo.id}" OnClick="return confirmLink(this, '{t name=$manufacturerinfo.name}Are you sure, you want to remove manufacturer \'$name\' from database?{/t}');">{trans("Delete")} <img src="img/delete.gif" ALT=""></A>
+                </TD>
+        </TR>
+</TABLE>

@@ -1,0 +1,19 @@
+{extends file="layout.html"}
+{block name="module_content"}
+<!--// $Id$ //-->
+<H1>{$layout.pagetitle}</H1>
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR>
+		<TD WIDTH="100%">
+			{include file="stckwarehouseinfobox.html"}
+		</TD>
+	</TR>
+</TABLE>
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR>
+		<TD WIDTH="100%">
+			{include file="stckstocklistbox.html" module="stckwarehouseinfo&id="|cat:$warehouseinfo.id}
+		</TD>
+	</TR>
+</TABLE>
+{/block}
