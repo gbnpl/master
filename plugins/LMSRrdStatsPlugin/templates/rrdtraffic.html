@@ -1,0 +1,89 @@
+{extends file="layout.html"}
+{block name=title}::: LMS :{$layout.pagetitle|striphtml} :::{/block}
+{block name=module_content}
+<!--// $Id$ //-->
+<H1>{$layout.pagetitle}</H1>
+{if $download || $upload}
+<table width="100%">
+	<tr>
+		<td class="text-center">
+			<iframe id="onlineiframe" width="100" height="10" frameborder="0" scrolling="no" src="?m=rrdtrafficgraph&type=online&nodeid=online{if $bar}&bar={$bar}{/if}{if $datefrom}&from={$datefrom}{/if}{if $dateto}&to={$dateto}{/if}&popup=1"></iframe>
+		</td>
+	</tr>
+	<tr>
+		<td class="text-center">
+			<iframe id="trafficiframe" width="100" height="10" frameborder="0" scrolling="no" src="?m=rrdtrafficgraph&type=traffic&nodeid=traffic{if $bar}&bar={$bar}{/if}{if $datefrom}&from={$datefrom}{/if}{if $dateto}&to={$dateto}{/if}&popup=1"></iframe>
+		</td>
+	</tr>
+</table>
+{/if}
+<TABLE WIDTH="100%" ALIGN="center" CELLPADDING="3">
+	<TR>
+		<TD style="vertical-align:top" WIDTH="50%">
+			<TABLE class="lmsbox">
+                            <THEAD>
+				<TR>
+					<TD align="center" COLSPAN="2">
+						<P><B>{trans("Download")}</B></P>
+					</TD>
+				</TR>
+                            </THEAD>
+                            <TBODY>
+				{section name=download loop=$download.name}
+				<TR>
+					<TD WIDTH="1%" NOWRAP>
+						<B><A HREF="?m=nodeinfo&id={$download.nodeid[download]}">{if $showips}{$download.ipaddr[download]}{else}{$download.name[download]|truncate:25:"...":true}{/if}</A></B>
+					</TD>
+					<TD CLASS="fright hand" WIDTH="99%" NOWRAP>
+						<IMG SRC="img/redpx.gif" HEIGHT="12" WIDTH="{$download.bar[download]}" BORDER="1" ALT="" {tip a=$download.nodeid[download] b=$bar c=$datefrom d=$dateto sticky=1 popup='?m=rrdtrafficgraph&type=auto&nodeid=$a&bar=$b&from=$c&to=$d'}>
+						{$download.data[download]|string_format:"%.2f"}&nbsp;{$download.unit[download]} ({$download.avg[download]|string_format:"%d"}&nbsp;kbit/s) 
+					</TD>
+				</TR>
+				{/section}
+                            </TBODY>
+                            <TFOOT>
+				<TR>
+					<TD ALIGN="center" COLSPAN="2">
+						<P><B>{trans("Total:")} {$download.sum.data|string_format:"%.2f "}{$download.sum.unit} ({$download.avgsum|string_format:"%d"}&nbsp;kbit/s)</B></P>
+					</TD>
+				</TR>
+                            </TFOOT>
+			</TABLE>
+		</TD>
+		<TD style="vertical-align:top" WIDTH="50%">
+			<TABLE class="lmsbox">
+                            <THEAD>
+				<TR>
+					<TD align="center" COLSPAN="2">
+						<P><B>{trans("Upload")}</B></P>
+					</TD>
+				</TR>
+                            </THEAD>
+                            <TBODY>
+				{section name=upload loop=$upload.name}
+				<TR>
+					<TD WIDTH="1%" NOWRAP>
+						<B><A HREF="?m=nodeinfo&id={$upload.nodeid[upload]}">{if $showips}{$upload.ipaddr[upload]}{else}{$upload.name[upload]|truncate:25:"...":true}{/if}</A></B>
+					</TD>
+					<TD CLASS="fright hand" WIDTH="99%" NOWRAP>
+						<IMG SRC="img/bluepx.gif" HEIGHT="12" WIDTH="{$upload.bar[upload]}" BORDER="1" ALT="" {tip a=$upload.nodeid[upload] b=$bar c=$datefrom d=$dateto sticky=1 popup='?m=rrdtrafficgraph&type=auto&nodeid=$a&bar=$b&from=$c&to=$d'}>
+						{$upload.data[upload]|string_format:"%.2f"}&nbsp;{$upload.unit[upload]} ({$upload.avg[upload]|string_format:"%d"}&nbsp;kbit/s) 
+					</TD>
+				</TR>
+				{/section}
+                            </TBODY>
+                            <TFOOT>
+				<TR>
+					<TD ALIGN="center" COLSPAN="2">
+						<P><B>{trans("Total:")} {$upload.sum.data|string_format:"%.2f "}{$upload.sum.unit} ({$upload.avgsum|string_format:"%d"}&nbsp;kbit/s)</B></P>
+					</TD>
+				</TR>
+                            </TFOOT>
+			</TABLE>
+		</TD>
+	</TR>
+	{if $smarty.section.download.index_next}
+	<TR><TD WIDTH="100%" COLSPAN="2" ALIGN="center">{t a=$smarty.section.download.index_next}Rows: $a{/t}</TD></TR>
+	{/if}
+</TABLE>
+{/block}

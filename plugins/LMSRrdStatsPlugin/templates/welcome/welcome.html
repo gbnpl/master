@@ -1,0 +1,38 @@
+{extends file="welcome/welcome.html"}
+{block name="extra-panel" append}
+{if !ConfigHelper::checkPrivilege('hide_summaries')}
+<table class="lmsbox">
+	<colgroup>
+		<col style="width: 50%;"></col>
+		<col style="width: 50%;"></col>
+	</colgroup>
+	<thead>
+		<tr>
+			<td colspan="2" class="text-center bold">
+				<img src="img/node.gif" alt=""> {trans("RRD Stats:")}
+			</td>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td colspan="2" class="text-center">
+				{if $online}
+				<iframe id="onlineiframe" width="100" height="10" frameborder="0" scrolling="no" src="?m=rrdtrafficgraph&type=online&nodeid=online&bar=day&popup=1"></iframe>
+				{else}
+				{trans("There is no RRD online file!")}
+				{/if}
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="text-center">
+				{if $traffic}
+				<iframe id="trafficiframe" width="100" height="10" frameborder="0" scrolling="no" src="?m=rrdtrafficgraph&type=traffic&nodeid=traffic&bar=day&popup=1"></iframe>
+				{else}
+				{trans("There is no RRD traffic file!")}
+				{/if}
+			</td>
+		</tr>
+	</tbody>
+</table>
+{/if}
+{/block}

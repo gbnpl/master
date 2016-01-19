@@ -1,0 +1,59 @@
+<html>
+<head>
+<meta name="GENERATOR" content="LMS {$layout.lmsv}">
+<meta http-equiv="Content-Language" content="{$LANGDEFS.$_ui_language.html}">
+<meta http-equiv="Content-Type" content="text/html; charset={$LANGDEFS.$_ui_language.charset}">
+<link href="{ConfigHelper::getConfig('phpui.style', 'img/style.css')}" rel="stylesheet" type="text/css">
+<title>::: LMS :::</title>
+<script type="text/javascript" src="img/common.js"></script>
+<script type="text/javascript">
+<!--
+	function moveGraphByTime(dtime, bar) {
+		document.getElementById('bar').value = bar;
+		document.getElementById('add').value = parseInt(document.getElementById('add').value) + dtime;
+		document.getElementById('graph{$type}').src = '?m=rrdtrafficgraph&type={$type}&nodeid={$nodeid}&bar=' + bar + '{if $from}&from={$from}{/if}{if $to}&to={$to}{/if}'
+			+ '&add=' + document.getElementById('add').value + '&ts={$smarty.now}';
+	}
+//-->
+</script>
+</head>
+<body style="text-align: center; margin: 0">
+	<form name="params"><input type="hidden" name="add" id="add" value="{if $add}{$add}{else}0{/if}"></form>
+	<input type="hidden" name="bar" id="bar" value="{$bar}">
+	<img id="graph{$type}" src="?m=rrdtrafficgraph&type={$type}&nodeid={$nodeid}&bar={$bar}{if $from}&from={$from}{/if}{if $to}&to={$to}{/if}{if $add}&add={$add}{/if}&ts={$smarty.now}" width="{$smarty.const.GRAPH_WIDTH}" height="{$smarty.const.GRAPH_HEIGHT}" alt="">
+	<div style="height: 16px; margin-top: 3px; font-weight: bold">
+		&laquo;&nbsp;
+		<a href="javascript:moveGraphByTime(-2592000, document.getElementById('bar').value)">1m</a>&nbsp;
+		<a href="javascript:moveGraphByTime(-604800, document.getElementById('bar').value)">1w</a>&nbsp;
+		<a href="javascript:moveGraphByTime(-86400, document.getElementById('bar').value)">1d</a>&nbsp;
+		<a href="javascript:moveGraphByTime(-43200, document.getElementById('bar').value)">12h</a>&nbsp;
+		<a href="javascript:moveGraphByTime(-21600, document.getElementById('bar').value)">6h</a>&nbsp;
+		<a href="javascript:moveGraphByTime(-3600, document.getElementById('bar').value)">1h</a>&nbsp;
+		|&nbsp;
+		<a href="javascript:moveGraphByTime(3600, document.getElementById('bar').value)">1h</a>&nbsp;
+		<a href="javascript:moveGraphByTime(21600, document.getElementById('bar').value)">6h</a>&nbsp;
+		<a href="javascript:moveGraphByTime(43200, document.getElementById('bar').value)">12h</a>&nbsp;
+		<a href="javascript:moveGraphByTime(86400, document.getElementById('bar').value)">1d</a>&nbsp;
+		<a href="javascript:moveGraphByTime(604800, document.getElementById('bar').value)">1w</a>&nbsp;
+		<a href="javascript:moveGraphByTime(2592000, document.getElementById('bar').value)">1m</a>&nbsp;
+		&raquo;
+		&nbsp;&nbsp;
+		{trans("<!rrdstats>Range:")}
+		<select name="range" onchange="javascript:moveGraphByTime(0, this.options[this.selectedIndex].value);">
+			<option value="hour"{if $bar == 'hour'} selected{/if}>{trans("hour")}</option>
+			<option value="3hours"{if $bar == '3hours'} selected{/if}>{trans("3 hours")}</option>
+			<option value="6hours"{if $bar == '6hours'} selected{/if}>{trans("6 hours")}</option>
+			<option value="halfday"{if $bar == 'halfday'} selected{/if}>{trans("halfday")}</option>
+			<option value="day"{if $bar == 'day'} selected{/if}>{trans("day")}</option>
+			<option value="week"{if $bar == 'week'} selected{/if}>{trans("week")}</option>
+			<option value="month"{if $bar == 'month'} selected{/if}>{trans("month")}</option>
+		</select>
+	</div>
+<script type="text/javascript">
+<!--
+var graph = document.getElementById('graph{$type}');
+autoiframe_setsize('{$type}iframe', graph.offsetWidth, graph.offsetHeight + 19);
+//-->
+</script>
+</body>
+</html>

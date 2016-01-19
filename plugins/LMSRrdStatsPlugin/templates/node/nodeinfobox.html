@@ -1,0 +1,44 @@
+{extends file="node/nodeinfobox.html"}
+{block name="nodeinfobox-rightcolumn" append}
+{if $rrdstats}
+<TR>
+	<TD style="width: 1%;">
+		<IMG SRC="img/traffic.gif" ALT="">
+	</TD>
+	<TD style="width: 99%;" class="nobr" COLSPAN="2">
+		<span class="bold">{trans("RRD Traffic stats from last (download/upload):")}</span>
+	</TD>
+</TR>
+<TR>
+	<TD style="width: 1%;"></TD>
+	<TD style="width: 99%; white-space: nowrap;" COLSPAN="2">
+		<TABLE style="width: 100%;" cellpadding="3">
+			<TR>
+				<TD style="width: 1%; white-space: nowrap;">
+					<A HREF="javascript:popup('?m=rrdtrafficgraph&type=auto&nodeid={$nodeinfo.id}&bar=hour',1,1,10,10)"><span class="bold">{trans("hour:")}</span></A>
+				</TD>
+				<TD style="width: 99%; white-space: nowrap;">
+					{$rrdstats.hour.download.data|string_format:"%.2f"} {$rrdstats.hour.download.units} ({$rrdstats.hour.downavg|string_format:"%d"} kbit/s) / {$rrdstats.hour.upload.data|string_format:"%.2f"} {$rrdstats.hour.upload.units} ({$rrdstats.hour.upavg|string_format:"%d"} kbit/s) 
+				</TD>
+			</TR>
+			<TR>
+				<TD style="width:1%; white-space: nowrap;">
+					<A HREF="javascript:popup('?m=rrdtrafficgraph&type=auto&nodeid={$nodeinfo.id}&bar=day',1,1,10,10)"><span class="bold">{trans("24 hour:")}</span></A>
+				</TD>
+				<TD style="width: 99%; white-space: nowrap;">
+					{$rrdstats.day.download.data|string_format:"%.2f"} {$rrdstats.day.download.units} ({$rrdstats.day.downavg|string_format:"%d"} kbit/s) / {$rrdstats.day.upload.data|string_format:"%.2f"} {$rrdstats.day.upload.units} ({$rrdstats.day.upavg|string_format:"%d"} kbit/s)
+				</TD>
+			</TR>
+			<TR>
+				<TD style="width: 1%; white-space: nowrap;">
+					<A HREF="javascript:popup('?m=rrdtrafficgraph&type=auto&nodeid={$nodeinfo.id}&bar=month',1,1,10,10)"><span class="bold">{trans("30 days:")}</span></A>
+				</TD>
+				<TD style="width: 99%; white-space: nowrap;">
+					{$rrdstats.month.download.data|string_format:"%.2f"} {$rrdstats.month.download.units} ({$rrdstats.month.downavg|string_format:"%d"} kbit/s) / {$rrdstats.month.upload.data|string_format:"%.2f"} {$rrdstats.month.upload.units} ({$rrdstats.month.upavg|string_format:"%d"} kbit/s)
+				</TD>
+			</TR>
+		</TABLE>
+	</TD>
+</TR>
+{/if}
+{/block}
