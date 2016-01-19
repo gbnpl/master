@@ -1,0 +1,615 @@
+--
+-- she-mplspw-mib.mib
+-- handmade :-(
+--
+
+	DS-SHE-MPLSPW-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS
+			she			
+				FROM AN-MIB
+			dsShe
+				FROM DASAN-SMI							
+			ifIndex			
+				FROM IF-MIB			
+			sheAlarmTimeAndDate, sheAlarmReportingSource, sheAlarmReportingSourceType, sheAlarmSeverity, SheAlarmSevProfileIndex			
+				FROM DS-SHE-ALARMING-MIB			
+			SheControlStatusType			
+				FROM DS-SHE-TC-MIB			
+			OBJECT-GROUP, MODULE-COMPLIANCE, NOTIFICATION-GROUP			
+				FROM SNMPv2-CONF			
+			TimeTicks, Unsigned32, Gauge32, OBJECT-TYPE, MODULE-IDENTITY, 
+			NOTIFICATION-TYPE			
+				FROM SNMPv2-SMI			
+			DisplayString			
+				FROM SNMPv2-TC;
+	
+	
+		sheMplsPwMib MODULE-IDENTITY 
+			LAST-UPDATED "200801311120Z"		-- January 31, 2008 at 11:20 GMT
+			ORGANIZATION 
+				"Nokia Siemens Networks"
+			CONTACT-INFO 
+				"Yang Xu
+				Com CD/FN RDC BJ
+				yang.xu@siemens.com
+				+0086 58671204
+				
+				
+				Gerd Barchmann
+				COO BBA DSLAM RD HW1
+				gerd.barchmann@nsn.com"
+			DESCRIPTION 
+				"This MIB contains all needed informations about shePots module and
+				all supported features."
+			REVISION "200605151632Z"		-- May 15, 2006 at 16:32 GMT
+			DESCRIPTION 
+				"new she pots mib"
+			REVISION "200608221003Z"		-- August 22, 2006 at 10:03 GMT
+			DESCRIPTION 
+				"Merge done to SHE R2.5 by Gerd Barchmann."
+			REVISION "200705081528Z"		-- May 08, 2007 at 15:28 GMT
+			DESCRIPTION 
+				"Merge current R2.0M maintenance release to SHE R2.5.2.
+				This version is not backward compatible to SHE R2.5.1."
+			REVISION "200709121105Z"		-- September 12, 2007 at 11:05 GMT
+			DESCRIPTION 
+				"Merge APS38 release of R2.0M version.
+				Add highfeedcoinbox(3) into ShePotsPptpProfilePortPotsTypeType.
+				Add new leaf shePotsPptpProfileCid and shePotsPptpProfileControlCid. Define new type ShePotsPptpProfileCidType for it.
+				shePotsAnalogIfProfileCid and shePotsAnalogIfProfileControlCid are removed
+				Add ipHostProtection(38) into ShePotsControlRequestResultType.
+				Add 3ElementCapacitanceTest(52) Must:shePotsConfigControlIfIndexBitMask	into shePotsConfigControlRequest description.
+				Add 3ElementCapacitanceTest(52) into ShePotsControlRequestType.
+				Add shePotsAnalogIfProfileHookoffMin and shePotsAnalogIfProfileControlHookoffMin.
+				Add fault(19) into ShePotsConfigPortStatusType.
+				Add one new entry shePotsPptpProfilePortPotsLineType into shePotsPptpProfileTable.
+				Add ShePotsPptpProfilePortPotsLineTypeType.
+				Add new PortStatus item: threeElementCapacitancetest.
+				Add new items in ReqResultType (38~43).
+				Modify shePotsAnalogIfProfileControlMeteringPulseInterval (20~65530. DEFVAL 20).
+				Add testringstart and threeElementCapacitanceTest into shePotsConfigLastTest."
+			REVISION "200710231140Z"		-- October 23, 2007 at 11:40 GMT
+			DESCRIPTION 
+				"Add SIP support for R2.6S and R2.8."
+			REVISION "200801311110Z"		-- January 31, 2008 at 11:10 GMT
+			DESCRIPTION 
+				"Small descriptional correction.
+				Add register information for SIP user."
+			::= { dsShe 50 }
+
+		
+	
+--
+-- Type definitions
+--
+	
+	
+	
+--
+-- Node definitions
+--
+	
+		shePseudoWireObjects OBJECT IDENTIFIER ::= { sheMplsPwMib 2 }
+
+
+		
+		shePwVpTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF ShePwVpEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"."
+			::= { shePseudoWireObjects 1 }
+				
+		shePwVpEntry OBJECT-TYPE
+			SYNTAX ShePwVpEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"."
+			INDEX {shePwVpId, shePwVpOltPwId  }
+			::= { shePwVpTable 1 }
+
+		
+		ShePwVpEntry ::=
+			SEQUENCE { 
+			     shePwVpId
+			     	Unsigned32,
+			     shePwVpOltPwId
+			     	Integer32,
+			     shePwVpState
+			     	INTEGER,
+			     shePwVpOntPwId
+			     	Unsigned32,
+			     shePwVpTunnelId
+			     	Unsigned32,
+			     shePwVpAtmConnId
+			     	Unsigned32,
+			     shePwVpBindHandle
+			     	Unsigned32,
+			     shePwVpRxInnerLabel
+			     	Unsigned32,
+			     shePwVpTxInnerLabel
+			     	Unsigned32,
+			     shePwVpTxOuterLabel
+			     	Unsigned32,
+			     shePwVpTransportType
+			     	INTEGER,
+			     shePwVpPwType
+			     	INTEGER,
+			     shePwVpTimoutMode
+			     	INTEGER,   
+			     shePwVpTimeoutValue
+			     	Unsigned32,
+			     shePwVpUpShaping
+			     	INTEGER,
+			     shePwVpDownShaping
+			     	INTEGER,
+			     shePwVpIsOverridingVpi
+			     	Integer32,       
+			     shePwVpNEMaxcellConcat
+			     	Integer32,
+			     shePwVpFEMaxcellConcat
+			     	Integer32,     
+			     shePwVpDstMacAddress
+			     	OCTET STRING,
+			     shePwVpOuterLabelTTL
+			     	INTEGER,
+			     shePwVpEnableCtrlWord
+			     	INTEGER,
+			     shePwVpCCSelected
+			     	INTEGER,
+			     shePwVpCVSelected
+			     	INTEGER,
+			     shePwVpSrcAddr
+			     	OCTET STRING,
+			     shePwVpDestAddr
+			     	OCTET STRING,
+			     shePwVpNetworkAddr
+			     	OCTET STRING,
+			     shePwVpFlowType
+			     	INTEGER,
+			     shePwVpOAMStatus
+			     	INTEGER   	
+			 }
+
+		shePwVpId OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Virtual path identifier - Upstream PW mapping key field "
+			::= { shePwVpEntry 1 }
+
+			     
+		shePwVpOltPwId OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"PW id assighned by OLT"
+			::= { shePwVpEntry 2 }
+			     				
+			     				
+	    shePwVpState  OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				 active(1),
+				 standby(2)
+				}
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"PW redundancy purpose"
+			::= { shePwVpEntry 3 }
+			     			    
+		shePwVpOntPwId  OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Assighned by ONT after pseudo-wire addition"
+			::= { shePwVpEntry 4 }
+
+		    
+		shePwVpTunnelId  OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Assighned by ONT after pseudo-wire addition"
+			::= { shePwVpEntry 5 }
+
+	    shePwVpAtmConnId OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Assighned by FPI after tunnel addition"
+			::= { shePwVpEntry 6 }
+			     	
+		shePwVpBindHandle OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Handle returned after binding pseudo-wire and ATM connection"
+			::= { shePwVpEntry 7 }
+
+		shePwVpRxInnerLabel OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Upstream PW Label (from ATM to PSN)"
+			::= { shePwVpEntry 8 }
+			     			    
+	    shePwVpTxInnerLabel OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Downstream PW label (from PSN to ATM)"
+			::= { shePwVpEntry 9 }
+			     	
+		shePwVpTxOuterLabel OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Extended tunnel LSP to ONT "
+			::= { shePwVpEntry 10 }
+			     
+		shePwVpTransportType OBJECT-TYPE
+			SYNTAX INTEGER 
+				{
+			    others(0),
+				mpls(1)
+				}
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Now we are using only MPLS PW type"
+			::= { shePwVpEntry 11 }
+			     	
+		shePwVpPwType OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				others(0),
+				nto1vpc(1)
+				}
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Now we are supporting Nto1 VPC."
+			::= { shePwVpEntry 12 }
+			     	
+		shePwVpTimoutMode OBJECT-TYPE
+			SYNTAX INTEGER 
+				{
+				enable(1),
+				disable(2)
+				}
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"This objects determines whether a packet can be transmitted to the PSN 
+				based on time out expiration for collecting cells or not. "
+			::= { shePwVpEntry 13 }
+			        
+		shePwVpTimeoutValue OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Maximum time out value for cell-packing - MCPT timer"
+			::= { shePwVpEntry 14 }
+			     	
+		shePwVpUpShaping OBJECT-TYPE
+			SYNTAX INTEGER
+				{ 
+				 perVpUpstreamOnly(1),
+				 perVpAndPerVcWithPriority(2),
+				 perVpAndPerVcWithTrafficCtrl(3)				
+				}
+					
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Shaping mode of Upstream"
+			::= { shePwVpEntry 15 }
+			     	
+		shePwVpDownShaping OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				perVpDownstreamOnly(1),
+				perVpAndPerExpWithPriority(2),
+				perVpAndPerExpWithTrafficCtrl(3),
+				perVpAndPerVccWithPriorityCtrl(4),
+				perVpAndPerVccWithTrafficCtrl(5)				
+				}
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Shaping mode of Downstream "
+			::= { shePwVpEntry 16 }
+			     	
+		shePwVpIsOverridingVpi OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"."
+			::= { shePwVpEntry 17 }
+			     	       
+		shePwVpNEMaxcellConcat OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"The maximum number of ATM cells that can be concatenated into one PW packet towards PSN. "
+			::= { shePwVpEntry 18 }
+
+			     	
+		shePwVpFEMaxcellConcat OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"The maximum number of ATM cells that can be concatenated into one PW packet 
+				towards PSN as reported by the far end. "
+			::= { shePwVpEntry 19 }
+
+			     	     
+		shePwVpDstMacAddress OBJECT-TYPE
+			SYNTAX OCTET STRING
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVpEntry 20 }
+
+		shePwVpOuterLabelTTL OBJECT-TYPE
+			SYNTAX INTEGER   
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVpEntry 21 }
+			     	
+		shePwVpEnableCtrlWord OBJECT-TYPE
+			SYNTAX INTEGER   
+				{
+				enable(1),
+				disable(2)
+				}
+
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVpEntry 22 }
+			     	
+		shePwVpCCSelected OBJECT-TYPE
+			SYNTAX INTEGER  
+				{
+				controlWord(1),
+				routerAlert(2),
+				pwTtl1(3)
+				}
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"CC selected for the particular PW"
+			::= { shePwVpEntry 23 }
+			     	
+		shePwVpCVSelected  OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				icmpPing(1),
+				lspPing(2)
+				}
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"CV selected for the particular PW"
+			::= { shePwVpEntry 24 }
+			     	
+		shePwVpSrcAddr  OBJECT-TYPE
+			SYNTAX OCTET STRING
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Self loop back address of OLT"
+			::= { shePwVpEntry 25 }
+			     	
+		shePwVpDestAddr  OBJECT-TYPE
+			SYNTAX OCTET STRING
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Targetted peer address for particular PW"
+			::= { shePwVpEntry 26 }
+			     	
+		shePwVpNetworkAddr  OBJECT-TYPE
+			SYNTAX OCTET STRING
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Interface address of OLT"
+			::= { shePwVpEntry 27 }
+			     	
+		shePwVpFlowType OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				f4EteOamFlow(1),
+				f4SegOamFlow(2),
+				f4SegEteOamFlow(3)
+				}
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"This object determines the flow type of the connection configured for the pseudowire.
+				It can be End-to-End flow type,Segment flow type or both the flow types are supported"
+			::= { shePwVpEntry 28 }
+			     
+		shePwVpOAMStatus OBJECT-TYPE
+			SYNTAX INTEGER
+				{
+				enable(1),
+				disable(2)
+				}
+
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"This objects determines whether OAM is enabled or disabled."
+			::= { shePwVpEntry 29 }
+			     	  		
+		
+		shePwVcTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF ShePwVcEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"."
+			::= { shePseudoWireObjects 2 }
+				
+		shePwVcEntry OBJECT-TYPE
+			SYNTAX ShePwVcEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"."
+			INDEX {shePwVpId, shePwVcId  }
+			::= { shePwVcTable 1 }
+
+		
+		ShePwVcEntry ::=
+			SEQUENCE { 			     
+				shePwVcId
+			     	Integer32,
+			    shePwVcShapingBand
+			    	Unsigned32,
+			    shePwVcServiceType
+			    	INTEGER,
+			    shePwVcPcr
+			    	Unsigned32,
+			    shePwVcScr
+			    	Unsigned32,
+			    shePwVcMbs
+			    	Unsigned32,
+			    shePwVcCdvt
+			    	Unsigned32,
+			    shePwVcExp
+			    	Integer32,
+			    shePwVcQoSid
+			    	Integer32,
+			    shePwVcConnId
+			    	Unsigned32,
+			    shePwVcBindHandle
+			    	Unsigned32
+		    }
+	    
+		shePwVcId OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 1 }
+	    
+	    shePwVcShapingBand OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 2 }
+	    
+	    shePwVcServiceType OBJECT-TYPE	    
+			SYNTAX INTEGER
+				{ 				
+				cbr(1),
+				vbr(2),
+				nrtVbr(3),
+				abr(4),
+				ubr(5)
+				}
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 3 }
+	    
+	    shePwVcPcr OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 4 }
+ 
+	    shePwVcScr OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 5 }    
+			
+	    shePwVcMbs OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 6 }   
+			
+	    shePwVcCdvt OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 7 } 
+			
+		shePwVcExp OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 8 }     
+			
+	    shePwVcQoSid OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 9 }
+			
+	    shePwVcConnId OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 10 }  
+			
+	    shePwVcBindHandle OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				""
+			::= { shePwVcEntry 11 }   
+						    
+	    
+	END
+
+--
+-- she-pots-mib.mib
+--

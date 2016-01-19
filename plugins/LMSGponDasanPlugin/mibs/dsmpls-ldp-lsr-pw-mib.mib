@@ -1,0 +1,648 @@
+DSMPLS-LDP-LSR-PW-MIB DEFINITIONS ::= BEGIN
+
+   IMPORTS
+      MODULE-IDENTITY, OBJECT-TYPE,
+      Integer32,Counter32, Unsigned32, mib-2
+            FROM SNMPv2-SMI
+
+      MODULE-COMPLIANCE, OBJECT-GROUP
+            FROM SNMPv2-CONF
+
+      TruthValue, RowStatus, RowPointer
+            FROM SNMPv2-TC
+
+      SnmpAdminString 
+         FROM SNMP-FRAMEWORK-MIB            -- [RFC3411]
+
+      InterfaceIndex,InterfaceIndexOrZero
+            FROM IF-MIB
+
+      InetAddress
+            FROM INET-ADDRESS-MIB
+
+     pwIndex
+           FROM PW-STD-MIB
+
+     mplsInterfaceIndex 
+            FROM MPLS-LSR-STD-MIB
+            
+     dasanEvents,dasanMgmt,dasanModules
+           FROM DASAN-SMI 
+           
+    dasanSwitchMIBObjects,dsSwitchModules
+		   FROM DASAN-SWITCH-MIB;
+  
+
+     dsMplsLdpStdMIB MODULE-IDENTITY
+         LAST-UPDATED "200406030000Z"  -- June 3, 2004
+         ORGANIZATION "Multiprotocol Label Switching (mpls) Working Group"
+         CONTACT-INFO
+
+             "Joan Cucchiara (jcucchiara@mindspring.com)
+              Marconi Communications, Inc.
+              Hans Sjostrand (hans@ipunplugged.com)
+              ipUnplugged
+              James V. Luciani (james_luciani@mindspring.com)
+              Marconi Communications, Inc.
+              Working Group Chairs:
+              George Swallow,   email: swallow@cisco.com
+              Loa Andersson,    email: loa@pi.se
+              MPLS Working Group, email: mpls@uu.net"
+
+         DESCRIPTION
+             "Copyright (C) The Internet Society (2004). The
+             initial version of this MIB module was published
+             in RFC 3815. For full legal notices see the RFC
+             itself or see:
+             http://www.ietf.org/copyrights/ianamib.html
+
+             This MIB contains managed object definitions for the
+             'Multiprotocol Label Switching, Label Distribution
+             Protocol, LDP' document."
+         REVISION "200406030000Z"  -- June 3, 2004
+         DESCRIPTION
+            "Initial version published as part of RFC 3815."
+
+         ::= { dsSwitchModules 28 }
+
+     --****************************************************************
+
+     dsMplsLdpLsrNotifications OBJECT IDENTIFIER ::= { dsMplsLdpStdMIB 0 }
+     dsMplsLdpLsrObjects       OBJECT IDENTIFIER ::= { dsMplsLdpStdMIB 1 }
+     dsMplsLdpLsrConformance   OBJECT IDENTIFIER ::= { dsMplsLdpStdMIB 2 }
+
+     --****************************************************************
+     -- MPLS LDP LSR Objects
+     --****************************************************************
+
+   dsMplsLdpObjects        OBJECT IDENTIFIER ::= { dsMplsLdpLsrObjects 1 }
+   
+   dsMplsLsrObjects        OBJECT IDENTIFIER ::= { dsMplsLdpLsrObjects 2 }
+
+   dsMplsPwObjects         OBJECT IDENTIFIER ::= { dsMplsLdpLsrObjects 3 }
+
+     --
+     -- The MPLS Label Distribution Protocol's
+     -- Label Switching Router Objects
+     --
+
+-- MPLS LDP Scalars
+
+     dsMplsLdpRouterLdp OBJECT-TYPE
+         SYNTAX     INTEGER { enable(1), disable(0) } 
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+		"This Object is used to perform any LDP operations. Without this object,
+                 the Lsr can not perform any LDP operations such as sending Ldp hello packets."
+
+         ::= { dsMplsLdpObjects 1}
+
+     dsMplsLdpControlMode OBJECT-TYPE
+         SYNTAX     INTEGER { ordered(0), independent(1) } 
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "The lable processing can be set by using this object. 
+              The control mode can be set as either ordered or independent." 
+
+         DEFVAL  {independent}
+         ::= { dsMplsLdpObjects 2 }
+
+     dsMplsLdpExplicitNull OBJECT-TYPE
+         SYNTAX     INTEGER { enable(1), disable(0) } 
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "This object is used to configure the router 
+              to send explicit-null labels for directly 
+              connected FECs instead of implicit-null labels."
+
+         DEFVAL  {disable}
+         ::= { dsMplsLdpObjects 3 }
+
+     dsMplsLdpGlobalMergeCapability OBJECT-TYPE
+         SYNTAX     INTEGER { merge-capable(0), non-merge-capable(1) } 
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "The merge capability aggregates multiple incoming flows 
+              with the same destination address into a single outgoing flow. 
+              This reduces the label-space shortage by sharing labels for 
+              different flows with the same destination, or the same FEC." 
+
+         DEFVAL  {merge-capable}
+         ::= { dsMplsLdpObjects 4 }
+
+     dsMplsLdpHelloInterval OBJECT-TYPE
+         SYNTAX     Unsigned32 (1..21845)
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "This object is used to set the interval after which 
+              hello packets are sent out. The unit of hello interval value 
+              is in seconds"
+
+         DEFVAL  {5}
+         ::= { dsMplsLdpObjects 5 }
+
+     dsMplsLdpKeepAliveInterval OBJECT-TYPE
+         SYNTAX     Unsigned32 (10..21845)
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "This object is used to set the global value of the interval 
+              after which keep-alive packets are sent out. The unit of 
+              keep alive interval value is in seconds" 
+
+         DEFVAL  {10}
+         ::= { dsMplsLdpObjects 6 }
+
+
+     dsMplsLdpMulticastHellos OBJECT-TYPE
+         SYNTAX     INTEGER { enable(1), disable(0) } 
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "This object enables multicast hello exchange on all interfaces 
+              enabled for LDP. This is used for auto-discovery of LDP peers 
+              on directly connected networks." 
+
+         DEFVAL  {enable}
+         ::= { dsMplsLdpObjects 7 }
+
+     dsMplsLdpPwStatusTlv OBJECT-TYPE				
+         SYNTAX     INTEGER { enable(1), disable(0) } 
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "This object enables the use of the PW Status TLV to signal 
+              the pseudowire status." 
+
+         DEFVAL  {enable}
+         ::= { dsMplsLdpObjects 8 }
+
+     dsMplsLdpRequestRetry OBJECT-TYPE 				
+         SYNTAX     INTEGER { enable(1), disable(0) } 
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "This object enables the retry of requests, once a request 
+              for a label has been rejected for a valid reason. The LSR 
+              to send a maximum of five label requests if a label request 
+              is rejected by an LDP peer."
+
+         DEFVAL  {disable}
+         ::= { dsMplsLdpObjects 9 }
+
+     dsMplsLdpRequestRetryTimeout OBJECT-TYPE
+         SYNTAX     Unsigned32 (1..65535)
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "This object is used to set the value for the interval between retries. 
+              Before this time is over, a request is re-sent to a peer.  The unit of 
+              request retry timeout value is in seconds." 
+
+         DEFVAL  {5}
+         ::= { dsMplsLdpObjects 10 }
+
+     dsMplsLdpRouterId OBJECT-TYPE 		
+         SYNTAX      InetAddress 
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "This object is used to set the router-id to the supplied IP address. 
+              The router uses this address to generate the LDP-ID." 
+
+         ::= { dsMplsLdpObjects 11 }
+
+     dsMplsLdpTargetedPeerHelloInterval OBJECT-TYPE
+         SYNTAX     Unsigned32 (1..21845)
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "This object is used to set the interval for sending unicast hello 
+              packets to targeted peers.  The unit of targeted peer hello interval 
+              value is in seconds"
+
+         DEFVAL  {15}
+         ::= { dsMplsLdpObjects 12 }
+
+
+     dsMplsLdpTargetedPeerHoldTime OBJECT-TYPE
+	 SYNTAX     Unsigned32 (3..65535)
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "The time that the router waits before rejecting an  
+              adjacency with targeted peers."
+         DEFVAL  {45}
+
+         ::= { dsMplsLdpObjects 13 }
+
+     dsMplsLdpPropagateRelease OBJECT-TYPE
+	 SYNTAX      INTEGER { enable(1), disable(0) }
+         MAX-ACCESS  read-write
+         STATUS      current
+         DESCRIPTION
+             "This is used to propagate the release of labels to downstream routers."
+
+         ::= { dsMplsLdpObjects 14 }
+
+-- End of LDP Scalars
+
+-- MPLS LDP Interface Config Table
+
+     dsMplsLdpInterfaceConfigTable OBJECT-TYPE
+         SYNTAX      SEQUENCE OF DSMplsLdpInterfaceConfEntry
+         MAX-ACCESS  not-accessible
+         STATUS      current
+         DESCRIPTION
+             "This table contains the information of LDP configuration 
+              specific to an interface in the Label Switching Router (LSR) 
+              or Label Edge Router (LER)."
+
+          ::= { dsMplsLdpObjects 15 }
+
+     
+     dsMplsLdpInterfaceConfEntry OBJECT-TYPE
+          SYNTAX      DSMplsLdpInterfaceConfEntry
+          MAX-ACCESS  not-accessible
+          STATUS      current
+          DESCRIPTION
+              "An entry in this table represents an infromation of LDP 
+               configuration parameters which are specific to an interface 
+               in the LSR(Label Switching Router).  An entry can be created 
+               by a network administrator or by an SNMP agent."
+
+          INDEX       {  dsMplsLdpInterfaceIndex  }
+          ::= { dsMplsLdpInterfaceConfigTable 1 }
+
+      DSMplsLdpInterfaceConfEntry ::= SEQUENCE {
+          dsMplsLdpInterfaceIndex              InterfaceIndexOrZero,
+          dsMplsLdpInterfacefEnaLdp 	       INTEGER,
+          dsMplsLdpInterfaceAdvtMode           INTEGER,
+          dsMplsLdpInterfaceRetentionMode      INTEGER,
+          dsMplsLdpInterfaceHelloInterval      INTEGER,
+          dsMplsLdpInterfaceHoldTime           INTEGER,
+          dsMplsLdpInterfaceKeepAliveInterval  INTEGER,
+          dsMplsLdpInterfaceKeepAliveTimeOut   INTEGER,
+          dsMplsLdpInterfaceMulticastHello     INTEGER,
+          dsMplsLdpInterfaceTargetPeerHelloInt INTEGER,
+          dsMplsLdpInterfaceTargetPeerHoldTime INTEGER
+	}
+
+      dsMplsLdpInterfaceIndex OBJECT-TYPE
+          SYNTAX       InterfaceIndexOrZero 
+          MAX-ACCESS   not-accessible
+          STATUS       current
+          DESCRIPTION
+              "This specifies the index for the LDP Interface."
+
+         ::= { dsMplsLdpInterfaceConfEntry 1 }
+
+      dsMplsLdpInterfacefEnaLdp OBJECT-TYPE
+          SYNTAX       INTEGER { enable(1), disable(0) } 
+          MAX-ACCESS   read-write 
+          STATUS       current
+          DESCRIPTION
+              "This is used to enable/disable LDP on a specified interface."
+
+         ::= { dsMplsLdpInterfaceConfEntry 2 }
+
+
+     dsMplsLdpInterfaceAdvtMode OBJECT-TYPE
+          SYNTAX       INTEGER { 
+                                 down-stream-on-demand(1), 
+                                 down-stream-unsolicited(0) 
+              	               } 
+          MAX-ACCESS   read-write 
+          STATUS       current
+          DESCRIPTION
+              "This is used to set the label advertisement mode for an 
+               interface for the current LSR to either 
+               downstream-on-demand (label is sent only when requested)
+               or downstream-unsolicited (label is sent unrequested)."
+
+         ::= { dsMplsLdpInterfaceConfEntry 3 }
+
+
+     dsMplsLdpInterfaceRetentionMode OBJECT-TYPE
+          SYNTAX       INTEGER { 
+                                 conservative(1), 
+                                 liberal(2) 
+              	               } 
+          MAX-ACCESS   read-write 
+          STATUS       current
+          DESCRIPTION
+              "This is used to set the label retention mode to be used 
+               for all labels exchanged via the given interface to either 
+               conservative (delete unused labels and FEC)
+               or liberal (retain all labels regardless of use)."
+
+         ::= { dsMplsLdpInterfaceConfEntry 4 }
+
+
+     dsMplsLdpInterfaceHelloInterval OBJECT-TYPE
+          SYNTAX      INTEGER (1..21845) 
+          MAX-ACCESS  read-write 
+          STATUS      current
+          DESCRIPTION
+              "This is used to set the interval for sending multicast
+               hello packets via an interface."
+
+         DEFVAL  {5}
+         ::= { dsMplsLdpInterfaceConfEntry 5 }
+
+     dsMplsLdpInterfaceHoldTime OBJECT-TYPE
+          SYNTAX      INTEGER (3..65535) 
+          MAX-ACCESS  read-write 
+          STATUS      current
+          DESCRIPTION
+              "This is used to set the hold-time value after which
+               the LSR rejects adjacencies.This is an interface specific 
+               command and overrides the value set for an LSR using the 
+               global hold-time command."
+
+         DEFVAL  {15}
+         ::= { dsMplsLdpInterfaceConfEntry 6 }
+
+     dsMplsLdpInterfaceKeepAliveInterval OBJECT-TYPE
+          SYNTAX      INTEGER (10..21845)
+          MAX-ACCESS  read-write
+          STATUS      current
+          DESCRIPTION
+              "This is used to set the interval for sending keep-alive
+               messages to the peer inorder to maintain a session.Each 
+               LSR must send keep-alive messages at regular intervals 
+               to its LDP peers to keep the session active.The keep-alive
+               interval determines the time-interval between successive 
+               keep-alive messages."
+
+         DEFVAL  {10}
+         ::= { dsMplsLdpInterfaceConfEntry 7 }
+
+
+    dsMplsLdpInterfaceKeepAliveTimeOut OBJECT-TYPE	
+          SYNTAX      INTEGER (30..65535)
+          MAX-ACCESS  read-write
+          STATUS      current
+          DESCRIPTION
+              "This is used to set the keep-alive time-out value for rejecting 
+               a session with the peer. This sets the time period for which an 
+               LSR must wait for successive keep-alive messages from LDP peers.
+               The keep-alive timer is reset every time a keep alive packet 
+               is received from the peer. The unit of the value is in seconds"
+
+         DEFVAL  {30}
+         ::= { dsMplsLdpInterfaceConfEntry 8 }
+
+
+     dsMplsLdpInterfaceMulticastHello OBJECT-TYPE	
+          SYNTAX      INTEGER { enable(1), disable(0) }
+          MAX-ACCESS  read-write
+          STATUS      current
+          DESCRIPTION
+              "This is used to enable multicast hello exchange on a specified interface."
+
+         DEFVAL  {enable}
+         ::= { dsMplsLdpInterfaceConfEntry 9 }
+
+
+     dsMplsLdpInterfaceTargetPeerHelloInt OBJECT-TYPE
+          SYNTAX      INTEGER (1..21845) 
+          MAX-ACCESS  read-write
+          STATUS      current
+          DESCRIPTION
+              "This is used to set an interval for sending unicast hello packets to
+               targeted-peers via the interface. The targeted-hello is sent to the 
+               specific address. The unit of the value is in seconds."
+
+         DEFVAL { 15 } 
+         ::= { dsMplsLdpInterfaceConfEntry 10 }
+
+     dsMplsLdpInterfaceTargetPeerHoldTime OBJECT-TYPE
+          SYNTAX      INTEGER (3..65535) 
+          MAX-ACCESS  read-write
+          STATUS      current
+          DESCRIPTION
+              "This is used to set the time-out value that is the time that the router
+               waits before rejecting an adjacency with the targeted-peer.  The timer is 
+               reset everytime a targeted hello packet is received from the targeted peer.
+               The unit of the value is in seconds."
+
+         DEFVAL { 45 }
+         ::= { dsMplsLdpInterfaceConfEntry 11 }
+
+
+-- END OF MPLS LDP Interface Config Table
+
+-- MPLS LDP Avertise Label Acl Table
+
+     dsMplsLdpAdvtLabelTable OBJECT-TYPE
+         SYNTAX      SEQUENCE OF DSMplsLdpAdvtLabelEntry
+         MAX-ACCESS  not-accessible
+         STATUS      current
+         DESCRIPTION
+             "This table contains the information of controlling the LDP 
+              label advertisement by prefix acl and peer acl."
+
+          ::= { dsMplsLdpObjects 16 }
+
+     
+     dsMplsLdpAdvtLabelEntry OBJECT-TYPE
+          SYNTAX      DSMplsLdpAdvtLabelEntry
+          MAX-ACCESS  not-accessible
+          STATUS      current
+          DESCRIPTION
+              "An entry in this table represents an infromation of 
+               LDP label advertisement for prefix acl and peer acl." 
+
+          INDEX       {  dsMplsLdpPrefixAcl, 
+                         dsMplsLdpPeerAcl }
+          ::= { dsMplsLdpAdvtLabelTable 1 }
+
+     DSMplsLdpAdvtLabelEntry ::= SEQUENCE {
+          dsMplsLdpPrefixAcl             OCTET STRING,
+          dsMplsLdpPeerAcl               OCTET STRING,
+          dsMplsLdpAdvertLabelRowStatus  RowStatus
+          }
+
+     dsMplsLdpPrefixAcl OBJECT-TYPE
+          SYNTAX      OCTET STRING (SIZE(0..24))
+          MAX-ACCESS  read-only 
+          STATUS      current
+          DESCRIPTION
+              "Prefix Access Control List is defined as destinations 
+               which have their labels advertised. The value of this object may 
+               'any' or the access list name.  In this object the string value 'any' 
+               is reservered for prefix acl list which means that it prevents 
+               the distribution of any locally assigned labels."
+
+         ::= { dsMplsLdpAdvtLabelEntry 1 }
+
+     dsMplsLdpPeerAcl OBJECT-TYPE
+          SYNTAX      OCTET STRING (SIZE(0..24))  
+          MAX-ACCESS  read-only
+          STATUS      current
+          DESCRIPTION
+              "Peer acl is defined as LDP neighbors which receives the 
+               label advertisements. The value of this object may  'none'
+               or access list name. The string value of the object 'none' is 
+               reservred for the peer access list."
+
+         ::= { dsMplsLdpAdvtLabelEntry 2 }
+
+     dsMplsLdpAdvertLabelRowStatus OBJECT-TYPE
+          SYNTAX      RowStatus 
+          MAX-ACCESS  read-create
+          STATUS      current
+          DESCRIPTION
+              "This object is used to create, modify and delete an entry in this table."
+         ::= { dsMplsLdpAdvtLabelEntry 3 }
+
+-- End of MPLS LDP Avertise Label Acl Table
+
+
+-- MPLS LSR Scalars objects
+
+    dsMplsLsrIngressTTL OBJECT-TYPE
+          SYNTAX      Integer32 (-1..255)
+          MAX-ACCESS  read-write
+          STATUS      current
+          DESCRIPTION
+              "This object is set to specify a Time to Live (TTL) value 
+               for LSPs for which this LSR is the ingress."
+
+          DEFVAL  {-1}
+          ::= { dsMplsLsrObjects 1 }
+
+       dsMplsLsrPropogateTTL OBJECT-TYPE
+          SYNTAX      INTEGER { enable(1), disable(0) }
+          MAX-ACCESS  read-write
+          STATUS      current
+          DESCRIPTION
+              "This object is used to enable TTL propagation. Enabling TTL 
+               propagation causes the TTL value in the IP header to be copied 
+               onto the TTL field in the shim header, at the LSP ingress."
+
+          ::= { dsMplsLsrObjects 2 }
+
+-- End of MPLS Scalars
+
+
+-- MPLS LSR Interface Table.
+
+       dsMplsLsrInterfaceTable  OBJECT-TYPE
+
+          SYNTAX        SEQUENCE OF DSMplsLsrInterfaceEntry
+          MAX-ACCESS    not-accessible
+          STATUS        current
+          DESCRIPTION
+              "This table specifies per-interface MPLS capability
+               and associated information."
+
+          ::= { dsMplsLsrObjects 3 }
+
+       dsMplsLsrInterfaceEntry OBJECT-TYPE
+          SYNTAX        DSMplsLsrInterfaceEntry
+          MAX-ACCESS    not-accessible
+          STATUS        current
+          DESCRIPTION
+              "An entry in this table represents an information  about
+               the label switching. An entry can be created 
+               by a network administrator or by an SNMP agent." 
+
+          INDEX { mplsInterfaceIndex }
+          ::= { dsMplsLsrInterfaceTable 1 }
+
+       DSMplsLsrInterfaceEntry ::= SEQUENCE {
+         dsMplsLsrLabelSwitching      INTEGER,
+         dsMplsLsrLabelSpace          Unsigned32 
+       }
+
+     dsMplsLsrLabelSwitching OBJECT-TYPE
+          SYNTAX       INTEGER { enable(1), disable(0) } 
+          MAX-ACCESS   read-write 
+          STATUS       current
+          DESCRIPTION
+              "This is used to enable Label-Switching in the NSM for 
+               the specified interface."
+
+         ::= { dsMplsLsrInterfaceEntry 1 }
+
+     dsMplsLsrLabelSpace OBJECT-TYPE
+          SYNTAX       Unsigned32(0..65535)
+          MAX-ACCESS   read-write 
+          STATUS       current
+          DESCRIPTION
+              "This is used to specify the label space value when the label-switching is
+               enabled for the specified interface."
+
+         ::= { dsMplsLsrInterfaceEntry 2 }
+
+-- End of MPLS LSR Label Switching Table
+
+
+-- MPLS PW Table
+
+     dsMplsPwTable   OBJECT-TYPE  
+        SYNTAX        SEQUENCE OF DSMplsPwEntry  
+        MAX-ACCESS    not-accessible  
+        STATUS        current  
+        DESCRIPTION  
+            "This table specifies information for configuring and  
+             status monitoring which are common to all service types  
+             and PSN types."  
+
+        ::= { dsMplsPwObjects 1 }  
+    
+     dsMplsPwEntry   OBJECT-TYPE  
+        SYNTAX        DSMplsPwEntry  
+        MAX-ACCESS    not-accessible  
+        STATUS        current  
+        DESCRIPTION  
+              "An entry in this table represents an information  about
+               the PW Group NAme. An entry can be created 
+               by a network administrator or by an SNMP agent."
+ 
+        INDEX  { pwIndex }  
+        ::= { dsMplsPwTable 1 }  
+    
+     DSMplsPwEntry ::= SEQUENCE {  
+           dsMplsPwGroupName           SnmpAdminString,
+	   dsMplsPwCCType              INTEGER
+      }  
+
+     dsMplsPwGroupName  OBJECT-TYPE  
+        SYNTAX        SnmpAdminString  
+        MAX-ACCESS    read-create  
+        STATUS        current  
+        DESCRIPTION  
+            "Specifies a group to which this MPLS Layer-2 virtual circuit belongs."  
+
+        ::= { dsMplsPwEntry 1 }
+ 
+     dsMplsPwCCType OBJECT-TYPE          
+        SYNTAX        INTEGER (1..7)
+        MAX-ACCESS    read-create  
+        STATUS        current  
+        DESCRIPTION  
+          "This variable indicates the CC type for VCCV negotiation. The CC type 
+           shall be control word (0x01) or router alert label (0x02) or pw-ttl (0x04)
+	   or combination of all three.  Find below the value for configuring the
+           CC type value with all the combination.
+              1 - Control word
+	      2 - Router Alert Label
+	      3 - Control word and Router Alert Label
+	      4 - pw TTL
+	      5 - Control word and pw TTL
+              6 - Router Alert Label and pw TTL  
+	      7 - Control word and Router Alert Label and pw TTL."
+
+       ::= { dsMplsPwEntry 2 }
+ 
+   -- End of MPLS PW Table 
+
+END

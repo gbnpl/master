@@ -1,0 +1,1153 @@
+--
+-- KOREA TELECOM Corporation BB-EMU SMI
+--
+-- Copyright (C) 2003 by KT Telecom Corporation.
+-- All rights reserved.
+--
+
+ KT-BB-EMU-MIB 
+ 
+        FORCE-INCLUDE <mib.h>
+        FORCE-INCLUDE <snmpdefs.h>
+        FORCE-INCLUDE <snmpstat.h>
+        FORCE-INCLUDE "ktbbemu.h"
+        FORCE-INCLUDE "ktbbemu_leaf.h"
+
+ 
+ DEFINITIONS ::= BEGIN
+
+ IMPORTS   
+  enterprises, MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE,
+  OBJECT-IDENTITY, Counter32, Gauge32, Integer32
+   FROM SNMPv2-SMI
+  DisplayString, TimeStamp, TimeInterval, TestAndIncr,
+  AutonomousType,  TEXTUAL-CONVENTION
+   FROM SNMPv2-TC
+  MODULE-COMPLIANCE, OBJECT-GROUP
+   FROM SNMPv2-CONF
+  mib-2
+   FROM RFC1213-MIB
+--  kt
+--   FROM KT-MIB
+	;
+
+ kt OBJECT IDENTIFIER ::= { enterprises 14008 }
+                
+ bbEMU   MODULE-IDENTITY
+   LAST-UPDATED "0307040100Z"
+   ORGANIZATION "Korea Telecom Corporation"
+   CONTACT-INFO
+    " Korea Telecom Inc. Lab."
+   DESCRIPTION
+    " The MIB module to describe  BB Power
+        Supplies & Environment Monitoring EMU"
+
+  ::= { kt 1005} 
+
+ PositiveInteger ::= TEXTUAL-CONVENTION
+  DISPLAY-HINT "d"
+  STATUS       current
+  DESCRIPTION
+   "This data type is a non-zero and non-negative value."
+  SYNTAX       INTEGER (1..2147483647)
+
+ NonNegativeInteger ::= TEXTUAL-CONVENTION
+  DISPLAY-HINT "d"
+  STATUS       current
+  DESCRIPTION
+   "This data type is a non-negative value."
+  SYNTAX       INTEGER (0..2147483647)   
+ 	
+
+ bbEMUObject  OBJECT IDENTIFIER ::= { bbEMU 1 }	
+	
+   --------------------------------------------------------------------
+   -- The Device Identification group.
+   --      All objects in this group except for emuIdentName and
+   --      emuIdentAttachedDevices are set at device initialization
+   --      and remain static.
+   --------------------------------------------------------------------
+
+ emuIdent              OBJECT IDENTIFIER ::= { bbEMUObject 1 }
+
+  emuIdentManufacturer OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+    "The name of the emu manufacturer."
+   ::= { emuIdent 1 }
+
+  emuIdentModel OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+    "The emu Model designation."
+   ::= { emuIdent 2 }
+
+  emuIdentemuSoftwareVersion OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-write
+   STATUS     current
+   DESCRIPTION
+    "The emu firmware/software version(s).  This variable
+    may or may not have the same value as
+    emuIdentEMUSoftwareVersion in some implementations."
+   ::= { emuIdent 3 }
+
+  emuIdentSnmpSoftwareVersion OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-write
+   STATUS     current
+   DESCRIPTION
+    "The emu snmp software version.  This variable may or
+    may not have the same value as
+    emuIdentemuSoftwareVersion in some implementations."
+   ::= { emuIdent 4 }
+
+  emuIdentName OBJECT-TYPE
+   SYNTAX     DisplayString 
+   MAX-ACCESS read-write
+   STATUS     current
+   DESCRIPTION
+    "A string identifying the emu.  This object should be
+    set by the administrator."
+   ::= { emuIdent 5 }
+  	
+  emuMacAddress OBJECT-TYPE
+   SYNTAX     DisplayString 
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+    "A string Ethernet Mac Address of emu.  
+    example ( 00:03:cf:00:4a:06 )."
+   ::= { emuIdent 6 }
+                                   
+        gentIdentBBtype OBJECT-TYPE
+   SYNTAX      INTEGER{
+    bBC(1),
+    bBS(2),
+    bBM(3),
+    bBW(4),
+    bBP(5)
+   }
+   MAX-ACCESS read-write
+   STATUS     current
+   DESCRIPTION
+    "Managed broad band  Outdoor infrastructure  Type.. such as 
+    BBC, BBS, BBM, BBW, BBP "
+   ::= { emuIdent 7 }
+
+   --------------------------------------------------------------------
+   -- The Device Networks group.   
+   --------------------------------------------------------------------
+
+ emuNetworks              OBJECT IDENTIFIER ::= { bbEMUObject 2 }
+
+  emuNetworksIP OBJECT-TYPE
+   SYNTAX     DisplayString 
+   MAX-ACCESS read-write
+   STATUS     current
+   DESCRIPTION
+    "The IP of the emu."
+   ::= { emuNetworks 1 }
+
+  emuNetworksMASK OBJECT-TYPE
+   SYNTAX     DisplayString 
+   MAX-ACCESS read-write
+   STATUS     current
+   DESCRIPTION
+    "The NETMASK of the emu." 	
+   ::= { emuNetworks 2 }
+
+  emuNetworksGW OBJECT-TYPE
+   SYNTAX     DisplayString 
+   MAX-ACCESS read-write
+   STATUS     current
+   DESCRIPTION
+    "The GateWay_IP of the emu."
+   ::= { emuNetworks 3 }
+
+  emuNetworksDNS OBJECT-TYPE
+   SYNTAX     DisplayString 
+   MAX-ACCESS read-write
+   STATUS     current
+   DESCRIPTION
+    "The DNS_IP of the emu."
+   ::= { emuNetworks 4 }
+  dDNSServerDomain OBJECT-TYPE
+   SYNTAX     DisplayString 
+   MAX-ACCESS read-write
+   STATUS     current
+   DESCRIPTION
+    "The Dynmic DNS Server Domain name.
+    example ( ddns.com )"
+   ::= { emuNetworks 5 }
+  	
+ 	
+   --------------------------------------------------------------------
+   -- The Trap Configuration group.   
+   --------------------------------------------------------------------
+
+ emuTrapCfg              OBJECT IDENTIFIER ::= { bbEMUObject 3 }
+   
+  trapNumOfHosts OBJECT-TYPE
+   SYNTAX      INTEGER (1..4)
+   MAX-ACCESS  read-only
+   STATUS      current
+   DESCRIPTION
+    "the number ( maximum = 4 ) of hosts to which the snmp 
+     module will send traps"
+   ::= { emuTrapCfg 1 }
+
+  TrapHostEntry
+   ::= SEQUENCE {
+     ipIndex
+    INTEGER,
+     trapHostIp
+    DisplayString 
+    }
+
+  trapHostTable  OBJECT-TYPE
+   SYNTAX      SEQUENCE OF TrapHostEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+    "Table of hosts which will receive traps"
+   ::= { emuTrapCfg 2 }
+
+  trapHostEntry
+   OBJECT-TYPE
+   SYNTAX      TrapHostEntry
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+    "Table entry of hosts which will receive traps"
+   INDEX       { ipIndex }
+   ::= { trapHostTable 1 }
+
+  ipIndex        OBJECT-TYPE
+   SYNTAX      INTEGER (1..4) 
+   MAX-ACCESS  not-accessible
+   STATUS      current
+   DESCRIPTION
+    "indexes to hosts"
+   ::= { trapHostEntry 1 }
+
+  trapHostIp     OBJECT-TYPE
+   SYNTAX      DisplayString 
+   MAX-ACCESS  read-write
+   STATUS      current
+   DESCRIPTION
+    "IP addresses of the hosts which the snmp module
+     will send traps"
+   ::= { trapHostEntry 2 }
+
+
+   --------------------------------------------------------------------
+   -- The EMU Sensor Configuration group.   
+   --------------------------------------------------------------------
+
+  emuSensorCfg               OBJECT IDENTIFIER ::= { bbEMUObject 4 }   
+   
+   --------------------------------------------------------------------
+   
+   aiCfg                 OBJECT IDENTIFIER ::= { emuSensorCfg 1 }
+   
+    AiCfgEntry
+     ::= SEQUENCE {
+       aiCfgSensorIndex
+      INTEGER,
+       aiCfgInstall
+      INTEGER,
+       aiCfgDesc
+      DisplayString,
+       aiCfgLean
+      INTEGER,
+       aiCfgOffset
+      INTEGER,
+       aiCfgCriHigh
+      INTEGER,
+       aiCfgMajHigh
+      INTEGER,
+       aiCfgMajLow
+      INTEGER,
+       aiCfgCriLow
+      INTEGER
+     }
+
+    aiCfgTable  OBJECT-TYPE
+     SYNTAX      SEQUENCE OF AiCfgEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Ai sensor install information"
+     ::= { aiCfg 1 }
+
+    aiCfgEntry
+     OBJECT-TYPE
+     SYNTAX      AiCfgEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Ai sensor install information"
+     INDEX       { aiCfgSensorIndex }
+     ::= { aiCfgTable 1 }
+
+    aiCfgSensorIndex        OBJECT-TYPE
+     SYNTAX      INTEGER (1..12) 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "indexes to sensor
+       1. Temperature1
+       2. Temperature2
+       3. Humidity 
+       4. Input Voltage 
+       5. Input Voltage RS phase
+       6. Input Voltage ST phase
+       7. Input Voltage TR phase
+       8. Oxygen concentration    
+       9. UPS output Voltage
+       10. Reserved AI 1
+       11. Reserved AI 2 
+       12. Reserved AI 3"
+     ::= { aiCfgEntry 1 }
+
+    aiCfgInstall        OBJECT-TYPE
+     SYNTAX      INTEGER {
+       notinstall(0),
+       install(1)
+       }
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      "Install to sensor"
+     ::= { aiCfgEntry 2 }
+
+    aiCfgDesc     OBJECT-TYPE
+     SYNTAX      DisplayString
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      "Information of sensor"
+     ::= { aiCfgEntry 3 }
+
+    aiCfgLean     OBJECT-TYPE
+     SYNTAX      INTEGER
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      " sensor lean value : ( use : step1 get original val      	
+      step2 divide 100  step3 use "
+     ::= { aiCfgEntry 4 }
+
+    aiCfgOffset     OBJECT-TYPE
+     SYNTAX      INTEGER
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      " sensor offset value : ( use : step1 get original val      	
+      step2 divide 100  step3 use "
+     ::= { aiCfgEntry 5 }
+
+    aiCfgCriHigh     OBJECT-TYPE
+     SYNTAX      INTEGER
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      " Critical high alarm thresold value : ( use : step1 get original val 
+      step2 divide 100  step3 use "
+     ::= { aiCfgEntry 6 }
+
+    aiCfgMajHigh     OBJECT-TYPE
+     SYNTAX      INTEGER
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      " Major high alarm thresold value : ( use : step1 get original val 
+      step2 divide 100  step3 use "
+     ::= { aiCfgEntry 7 }
+
+    aiCfgMajLow     OBJECT-TYPE
+     SYNTAX      INTEGER
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      " Major low alarm thresold value : ( use : step1 get original val 
+      step2 divide 100  step3 use "
+     ::= { aiCfgEntry 8 }
+
+    aiCfgCriLow     OBJECT-TYPE
+     SYNTAX      INTEGER
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      " Critical low alarm thresold value : ( use : step1 get original val 
+      step2 divide 100  step3 use "
+     ::= { aiCfgEntry 9 }
+
+   --------------------------------------------------------------------
+   
+   diCfg                 OBJECT IDENTIFIER ::= { emuSensorCfg 2 }
+   
+    DiCfgEntry
+     ::= SEQUENCE {
+       diCfgSensorIndex
+      INTEGER,
+       diCfgInstall
+      INTEGER,
+       diCfgDesc
+      DisplayString,
+       diCfgNormal
+      INTEGER,
+       diCfgAlarmclass
+      INTEGER
+     }
+
+    diCfgTable  OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DiCfgEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Di sensor install information"
+     ::= { diCfg 1 }
+
+    diCfgEntry
+     OBJECT-TYPE
+     SYNTAX      DiCfgEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Di sensor install information"
+     INDEX       { diCfgSensorIndex }
+     ::= { diCfgTable 1 }
+
+    diCfgSensorIndex        OBJECT-TYPE
+     SYNTAX      INTEGER (1..24) 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "indexes to discrete sensor
+       1. Flood1
+       2. Flood2
+       3. Fire
+       4. Door  (BBM Hatch) 
+       5. BBC FAN (BBM Hatch Lock)
+       6. BBM Front Door  
+       7. Methane concentration
+       8. CO concentration
+       9. Water pump 1 Operation
+      10. Water pump 1 Fault 
+      11. Water pump 2 Operation
+      12. Water pump 2 Fault 
+      13. Aircon Operation
+      14. Aircon Fault
+      15. Haron Operation   
+      16. Indoor inhalation Fan Fault
+      17. Indoor exhaust  Fan Fault
+      18. Aircon inhalation Fan Fault  
+      19. Aircon exhaust Fan Fault
+      20. UPS battery low voltage Alarm
+      21. UPS input voltage Alarm      
+      22. reserved DI input
+      23. reserved DI input
+      24. reserved DI input"
+     ::= { diCfgEntry 1 }
+
+    diCfgInstall        OBJECT-TYPE
+     SYNTAX      INTEGER {
+       notinstall(0),
+       install(1)
+       }
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      "Install to sensor"
+     ::= { diCfgEntry 2 }
+
+    diCfgDesc     OBJECT-TYPE
+     SYNTAX      DisplayString
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      "Information of sensor"
+     ::= { diCfgEntry 3 }
+
+    diCfgNormal     OBJECT-TYPE
+     SYNTAX      INTEGER {
+        low(0),
+        high(1)
+        }
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      " normal status value of sensor"
+     ::= { diCfgEntry 4 }
+
+    diCfgAlarmclass     OBJECT-TYPE
+     SYNTAX      INTEGER{
+        normal(0),
+        minor(1),
+        major(2),
+        critical(3)
+        }
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      " alarm class"
+     ::= { diCfgEntry 5 }
+
+   --------------------------------------------------------------------
+   
+   doCfg                 OBJECT IDENTIFIER ::= { emuSensorCfg 3 }
+   
+    DoCfgEntry
+     ::= SEQUENCE {
+       doCfgIndex
+      INTEGER,
+       doCfgInstall
+      INTEGER,
+       doCfgDesc
+      DisplayString
+     }
+
+    doCfgTable  OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DoCfgEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Do sensor install information"
+     ::= { doCfg 1 }
+
+    doCfgEntry
+     OBJECT-TYPE
+     SYNTAX      DoCfgEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Do sensor install information"
+     INDEX       { doCfgIndex }
+     ::= { doCfgTable 1 }
+
+    doCfgIndex        OBJECT-TYPE
+     SYNTAX      INTEGER (1..10) 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      " Indexes to discrete output sensor
+                         1. Digital Output1 On/Off
+                         2. Digital Output2 On/Off     	
+       3. AC OUT Reset       
+       4. BBM Light ON/OFF
+       5. BBM Green Alarm Light On/Off
+       6. BBM Red Alarn Light   On/Off
+       7. BBM Audible Alarm     On/Off
+       8. BBM Ventilator isolation On/Off (optional)
+       9. Reserved
+      10. Reserved"
+     ::= { doCfgEntry 1 }
+
+    doCfgInstall        OBJECT-TYPE
+     SYNTAX      INTEGER {
+       notinstall(0),
+       install(1)
+       }
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      "Installed number  of controller"
+     ::= { doCfgEntry 2 }
+
+    doCfgDesc     OBJECT-TYPE
+     SYNTAX      DisplayString
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      "Information of DO contact  point"
+     ::= { doCfgEntry 3 }     
+    	
+                                        
+                                        
+   --------------------------------------------------------------------
+   -- The EMU Control group.   
+   --------------------------------------------------------------------
+
+  emuControl             OBJECT IDENTIFIER ::= { bbEMUObject 5 }
+ 	
+   emuReset OBJECT-TYPE
+    SYNTAX     INTEGER {
+       swReset(1),
+       hwReset(2)
+       }
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+     "BBC EMU Reset Control.
+      1. S/W Reset
+      2. H/W Reset"
+    ::= { emuControl 1 }       
+   	
+   --------------------------------------------------------------------
+                                        
+   --------------------------------------------------------------------
+   -- The EMU Status group.   
+   --------------------------------------------------------------------
+
+  emuStatus                OBJECT IDENTIFIER ::= { bbEMUObject 6 }
+ 	
+   --------------------------------------------------------------------
+   
+   aiStatus    OBJECT IDENTIFIER ::= { emuStatus 1 }
+  	
+    AiStatusEntry
+     ::= SEQUENCE {
+       aiStatusSensorIndex
+      INTEGER,
+       aiStatusValue
+      INTEGER
+     }
+
+    aiStatusTable  OBJECT-TYPE
+     SYNTAX      SEQUENCE OF AiStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Ai Status Value"
+     ::= { aiStatus 1 }
+
+    aiStatusEntry
+     OBJECT-TYPE
+     SYNTAX      AiStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Ai Status information"
+     INDEX       { aiStatusSensorIndex }
+     ::= { aiStatusTable 1 }
+
+    aiStatusSensorIndex        OBJECT-TYPE
+     SYNTAX      INTEGER (1..12) 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "indexes to analog input sensor
+       refer to AiCfgSensorIndex "
+     ::= { aiStatusEntry 1 }
+
+    aiStatusValue        OBJECT-TYPE
+     SYNTAX      INTEGER
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+      "value of analog input value
+       1. get value 2. divide 100  3. use"
+     ::= { aiStatusEntry 2 }
+
+   --------------------------------------------------------------------
+   
+   diStatus    OBJECT IDENTIFIER ::= { emuStatus 2 }
+  	
+    DiStatusEntry
+     ::= SEQUENCE {
+       diStatusSensorIndex
+      INTEGER,
+       diStatusValue
+      INTEGER
+     }
+
+    diStatusTable  OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DiStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Di Status Value"
+     ::= { diStatus 1 }
+
+    diStatusEntry
+     OBJECT-TYPE
+     SYNTAX      DiStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Di Status information"
+     INDEX       { diStatusSensorIndex }
+     ::= { diStatusTable 1 }
+
+    diStatusSensorIndex        OBJECT-TYPE
+     SYNTAX      INTEGER (1..24)
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "indexes to discrete input sensor
+       refer to DiSensorIndex"
+     ::= { diStatusEntry 1 }
+
+    diStatusValue        OBJECT-TYPE
+     SYNTAX      INTEGER {
+         on(1),
+         off(0)
+        }
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+      "status value of discrete input value"
+     ::= { diStatusEntry 2 }
+
+   --------------------------------------------------------------------
+   
+   doStatus    OBJECT IDENTIFIER ::= { emuStatus 3 }
+  	
+    DoStatusEntry
+     ::= SEQUENCE {
+       doStatusSensorIndex
+      INTEGER,
+       doStatusValue
+      INTEGER
+     }
+
+    doStatusTable  OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DoStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Do Status Value and DO Control"
+     ::= { doStatus 1 }
+
+    doStatusEntry
+     OBJECT-TYPE
+     SYNTAX      DoStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Do Status information"
+     INDEX       { doStatusSensorIndex }
+     ::= { doStatusTable 1 }
+
+    doStatusSensorIndex        OBJECT-TYPE
+     SYNTAX      INTEGER (1..10) 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "indexes to discrete input sensor
+       refer to DO index"
+     ::= { doStatusEntry 1 }
+
+    doStatusValue        OBJECT-TYPE
+     SYNTAX      INTEGER {
+         on(1),
+         off(0)
+        }
+     MAX-ACCESS  read-write
+     STATUS      current
+     DESCRIPTION
+      "status value of discrete output value and do control"
+     ::= { doStatusEntry 2 }
+    	
+
+   --------------------------------------------------------------------
+   -- The Rectifier group.   
+   --------------------------------------------------------------------
+
+ rectifier     OBJECT IDENTIFIER ::= { bbEMUObject 7 }
+
+   --------------------------------------------------------------------
+   
+   rectifierIdent    OBJECT IDENTIFIER ::= { rectifier 1 }
+  	
+    vendor OBJECT-TYPE
+     SYNTAX  INTEGER
+     MAX-ACCESS read-write
+     STATUS  current
+     DESCRIPTION
+      "rectifier vendor code
+       1. vender 1
+       2. vender 2
+       3. vender 3
+       4. vender 4"             	
+     ::= { rectifierIdent 1 }
+
+    rectiInstall OBJECT-TYPE
+     SYNTAX  INTEGER 
+     MAX-ACCESS read-write
+     STATUS  current
+     DESCRIPTION
+      "rectifier install status
+       0. not install
+       1. install"
+     ::= { rectifierIdent 2 }
+
+    rectiConnSpeed OBJECT-TYPE
+     SYNTAX  INTEGER 
+     MAX-ACCESS read-write
+     STATUS  current
+     DESCRIPTION
+      "rectifier connect speed ( RS232C )
+       9600, 19200, 38400, 57600 "
+     ::= { rectifierIdent 3 }
+	
+ -------------------------------------------------------------------
+     	
+   rectifierStatus    OBJECT IDENTIFIER ::= { rectifier 2 }
+ -------------------------------------------------------------------
+	
+    rectifierAnalogStatus    OBJECT IDENTIFIER ::= { rectifierStatus 1 }
+  	
+    RectifierAnalogStatusEntry
+     ::= SEQUENCE {
+       rectifierAnalogStatusIndex
+      INTEGER,
+       rectifierAnalogStatusValue
+      INTEGER
+     }
+
+    rectifierAnalogStatusTable  OBJECT-TYPE
+     SYNTAX      SEQUENCE OF RectifierAnalogStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Rectifier analog Status Value"
+     ::= { rectifierAnalogStatus 1 }
+
+    rectifierAnalogStatusEntry
+     OBJECT-TYPE
+     SYNTAX      RectifierAnalogStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Rectifier analog Status information"
+     INDEX       { rectifierAnalogStatusIndex }
+     ::= { rectifierAnalogStatusTable 1 }
+
+    rectifierAnalogStatusIndex        OBJECT-TYPE
+     SYNTAX      INTEGER (1..9) 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "indexes to analog status value
+       1. INPUT Voltage ( AC )
+       2. OUTPUT Voltage ( DC )
+       3. LOAD_A
+       4. CHARGE_A
+       5. BATTERY TEMP
+       6. BATTERY CELL 1 VOLTAGE
+       7. BATTERY CELL 2 VOLTAGE
+       8. BATTERY CELL 3 VOLTAGE
+       9. BATTERY CELL 4 VOLTAGE"
+     ::= { rectifierAnalogStatusEntry 1 }
+
+    rectifierAnalogStatusValue        OBJECT-TYPE
+     SYNTAX      INTEGER
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+      "status value of analog data
+      1. get value 2. divide 100  3. use"
+     ::= { rectifierAnalogStatusEntry 2 }                                           
+    	
+ --------------------------------------------------------------------------------------
+
+    discreteStatus    OBJECT IDENTIFIER ::= { rectifierStatus 2 }
+	
+ --------------------------------------------------------------------------------------  	
+	
+    DiscreteStatusEntry
+     ::= SEQUENCE {
+       discreteStatusIndex
+      INTEGER,
+       discreteStatusValue
+      INTEGER
+     }
+
+    discreteStatusTable  OBJECT-TYPE
+     SYNTAX      SEQUENCE OF DiscreteStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Rectifier discrete Status Value"
+     ::= { discreteStatus 1 }
+
+    discreteStatusEntry
+     OBJECT-TYPE
+     SYNTAX      DiscreteStatusEntry
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "Rectifier discrete Status information"
+     INDEX       { discreteStatusIndex }
+     ::= { discreteStatusTable 1 }
+
+    discreteStatusIndex        OBJECT-TYPE
+     SYNTAX      INTEGER (1..3) 
+     MAX-ACCESS  not-accessible
+     STATUS      current
+     DESCRIPTION
+      "indexes to discrete status value
+       1. COOLER
+       2. HEATER
+       3. EXCHANGER"
+     ::= { discreteStatusEntry 1 }
+
+    discreteStatusValue        OBJECT-TYPE
+     SYNTAX      INTEGER
+     MAX-ACCESS  read-only
+     STATUS      current
+     DESCRIPTION
+      "status value of discrete data
+       0. normal
+       1. alarm"
+     ::= { discreteStatusEntry 2 }
+     	
+
+
+   --------------------------------------------------------------------
+   -- The Alarm group.   
+   --------------------------------------------------------------------
+
+ emuAlarm     OBJECT IDENTIFIER ::= { bbEMUObject 8 }
+	
+  alarmTotalCount OBJECT-TYPE
+   SYNTAX     INTEGER
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+    "Total Number of occurrence alarm."
+   ::= { emuAlarm 1 }
+	
+  alarmGetBulk OBJECT-TYPE
+   SYNTAX     DisplayString
+   MAX-ACCESS read-only
+   STATUS     current
+   DESCRIPTION
+       "The present of active alarm conditions.
+     Format ( Unit Seperator = |  Record Seperator = $ )
+            CA | Alarmcode | Alarmsubcode | Alarmclass | Timestamp |$                 
+         AGENT :  Alarmcode : 101~~ 325 => Rectifier Alarm
+                       326 => Rectifier communication Alarm
+                       327 => EMU Internal communication Alarm
+                          801 ~ 812 => EMU Analog Alarm
+                          901 ~ 924 => EMU Discrete Alarm                             
+         EMS :
+                 RECTIFIER Alarm = Alarmcode - 100
+                 EMU Analog Alarm = Alarmcode - 800
+                 EMU Discrete Alarm = Alaemcode - 900
+          Timestamp use the unixtime format
+        DI , Rectifier alarm subcode is  0"
+   ::= { emuAlarm 2 }
+    	
+
+   --------------------------------------------------------------------
+
+ bbEMUTrap OBJECT IDENTIFIER    ::= { bbEMU 2 }
+
+   --------------------------------------------------------------------
+   -- The Alarm Object Define group.   
+   --------------------------------------------------------------------
+
+  trapType OBJECT IDENTIFIER    ::= { bbEMUTrap 1 }	
+ 	
+   alarmNum OBJECT-TYPE
+    SYNTAX     INTEGER
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+     "The Value mean alarm number."
+    ::= { trapType 1 }
+
+   alarmSubVal OBJECT-TYPE
+    SYNTAX     INTEGER
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+     "The Value mean alarm status.
+      apply to emu AI alarm.
+      1 : low alarm 
+      2 : high alarm"
+    ::= { trapType 2 }
+
+   alarmClass OBJECT-TYPE
+    SYNTAX     INTEGER
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+     "The Value mean alarm class.
+      0 : normal alarm 
+      1 : minor alarm
+      2 : major alarm
+      3 : critical alarm"
+    ::= { trapType 3 }
+
+   alarmVal OBJECT-TYPE
+    SYNTAX     INTEGER
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+     "The Value mean alarm value.
+      0 : alarm clear 
+      1 : alarm occurrence"
+    ::= { trapType 4 } 
+
+
+   --------------------------------------------------------------------
+   -- The Alarm Notification group.   
+   --------------------------------------------------------------------
+
+  emuTrap OBJECT IDENTIFIER   ::= { bbEMUTrap 2 }  	
+
+   --------------------------------------------------------------------   	
+
+   emuAIALARM NOTIFICATION-TYPE
+    OBJECTS { alarmNum,
+        alarmSubVal,
+        alarmClass,
+        alarmVal} 
+    STATUS  current
+    DESCRIPTION
+     " EMUAIALARM 
+       alarmNum : Analog Input Sensor Index
+       alarmSubval : 0: Low Alarm
+           1: High Alarm
+       alarmClass : 1. Minor Alarm
+                    2. Major Alarm
+                    3. Critical Alarm
+       alarmVal : 0 : Alarm Clear
+           1 : Alarm Occurrence"
+    ::= { emuTrap 1 }
+
+   emuDIALARM NOTIFICATION-TYPE
+    OBJECTS { alarmNum,
+       alarmClass,
+       alarmVal} 
+    STATUS  current
+    DESCRIPTION
+     " EMUDIALARM 
+       alarmNum : Discrete Input Sensor Index
+       alarmClass : 1. Minor Alarm
+                    2. Major Alarm
+                    3. Critical Alarm
+       alarmVal : 0 : Alarm Clear
+           1 : Alarm Occurrence"
+    ::= { emuTrap 2 }
+
+   rectifierALARM NOTIFICATION-TYPE
+    OBJECTS { alarmNum,
+        alarmClass,
+        alarmVal} 
+    STATUS  current
+    DESCRIPTION
+     " Rectifier  ALARM 
+       alarmNum : Alarm Index  
+         1.REC-1 NFB OFF
+         2.REC-1 N.C
+         3.REC-1 FAIL
+         4.REC-1 O.V.P
+         5.REC-2 NFB OFF
+         6.REC-2 N.C
+         7.REC-2 FAIL
+         8.REC-2 O.V.P
+         9.OUT_VOLT_LOW
+           10.OUT_VOLT_HIGH
+        11.OUTPUT_A NFB OFF
+        12.RESERVED
+        13.BATT #1 LOW FAIL
+        14.BATT #1 HIGH FAIL
+        15.BATT #2 LOW FAIL
+        16.BATT #2 HIGH FAIL
+        17.BATT #3 LOW FAIL
+        18.BATT #3 HIGH FAIL
+        19.BATT #4 LOW FAIL
+        20.BATT #4 HIGH FAIL
+        21.BATT RELAY OFF
+        22.BATT NFB OFF
+        23.AC_LOW
+        24.AC_HIGH
+        25.AC_FAIL
+        26.RESERVED
+        27.RESERVED
+        28.RESERVED
+        29.RESERVED
+        30.RESERVED
+        31.DOOR_OPEN
+        32.HEAT_FAIL
+        33.RESERVED
+        34.RESERVED
+        35.EXCH_FAN_FAIL
+        36.RESERVED
+        37.RESERVED
+        38.AC_NFB_OFF
+        39.BAT_TEMP_LOW
+        40.BAT_TEMP_HIGH
+        41.RESERVED
+        42.RESERVED
+        43.RESERVED
+        44.RESERVED
+        45.COOLER FAIL
+        46.SYS_TEMP_HIGH
+        47.SYS_TEMP_OVER
+        48.FLOOD_1
+        49.FIRE
+        50.RESERVED
+        51.RESERVED
+        52.FLOOD_2
+        53.RESERVED
+        54.RESERVED
+        55.OVER HUMIDITY
+        56.RESERVED
+        57.RESERVED
+        58.RESERVED
+        59.RESERVED
+        60.RECU_FAN1_FAIL
+        61.RECU_FAN2_FAIL
+        62.RESERVED
+        63.DIS_CH   
+        64.Oxygen scarcity
+        65.RS Voltage High
+        66.RS Voltage Low
+        67.ST Voltage High
+        68.ST Voltage Low
+        69.TS Voltage High
+        70.TS Voltage Low
+        71.Rectifier Output voltage High
+        72.Rectifier Output Voltage Low
+        73.UPS Output Voltage High
+        74.UPS Output Voltage Low
+        75 ~ 79 : RESERVED
+        80.Metane  Concentration
+        81.CO Concentration
+        82.Water Pump 1 Fail
+        83.Water Pump 2 Fail
+        84.Aircon Alarm
+        85. Haron explosion  
+        86. Indoor in-Fan Fail  
+        87. Indoor ex-Fan Fail
+        88. Aircon in-Fan Fail
+        89. Aircon ex-Fan Fail
+        90 ~ 255 : RESERVED
+       alarmClass : 1. Minor Alarm
+                    2. Major Alarm
+                    3. Critical Alarm
+       alarmVal : 0 : Alarm Clear
+           1 : Alarm Occurrence"
+    ::= { emuTrap 3 }
+
+
+   emuCOMMALARM NOTIFICATION-TYPE
+    OBJECTS { alarmNum,
+        alarmClass,
+        alarmVal} 
+    STATUS  current
+    DESCRIPTION
+     " EMU Communication alarm
+       alarmNum : 1. internal communication alarm
+                  2. rectifier communication alarm
+       alarmClass : 1. Minor Alarm
+                    2. Major Alarm
+                    3. Critical Alarm
+       alarmVal : 0 : Alarm Clear
+           1 : Alarm Occurrence"
+    ::= { emuTrap 4 }
+   	
+ 	
+   	
+END

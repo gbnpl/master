@@ -1,0 +1,500 @@
+<!-- $Id$ -->
+{include file="calendar_js.html"}
+<SCRIPT TYPE="text/javascript" SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpon.js""></SCRIPT>
+<FORM NAME="netdevedit" METHOD="POST" ACTION="?m=gponoltedit&id={$netdevinfo.id}">
+	<INPUT type="submit" class="hiddenbtn">
+	<INPUT TYPE="HIDDEN" NAME="netdev[gponoltid]" VALUE="{$netdevinfo.gponoltid}">
+<TABLE WIDTH="100%" CELLPADDING="3">
+	
+	<TR class="dark">
+		<TD WIDTH="1%" class="fleftu">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" class="fbt">
+			<B>{trans("Name:")}</B>
+		</TD>
+		<TD WIDTH="98%" class="frightu">
+			<INPUT TYPE="TEXT" NAME="netdev[name]" VALUE="{$netdevinfo.name}" MAXLENGTH="32" {tip trigger="name" text="Enter device name" bold=1}>
+		</TD>
+	</TR>
+	<TR class="light">
+                <TD WIDTH="100%" COLSPAN="3" class="flr">
+		        <TABLE WIDTH="100%" CELLPADDING="0">
+		                <TR class="light">
+		                        <TD WIDTH="50%" style="vertical-align:top;">
+		                                <TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/producer.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Producer:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[producer]" VALUE="{$netdevinfo.producer}" {tip text="Enter device producer (optional)"}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_model.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Model:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[model]" VALUE="{$netdevinfo.model}" {tip text="Enter model name (optional)" }>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/serialnumber.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Serial number:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[serialnumber]" VALUE="{$netdevinfo.serialnumber}" {tip text="Enter serial number (optional)"}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/port.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Ports number:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+<SCRIPT type="text/javascript">
+<!--
+function SetGponPorts() {
+	{foreach from=$gponoltportsinfo item=gponoltports}
+	SetObjectValue('gponoltports[{$gponoltports.numport}]','{$gponoltports.maxonu}');
+	SetObjectValue('countlinkporthidden[{$gponoltports.numport}]','{$gponoltports.countlinkport}');
+	SetObjectValue('gponoltportshidden[{$gponoltports.numport}]','{$gponoltports.maxonu}');
+	SetObjectinnerHTML('countlinkport[{$gponoltports.numport}]','{$gponoltports.countlinkport}');
+	{/foreach}
+}
+
+function UpdateGponPorts(countPorts) {
+	var maxusedport;
+	{foreach from=$gponoltportsinfo item=gponoltports}
+	{if $gponoltports.countlinkport > 0}
+	maxusedport={$gponoltports.numport};
+	{/if}
+	{/foreach}
+	if (parseInt(countPorts) < maxusedport) {
+		alert('Nie można zmniejszyć liczby portów!\nUsuń przypisanie ONU do portów.');
+		SetObjectValue('netdev[ports]',document.getElementById('ports_temp').value);
+	} else {
+		ShowGponPorts(countPorts, {ConfigHelper::getConfig('gpon-dasan.max_onu_to_olt', 64)});
+		SetGponPorts();
+		SetObjectValue('ports_temp',countPorts);
+		SetObjectValue('netdev[ports]',countPorts);
+		return true;
+	}
+}
+//-->
+</SCRIPT>
+<INPUT TYPE="HIDDEN" NAME="ports_temp" ID="ports_temp" VALUE="{if $netdevinfo.ports}{$netdevinfo.ports}{/if}">
+		<INPUT TYPE="TEXT" NAME="netdev[ports]" ID="netdev[ports]" VALUE="{if $netdevinfo.ports}{$netdevinfo.ports}{/if}" {tip trigger="ports" text="Enter number of ports (optional)"} onkeyup="ZamienNaLiczbe(this);UpdateGponPorts(this.value);">
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/port.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>Porty:</B>
+		</TD>
+		<TD WIDTH="98%">
+			<div id="GponPorts">
+			</div>
+			<SCRIPT type="text/javascript">
+<!--
+ShowGponPorts({$netdevinfo.ports},{ConfigHelper::getConfig('gpon-dasan.max_onu_to_olt', 64)});
+SetGponPorts();
+//-->
+</SCRIPT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/home.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Location:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[location]" VALUE="{$netdevinfo.location}" {tip text="Enter device location (optional)"}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD COLSPAN="3">
+			<HR SIZE="1" />
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP wersja:</B>
+		</TD>
+		<TD WIDTH="98%">
+		    <SELECT NAME="netdev[snmp_version]" {tip text="Wybierz wersję SNMP" trigger="snmp_version"}>
+			    <OPTION VALUE="0"></OPTION>
+			    {section name=snmp_v start=2 loop=4}
+			    <OPTION VALUE="{$smarty.section.snmp_v.index}" {if $netdevinfo.snmp_version eq $smarty.section.snmp_v.index} SELECTED{/if}>Version {$smarty.section.snmp_v.index}</OPTION>
+			{/section}
+			</SELECT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP opis:</B>
+		</TD>
+		<TD WIDTH="98%">
+			<TEXTAREA NAME="netdev[snmp_description]" COLS="40" ROWS="5" COLS="40" ROWS="3" {tip text="Enter additional information (optional)"}>{$netdevinfo.snmp_description}</TEXTAREA>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP IP host:</B>
+		</TD>
+		<TD WIDTH="98%">
+		<INPUT TYPE="TEXT" NAME="netdev[snmp_host]" VALUE="{$netdevinfo.snmp_host}" {tip trigger="snmp_host" text="Wprowadź IP adres hosta"} maxlenght="100" />
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Community (v.2):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        <INPUT TYPE="TEXT" NAME="netdev[snmp_community]" VALUE="{$netdevinfo.snmp_community}" {tip trigger="snmp_community" text="Wprowadź Community - tylko dla wersji poniżej 3"} maxlenght="100" />
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Auth protocol (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        <SELECT NAME="netdev[snmp_auth_protocol]" {tip text="Wybierz Auth protocol (v.3)" trigger="snmp_auth_protocol"}>
+			<OPTION VALUE="MD5" {if $netdevinfo.snmp_auth_protocol eq 'MD5'} SELECTED{/if}>MD5</OPTION>
+			<OPTION VALUE="SHA" {if $netdevinfo.snmp_auth_protocol eq 'SHA'} SELECTED{/if}>SHA</OPTION>
+			</SELECT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Username (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        <INPUT TYPE="TEXT" NAME="netdev[snmp_username]" VALUE="{$netdevinfo.snmp_username}" {tip trigger="snmp_username" text="Wprowadź login użytkownika SNMP (v.3)"} maxlenght="255" />
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Password (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        <INPUT TYPE="TEXT" NAME="netdev[snmp_password]" VALUE="{$netdevinfo.snmp_password}" {tip trigger="snmp_password" text="Wprowadź hasło użytkownika SNMP (v.3)"} maxlenght="255" />
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Security level (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        <SELECT NAME="netdev[snmp_sec_level]" {tip text="Wybierz Security level (v.3)" trigger="snmp_sec_level"}>
+			<OPTION VALUE="authNoPriv" {if $netdevinfo.snmp_sec_level eq 'authNoPriv'} SELECTED{/if}>authNoPriv</OPTION>
+			<OPTION VALUE="noAuthNoPriv" {if $netdevinfo.snmp_sec_level eq 'noAuthNoPriv'} SELECTED{/if}>noAuthNoPriv</OPTION>
+			<OPTION VALUE="authPriv" {if $netdevinfo.snmp_sec_level eq 'authPriv'} SELECTED{/if}>authPriv</OPTION>
+			</SELECT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Privacy passphrase (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        <INPUT TYPE="TEXT" NAME="netdev[snmp_privacy_passphrase]" VALUE="{$netdevinfo.snmp_privacy_passphrase}" {tip trigger="snmp_privacy_passphrase" text="Wpisz Privacy passphrase (v.3)"} maxlenght="255" />
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Privacy protocol (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        <SELECT NAME="netdev[snmp_privacy_protocol]" {tip text="Wybierz Privacy protocol (v.3)" trigger="snmp_privacy_protocol"}>
+			<OPTION VALUE="DES" {if $netdevinfo.snmp_privacy_protocol eq 'DES'} SELECTED{/if}>DES</OPTION>
+			<OPTION VALUE="AES" {if $netdevinfo.snmp_privacy_protocol eq 'AES'} SELECTED{/if}>AES</OPTION>
+			</SELECT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD COLSPAN="3">
+			<HR SIZE="1" />
+		</TD>
+	</TR>
+{if ConfigHelper::checkConfig('phpui.radius')}
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/radius.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Shortname:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[shortname]" VALUE="{$netdevinfo.shortname}" {tip text="Enter shortname (optional)"}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/radius.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Type:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<SELECT NAME="netdev[nastype]" {tip text="Select type (optional)" trigger="nastype"}>
+			<OPTION VALUE="0"></OPTION>
+			{foreach from=$nastype item=item key=key}
+			<OPTION VALUE="{$key}" {if $key==$netdevinfo.nastype} SELECTED{/if}>{$item.name}</OPTION>
+			{/foreach}
+			</SELECT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/radius.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Max clients:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[clients]" VALUE="{if $netdevinfo.clients}{$netdevinfo.clients}{/if}" {tip text="Enter max clients (optional)"}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/radius.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Secret:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[secret]" VALUE="{$netdevinfo.secret}" {tip text="Enter secret (optional)"}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/radius.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Community:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[community]" VALUE="{$netdevinfo.community}" {tip text="Enter community (optional)"}>
+		</TD>
+	</TR>
+	{if $netdevinfo.lok}
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/networknode.png" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>Węzeł sieci:</B>
+		</TD>
+		<TD WIDTH="98%">
+			<SELECT NAME="netdev[locationid]">
+			    {section name=lok loop=$netdevinfo.lok}
+				<OPTION VALUE="{$netdevinfo.lok[lok].id}"
+				{if $netdevinfo.netdevnodeid==$netdevinfo.lok[lok].id}
+				    selected
+				{/if}
+				>
+				<B>{$netdevinfo.lok[lok].symbol}</B> / {$netdevinfo.lok[lok].nazwa}
+				</OPTION>
+			    {/section}
+			</SELECT>
+		</TD>
+	</TR>
+	{/if}
+
+{/if}
+{if isset($channels)}
+        <TR class="light">
+	        <TD WIDTH="1%">
+		        <IMG SRC="img/channel.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>{trans("Channel:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+		        <SELECT NAME="netdev[channelid]" {tip text="Select channel (optional)" trigger="channelid"}>
+		        	<OPTION VALUE="">- {trans("none")} -</OPTION>
+		        	{foreach from=$channels item=item}
+			        <OPTION VALUE="{$item.id}" {if $item.id == $netdevinfo.channelid} SELECTED{/if}>{$item.name}</OPTION>
+			        {/foreach}
+		        </SELECT>
+		</TD>
+	</TR>
+{/if}
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/calendar.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Purchase date:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[purchasedate]" VALUE="{if $netdevinfo.purchasedate}{$netdevinfo.purchasedate}{/if}" SIZE="10" MAXSIZE="10" OnClick="javascript:cal1.popup();" {tip trigger="purchasedate" text="Enter device purchase date in 'yyyy/mm/dd' format or click to choose date from calendar (optional)"}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/guarantee.png" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Guarantee period:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<SELECT SIZE="1" NAME="netdev[guaranteeperiod]" {tip text="Select device guarantee period (optional)"}>
+				{foreach from=$_GUARANTEEPERIODS key=key item=period}
+				<OPTION VALUE="{$key}"{if $netdevinfo.guaranteeperiod eq $key} SELECTED{/if}>{$period}</OPTION>
+				{/foreach}
+			</SELECT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/desc.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Description:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<TEXTAREA NAME="netdev[description]" COLS="40" ROWS="5" COLS="40" ROWS="5" {tip text="Enter additional information (optional)"}>{$netdevinfo.description}</TEXTAREA>
+		</TD>
+	</TR>
+                                        </TABLE>
+				</TD>
+			        <TD WIDTH="50%" style="vertical-align:top;">
+			                <TABLE WIDTH="100%" CELLPADDING="3">
+
+<TR class="light">
+		<TD colspan="3">
+		{$error_snmp}
+
+		{$snmpoltdata}
+		<br>
+		<FORM ID="myformaddprofile" name="myformaddprofile" METHOD="POST" ACTION="?m=gponoltedit&id={$netdevinfo.id}">
+		<input type="hidden" name="gponprofileadd" id="gponprofileadd" value="0" />
+		<input type="hidden" name="profile_edit" id="profile_edit" value="{$temp_post.profile_edit}" />
+		<b>ONU Profile:</b><br /><br />
+		<b>Nazwa:</b> <INPUT TYPE="TEXT" NAME="profile_name" value="{$temp_post.profile_name}" maxlength="63" {tip text="Wpisz nazwę profilu" trigger="profile_name"} {if $temp_post.profile_edit eq 1} disabled="disabled" {/if}/>
+		{if $temp_post.profile_edit eq 1} <input type="hidden" name="profile_name" value="{$temp_post.profile_name}" /> {/if}
+		<br />
+		<b>Traffic profile:</b> <SELECT {tip trigger="trafficprofiles"} SIZE="1" NAME="trafficprofiles" {tip text="Wybierz Traffic profile"} {if $temp_post.profile_edit eq 1} disabled="disabled" {/if}>
+				{foreach from=$trafficprofiles key=key item=qname}
+				<OPTION VALUE="{$key}"{if $temp_post.trafficprofiles eq $key} SELECTED{/if}>{$qname}</OPTION>
+				{/foreach}
+			</SELECT>
+			{if $temp_post.profile_edit eq 1} <input type="hidden" name="trafficprofiles" value="{$temp_post.trafficprofiles}" /> {/if}
+			<br />
+			<br />
+		<table cellpadding="2" cellspacing="2" border="1">
+		<tr><td><b>Eth:</b></td><td><b>Downstream:</b></td><td><b>VLAN ID:</b></td><td><b>COS:</b></td><td><b>Status:</b></td></tr>
+		
+		<tr><td>e1</td><td><INPUT TYPE="TEXT" NAME="downstream_1" size="10" value="{if $temp_post.downstream_1}{$temp_post.downstream_1}{else}64{/if}" {tip text="Wpisz wartość downstream" trigger="downstream_1"} onkeyup="ZamienNaLiczbe(this);" /></td><td><INPUT TYPE="TEXT" NAME="vlan_id_1" size="4" maxlength="4" value="{if $temp_post.vlan_id_1}{$temp_post.vlan_id_1}{/if}" {tip text="Wpisz wartość VLAN ID" trigger="vlan_id_1"} onkeyup="ZamienNaLiczbe(this);" /></td><td><INPUT TYPE="TEXT" NAME="cos_1" maxlength="1" size="1" value="{if $temp_post.cos_1}{$temp_post.cos_1}{else}0{/if}" {tip text="Wpisz wartość COS" trigger="cos_1"} onkeyup="ZamienNaLiczbe(this);" /></td>
+		<td><select name="status_1"><option value="1" {if $temp_post.status_1 eq "enable(1)"} selected="selected" {/if}>włącz</option><option value="2" {if $temp_post.status_1 eq "disable(2)"} selected="selected" {/if}>wyłącz(off)</option></select></td>
+		</tr>
+		
+		<tr><td>e2</td><td><INPUT TYPE="TEXT" NAME="downstream_2" size="10" value="{if $temp_post.downstream_2}{$temp_post.downstream_2}{else}64{/if}" {tip text="Wpisz wartość downstream" trigger="downstream_2"} onkeyup="ZamienNaLiczbe(this);" /></td><td><INPUT TYPE="TEXT" NAME="vlan_id_2" size="4" maxlength="4" value="{if $temp_post.vlan_id_2}{$temp_post.vlan_id_2}{/if}" {tip text="Wpisz wartość VLAN ID" trigger="vlan_id_2"} onkeyup="ZamienNaLiczbe(this);" /></td><td><INPUT TYPE="TEXT" NAME="cos_2" maxlength="1" size="1" value="{if $temp_post.cos_2}{$temp_post.cos_2}{else}0{/if}" {tip text="Wpisz wartość COS" trigger="cos_2"} onkeyup="ZamienNaLiczbe(this);" /></td>
+		<td><select name="status_2"><option value="1" {if $temp_post.status_2 eq "enable(1)"} selected="selected" {/if}>włącz</option><option value="2" {if $temp_post.status_2 eq "disable(2)"} selected="selected" {/if}>wyłącz(off)</option></select></td>
+		</tr>
+		
+		<tr><td>e3</td><td><INPUT TYPE="TEXT" NAME="downstream_3" size="10" value="{if $temp_post.downstream_3}{$temp_post.downstream_3}{else}64{/if}" {tip text="Wpisz wartość downstream" trigger="downstream_3"} onkeyup="ZamienNaLiczbe(this);" /></td><td><INPUT TYPE="TEXT" NAME="vlan_id_3" size="4" maxlength="4" value="{if $temp_post.vlan_id_3}{$temp_post.vlan_id_3}{/if}" {tip text="Wpisz wartość VLAN ID" trigger="vlan_id_3"} onkeyup="ZamienNaLiczbe(this);" /></td><td><INPUT TYPE="TEXT" NAME="cos_3" maxlength="1" size="1" value="{if $temp_post.cos_3}{$temp_post.cos_3}{else}0{/if}" {tip text="Wpisz wartość COS" trigger="cos_3"} onkeyup="ZamienNaLiczbe(this);" /></td>
+		<td><select name="status_3"><option value="1" {if $temp_post.status_3 eq "enable(1)"} selected="selected" {/if}>włącz</option><option value="2" {if $temp_post.status_3 eq "disable(2)"} selected="selected" {/if}>wyłącz(off)</option></select></td>
+		</tr>
+		
+		<tr><td>e4</td><td><INPUT TYPE="TEXT" NAME="downstream_4" size="10" value="{if $temp_post.downstream_4}{$temp_post.downstream_4}{else}64{/if}" {tip text="Wpisz wartość downstream" trigger="downstream_4"} onkeyup="ZamienNaLiczbe(this);" /></td><td><INPUT TYPE="TEXT" NAME="vlan_id_4" size="4" maxlength="4" value="{if $temp_post.vlan_id_4}{$temp_post.vlan_id_4}{/if}" {tip text="Wpisz wartość VLAN ID" trigger="vlan_id_4"} onkeyup="ZamienNaLiczbe(this);" /></td><td><INPUT TYPE="TEXT" NAME="cos_4" maxlength="1" size="1" value="{if $temp_post.cos_4}{$temp_post.cos_4}{else}0{/if}" {tip text="Wpisz wartość COS" trigger="cos_4"} onkeyup="ZamienNaLiczbe(this);" /></td>
+		<td><select name="status_4"><option value="1" {if $temp_post.status_4 eq "enable(1)"} selected="selected" {/if}>włącz</option><option value="2" {if $temp_post.status_4 eq "disable(2)"} selected="selected" {/if}>wyłącz(off)</option></select></td>
+		</tr>
+		<tr><td colspan="5" align="right"><input type="button" name="add_profile" value="{if $temp_post.profile_edit eq 1}Zmień{else}Dodaj{/if} profil ONU" OnClick="document.getElementById('gponprofileadd').value=1;this.form.submit();" />
+		{if $temp_post.profile_edit eq 1}<br /><a href="?m=gponoltedit&id={$netdevinfo.id}">dodaj nowy</a> {/if}</td></tr>
+		</table>
+		<b>Dodane profile:</b><br /><br />
+		<table cellpadding="3" cellspacing="3" border="1">
+		{foreach from=$gponoltprofiles key=key item=name}
+			<tr><td align="right">{$key}.</td><td>{$name}</td><td><a href="?m=gponoltedit&id={$netdevinfo.id}&prof={$name|replace:'&nbsp;':'::'}">edytuj</a></td></tr>
+		{/foreach}
+		</TD>
+		</table>
+		</form>
+	</TR>
+	{if $nagiosON}
+	<TR>
+	    <td colspan="3"> <hr size="1" /> </td>
+	</TR>
+	<tr>
+	    <TD><img src=img/nagios.gif></TD>
+	    <TD nowrap>
+		<B>Monitoruj w NAGIOSIE</B>
+	    </TD>
+	    <TD>
+		<select name=dev2nagios[nagios] onchange=ShowHideNagios(this);>
+		    <option value='0' {if $dev2nagios.nagios!='1'}selected{/if}>Nie
+		    <option value='1' {if $dev2nagios.nagios=='1'}selected{/if}>Tak
+		</select>
+	    </TD>
+	</TR>
+	{/if}
+	
+	</TABLE>
+                            		</TD>
+                    		</TR>
+            		</TABLE>
+        	</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="100%" class="fbottomu" COLSPAN="3" ALIGN="RIGHT">
+			<A HREF="javascript:document.netdevedit.submit();" ACCESSKEY="S">{trans("Submit")} <IMG SRC="img/save.gif" alt=""></A>
+			<A HREF="?m=gponoltinfo&id={$netdevinfo.id}">{trans("Cancel")} <IMG SRC="img/cancel.gif" alt=""></A>
+		</TD>
+	</TR>	
+</TABLE>
+</FORM>
+<SCRIPT type="text/javascript">
+<!--
+BUL_TIMECOMPONENT = false;
+var cal1 = new calendar(document.forms['netdevedit'].elements['netdev[purchasedate]']);
+//-->
+</SCRIPT>

@@ -1,0 +1,182 @@
+-- netdevices --
+ALTER TABLE netdevices ADD COLUMN gponoltid int(11) DEFAULT NULL;
+ALTER TABLE netdevices ADD KEY gponoltid (gponoltid);
+
+-- gponauthlog --
+CREATE table gponauthlog (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	time datetime NULL DEFAULT NULL,
+	onuid int(11) NOT NULL,
+	nas varchar(15) NOT NULL DEFAULT '',
+	oltport int(11),
+	onuoltid int(11),
+	version varchar(20),
+	PRIMARY KEY (id),
+	KEY gponauthlog_onuid_time (onuid, time DESC)
+) ENGINE=InnoDB;
+
+-- gponolt --
+CREATE TABLE gponolt (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	snmp_version tinyint(4) NOT NULL,
+	snmp_description varchar(255) NOT NULL,
+	snmp_host varchar(100) NOT NULL,
+	snmp_community varchar(100) NOT NULL,
+	snmp_auth_protocol enum('MD5','SHA','') NOT NULL,
+	snmp_username varchar(255) NOT NULL,
+	snmp_password varchar(255) NOT NULL,
+	snmp_sec_level enum('noAuthNoPriv','authNoPriv','authPriv','') NOT NULL,
+	snmp_privacy_passphrase varchar(255) NOT NULL,
+	snmp_privacy_protocol enum('DES','AES','') NOT NULL,
+	PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+-- gponoltports --
+CREATE TABLE gponoltports (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	gponoltid int(11) NOT NULL,
+	numport int(11) NOT NULL,
+	maxonu int(11) NOT NULL,
+	PRIMARY KEY (id),
+	KEY gponoltid (gponoltid)
+) ENGINE=InnoDB;
+
+-- gponoltprofiles --
+CREATE TABLE gponoltprofiles (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	name varchar(100) NOT NULL,
+	PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+-- gpononu --
+CREATE TABLE gpononu (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	name varchar(100) NOT NULL,
+	location varchar(255) NOT NULL,
+	gpononumodelsid int(11) NOT NULL,
+	description text NOT NULL,
+	serialnumber varchar(32) NOT NULL,
+	purchasetime int(11) NOT NULL DEFAULT '0',
+	guaranteeperiod tinyint(3) unsigned NOT NULL DEFAULT '0',
+	password varchar(100) NOT NULL,
+	onuid smallint(11) NOT NULL DEFAULT '0',
+	autoprovisioning tinyint(4) DEFAULT NULL,
+	onudescription varchar(32) DEFAULT NULL,
+	gponoltprofilesid int(11) DEFAULT NULL,
+	voipaccountsid1 int(11) DEFAULT NULL,
+	voipaccountsid2 int(11) DEFAULT NULL,
+	autoscript tinyint(4) NOT NULL DEFAULT '0',
+	host_id1 int(11),
+	host_id2 int(11),
+	creationdate int(11) NOT NULL DEFAULT '0',
+	moddate int(11) NOT NULL DEFAULT '0',
+	creatorid int(11) NOT NULL DEFAULT '0',
+	modid int(11) NOT NULL DEFAULT '0',
+	PRIMARY KEY (id),
+	UNIQUE KEY name (name),
+	KEY gpononumodelsid (gpononumodelsid),
+	FOREIGN KEY (host_id1) REFERENCES nodes (id) ON DELETE SET NULL ON UPDATE CASCADE,
+	FOREIGN KEY (host_id2) REFERENCES nodes (id) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- gpononu2customers --
+CREATE TABLE gpononu2customers (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	gpononuid int(11) NOT NULL,
+	customersid int(11) NOT NULL,
+	PRIMARY KEY (id),
+	KEY IXgpononuid (gpononuid),
+	KEY IXcustomersid (customersid),
+	FOREIGN KEY (gpononuid) REFERENCES gpononu (id) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (customersid) REFERENCES customers (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- gpononu2olt --
+CREATE TABLE gpononu2olt (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	netdevicesid int(11) NOT NULL,
+	gpononuid int(11) NOT NULL,
+	numport smallint(6) NOT NULL,
+	PRIMARY KEY (id),
+	UNIQUE KEY gpononuid (gpononuid),
+	KEY gponoltid (netdevicesid)
+) ENGINE=InnoDB;
+
+-- gpononumodels --
+CREATE TABLE gpononumodels (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	name varchar(32) NOT NULL,
+	description text COLLATE utf8_polish_ci,
+	producer varchar(64) DEFAULT NULL,
+	PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+-- gpononuportstype --
+CREATE TABLE gpononuportstype (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	name varchar(100) NOT NULL,
+	PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+-- gpononuport --
+CREATE TABLE gpononuport (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	onuid int(11) NOT NULL,
+	typeid int(11) DEFAULT NULL,
+	portid int(11) DEFAULT NULL,
+	portdisable tinyint(4),
+	PRIMARY KEY (id),
+	UNIQUE KEY onu_type_port (onuid, typeid, portid),
+	FOREIGN KEY (onuid) REFERENCES gpononu (id) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (typeid) REFERENCES gpononuportstype (id) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- gpononuportstype2models --
+CREATE TABLE gpononuportstype2models (
+	gpononuportstypeid int(11) NOT NULL,
+	gpononumodelsid int(11) NOT NULL,
+	portscount int(11) NOT NULL,
+	KEY gpononuportstypeid (gpononuportstypeid, gpononumodelsid),
+	FOREIGN KEY (gpononuportstypeid) REFERENCES gpononuportstype (id) ON DELETE SET NULL ON UPDATE CASCADE,
+	FOREIGN KEY (gpononumodelsid) REFERENCES gpononumodels (id) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB;
+
+-- gpononutv --
+CREATE TABLE gpononutv (
+	id int(11) NOT NULL AUTO_INCREMENT,
+	ipaddr int(16) unsigned NOT NULL,
+	channel varchar(100) NOT NULL,
+	PRIMARY KEY (id),
+	UNIQUE KEY ipaddr (ipaddr)
+) ENGINE=InnoDB;
+
+DROP PROCEDURE IF EXISTS log_onu_auth;
+
+DELIMITER $$
+CREATE PROCEDURE log_onu_auth (username varchar(100), nas_ip varchar(15), olt int(11), onu int(11), ver char(20))
+	BEGIN
+		DECLARE  dev_id, onu_id int ;
+		SELECT netdev INTO dev_id FROM nodes n WHERE inet_ntoa(ipaddr) = nas_ip AND ownerid = 0;
+		SELECT id INTO onu_id FROM gpononu WHERE name = username;
+		INSERT INTO gponauthlog(time, onuid, nas, oltport, onuoltid, version) VALUES(NOW(), onu_id, nas_ip, olt, onu, ver);
+		UPDATE gpononu SET onuid = onu WHERE id = onu_id;
+
+		REPLACE INTO gpononu2olt(netdevicesid, gpononuid, numport) VALUES(dev_id, onu_id, olt);
+	END;
+$$
+DELIMITER ;
+
+-- uiconfig --
+INSERT INTO uiconfig (section, var, value, description, disabled) VALUES ('gpon-dasan', 'max_onu_to_olt', '64', 'GPON - Domyślna maksymalna liczba ONU przypisanych do portu OLT', 0);
+INSERT INTO uiconfig (section, var, value, description, disabled) VALUES ('gpon-dasan', 'onumodels_pagelimit', '100', 'Limit wyświetlanych rekordów na jednej stronie listy modeli ONU.', 0);
+INSERT INTO uiconfig (section, var, value, description, disabled) VALUES ('gpon-dasan', 'onu_pagelimit', '100', 'Limit wyświetlanych rekordów na jednej stronie listy ONU.', 0);
+INSERT INTO uiconfig (section, var, value, description, disabled) VALUES ('gpon-dasan', 'olt_pagelimit', '100', 'Limit wyświetlanych rekordów na jednej stronie listy OLT.', 0);
+INSERT INTO uiconfig (section, var, value, description, disabled) VALUES ('gpon-dasan', 'onu_customerlimit', '5', 'Maksymalna liczba Klientów przypisanych do ONU', 0);
+INSERT INTO uiconfig (section, var, value, description, disabled) VALUES ('gpon-dasan', 'tx_output_power_weak', '-26', 'Niski poziom mocy optycznej RX Output Power', 0);
+INSERT INTO uiconfig (section, var, value, description, disabled) VALUES ('gpon-dasan', 'onu_autoscript_debug', '1', '', 1);
+INSERT INTO uiconfig (section, var, value, description, disabled) VALUES ('gpon-dasan', 'use_radius', 0, 'Czy gpon (olty) mają używać radiusa', 0);
+INSERT INTO uiconfig (section, var, value, description, disabled) VALUES ('gpon-dasan', 'syslog', 0, 'Jeśli mamy tabele syslog to możemy logować zdarzenia (custom lms).  syslog(time integer, userid integer, level smallint, what character varying(128), xid integer, message text, detail text)', 0);
+
+INSERT INTO gpononuportstype (name) VALUES ('eth'), ('pots'), ('ces'), ('video'), ('virtual-eth'), ('wifi');
+
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSGponDasanPlugin', '2015122900');

@@ -1,0 +1,147 @@
+--
+-- she-gpon-mib.mib
+-- handmade :-(
+--
+
+	DS-SHE-GPON-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS
+			she			
+				FROM AN-MIB
+			dsShe
+				FROM DASAN-SMI							
+			ifIndex			
+				FROM IF-MIB			
+			sheAlarmTimeAndDate, sheAlarmReportingSource, sheAlarmReportingSourceType, sheAlarmSeverity, SheAlarmSevProfileIndex			
+				FROM DS-SHE-ALARMING-MIB			
+			SheControlStatusType			
+				FROM DS-SHE-TC-MIB			
+			OBJECT-GROUP, MODULE-COMPLIANCE, NOTIFICATION-GROUP			
+				FROM SNMPv2-CONF			
+			TimeTicks, Unsigned32, Gauge32, OBJECT-TYPE, MODULE-IDENTITY, 
+			NOTIFICATION-TYPE			
+				FROM SNMPv2-SMI			
+			DisplayString			
+				FROM SNMPv2-TC;
+	
+	
+		sheGponMib MODULE-IDENTITY 
+			LAST-UPDATED "200907241120Z"		-- January 31, 2008 at 11:20 GMT
+			ORGANIZATION 
+				"DASAN Networks"
+			CONTACT-INFO 
+				"dhlee@dasannetworks.com"
+			DESCRIPTION 
+				"This MIB contains GPON-related information."
+			::= { dsShe 51 }
+
+		
+	
+--
+-- Type definitions
+--
+	
+	
+	
+--
+-- Node definitions
+--
+	
+		sheGponBase OBJECT IDENTIFIER ::= { sheGponMib 1 }
+		sheGponPort OBJECT IDENTIFIER ::= { sheGponMib 2 }
+		
+		sheGponPortTable OBJECT-TYPE
+			SYNTAX SEQUENCE OF SheGponPortEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"."
+			::= { sheGponPort 1 }
+				
+		sheGponPortEntry OBJECT-TYPE
+			SYNTAX SheGponPortEntry
+			MAX-ACCESS not-accessible
+			STATUS current
+			DESCRIPTION
+				"."
+			INDEX {sheGponPortId  }
+			::= { sheGponPortTable 1 }
+
+		
+		SheGponPortEntry ::=
+			SEQUENCE { 
+			     sheGponPortId
+			     	Integer32,
+			     sheGponPortStatus
+			     	INTEGER,
+			     sheGponPortRegistrationCnt
+			     	Unsigned32,
+			     sheGponPortAuthAcceptedCnt
+			     	Unsigned32,
+			     sheGponPortAuthRejectedCnt
+			     	Unsigned32,
+			     sheGponPortAuthChallengedCnt
+			     	Unsigned32
+			 }
+
+			     
+        sheGponPortId OBJECT-TYPE
+			SYNTAX Integer32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Gpon Port Index."
+			::= { sheGponPortEntry 1 }
+			     
+  	    sheGponPortStatus OBJECT-TYPE
+			SYNTAX INTEGER
+			{
+			disable(0),
+			notready(1),
+			inactive(2),
+			active(3) 
+			}
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Gpon Port status."
+			::= { sheGponPortEntry 2 }
+
+		sheGponPortRegistrationCnt OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Gpon Port registration counter."
+			::= { sheGponPortEntry 3 }
+			     
+		sheGponPortAuthAcceptedCnt OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Gpon Port authentication success counter."
+			::= { sheGponPortEntry 4 }
+
+		sheGponPortAuthRejectedCnt OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Gpon Port authentication reject counter."
+			::= { sheGponPortEntry 5 }
+
+		sheGponPortAuthChallengedCnt OBJECT-TYPE
+			SYNTAX Unsigned32
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Gpon Port authentication challenge counter."
+			::= { sheGponPortEntry 6 }
+					    
+	    
+	END
+
+--
+-- she-pots-mib.mib
+--

@@ -1,0 +1,24 @@
+VENDOR Dasan 6296
+BEGIN-VENDOR Dasan
+
+ATTRIBUTE Dasan-Gpon-Olt-Id 101 integer
+ATTRIBUTE Dasan-Gpon-Onu-Id 102 integer
+ATTRIBUTE Dasan-Gpon-Onu-Model-Name 103 string
+ATTRIBUTE Dasan-Gpon-Onu-Serial-Num 104 string
+ATTRIBUTE Dasan-Gpon-Onu-Profile 105 string
+ATTRIBUTE Dasan-Gpon-Onu-Firmware-Version 106 string
+ATTRIBUTE Dasan-Gpon-Onu-Static-Ip 107 string
+ATTRIBUTE Dasan-Gpon-Onu-Voip-Sip-Number 108 string
+ATTRIBUTE Dasan-Gpon-Onu-Voip-Sip-Auth 109 string
+ATTRIBUTE Dasan-Gpon-Onu-Voip-Mgc-Msg-Id 110 string
+ATTRIBUTE Dasan-Gpon-Onu-Voip-Mgc-Term-Id 111 string
+ATTRIBUTE Dasan-Gpon-Onu-Uni-Port-Admin 112 string
+ATTRIBUTE Dasan-Gpon-Onu-Description 113 string
+ATTRIBUTE Dasan-Gpon-Onu-Uni-Eth-Port-Medium 114 string
+ATTRIBUTE Dasan-Gpon-Onu-Uni-Eth-Auto-Detect 115 string
+ATTRIBUTE Dasan-Gpon-Onu-Mac-Filter 116 string
+ATTRIBUTE Dasan-Gpon-Onu-Mgmt-Mode-Ip-Path-Ftp 117 string
+ATTRIBUTE Dasan-Gpon-Onu-Mgmt-Mode-Ip-Path-Tftp 118 string
+ATTRIBUTE Dasan-Gpon-Onu-Mgmt-Mode-Ip-Path-Uri 119 string
+
+END-VENDOR Dasan

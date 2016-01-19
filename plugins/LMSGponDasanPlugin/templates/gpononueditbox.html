@@ -1,0 +1,340 @@
+<!-- $Id$ -->
+{include file="calendar_js.html"}
+<SCRIPT TYPE="text/javascript" SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpon.js""></SCRIPT>
+<FORM NAME="netdevedit" METHOD="POST" ACTION="?m=gpononuedit&id={$netdevinfo.id}">
+	<INPUT type="submit" class="hiddenbtn">
+	<INPUT TYPE="hidden" NAME="voipaccountsid1" ID="pots_1_phone" VALUE="{$netdevinfo.voipaccountsid1}"> 
+	<INPUT TYPE="hidden" NAME="voipaccountsid2" ID="pots_2_phone" VALUE="{$netdevinfo.voipaccountsid2}"> 
+	<INPUT TYPE="hidden" NAME="host_id1" ID="hostid_1" VALUE="{$netdevinfo.host_id1}"> 
+	<INPUT TYPE="hidden" NAME="host_id2" ID="hostid_2" VALUE="{$netdevinfo.host_id2}"> 
+<TABLE WIDTH="100%" CELLPADDING="3">
+	
+	<TR class="dark">
+		<TD WIDTH="1%" class="fleftu">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" class="fbt">
+			<B>{trans("Name:")}</B>
+		</TD>
+		<TD WIDTH="98%" class="frightu">
+			<B>{$netdevinfo.name} ({$netdevinfo.id|string_format:"%04d"})</B>
+		</TD>
+	</TR>
+	<TR class="light">
+                <TD WIDTH="100%" COLSPAN="3" class="flr">
+		        <TABLE WIDTH="100%" CELLPADDING="0">
+		                <TR class="light">
+		                        <TD WIDTH="50%" style="vertical-align:top;">
+		                                <TABLE WIDTH="100%" CELLPADDING="3">
+		                                <TR class="light">
+		<TD WIDTH="1%">
+			 <IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%">
+		        <B>ONU ID:</B>
+		</TD>
+		<TD WIDTH="98%">
+		       <b>{$netdevinfo.onuid}</b>
+		</TD>
+	</TR>
+	
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/settings.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B {tip text="Pole możliwe do zmiany przy nowym, jeszcze nie podłączonym onu"}>Wydany do klienta:</B>
+		</TD>
+		<TD WIDTH="98%">
+		<input type="checkbox" name="netdev[autoprovisioning]" {if $netdevinfo.autoprovisioning eq 0} {else} checked="checked"{/if} value="1" {if $netdevinfo.autoscript eq 1} disabled="disabled" {/if}/>
+		{if $netdevinfo.autoscript eq 1}
+		<INPUT TYPE="hidden" NAME="netdev[autoprovisioning]" ID="netdev[autoprovisioning]" VALUE="{$netdevinfo.autoprovisioning}"> 
+		{/if}
+		</TD>
+	</TR>
+	
+	 <TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/settings.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B {tip text="Pole możliwe do zmiany przy nowym, jeszcze nie podłączonym onu"}>Profil:</B>
+		</TD>
+		<TD WIDTH="98%">
+			<SELECT {tip trigger="gponoltprofiles"} SIZE="1" NAME="netdev[gponoltprofilesid]" {tip text="Wybierz profil ktory ma byc skonfigurowany na nowym ONU"} {if $netdevinfo.autoscript eq 1} disabled="disabled" {/if}>
+			<option value="">Wybierz</option>
+				{foreach from=$gponoltprofiles key=key item=qname}
+				<OPTION VALUE="{$key}"{if $netdevinfo.gponoltprofilesid eq $key} SELECTED{/if}>{$qname}</OPTION>
+				{/foreach}
+			</SELECT>
+			{if $netdevinfo.autoscript eq 1}
+		<INPUT TYPE="hidden" NAME="netdev[gponoltprofilesid]" ID="netdev[gponoltprofilesid]" VALUE="{$netdevinfo.gponoltprofilesid}"> 
+		{/if}
+		</TD>
+	</TR>
+	
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu_model.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Model:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<SELECT SIZE="1" NAME="netdev[gpononumodelsid]" {tip text="Wybierz model ONU"}>
+				{foreach from=$gpononumodels key=key item=qname}
+				<OPTION VALUE="{$key}"{if $netdevinfo.gpononumodelsid eq $key} SELECTED{/if}>{$qname}</OPTION>
+				{/foreach}
+			</SELECT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/passwd.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%">
+		        <B>{trans("Password:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {if $netdevinfo.password eq ''}(auto-learning){else}{$netdevinfo.password}{/if}
+		        <INPUT TYPE="hidden" NAME="netdev[password]" ID="password" VALUE="{$netdevinfo.password}"> 
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%">
+			<B {tip text="Pole możliwe do zmiany przy nowym, jeszcze nie podłączonym onu"}>ONU description:</B>
+		<TD WIDTH="98%">
+		<INPUT TYPE="TEXT" NAME="netdev[onudescription]" VALUE="{$netdevinfo.onudescription}" MAXLENGTH="32" {if $netdevinfo.autoscript eq 1} disabled="disabled" style="border:1px solid grey;color:grey;" {/if}/>
+		{if $netdevinfo.autoscript eq 1}
+		<INPUT TYPE="hidden" NAME="netdev[onudescription]" ID="netdev[onudescription]" VALUE="{$netdevinfo.onudescription}"> 
+		{/if} 
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/serialnumber.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Serial number:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[serialnumber]" VALUE="{$netdevinfo.serialnumber}" {tip text="Enter serial number (optional)"}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/home.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Location:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[location]" VALUE="{$netdevinfo.location}" {tip text="Enter device location (optional)"}>
+		</TD>
+	</TR>
+		<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/customer.gif" ALT="{trans("Customer:")}">
+		</TD>
+		<TD WIDTH="99%" COLSPAN="2">
+		<TABLE>
+		{section name=foo start=0 loop=$onu_customerlimit step=1}
+		{assign var="temp_var" value="document.getElementById('customersid_"|cat:$smarty.section.foo.index|cat:"').value+';'+"}
+		{assign var='new_var' value=$temp_var|cat:$new_var}
+		{/section}
+		{assign var='new_var' value=$new_var|cat:"'0;'"}
+		{section name=foo start=0 loop=$onu_customerlimit step=1}
+		<TR><TD>{$smarty.section.foo.index+1}.
+		{assign var="temp" value="customersid_"|cat:$smarty.section.foo.index}
+		</TD>
+		<TD>
+		<SELECT {tip trigger="customer_test"} SIZE="1" ID="customersid_{$smarty.section.foo.index}" NAME="netdev[customersid_{$smarty.section.foo.index}]" {tip text="Przypisz ONU do klienta"} style="max-width:250px;" onchange="xajax_ONU_Voip_Phone_Xj({$new_var},document.getElementById('pots_1_phone').value,document.getElementById('pots_2_phone').value,{if $netdevinfo.autoscript eq 1}1{else}0{/if});
+		xajax_ONU_Host_hosts_Xj({$new_var},document.getElementById('hostid_1').value,document.getElementById('hostid_2').value,{if $netdevinfo.autoscript eq 1}1{else}0{/if});" >
+			<OPTION VALUE="0">--BEZ KLIENTA--</OPTION>
+				{foreach from=$customers item=c}
+				<OPTION VALUE="{$c.id}"{if $netdevinfo.$temp eq $c.id} SELECTED{/if}>
+				
+				{$c.customername|truncate:40:"...":true} ({$c.id|string_format:"%04d"})</OPTION>
+				{/foreach}
+		</SELECT>
+
+		<SCRIPT type="text/javascript">
+<!--
+document.getElementById('customersid_{$smarty.section.foo.index}').onchange();
+//-->
+</SCRIPT>
+		
+		</TD></TR>
+		
+{/section}
+		
+		</TABLE>
+			
+		</TD>
+	</TR>
+	 </TABLE>
+	 <table  id="show_voip" style="display:none;">
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/voip.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>VoIP:</B>
+		</TD>
+		{if $netdevinfo.potsports == 2}
+		    <TD WIDTH="98%" id="ONU_Voip_Phone" align="left">
+		{else}
+		    <TD WIDTH="98%" align="left">
+		    Brak portów voip
+		{/if}
+
+		</TD>
+	</TR></table>
+	<table  id="show_host" style="display:block;">
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/node.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>Host:</B>
+		</TD>
+		<TD WIDTH="49%" id="ONU_Host_hosts" align="left">
+
+		</TD>
+		<td WIDTH="49%" align="left">
+		    <table>
+			<tr>
+			    <td><nobr><img src="img/netdev.gif" alt""> {trans("Device:")} <input name="devhost1" type="checkbox" {if $netdevinfo.host_id1_dev}checked="checked"{/if} {if $netdevinfo.autoscript eq 1} disabled="disabled" {/if}></nobr></td>
+			    <td><select name="devhost_id1" {if $netdevinfo.autoscript eq 1} disabled="disabled" {/if}>
+			         <OPTION VALUE="0">-- wybierz --</OPTION>
+                                 {foreach from=$netdevhosts item=nd}
+	                              <OPTION VALUE="{$nd.id}"{if $netdevinfo.host_id1 eq $nd.id} SELECTED{/if}>{$nd.host}</OPTION>
+	                         {/foreach}
+				</select></td>
+			</tr>
+			<tr>
+			    <td><nobr><img src="img/netdev.gif" alt""> {trans("Device:")} <input name="devhost2" type="checkbox" {if $netdevinfo.host_id2_dev}checked="checked"{/if} {if $netdevinfo.autoscript eq 1} disabled="disabled" {/if}></nobr></td>
+			    <td><select name="devhost_id2" {if $netdevinfo.autoscript eq 1} disabled="disabled" {/if}>
+			         <OPTION VALUE="0">-- wybierz --</OPTION>
+                                 {foreach from=$netdevhosts item=nd}
+	                              <OPTION VALUE="{$nd.id}"{if $netdevinfo.host_id2 eq $nd.id} SELECTED{/if}>{$nd.host}</OPTION>
+	                         {/foreach}
+				</select></td>
+			</tr>
+		    </table>
+		</td>
+	</TR> </TABLE>
+                                       
+				</TD>
+				<TD WIDTH="50%" style="vertical-align:top;">
+			                <TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/calendar.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Purchase date:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[purchasedate]" VALUE="{if $netdevinfo.purchasedate}{$netdevinfo.purchasedate}{/if}" SIZE="10" MAXSIZE="10" OnClick="javascript:cal1.popup();" {tip trigger="purchasedate" text="Enter device purchase date in 'yyyy/mm/dd' format or click to choose date from calendar (optional)"}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/guarantee.png" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Guarantee period:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<SELECT SIZE="1" NAME="netdev[guaranteeperiod]" {tip text="Select device guarantee period (optional)"}>
+				{foreach from=$_GUARANTEEPERIODS key=key item=period}
+				<OPTION VALUE="{$key}"{if $netdevinfo.guaranteeperiod eq $key} SELECTED{/if}>{$period}</OPTION>
+				{/foreach}
+			</SELECT>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/desc.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Description:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<TEXTAREA NAME="netdev[description]" COLS="40" ROWS="5" COLS="40" ROWS="5" {tip text="Enter additional information (optional)"}>{$netdevinfo.description}</TEXTAREA>
+			</FORM>
+		</TD>
+	</TR>	
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/users.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Created:")}<BR>
+			{trans("Modified:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			{if $netdevinfo.creationdateh}{$netdevinfo.createdby}, {$netdevinfo.creationdateh}{else} ? {/if}<BR>
+			{if $netdevinfo.moddate}{$netdevinfo.modifiedby}, {$netdevinfo.moddateh}{else}-{/if}
+		</TD>
+	</TR>
+
+	{if ConfigHelper::getConfig('phpui.default_editor')}
+	<tr class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu_takenports.gif" ALT="">
+		</td>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Ports:")}<br>(radius)</B>
+		</TD>
+		<TD WIDTH="98%">
+		    <table CELLPADDING="2" border="1" rules="cols">
+			<tr class="dark"><td>Port</td><td>Admin status</td></tr>
+			{foreach from=$modelports key=mpid item=modelport}
+			    {section name=port loop=$modelport.portscount}
+			    <tr><td align="right">{$modelport.name} {$smarty.section.port.iteration}</td>
+				<td>
+				<SELECT SIZE="1" NAME="portdisable[{$modelport.id}][{$smarty.section.port.iteration}]">
+				    <option value="0"> up </option>
+				    <option value="1" {if $onuports[$modelport.id][$smarty.section.port.iteration] == 1} SELECTED {/if}> down </option>
+				</SELECT>
+			    </td></tr>
+			    {/section}
+			{/foreach}
+		    </table>
+		</TD>
+	</TR>
+	{/if}
+                                    		</TABLE>
+                            		</TD>
+                    		</TR>
+            		</TABLE>
+        	</TD>
+	</TR>
+	{if $netdevinfo.gponoltid gt 0}
+	<TR class="light">
+		<TD WIDTH="100%" colspan="3" class="flr">
+		<div style="border:1px solid black;padding:3px;margin:2px;">
+		{$snmponudata}
+		</div>
+		</TD>
+	</TR>
+	{/if}
+	<TR class="light">
+		<TD WIDTH="100%" class="fbottomu" COLSPAN="3" ALIGN="RIGHT">
+			<A HREF="javascript:document.netdevedit.submit();" ACCESSKEY="S" id="xsd">{trans("Submit")} <IMG SRC="img/save.gif" alt=""></A>
+			<A HREF="?m=gpononuinfo&id={$netdevinfo.id}">{trans("Cancel")} <IMG SRC="img/cancel.gif" alt=""></A>
+		</TD>
+	</TR>	
+</TABLE>
+
+<SCRIPT type="text/javascript">
+<!--
+BUL_TIMECOMPONENT = false;
+var cal1 = new calendar(document.forms['netdevedit'].elements['netdev[purchasedate]']);
+//-->
+</SCRIPT>

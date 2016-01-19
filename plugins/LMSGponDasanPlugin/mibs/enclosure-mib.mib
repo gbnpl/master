@@ -1,0 +1,449 @@
+-- *****************************************************************
+-- ENCLOSURES MIB -  The MIB for Enclosures.
+--
+-- Jun 2003, dhlee
+--
+-- Copyright (c) 2003 by Dasan Co., Ltd.
+-- All rights reserved.
+-- *****************************************************************
+ 
+ 
+ENCLOSURE-MIB DEFINITIONS ::= BEGIN
+IMPORTS
+    MODULE-IDENTITY,
+    OBJECT-TYPE,
+    Counter32, Gauge32, Counter64,
+    Integer32, TimeTicks, mib-2,
+    NOTIFICATION-TYPE
+    			FROM SNMPv2-SMI
+    TEXTUAL-CONVENTION, DisplayString,
+    PhysAddress, TruthValue, RowStatus,
+    TimeStamp, AutonomousType, TestAndIncr
+                        FROM SNMPv2-TC
+
+    MODULE-COMPLIANCE,
+    OBJECT-GROUP        FROM SNMPv2-CONF
+    otherEnterprises           
+                        FROM DASAN-SMI;
+ 
+enclosureMIB MODULE-IDENTITY
+    LAST-UPDATED   "200306280000Z"
+    ORGANIZATION   "Dasan Co., Ltd."
+    CONTACT-INFO
+                   "Dasan Co., Ltd."
+    DESCRIPTION
+        "The MIB module to describe the enclosure."
+    ::= { otherEnterprises 1 }       
+                                                              
+enclosureEvents		OBJECT IDENTIFIER ::= { enclosureMIB 1 }                                                              
+enclosureMIBObjects	OBJECT IDENTIFIER ::= { enclosureMIB 2 }	
+
+
+--     
+-- Door, Fire, Fan, flooding
+--                                                                   
+enDoorAdminStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+                      enable(1),
+                      disable(2)
+                   }
+       MAX-ACCESS  read-write
+       STATUS      current
+       DESCRIPTION
+          "A value that determined whether to use door-sensor or not."
+       ::= { enclosureMIBObjects 1 }
+       
+enDoorOperStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+                      open(1),
+                      close(2)
+                   }
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "display that door is open or not."
+       ::= { enclosureMIBObjects 2 }
+                                     
+enFireAdminStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+                      enable(1),
+                      disable(2)
+                   }
+       MAX-ACCESS  read-write
+       STATUS      current
+       DESCRIPTION
+          "A value that determined whether to use Fire-sensor or not."
+       ::= { enclosureMIBObjects 3 }
+       
+enFireOperStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+                      normal(1),
+                      abnormal(2)
+                   }
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "display that fire is occrued or not."
+       ::= { enclosureMIBObjects 4 }
+
+enFanAdminStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+                      enable(1),
+                      disable(2)
+                   }
+       MAX-ACCESS  read-write
+       STATUS      current
+       DESCRIPTION
+          "A value that determined whether to use Fan-sensor or not."
+       ::= { enclosureMIBObjects 5 }
+       
+enFanOperStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+                      on(1),
+                      off(2)
+                   }
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "display that fan is running or not."
+       ::= { enclosureMIBObjects 6 }
+       
+enFloodAdminStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+                      enable(1),
+                      disable(2)
+                   }
+       MAX-ACCESS  read-write
+       STATUS      current
+       DESCRIPTION
+          "A value that determined whether to use Flood-sensor or not."
+       ::= { enclosureMIBObjects 7 }
+       
+enFloodOperStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+                      normal(1),
+                      abnormal(2)
+                   }
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "display that flooding exists or not."
+       ::= { enclosureMIBObjects 8 }
+
+                 
+--               
+-- Temperature Table
+--
+  
+enTemperatureTable OBJECT-TYPE
+	SYNTAX	SEQUENCE OF EnTemperatureEntry	    
+	MAX-ACCESS not-accessible
+	STATUS current 
+	DESCRIPTION 
+		"The Temperature table of Enclosure."
+	::= { enclosureMIBObjects 9 }
+
+enTemperatureEntry OBJECT-TYPE
+    SYNTAX      EnTemperatureEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+         "An entry containing management information applicable
+         to enclosure's Temperature."
+    INDEX   { enTemperatureIndex } 
+    ::= { enTemperatureTable 1 }
+
+EnTemperatureEntry ::=
+	SEQUENCE {
+	           enTemperatureIndex				INTEGER,
+	           enTemperatureValue				INTEGER,
+	           enTemperatureAdminStatus			INTEGER,
+	           enTemperatureOperStatus			INTEGER,
+	           enTemperatureCeilThreshold	 	INTEGER,
+	           enTemperatureFloorThreshold 		INTEGER
+	}   
+
+enTemperatureIndex OBJECT-TYPE
+       SYNTAX      INTEGER
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "A unique value, greater than zero, for each
+           Temperature sensor.It is recommended that values are assigned
+           contiguously starting from 1."
+       ::= { enTemperatureEntry 1 }
+
+enTemperatureValue OBJECT-TYPE
+       SYNTAX      INTEGER
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "A Temerature in the enclosure."
+       ::= { enTemperatureEntry 2 }
+
+enTemperatureAdminStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+       					enabled(1),
+       					disabled(2)
+      				}
+       MAX-ACCESS  read-write
+       STATUS      current
+       DESCRIPTION
+          "A value that determined whether to use temperature-sensor or not."
+       ::= { enTemperatureEntry 3 }
+       
+enTemperatureOperStatus OBJECT-TYPE
+       SYNTAX      INTEGER  {
+       				normal(1),
+       				abnormal(2)       
+       				}
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "A status value that display current Operational status."
+       ::= { enTemperatureEntry 4 }
+                                   
+enTemperatureCeilThreshold OBJECT-TYPE
+       SYNTAX      INTEGER
+       MAX-ACCESS  read-write
+       STATUS      current
+       DESCRIPTION
+          "A ceil value of temperature threshold."
+       ::= { enTemperatureEntry 5 }
+       
+enTemperatureFloorThreshold OBJECT-TYPE
+       SYNTAX      INTEGER
+       MAX-ACCESS  read-write
+       STATUS      current
+       DESCRIPTION
+          "A floor value of temperature threshold."
+       ::= { enTemperatureEntry 6 }
+--       
+-- Humidity Table
+--
+
+enHumidityTable OBJECT-TYPE
+	SYNTAX	SEQUENCE OF EnHumidityEntry	    
+	MAX-ACCESS not-accessible
+	STATUS current 
+	DESCRIPTION 
+		"The Humidity table of Enclosure."
+	::= { enclosureMIBObjects 10 }
+
+enHumidityEntry OBJECT-TYPE
+    SYNTAX      EnHumidityEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+         "An entry containing management information applicable
+         to a Humidity sensor."
+    INDEX   { enHumidityIndex } 
+    ::= { enHumidityTable 1 }
+
+EnHumidityEntry ::=
+	SEQUENCE {
+	           enHumidityIndex				INTEGER,
+	           enHumidityValue				INTEGER,
+	           enHumidityAdminStatus		INTEGER,
+	           enHumidityOperStatus			INTEGER,
+	           enHumidityCeilThreshold		INTEGER,
+	           enHumidityFloorThreshold 	INTEGER
+	}   
+
+enHumidityIndex OBJECT-TYPE
+       SYNTAX      INTEGER
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "A unique value, greater than zero, for each
+           Humidity sensor. It is recommended that values are assigned
+           contiguously starting from 1."
+       ::= { enHumidityEntry 1 }
+       
+
+enHumidityValue OBJECT-TYPE
+       SYNTAX      INTEGER
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "A Humidity in the enclosure."
+       ::= { enHumidityEntry 2 }
+
+enHumidityAdminStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+       					enabled(1),
+       					disabled(2)
+      				}
+       MAX-ACCESS  read-write
+       STATUS      current
+       DESCRIPTION
+          "A value that determined whether to use humidity-sensor or not."
+       ::= { enHumidityEntry 3 }
+       
+enHumidityOperStatus OBJECT-TYPE
+       SYNTAX      INTEGER  {
+       				normal(1),
+       				abnormal(2)       
+       				}
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "A status value that display current Operational status."
+       ::= { enHumidityEntry 4 }
+                                   
+enHumidityCeilThreshold OBJECT-TYPE
+       SYNTAX      INTEGER
+       MAX-ACCESS  read-write
+       STATUS      current
+       DESCRIPTION
+          "A ceil value of humidity threshold."
+       ::= { enHumidityEntry 5 }
+       
+enHumidityFloorThreshold OBJECT-TYPE
+       SYNTAX      INTEGER
+       MAX-ACCESS  read-write
+       STATUS      current
+       DESCRIPTION
+          "A floor value of humidity threshold."
+       ::= { enHumidityEntry 6 }
+
+-- 2003/07/21 dhlee add           
+enEnclosureInfoTable OBJECT-TYPE
+    SYNTAX 	SEQUENCE OF EnEnclosureInfoEntry	    
+	MAX-ACCESS not-accessible
+	STATUS current 
+	DESCRIPTION 
+		"The Information table of Enclosure."
+	::= { enclosureMIBObjects 11 }
+	
+enEnclosureInfoEntry OBJECT-TYPE
+    SYNTAX      EnEnclosureInfoEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+         "An entry containing management information applicable
+         to a enclosure."
+    INDEX   { enEnclosureInfoIndex } 
+    ::= { enEnclosureInfoTable 1 }
+
+EnEnclosureInfoEntry ::=
+	SEQUENCE {
+	           enEnclosureInfoIndex				INTEGER,
+	           enEnclosureInfoOperStatus    	INTEGER
+	}   
+	
+enEnclosureInfoIndex OBJECT-TYPE
+       SYNTAX      INTEGER
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "A unique value, greater than zero, for each
+           Enclosure. It is recommended that values are assigned
+           contiguously starting from 1."
+       ::= { enEnclosureInfoEntry 1 }
+	
+enEnclosureInfoOperStatus OBJECT-TYPE
+       SYNTAX      INTEGER {
+                      alive(1),
+                      noreply(2)
+                   }
+       MAX-ACCESS  read-only
+       STATUS      current
+       DESCRIPTION
+          "Display enclosure operation status.
+           alive(1)
+           noreply(2)
+           noreply means maybe that there is no enclosure.
+          "
+       ::= { enEnclosureInfoEntry 2 }
+
+ 
+       
+--
+-- define Notify Type
+--
+enclosureTrap NOTIFICATION-TYPE
+    STATUS current 
+    DESCRIPTION 
+             "The Enclosure Trap."
+    ::= { enclosureEvents 1001 }
+
+enclosureDoorTrap  TRAP-TYPE
+	ENTERPRISE  enclosureEvents    
+	VARIABLES   { enDoorOperStatus }
+	DESCRIPTION
+             "The Enclosure Door Trap."
+    ::= 1001
+                             
+-- enTemperautreRisingThreshold TRAP-TYPE
+--	ENTERPRISE  enclosuresEvents    
+--	VARIABLES   { enTemperatureIndex, enTemperatureValue }
+--   DESCRIPTION
+--             "The temperature of enclosures is over the ceil threshold value."
+--    ::= 1001
+ 
+--enTemperautreFallingThreshold TRAP-TYPE
+--	ENTERPRISE  enclosuresEvents    
+--	VARIABLES   { enTemperatureIndex, enTemperatureValue }
+--    DESCRIPTION
+--             "The temperature of enclosures falls under the floor threshold value."
+--    ::= 1002
+    
+--enHumidityRisingThreshold TRAP-TYPE
+--	ENTERPRISE  enclosuresEvents    
+--	VARIABLES   { enHumidityIndex, enHumidityValue }
+--    DESCRIPTION
+--             "The humidity of enclosures is over the ceil threshold value."
+--    ::= 1003
+ 
+--enHumidityFallingThreshold TRAP-TYPE
+--	ENTERPRISE  enclosuresEvents    
+--	VARIABLES   { enHumidityIndex, enHumidityValue }
+--    DESCRIPTION
+--             "The humidity of enclosures falls under the floor threshold value."
+--    ::= 1004
+    
+--enDoorOpened TRAP-TYPE
+--    ENTERPRISE  enclosuresEvents
+--    VARIABLES   { enDoorOperStatus }
+--    DESCRIPTION
+--             "The door is open."
+--    ::= 1005
+
+--enDoorClosed TRAP-TYPE
+--    ENTERPRISE  enclosuresEvents
+--    VARIABLES   { enDoorOperStatus }
+--    DESCRIPTION
+--             "The door is closed."
+--    ::= 1006
+
+--enOnFire TRAP-TYPE
+--    ENTERPRISE  enclosuresEvents
+--    VARIABLES   { enFireOperStatus }
+--    DESCRIPTION
+--             "The fire is happed in enclosures."
+--    ::= 1007
+
+--enExtinguishFire TRAP-TYPE
+--    ENTERPRISE  enclosuresEvents
+--    VARIABLES   { enFireOperStatus }
+--    DESCRIPTION
+--             "The fire was put out in enclosures."
+--   ::= 1008
+         
+--enFlooding TRAP-TYPE
+--    ENTERPRISE  enclosuresEvents
+--    VARIABLES   { enFireOperStatus }
+--    DESCRIPTION
+--             "The flooding is happened in enclosures."
+--    ::= 1009
+
+--enDryness TRAP-TYPE
+--    ENTERPRISE  enclosuresEvents
+--    VARIABLES   { enFireOperStatus }
+--    DESCRIPTION
+--             "The foolding was removed in enclosures."
+--    ::= 1010            
+END
+
+                        

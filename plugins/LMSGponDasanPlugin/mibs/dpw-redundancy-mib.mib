@@ -1,0 +1,297 @@
+DPW-REDUNDANCY-MIB DEFINITIONS ::= BEGIN
+
+      IMPORTS
+      NOTIFICATION-TYPE, MODULE-IDENTITY, OBJECT-TYPE,
+      Integer32, Counter32, Unsigned32, Counter64, mib-2,
+      transmission
+            FROM SNMPv2-SMI
+
+      MODULE-COMPLIANCE, OBJECT-GROUP
+            FROM SNMPv2-CONF
+
+      TruthValue, RowStatus, RowPointer
+            FROM SNMPv2-TC
+
+      PerfCurrentCount, PerfIntervalCount
+            FROM PerfHist-TC-MIB
+
+      InterfaceIndex
+            FROM IF-MIB
+
+      pwIndex
+            FROM PW-STD-MIB
+
+      AtmVpIdentifier
+            FROM ATM-TC-MIB
+      
+      dasanEvents,dasanMgmt           
+            FROM DASAN-SMI 
+         ;
+
+
+    dpwRedundancyMIB MODULE-IDENTITY
+        LAST-UPDATED "200810300000Z"  -- 2008
+        ORGANIZATION "Pseudo-Wire Emulation Edge-to-Edge (PWE3)
+                      Working Group"
+        CONTACT-INFO
+             "Discussion and general questions should be posed to
+             the PWE3 Working Group (pwe3@ietf.org)."
+
+        DESCRIPTION
+            "This MIB contains managed object definitions for
+             Pseudo Wire Redundancy.
+
+             This MIB supplements the PW-STD-MIB module.
+             The PW-STD-MIB contains structures and MIB associations
+             generic to Pseudo-Wire (PW) emulation. PW-specific
+             MIBs (such as this) contain config and stats for specific
+             PW types.
+
+             Copyright (C) The IETF Trust (2008).  This version of
+             this MIB module is part of RFC XXXX; see the RFC itself for
+             full legal notices."
+
+        -- Revision history.
+
+        REVISION "200810300000Z"  -- 4 January 2004 12:00:00 GMT
+        DESCRIPTION 
+             "Initial version published as RFC XXXX."
+
+           ::= { mplsPWREDUNDANCYMIB 1 }
+
+
+      -- Top-level components of this MIB
+
+
+      dpwRedundancyNotifications OBJECT IDENTIFIER ::= { dpwRedundancyMIB 0 }
+      dpwRedundancyObjects       OBJECT IDENTIFIER ::= { dpwRedundancyMIB 1 }
+
+  --Generic PW Redundancy table
+
+  dpwRedundancyTable OBJECT-TYPE
+      SYNTAX    SEQUENCE OF DpwRedundancyEntry
+      MAX-ACCESS        not-accessible
+      STATUS            current
+      DESCRIPTION
+          "This table specifies generic information for an Pseudowire 
+	   Redundancy."
+      ::= { dasanMgmt 31 }
+
+      dpwRedundancyEntry OBJECT-TYPE
+      SYNTAX        DpwRedundancyEntry
+      MAX-ACCESS    not-accessible
+      STATUS        current
+      DESCRIPTION
+             "This table contains a set of parameters for
+           the Pseudowire Redundancy. This table is indexed by 
+           pwIndex from pwTable. An entry is created for every
+           newly pwIndex in the pwTable. Unless otherwise specified,
+           all read-write objects in this table MAY
+           be changed when the PW is defined as not active
+           and all RW objects values must persist
+           after reboot"
+      REFERENCE
+        "See [PWMIB] "
+
+      INDEX { pwIndex }
+      ::= { dpwRedundancyTable 1 }
+
+  DpwRedundancyEntry ::= SEQUENCE {
+          pwMode    INTEGER,
+          pwSubmode INTEGER,
+          pwBindType INTEGER,
+	  pwState   INTEGER
+          }
+
+   pwMode  OBJECT-TYPE  
+      SYNTAX      INTEGER {
+                       independent (1),
+                       masterSlave (2)
+		  }
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "If this object is set to independent, then the mode for this PW is Independent. 
+          If it is set to masterSlave, then the mode is master-slave."  
+      DEFVAL { independent }
+      ::= { dpwRedundancyEntry 1 }
+
+   pwSubmode  OBJECT-TYPE  
+      SYNTAX      INTEGER {
+                       notApplicable (0),
+                       master (1),
+                       slave (2)
+		  }  
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "This object defines whether the pseudowire is master or slave when the pwMode
+          is masterSlave.It is set to notApplicable when pwMode is independent."  
+      DEFVAL { notApplicable }
+      ::= { dpwRedundancyEntry 2 }
+
+   pwBindType  OBJECT-TYPE  
+      SYNTAX      INTEGER {
+                       primary (1),
+                       secondary (2)
+		  }
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "If this object is set to independent, then the mode for this PW is Independent. 
+          If it is set to masterSlave, then the mode is master-slave."  
+      ::= { dpwRedundancyEntry 3 }
+
+   pwState  OBJECT-TYPE  
+      SYNTAX      INTEGER {
+                       start (0),
+                       forwarding (1),
+                       notForwarding (2)
+		  }  
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "This object defines whether the pseudowire is master or slave when the pwMode
+          is masterSlave.It is set to notApplicable when pwMode is independent."  
+      DEFVAL { start }
+      ::= { dpwRedundancyEntry 4 }
+
+   dpwRedSwitchOverTable OBJECT-TYPE
+      SYNTAX       SEQUENCE OF DpwRedSwitchOverEntry
+      MAX-ACCESS   not-accessible
+      STATUS       current
+      DESCRIPTION
+          "This table specifies manual switchover of Pseudowire 
+	   Redundancy."
+
+      INDEX { pwIndex }
+      ::= { dpwRedundancyObjects 2 }
+
+   dpwRedSwitchOverEntry OBJECT-TYPE
+      SYNTAX        DpwRedSwitchOverEntry
+      MAX-ACCESS    not-accessible
+      STATUS        current
+      DESCRIPTION
+             "This table contains the parameters for
+           the Pseudowire Redundancy Switchover. This table is indexed by 
+           pwIndex from pwTable. An entry is created for every
+           newly pwIndex in the pwTable. Unless otherwise specified,
+           all read-write objects in this table MAY
+           be changed when the PW is defined as not active
+           and all RW objects values must persist
+           after reboot"
+      REFERENCE
+        "See [PWMIB] "
+
+      INDEX { pwIndex }
+      ::= { dpwRedSwitchOverTable 1 }
+
+  DpwRedSwitchOverEntry ::= SEQUENCE {
+          pwManualSwitchOver    Unsigned32
+          }
+
+   pwManualSwitchOver  OBJECT-TYPE  
+      SYNTAX      Unsigned32 (0..1)  
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "This object defines Switchover to be triggered on the Pseudowire given as Index."  
+      DEFVAL { 0 }
+      ::= { dpwRedSwitchOverEntry 1 }
+
+
+   pwModeGlobal  OBJECT-TYPE  
+      SYNTAX      INTEGER {
+                       independent (1),
+                       masterSlave (2)
+		  }
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "If this object is set to independent, then the mode is Independent. 
+          If it is set to masterSlave, then the mode is master-slave."  
+      DEFVAL { independent }
+      ::= { dpwRedundancyObjects 3 }
+
+   pwSubmodeGlobal  OBJECT-TYPE  
+      SYNTAX      INTEGER {
+                       notApplicable (0),
+                       master (1),
+                       slave (2)
+		  }  
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "This object defines whether the router is master or slave when the pwMode
+          is masterSlave.It is set to notApplicable when pwMode is independent."  
+      DEFVAL { notApplicable }
+      ::= { dpwRedundancyObjects 4 }
+
+   pwRevertiveMode  OBJECT-TYPE  
+      SYNTAX      INTEGER {
+			revertiveModeEnable (1),
+			revertiveModeDisable (2)
+		  }  
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "If this object is set to revertiveModeEnable(1), then it enables the 
+          revertive mode; otherwise the mode is not enabled."
+      DEFVAL { revertiveModeDisable }  
+      ::= { dpwRedundancyObjects 5 }
+
+   
+   pwRevertiveTimer  OBJECT-TYPE  
+      SYNTAX      Unsigned32 (0..180) 
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "This object defines the timer value in sec after which the primary should 
+          be made active when it comes up from down state."  
+      DEFVAL { 0 }
+      ::= { dpwRedundancyObjects 6 }
+
+   pwSwitchOverTimer  OBJECT-TYPE  
+      SYNTAX      Unsigned32 (1..10)  
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "This object defines the timer value in sec after which the primary should 
+          be made active when it comes up from down state."  
+      DEFVAL { 3 }
+      ::= { dpwRedundancyObjects 7 }
+
+   pwAcDownSwitchoverTrigger  OBJECT-TYPE  
+      SYNTAX      INTEGER {
+			acDownSwitchoverTriggerEnable (1),
+			acDownSwitchoverTriggerDisable (2)
+		  }
+      MAX-ACCESS  read-write  
+      STATUS      current  
+      DESCRIPTION  
+         "If this object is set to acDownNotifEnable(1), then it notifies the 
+          peer when AC goes down; otherwise it does not notify the peer when 
+          AC goes down."
+      DEFVAL { acDownSwitchoverTriggerDisable }  
+      ::= { dpwRedundancyObjects  8} 
+
+   pwAllDown NOTIFICATION-TYPE
+	OBJECTS {
+		  pwIndex,
+		  pwIndex
+		}
+	STATUS current
+	DESCRIPTION
+		"This notification is generated when all the pesudowire of a redundancy 
+                 set are in not forwarding."
+	::= {dpwRedundancyNotifications 1}
+
+   pwSwitchoverTimerExpiry NOTIFICATION-TYPE
+	OBJECTS {
+		   pwIndex
+		}
+	STATUS current
+	DESCRIPTION
+		"This notification is generated when the switchover timer expires."
+	::= {dpwRedundancyNotifications 2}
+  END

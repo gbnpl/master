@@ -1,0 +1,16 @@
+Dodatek GPON Dasan do LMS w wersji git (ver 2.1) / 21.07.2015
+
+==========================================================
+Wymagania:
+1. Wersja LMS z git (testowane w dniu 21 lipca 2015)
+2. PHP w wersji 5.3 lub nowszej.
+3. Moduł snmp dla PHP
+4. Uprawnienia do odczytu i zapisu przez snmp (wersja do wyboru 1-3) na OLT
+
+Instalacja:
+1. Zawartość paczki umieścić w katalogu plugins w LMS.
+2. Utworzyć dowiązanie symboliczne w katalogu img LMS-a o nazwie LMSGponDasanPlugin
+   do katalogu ../plugins/LMSGponDasanPlugin/img.
+3. W pliku /etc/snmp/snmp.conf wskazać katalog <lms-path>/plugins/LMSGponDasanPlugin/mibs:
+   mibdirs +<lms-path>/plugins/LMSGponDasanPlugin/mibs:<lms-path>/plugins/LMSGponDasanPlugin/mibs/SLE:<lms-path>/plugins/LMSGponDasanPlugin/mibs/DSSHE
+4. Zrestartować serwer www.
