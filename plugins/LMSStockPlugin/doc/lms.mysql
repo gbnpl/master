@@ -1,19 +1,19 @@
-DROP VIEW IF EXISTS stck_vpstock;
+#DROP VIEW IF EXISTS stck_vpstock;
 
-DROP TABLE IF EXISTS stck_stockassignments;
-DROP TABLE IF EXISTS stck_stock;
-DROP TABLE IF EXISTS stck_warehouses;
-DROP TABLE IF EXISTS stck_vpstock;
-DROP TABLE IF EXISTS stck_products;
-DROP TABLE IF EXISTS stck_types;
-DROP TABLE IF EXISTS stck_supplierassignments;
-DROP TABLE IF EXISTS stck_receivenotes;
-DROP TABLE IF EXISTS stck_quantities;
-DROP TABLE IF EXISTS stck_manufacturers;
-DROP TABLE IF EXISTS stck_groups;
+#DROP TABLE IF EXISTS stck_stockassignments;
+#DROP TABLE IF EXISTS stck_stock;
+#DROP TABLE IF EXISTS stck_warehouses;
+#DROP TABLE IF EXISTS stck_vpstock;
+#DROP TABLE IF EXISTS stck_products;
+#DROP TABLE IF EXISTS stck_types;
+#DROP TABLE IF EXISTS stck_supplierassignments;
+#DROP TABLE IF EXISTS stck_receivenotes;
+#DROP TABLE IF EXISTS stck_quantities;
+#DROP TABLE IF EXISTS stck_manufacturers;
+#DROP TABLE IF EXISTS stck_groups;
 
-ALTER TABLE cash DROP COLUMN IF EXISTS stockid;
-ALTER TABLE invoicecontents DROP COLUMN IF EXISTS stockid;
+#ALTER TABLE cash DROP COLUMN IF EXISTS stockid;
+#ALTER TABLE invoicecontents DROP COLUMN IF EXISTS stockid;
 
 DELETE FROM dbinfo WHERE keytype = 'dbversion_LMSStockPlugin';
 
