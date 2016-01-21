@@ -4,7 +4,7 @@
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -33,6 +33,7 @@ $parameters = array(
 	'h' => 'help',
 	'v' => 'version',
 	'f:' => 'traffic-log-file:',
+	's:' => 'section:',
 );
 
 foreach ($parameters as $key => $val) {
@@ -50,7 +51,7 @@ foreach ($short_to_longs as $short => $long)
 if (array_key_exists('version', $options)) {
 	print <<<EOF
 lms-traffic.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 	exit(0);
@@ -59,7 +60,7 @@ EOF;
 if (array_key_exists('help', $options)) {
 	print <<<EOF
 lms-traffic.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 -f, --traffic-log-file=/var/log/traffic.log  traffic log file (default: /var/log/traffic.log);
 -C, --config-file=/etc/lms/lms.ini      alternate config file (default: /etc/lms/lms.ini);
@@ -76,7 +77,7 @@ $quiet = array_key_exists('quiet', $options);
 if (!$quiet) {
 	print <<<EOF
 lms-traffic.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 }
