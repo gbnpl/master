@@ -191,7 +191,8 @@ foreach ($nodes as $nodeid) {
 	$nodeidx++;
 
 	$records = $DB->GetAll('SELECT * FROM stats
-		WHERE nodeid = ? AND dt >= ? AND dt <= ?', array($nodeid, $from, $to));
+		WHERE nodeid = ? AND dt >= ? AND dt <= ?
+		ORDER BY dt', array($nodeid, $from, $to));
 	if (empty($records))
 		continue;
 
