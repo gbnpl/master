@@ -159,7 +159,7 @@ if (!isset($from))
 if (!isset($to))
 	$to = time();
 else
-	$to += 86399;
+	$to--;
 
 if ($from > $to)
 	die("Starting date should be less than or equal to ending date!" . PHP_EOL);
