@@ -165,6 +165,17 @@ $disconnect_pattern = ConfigHelper::getConfig('rrdstats.disconnect_pattern', '^(
 	. '\|(?<ip>[^|]+)\|(?<mac>[^|]+)\|(?<nasip>[^|]+)\|(?<nasid>[^|]+)\|(?<gigadownload>[^|]+)\|(?<download>[^|]+)'
 	. '\|(?<gigaupload>[^|]+)\|(?<upload>[^|]+)\|(?<username>[^|]+)$');
 
+$rrdtool_process = proc_open(RRDTOOL_BINARY . ' -',
+	array(
+		0 => array('pipe', 'r'),
+		1 => array('file', '/dev/null', 'w'),
+		2 => array('file', '/dev/null', 'w'),
+	),
+	$rrdtool_pipes
+);
+if (!is_resource($rrdtool_process))
+	die("Couldn't open " . RRDTOOL_BINARY . "!" . PHP_EOL);
+
 $full32bit = pow(2, 32);
 $sessions = array();
 $total_download = $total_upload = 0.0;
@@ -260,7 +271,7 @@ while (!feof($fh)) {
 
 		$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . $session['nodeid'] . '.rrd';
 		if (!file_exists($rrd_file)) {
-			$cmd = RRDTOOL_BINARY . " create ${rrd_file} --step ${stat_freq}"
+			$cmd = "create ${rrd_file} --step ${stat_freq}"
 				. ' DS:down:GAUGE:' . ($stat_freq * 2) . ':0:U'
 				. ' DS:up:GAUGE:' . ($stat_freq * 2) . ':0:U'
 				. ' RRA:AVERAGE:0.5:1:' . (7 * 86400 / $stat_freq) // przez 7 dni bez agregacji
@@ -273,10 +284,10 @@ while (!feof($fh)) {
 				. ' RRA:MAX:0.5:6:' . ((31 * 86400) / ($stat_freq * 6))
 				. ' RRA:MAX:0.5:12:' .  ((61 * 86400) / ($stat_freq * 12))
 				. ' RRA:MAX:0.5:72:' . ((275 * 86400) / ($stat_freq * 72));
-			system($cmd);
+			fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
 		}
-		$cmd = RRDTOOL_BINARY . " update ${rrd_file} N:${delta_download}:${delta_upload}";
-		system($cmd);
+		$cmd = "update ${rrd_file} N:${delta_download}:${delta_upload}";
+		fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
 /*
 		$DB->Execute('INSERT INTO stats (nodeid, dt, upload, download, nodesessionid)
 			VALUES(?, ?, ?, ?, ?)',
@@ -292,7 +303,7 @@ $total_upload = sprintf("%.0f", $total_upload);
 if ($total_download > 0 || $total_upload > 0) {
 	$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . 'traffic.rrd';
 	if (!file_exists($rrd_file)) {
-		$cmd = RRDTOOL_BINARY . " create ${rrd_file} --step ${stat_freq}"
+		$cmd = "create ${rrd_file} --step ${stat_freq}"
 			. ' DS:down:GAUGE:' . ($stat_freq * 2) . ':0:U'
 			. ' DS:up:GAUGE:' . ($stat_freq * 2) . ':0:U'
 			. ' RRA:AVERAGE:0.5:1:' . (7 * 86400 / $stat_freq) // przez 7 dni bez agregacji
@@ -305,11 +316,13 @@ if ($total_download > 0 || $total_upload > 0) {
 			. ' RRA:MAX:0.5:6:' . ((31 * 86400) / ($stat_freq * 6))
 			. ' RRA:MAX:0.5:12:' .  ((61 * 86400) / ($stat_freq * 12))
 			. ' RRA:MAX:0.5:72:' . ((275 * 86400) / ($stat_freq * 72));
-		system($cmd);
+		fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
 	}
-	$cmd = RRDTOOL_BINARY . " update ${rrd_file} N:${total_download}:${total_upload}";
-		system($cmd);
+	$cmd = "update ${rrd_file} N:${total_download}:${total_upload}";
+	fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
 }
+
+proc_close($rrdtool_process);
 
 if (!empty($sessions))
 	foreach ($sessions as $session) {
