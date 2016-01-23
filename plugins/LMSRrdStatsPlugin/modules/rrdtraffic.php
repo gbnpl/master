@@ -63,6 +63,8 @@ function Traffic($from = 0, $to = 0, $order = '') {
 			break;
 	}
 
+	$stat_freq = intval(ConfigHelper::getConfig('rrdstats.stat_freq', ConfigHelper::getConfig('phpui.stat_freq', 12)));
+
 	$orderednodes = array();
 	$total_download = $total_upload = 0;
 	foreach ($nodes as $nodeid => &$node) {
@@ -76,6 +78,14 @@ function Traffic($from = 0, $to = 0, $order = '') {
 		if ($ret)
 			continue;
 
+		$lines = preg_grep('/^[0-9]+:\s+/', $out);
+		if (empty($lines))
+			continue;
+
+		sscanf(reset($lines), "%d: %s %s\n", $date1, $download, $upload);
+		sscanf(next($lines), "%d: %s %s\n", $date2, $download, $upload);
+		$multiplier = ($date2 - $date1) / $stat_freq;
+
 		$lines = preg_grep('/^[0-9]+:\s+[0-9]/', $out);
 		if (empty($lines))
 			continue;
@@ -83,8 +93,8 @@ function Traffic($from = 0, $to = 0, $order = '') {
 		$date = $download = $upload = $node['download'] = $node['upload'] = 0;
 		foreach ($lines as $line) {
 			sscanf($line, "%d: %f %f\n", $date, $download, $upload);
-			$node['download'] += $download;
-			$node['upload'] += $upload;
+			$node['download'] += $download * $multiplier;
+			$node['upload'] += $upload * $multiplier;
 		}
 
 		$total_download += $node['download'];
