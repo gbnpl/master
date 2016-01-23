@@ -220,7 +220,7 @@ foreach ($nodes as $nodeid) {
 		$cmd = "update ${rrd_file}";
 		$download = intval($record['download'] / $rrd2sql);
 		$upload = intval($record['upload'] / $rrd2sql);
-		for ($i = 0, $dt = $record['dt'] - $phpui_stat_freq; $i < $rrd2sql; $i++, $dt += $stat_freq)
+		for ($i = 1, $dt = $record['dt'] - $phpui_stat_freq + $stat_freq; $i <= $rrd2sql; $i++, $dt += $stat_freq)
 			$cmd .= " $dt:$download:$upload";
 		fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
 	}
