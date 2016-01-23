@@ -48,6 +48,8 @@ switch ($type) {
 			$stats[$i]['upload'] = 0;
 		}
 
+		$stat_freq = intval(ConfigHelper::getConfig('rrdstats.stat_freq', ConfigHelper::getConfig('phpui.stat_freq', 12)));
+
 		$nodes = $DB->GetCol('SELECT id FROM nodes WHERE ownerid = ?', array($customer));
 		if (!empty($nodes)) {
 			foreach ($nodes as $nodeid) {
@@ -61,6 +63,14 @@ switch ($type) {
 				if ($ret)
 					continue;
 
+				$lines = preg_grep('/^[0-9]+:\s+/', $out);
+				if (empty($lines))
+					continue;
+
+				sscanf(reset($lines), "%d: %s %s\n", $date1, $download, $upload);
+				sscanf(next($lines), "%d: %s %s\n", $date2, $download, $upload);
+				$multiplier = ($date2 - $date1) / $stat_freq;
+
 				$lines = preg_grep('/^[0-9]+:\s+[0-9]/', $out);
 				if (empty($lines))
 					continue;
@@ -71,8 +81,8 @@ switch ($type) {
 
 					$day = date('j', $date);
 
-					$stats[$day]['download'] += $download;
-					$stats[$day]['upload'] += $upload;
+					$stats[$day]['download'] += $download * $multiplier;
+					$stats[$day]['upload'] += $upload * $multiplier;
 				}
 			}
 
