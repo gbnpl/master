@@ -90,6 +90,8 @@ function RRDGraph($nodeid, $type, $from, $to) {
 			break;
 	}
 
+	$title .= ': ' . strftime('%Y/%m/%d %H:%M', $from) . ' - ' . strftime('%Y/%m/%d %H:%M', $to);
+
 	//	--rigid \
 	//--start=-86400
 	$cmd = RRDTOOL_BINARY . " graph - --imgformat PNG --start $from --end $to --title '$title' "
