@@ -40,7 +40,7 @@ class HiperusQuickSearchHandler {
 
 		if ($mode == 'hiperus') {
 			if (isset($_GET['ajax'])) {
-				$list = $DB->GetAll("SELECT customerid, number, terminal_name FROM hv_pstn
+				$list = $DB->GetAll("SELECT id, customerid, number, terminal_name FROM hv_pstn
 					WHERE " . (preg_match('/^[0-9]+$/', $search) ? 'customerid = ' . intval($search) . ' OR ' : '')
 						. " number ?LIKE? $sql_search OR LOWER(terminal_name) ?LIKE? LOWER($sql_search)
 						LIMIT 15");
