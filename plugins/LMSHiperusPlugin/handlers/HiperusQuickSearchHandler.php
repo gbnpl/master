@@ -43,7 +43,7 @@ class HiperusQuickSearchHandler {
 				$list = $DB->GetAll("SELECT customerid, number, terminal_name FROM hv_pstn
 					WHERE " . (preg_match('/^[0-9]+$/', $search) ? 'customerid = ' . intval($search) . ' OR ' : '')
 						. " number ?LIKE? $sql_search OR LOWER(terminal_name) ?LIKE? LOWER($sql_search)
-						LIMIT 15"));
+						LIMIT 15");
 
 				$eglible = array(); $actions = array(); $descriptions = array();
 
@@ -51,7 +51,7 @@ class HiperusQuickSearchHandler {
 					foreach ($list as $row) {
 						$customername = $DB->GetOne("SELECT name FROM hv_customers WHERE id = ?", array($row['customerid']));
 						$actions[$row['id']] = '?m=hv_accountinfo&id=' . $row['customerid'];
-						$eglible[$row['id']] = escape_js($row['number'] . '/' . $row['terminal_name']);
+						$eglible[$row['id']] = escape_js($row['number'] . ' / ' . $row['terminal_name']);
 						$descriptions[$row['id']] = escape_js($customername);
 					}
 				header('Content-type: text/plain');
