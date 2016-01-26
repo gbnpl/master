@@ -90,6 +90,10 @@ class LMSHiperusPlugin extends LMSPlugin {
 				'class' => 'HiperusNodeHandler',
 				'method' => 'nodeEditBeforeDisplay'
 			),
+			'quicksearch_after_submit' => array(
+				'class' => 'HiperusQuickSearchHandler',
+				'method' => 'quicksearchAfterSubmit',
+			),
 		);
 	 }
 }
