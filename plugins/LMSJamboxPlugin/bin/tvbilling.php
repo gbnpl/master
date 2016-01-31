@@ -141,6 +141,7 @@ function localtime2() {
 
 $addinvoices = ConfigHelper::checkConfig('jambox.tvbilling_addinvoices');
 
+$timeoffset = date('Z');
 $fakedate = (array_key_exists('fakedate', $options) ? $options['fakedate'] : NULL);
 $cdate = strftime("%s", localtime2());
 $year = strftime("%Y", localtime2());
@@ -148,9 +149,8 @@ $month = intval(strftime("%m", localtime2()));
 $start_date = date("Y-m-d", mktime(12, 0, 0, $month - 1, 1, $year));
 //$end_date = date("Y-m-d", mktime(12, 0, 0, $month, 0, $year));
 $end_date = date("Y-m-d");
-$starttime = intval($cdate / 86400) * 86400;
+$starttime = intval(($cdate + $timeoffset) / 86400) * 86400 - $timeoffset;
 $endtime = $starttime + 86400;
-
 $to_insert = array();
 
 // prepare customergroups in sql query
