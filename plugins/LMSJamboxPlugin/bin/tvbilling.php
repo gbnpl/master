@@ -208,8 +208,8 @@ foreach ($to_insert as $key => $i){
 	else
 		$document = $DB->GetRow("SELECT MAX(d.id) AS id, MAX(itemid) AS itemid FROM documents d
 				JOIN invoicecontents ic ON ic.docid = d.id
-				WHERE customerid = ? AND sdate >= ? AND sdate < ?
-				GROUP BY d.id", array($customerid, $starttime, $endtime));
+				WHERE customerid = ? AND sdate >= ? AND sdate < ? AND d.type = ?
+				GROUP BY d.id", array($customerid, $starttime, $endtime, DOC_INVOICE));
 	if (empty($document)) {
 		$customer = $DB->GetRow("SELECT lastname, name, address, city, zip, ssn, ten, countryid, divisionid, paytime, paytype
 			FROM customers WHERE id = ?", array($customerid));
