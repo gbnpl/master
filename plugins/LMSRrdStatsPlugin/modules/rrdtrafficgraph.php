@@ -116,7 +116,6 @@ function RRDGraph($nodeid, $type, $from, $to) {
 }
 
 $nodeid = isset($_GET['nodeid']) ? $_GET['nodeid'] : 0;
-$bar = isset($_GET['bar']) ? $_GET['bar'] : NULL;
 $from = isset($_GET['from']) ? $_GET['from'] : NULL;
 $to = isset($_GET['to']) ? $_GET['to'] : NULL;
 $add = !empty($_GET['add']) ? $_GET['add'] : NULL;
@@ -124,6 +123,16 @@ $add = !empty($_GET['add']) ? $_GET['add'] : NULL;
 $type = (isset($_GET['type']) ? $_GET['type'] : 'auto');
 if (!in_array($type, array('auto', 'online', 'traffic')))
 	$type = 'auto';
+
+if (isset($_GET['bar']))
+	$bar = $_GET['bar'];
+else
+	$SESSION->restore('rrdstatsbar_' . $type, $bar);
+$SESSION->save('rrdstatsbar_' . $type, $bar);
+$SESSION->close();
+
+if (empty($bar))
+	$bar = 'day';
 
 if (empty($_GET['popup'])) {
 	$todate = intval($to);
