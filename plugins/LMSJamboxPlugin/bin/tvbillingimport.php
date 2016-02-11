@@ -30,8 +30,8 @@ $parameters = array(
 	'q' => 'quiet',
 	'h' => 'help',
 	'v' => 'version',
-	's:' => 'startdate:',
-	'e:' => 'enddate:',
+	's:' => 'start-date:',
+	'e:' => 'end-date:',
 );
 
 foreach ($parameters as $key => $val) {
@@ -49,7 +49,7 @@ foreach ($short_to_longs as $short => $long)
 if (array_key_exists('version', $options)) {
 	print <<<EOF
 tvbillingimport.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 	exit(0);
@@ -58,7 +58,7 @@ EOF;
 if (array_key_exists('help', $options)) {
 	print <<<EOF
 tvbillingimport.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 -C, --config-file=/etc/lms/lms.ini      alternate config file (default: /etc/lms/lms.ini);
 -h, --help                      print this help and exit;
@@ -75,7 +75,7 @@ $quiet = array_key_exists('quiet', $options);
 if (!$quiet) {
 	print <<<EOF
 tvbillingimport.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 }
