@@ -69,6 +69,7 @@ lms-traffic.php
 -q, --quiet                     suppress any output, except errors
 -s, --section=<section-name>    section name from lms configuration where settings
                                 are stored
+
 EOF;
 	exit(0);
 }
@@ -179,10 +180,15 @@ fclose($fh);
 
 $currtime = time();
 if ($online_update) {
-	foreach ($nodes as $ip => $node)
-		if (isset($data[$ip]))
-			$DB->Execute('UPDATE nodes SET lastonline = ? WHERE id = ?',
-				array($currtime, $node['id']));
+	$nodechunks = array_chunk($nodes, 300);
+	foreach ($nodechunks as $nodechunk) {
+		$nodeids = array();
+		foreach ($nodechunk as $node)
+			if (isset($data[$node['ipaddr']]))
+				$nodeids[] = $node['id'];
+		$DB->Execute('UPDATE nodes SET lastonline = ? WHERE id IN (' . implode(',', $nodeids) . ')',
+			array($currtime));
+	}
 }
 
 $rrdtool_process = proc_open(RRDTOOL_BINARY . ' -',
