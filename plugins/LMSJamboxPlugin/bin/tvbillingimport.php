@@ -140,7 +140,7 @@ $AUTH = null;
 $SYSLOG = null;
 $LMSTV = new LMSTV($DB, $AUTH, $SYSLOG);
 
-$res = $LMSTV->GetBillingEvents($start_date, $end_date);
+$res = $LMSTV->GetBillingEvents(date('Y-m-d', $start_date), date('Y-m-d', $end_date));
 
 if (!empty($res)) {
 	foreach ($res as $key => $r) {
