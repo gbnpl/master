@@ -2,7 +2,7 @@
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -30,7 +30,8 @@ $parameters = array(
 	'q' => 'quiet',
 	'h' => 'help',
 	'v' => 'version',
-	'f:' => 'fakedate:',
+	's:' => 'startdate:',
+	'e:' => 'enddate:',
 );
 
 foreach ($parameters as $key => $val) {
@@ -63,7 +64,8 @@ tvbillingimport.php
 -h, --help                      print this help and exit;
 -v, --version                   print version info and exit;
 -q, --quiet                     suppress any output, except errors
--f, --fakedate=YYYY/MM/DD       override system date
+-s, --start-date=YYYY/MM/DD     start date for imported billing events
+-e, --end-date=YYYY/MM/DD       end date for imported billing events
 
 EOF;
 	exit(0);
@@ -122,33 +124,26 @@ try {
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
-function localtime2() {
-	global $fakedate;
-	if (!empty($fakedate)) {
-		$date = explode("/", $fakedate);
-		return mktime(0, 0, 0, $date[1], $date[2], $date[0]);
-	} else
-		return time();
-}
+if (array_key_exists('start-date', $options)) {
+	$date = explode('/', $options['start-date']);
+	$start_date = mktime(0, 0, 0, $date[1], $date[2], $date[0]);
+} else
+	$start_date = date("Y-m-d", mktime(0, 0, 0, intval(strftime("%m")) - 1, 1, strftime("%Y")));
 
-$fakedate = (array_key_exists('fakedate', $options) ? $options['fakedate'] : NULL);
+if (array_key_exists('end-date', $options)) {
+	$date = explode('/', $options['end-date']);
+	$end_date = mktime(23, 59, 59, $date[1], $date[2], $date[0]);
+} else
+	$end_date = time();
 
 $AUTH = null;
 $SYSLOG = null;
 $LMSTV = new LMSTV($DB, $AUTH, $SYSLOG);
 
-$year = strftime("%Y", localtime2());
-$month = intval(strftime("%m", localtime2()));
-$start_date = date("Y-m-d", mktime(0, 0, 0, $month - 1, 1, $year));
-//$end_date = date("Y-m-d", mktime(23, 59, 59, $month, 0, $year));
-$end_date = date("Y-m-d");
-//echo "$start_date\n";
-//echo "$end_date\n";
-
 $res = $LMSTV->GetBillingEvents($start_date, $end_date);
 
 if (!empty($res)) {
-	foreach ($res as $key => $r){
+	foreach ($res as $key => $r) {
 		try {
 			if ($DB->GetOne('SELECT beid FROM tv_billingevent WHERE beid = ?', array($r['id'])))
 				continue;
