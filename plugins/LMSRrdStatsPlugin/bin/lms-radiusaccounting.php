@@ -202,7 +202,7 @@ while (!feof($fh)) {
 	}
 	if ($type == null) {
 		if (!$quiet)
-			print "Invalid line: %line" . PHP_EOL;
+			print "Invalid line: $line" . PHP_EOL;
 		continue;
 	}
 
