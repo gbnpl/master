@@ -238,6 +238,7 @@ while (!feof($fh)) {
 		$session = $DB->GetRow('SELECT ownerid AS customerid, n.id AS nodeid,
 				ipaddr, mac FROM vmacs n
 			WHERE n.ipaddr = ?', array(ip_long($m['ip'])));
+		$session['ipaddr'] = $m['ip'];
 		$session['start'] = $session['stop'] = $dt;
 		$session['mac'] = $m['mac'];
 		$session['download'] = $download;
