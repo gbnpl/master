@@ -4,7 +4,7 @@
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -54,7 +54,7 @@ foreach ($short_to_longs as $short => $long)
 if (array_key_exists('version', $options)) {
 	print <<<EOF
 lms-notify.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 	exit(0);
@@ -63,7 +63,7 @@ EOF;
 if (array_key_exists('help', $options)) {
 	print <<<EOF
 lms-notify.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 -C, --config-file=/etc/lms/lms.ini      alternate config file (default: /etc/lms/lms.ini);
 -h, --help                      print this help and exit;
@@ -86,7 +86,7 @@ $quiet = array_key_exists('quiet', $options);
 if (!$quiet) {
 	print <<<EOF
 lms-notify.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 }
@@ -190,7 +190,7 @@ foreach (array('contracts', 'debtors', 'reminder', 'invoices', 'notes', 'warning
 	$notifications[$type]['file'] = ConfigHelper::getConfig($config_section . '.' . $type . '_file', '/etc/rc.d/' . $type . '.sh');
 	$notifications[$type]['header'] = ConfigHelper::getConfig($config_section . '.' . $type . '_header', "#!/bin/bash\n\nipset flush $type\n");
 	$notifications[$type]['rule'] = ConfigHelper::getConfig($config_section . '.' . $type . '_rule', "ipset add $type %i\n");
-	$notifications[$type]['footer'] = ConfigHelper::getConfig($config_section . '.' . $type . '_footer', '');
+	$notifications[$type]['footer'] = ConfigHelper::getConfig($config_section . '.' . $type . '_footer', '', true);
 }
 
 if (in_array('mail', $channels) && empty($mail_from))
@@ -291,6 +291,8 @@ function create_message($type, $subject, $template) {
 
 function send_mail($msgid, $cid, $rmail, $rname, $subject, $body) {
 	global $LMS, $DB, $mail_from, $notify_email;
+	global $host, $port, $user, $pass, $auth;
+
 	$DB->Execute("INSERT INTO messageitems
 		(messageid, customerid, destination, status)
 		VALUES (?, ?, ?, ?)",
@@ -301,7 +303,7 @@ function send_mail($msgid, $cid, $rmail, $rname, $subject, $body) {
 		'Subject' => $subject);
 	if (!empty($notify_email))
 		$headers['Cc'] = $notify_email;
-	$result = $LMS->SendMail($rmail, $headers, $body);
+	$result = $LMS->SendMail($rmail, $headers, $body, null, $host, $port, $user, $pass, $auth);
 
 	$query = "UPDATE messageitems
 		SET status = ?, lastdate = ?NOW?, error = ?
@@ -347,17 +349,21 @@ if (empty($types) || in_array('contracts', $types)) {
 		JOIN assignments a ON (c.id = a.customerid)
 		LEFT JOIN (SELECT " . $DB->GroupConcat('contact') . " AS email, customerid
 			FROM customercontacts
-			WHERE (type & ?) = ? 
+			WHERE (type & ?) = ?
 			GROUP BY customerid
 		) m ON (m.customerid = c.id)
 		LEFT JOIN (SELECT " . $DB->GroupConcat('contact') . " AS phone, customerid
 			FROM customercontacts
-			WHERE type < ?
+			WHERE (type & ?) = ?
 			GROUP BY customerid
 		) x ON (x.customerid = c.id)
 		GROUP BY c.id, c.pin, c.lastname, c.name, m.email, x.phone
 		HAVING MAX(a.dateto) >= $daystart + ? * 86400 AND MAX(a.dateto) < $daystart + (? + 1) * 86400",
-		array(CONTACT_EMAIL | CONTACT_DISABLED, CONTACT_EMAIL, CONTACT_EMAIL, $days, $days));
+		array(CONTACT_EMAIL | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_EMAIL | CONTACT_NOTIFICATIONS,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS,
+			$days, $days));
 
 	if (!empty($customers)) {
 		$notifications['contracts']['customers'] = array();
@@ -378,9 +384,9 @@ if (empty($types) || in_array('contracts', $types)) {
 						printf("[mail/contracts] %s (%04d): %s" . PHP_EOL,
 							$recipient_name, $row['id'], $recipient_mail);
 				if (in_array('sms', $channels) && !empty($recipient_phones))
-					foreach ($recipient_phones as $phone)
+					foreach ($recipient_phones as $recipient_phone)
 						printf("[sms/contracts] %s (%04d): %s" . PHP_EOL,
-							$recipient_name, $row['id'], $phone);
+							$recipient_name, $row['id'], $recipient_phone);
 			}
 
 			if (!$debug) {
@@ -392,8 +398,8 @@ if (empty($types) || in_array('contracts', $types)) {
 				}
 				if (in_array('sms', $channels) && !empty($recipient_phones)) {
 					$msgid = create_message(MSG_SMS, $subject, $message);
-					foreach ($recipient_phones as $phone)
-						send_sms($msgid, $row['id'], $phone, $message);
+					foreach ($recipient_phones as $recipient_phone)
+						send_sms($msgid, $row['id'], $recipient_phone, $message);
 				}
 			}
 		}
@@ -417,7 +423,7 @@ if (empty($types) || in_array('debtors', $types)) {
 		) m ON (m.customerid = c.id)
 		LEFT JOIN (SELECT " . $DB->GroupConcat('contact') . " AS phone, customerid
 			FROM customercontacts
-			WHERE type < ?
+			WHERE (type & ?) = ?
 			GROUP BY customerid
 		) x ON (x.customerid = c.id)
 		LEFT JOIN documents d ON d.id = cash.docid
@@ -427,7 +433,12 @@ if (empty($types) || in_array('debtors', $types)) {
 			OR (cash.docid <> 0 AND ((d.type IN (?, ?) AND cash.time < $currtime
 				OR (d.type IN (?, ?) AND d.cdate + (d.paytime + ?) * 86400 < $currtime)))))
 		GROUP BY c.id, c.pin, c.lastname, c.name, m.email, x.phone, divisions.account
-		HAVING SUM(value) < ?", array(CONTACT_EMAIL | CONTACT_DISABLED, CONTACT_EMAIL, CONTACT_EMAIL, $days, DOC_RECEIPT, DOC_CNOTE, DOC_INVOICE, DOC_DNOTE, $days, $limit));
+		HAVING SUM(value) < ?", array(
+			CONTACT_EMAIL | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_EMAIL | CONTACT_NOTIFICATIONS,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS,
+			$days, DOC_RECEIPT, DOC_CNOTE, DOC_INVOICE, DOC_DNOTE, $days, $limit));
 
 	if (!empty($customers)) {
 		$notifications['debtors']['customers'] = array();
@@ -448,9 +459,9 @@ if (empty($types) || in_array('debtors', $types)) {
 						printf("[mail/debtors] %s (%04d): %s" . PHP_EOL,
 							$recipient_name, $row['id'], $recipient_mail);
 				if (in_array('sms', $channels) && !empty($recipient_phones))
-					foreach ($recipient_phones as $phone)
+					foreach ($recipient_phones as $recipient_phone)
 						printf("[sms/debtors] %s (%04d): %s" . PHP_EOL,
-							$recipient_name, $row['id'], $phone);
+							$recipient_name, $row['id'], $recipient_phone);
 			}
 
 			if (!$debug) {
@@ -462,8 +473,8 @@ if (empty($types) || in_array('debtors', $types)) {
 				}
 				if (in_array('sms', $channels) && !empty($recipient_phones)) {
 					$msgid = create_message(MSG_SMS, $subject, $message);
-					foreach ($recipient_phones as $phone)
-						send_sms($msgid, $row['id'], $phone, $message);
+					foreach ($recipient_phones as $recipient_phone)
+						send_sms($msgid, $row['id'], $recipient_phone, $message);
 				}
 			}
 		}
@@ -511,7 +522,12 @@ if (empty($types) || in_array('reminder', $types)) {
 		WHERE d.type = 1 AND d.closed = 0 AND ca.balance < 0
 			AND ((d.cdate / 86400) + d.paytime + 1 - ?) * 86400 >= $daystart
 			AND ((d.cdate / 86400) + d.paytime - ?) * 86400 < $daystart",
-		array(CONTACT_INVOICES | CONTACT_DISABLED, CONTACT_INVOICES, CONTACT_MOBILE | CONTACT_DISABLED, CONTACT_MOBILE, $days, DOC_RECEIPT, DOC_CNOTE, DOC_INVOICE, DOC_DNOTE, $days, $days, $days));
+		array(
+			CONTACT_EMAIL | CONTACT_INVOICES | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_EMAIL | CONTACT_INVOICES | CONTACT_NOTIFICATIONS,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS,
+			$days, DOC_RECEIPT, DOC_CNOTE, DOC_INVOICE, DOC_DNOTE, $days, $days, $days));
 	if (!empty($documents)) {
 		$notifications['reminder']['customers'] = array();
 		foreach ($documents as $row) {
@@ -532,9 +548,9 @@ if (empty($types) || in_array('reminder', $types)) {
 						printf("[mail/reminder] %s (%04d) %s: %s" . PHP_EOL,
 							$row['name'], $row['id'], $row['doc_number'], $recipient_mail);
 				if (in_array('sms', $channels) && !empty($recipient_phones))
-					foreach ($recipient_phones as $phone)
+					foreach ($recipient_phones as $recipient_phone)
 						printf("[sms/reminder] %s (%04d) %s: %s" . PHP_EOL,
-							$row['name'], $row['id'], $row['doc_number'], $phone);
+							$row['name'], $row['id'], $row['doc_number'], $recipient_phone);
 			}
 
 			if (!$debug) {
@@ -546,8 +562,8 @@ if (empty($types) || in_array('reminder', $types)) {
 				}
 				if (in_array('sms', $channels) && !empty($recipient_phones)) {
 					$msgid = create_message(MSG_SMS, $subject, $message);
-					foreach ($recipient_phones as $phone)
-						send_sms($msgid, $row['id'], $phone, $message);
+					foreach ($recipient_phones as $recipient_phone)
+						send_sms($msgid, $row['id'], $recipient_phone, $message);
 				}
 			}
 		}
@@ -583,7 +599,12 @@ if (empty($types) || in_array('invoices', $types)) {
 		) ca ON (ca.customerid = d.customerid)
 		WHERE (c.invoicenotice IS NULL OR c.invoicenotice = 0) AND d.type IN (?, ?)
 			AND d.cdate >= ? AND d.cdate <= ?",
-		array(CONTACT_INVOICES | CONTACT_DISABLED, CONTACT_INVOICES, CONTACT_MOBILE | CONTACT_DISABLED, CONTACT_MOBILE, DOC_INVOICE, DOC_CNOTE, $daystart, $dayend));
+		array(
+			CONTACT_EMAIL | CONTACT_INVOICES | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_EMAIL | CONTACT_INVOICES | CONTACT_NOTIFICATIONS,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS,
+			DOC_INVOICE, DOC_CNOTE, $daystart, $dayend));
 
 	if (!empty($documents)) {
 		$notifications['invoices']['customers'] = array();
@@ -605,9 +626,9 @@ if (empty($types) || in_array('invoices', $types)) {
 						printf("[mail/invoices] %s (%04d) %s: %s" . PHP_EOL,
 							$row['name'], $row['id'], $row['doc_number'], $recipient_mail);
 				if (in_array('sms', $channels) && !empty($recipient_phones))
-					foreach ($recipient_phones as $phone)
+					foreach ($recipient_phones as $recipient_phone)
 						printf("[sms/invoices] %s (%04d): %s: %s" . PHP_EOL,
-							$row['name'], $row['id'], $row['doc_number'], $phone);
+							$row['name'], $row['id'], $row['doc_number'], $recipient_phone);
 			}
 
 			if (!$debug) {
@@ -619,8 +640,8 @@ if (empty($types) || in_array('invoices', $types)) {
 				}
 				if (in_array('sms', $channels) && !empty($recipient_phones)) {
 					$msgid = create_message(MSG_SMS, $subject, $message);
-					foreach ($recipient_phones as $phone)
-						send_sms($msgid, $row['id'], $phone, $message);
+					foreach ($recipient_phones as $recipient_phone)
+						send_sms($msgid, $row['id'], $recipient_phone, $message);
 				}
 			}
 		}
@@ -642,7 +663,7 @@ if (empty($types) || in_array('notes', $types)) {
 		) m ON (m.customerid = c.id)
 		LEFT JOIN (SELECT " . $DB->GroupConcat('contact') . " AS phone, customerid
 			FROM customercontacts
-			WHERE (type & ?) = ? 
+			WHERE (type & ?) = ?
 			GROUP BY customerid
 		) x ON (x.customerid = c.id)
 		JOIN (SELECT SUM(value) * -1 AS value, docid
@@ -656,8 +677,12 @@ if (empty($types) || in_array('notes', $types)) {
 		) ca ON (ca.customerid = d.customerid)
 		WHERE (c.invoicenotice IS NULL OR c.invoicenotice = 0) AND d.type = ?
 			AND d.cdate >= ? AND d.cdate <= ?",
-		array(CONTACT_EMAIL | CONTACT_DISABLED, CONTACT_EMAIL, CONTACT_MOBILE | CONTACT_DISABLED, CONTACT_MOBILE, DOC_DNOTE, $daystart, $dayend));
-
+		array(
+			CONTACT_EMAIL | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_EMAIL | CONTACT_NOTIFICATIONS,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS,
+			DOC_DNOTE, $daystart, $dayend));
 	if (!empty($documents)) {
 		$notifications['notes']['customers'] = array();
 		foreach ($documents as $row) {
@@ -678,7 +703,7 @@ if (empty($types) || in_array('notes', $types)) {
 						printf("[mail/notes] %s (%04d) %s: %s" . PHP_EOL,
 							$row['name'], $row['id'], $row['doc_number'], $recipient_mail);
 				if (in_array('sms', $channels) && !empty($recipient_phones))
-					foreach ($recipient_phones as $phone)
+					foreach ($recipient_phones as $recipient_phone)
 						printf("[sms/notes] %s (%04d) %s: %s" . PHP_EOL,
 							$row['name'], $row['id'], $row['doc_number'], $recipient_phone);
 			}
@@ -692,8 +717,8 @@ if (empty($types) || in_array('notes', $types)) {
 				}
 				if (in_array('sms', $channels) && !empty($recipient_phones)) {
 					$msgid = create_message(MSG_SMS, $subject, $message);
-					foreach ($recipient_phones as $phone)
-						send_sms($msgid, $row['id'], $phone, $message);
+					foreach ($recipient_phones as $recipient_phone)
+						send_sms($msgid, $row['id'], $recipient_phone, $message);
 				}
 			}
 		}
@@ -713,7 +738,7 @@ if (empty($types) || in_array('warnings', $types)) {
 		) m ON (m.customerid = c.id)
 		LEFT JOIN (SELECT " . $DB->GroupConcat('contact') . " AS phone, customerid
 			FROM customercontacts
-			WHERE (type & ?) = ? 
+			WHERE (type & ?) = ?
 			GROUP BY customerid
 		) x ON (x.customerid = c.id)
 		LEFT JOIN (SELECT SUM(value) AS balance, customerid
@@ -721,7 +746,11 @@ if (empty($types) || in_array('warnings', $types)) {
 			GROUP BY customerid
 		) ca ON (ca.customerid = c.id)
 		WHERE c.id IN (SELECT DISTINCT ownerid FROM vnodes WHERE warning = 1)",
-		array(CONTACT_EMAIL | CONTACT_DISABLED, CONTACT_EMAIL, CONTACT_MOBILE | CONTACT_DISABLED, CONTACT_MOBILE));
+		array(
+			CONTACT_EMAIL | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_EMAIL | CONTACT_NOTIFICATIONS,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS | CONTACT_DISABLED,
+			CONTACT_MOBILE | CONTACT_NOTIFICATIONS));
 
 	if (!empty($customers)) {
 		$notifications['warnings']['customers'] = array();
@@ -741,7 +770,7 @@ if (empty($types) || in_array('warnings', $types)) {
 						printf("[mail/warnings] %s (%04d): %s" . PHP_EOL,
 							$row['name'], $row['id'], $recipient_mail);
 				if (in_array('sms', $channels) && !empty($recipient_phones))
-					foreach ($recipient_phones as $phone)
+					foreach ($recipient_phones as $recipient_phone)
 						printf("[sms/warnings] %s (%04d): %s" . PHP_EOL,
 							$row['name'], $row['id'], $recipient_phone);
 			}
@@ -755,8 +784,8 @@ if (empty($types) || in_array('warnings', $types)) {
 				}
 				if (in_array('sms', $channels) && !empty($recipient_phones)) {
 					$msgid = create_message(MSG_SMS, $subject, $message);
-					foreach ($recipient_phones as $phone)
-						send_sms($msgid, $row['id'], $phone, $message);
+					foreach ($recipient_phones as $recipient_phone)
+						send_sms($msgid, $row['id'], $recipient_phone, $message);
 				}
 			}
 		}

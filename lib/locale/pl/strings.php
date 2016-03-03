@@ -1557,6 +1557,7 @@ $_LANG['24 hour:'] = '24 godzin:';
 $_LANG['30 days:'] = '30 dni:';
 $_LANG['hour:'] = 'godziny:';
 $_LANG['Traffic stats from last (download/upload):'] = 'Statystyki ruchu z ostatnich (download/upload):';
+$_LANG['Traffic stats (download/upload):'] = 'Statystyki ruchu (download/upload):';
 $_LANG['disposable'] = 'jednorazowo';
 $_LANG['Enter accounting time. For disposable accounting enter date in format YYYY/MM/DD, for weekly accounting enter day of week (Monday = 1), for monthly accounting enter day of month (1 to 28), for yearly accounting enter day and month in format DD/MM (15/09 means September 15th), for half-yearly DD/MM (MM <=6) and for quarterly DD/MM (MM <= 3)'] = 'Wprowadź czas naliczania. Dla jednorazowego naliczania wprowadź datę w formacie RRRR/MM/DD, dla tygodniowego naliczania wprowadź dzień tygodnia (poniedziałek = 1), dla miesięcznego wprowadź dzień miesiąca (1 do 28), dla rocznego wprowadź dzień i miesiąc w formacie DD/MM (15/09 znaczy 15 Września), dla półrocznego DD/MM (MM <=6), a dla kwartalnego DD/MM (MM <=3)';
 $_LANG['Enter liability name/description (tariffless liabilities only)'] = 'Wprowadź nazwę/opis zobowiązania (tylko zobowiązania beztaryfowe)';
@@ -2535,6 +2536,7 @@ $_LANG['Category Info: $a'] = 'Informacje o kategorii: $a';
 $_LANG['Categories List'] = 'Lista kategorii';
 $_LANG['List of categories'] = 'Lista kategorii';
 $_LANG['Add new category'] = 'Utworzenie nowej kategorii';
+$_LANG['You have to select category!'] = 'Musisz wybrać kategorię!';
 
 $_LANG['Enter device latitude (optional)'] = 'Podaj szerokość geograficzną dla urządzenia (opcjonalne)';
 $_LANG['Enter device longitude (optional)'] = 'Podaj długość geograficzną dla urządzenia (opcjonalne)';
@@ -3031,7 +3033,7 @@ $_LANG['Payment for liabilities'] = 'Wpłata na poczet należności';
 $_LANG['Check if sent electronic invoices on this email'] = 'Zaznacz jeśli na ten adres e-mail mają być wysyłane elektroniczne faktury';
 $_LANG['Not visible by the customer in electronic Customer Service Representative'] = 'Niewidoczny dla klienta w elektronicznym biurze obsługi klienta';
 $_LANG['If the customer wants to receive an electronic invoice must be checked e-mail address to which to send e-invoices'] = 'Jeśli klient chce otrzymywać fakturę elektroniczną musi zostać zaznaczony adres e-mail na który mają być wysyłane e-faktury';
-$_LANG['Cancellation of a traditional invoice (agreement on an electronic invoice):'] = 'Rezygnazja z faktury tradycyjnej (zgoda na fakturę elektroniczną):';
+$_LANG['Cancellation of a traditional invoice (agreement on an electronic invoice):'] = 'Rezygnacja z faktury tradycyjnej (zgoda na fakturę elektroniczną):';
 $_LANG['Check if send notification'] = 'Zaznacz, jeżeli chcesz wysyłać powiadomienia';
 $_LANG['Notification'] = 'Powiadomienia';
 
