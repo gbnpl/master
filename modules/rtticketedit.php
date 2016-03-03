@@ -104,7 +104,7 @@ if(isset($_POST['ticket']))
 	$ticketedit['ticketid'] = $ticket['ticketid'];
 
 	if(!count($ticketedit['categories']))
-		$error = true;
+		$error['categories'] = trans('You have to select category!');
 
 	if(($LMS->GetUserRightsRT($AUTH->id, $ticketedit['queueid']) & 2) != 2)
 		$error['queue'] = trans('You have no privileges to this queue!');
@@ -316,7 +316,8 @@ if (!ConfigHelper::checkValue(ConfigHelper::getConfig('phpui.big_networks', fals
 }
 
 $queuelist = $LMS->GetQueueNames();
-if (ConfigHelper::getConfig('userpanel.limit_ticket_movements_to_selected_queues')) {
+if (strpos('helpdesk', ConfigHelper::getConfig('userpanel.enabled_modules')) !== false
+	&& ConfigHelper::getConfig('userpanel.limit_ticket_movements_to_selected_queues')) {
 	$selectedqueues = explode(';', ConfigHelper::getConfig('userpanel.queues'));
 	if (in_array($ticket['queueid'], $selectedqueues))
 		foreach ($queuelist as $idx => $queue)
