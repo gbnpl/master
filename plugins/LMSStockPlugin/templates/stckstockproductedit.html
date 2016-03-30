@@ -78,7 +78,7 @@
 			<B>{trans("Sell date:")}</B>
 		</TD>
 		<TD CLASS="fright">
-			<INPUT type="TEXT" name="productedit[leavedate]" value="{$productedit.leavedate|date_format:"%Y/%m/%d"}" OnClick="cal3.popup();" {tip text="Product`s sale date" trigger="leavedate"} SIZE="10">
+			<INPUT type="TEXT" name="productedit[leavedate]" value="{$productedit.leavedate|date_format:"%Y/%m/%d"}" OnClick="cal3.popup();" {tip text="Product's sale date" trigger="leavedate"} SIZE="10">
 		</TD>
 	</TR>
 	<TR class="light">
@@ -111,9 +111,6 @@
 <!--
 var cal3 = new calendar(document.forms['productedit'].elements['productedit[leavedate]']);
 cal3.time_comp = false;
-{if !$productedit.leavedate}
-document.forms['productedit'].elements['productedit[leavedate]'].value = '0';
-{/if}
 //-->
 </SCRIPT>
 {/block}

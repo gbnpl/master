@@ -49,7 +49,7 @@ if (isset($_POST['productedit'])) {
 	if (isset($productedit['pricesell']) && !preg_match('/^\d+[,.]{0,1}\d{0,2}$/i', $productedit['pricebuygross']))
 		$error['pricesell'] = 'Wrong or missing price!';
 	
-	if (isset($productedit['leavedate']) && !$productedit['leavedate'] == '0') {
+	if (isset($productedit['leavedate']) && !empty($productedit['leavedate'])) {
 		if(preg_match('/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}$/', $productedit['leavedate'])) {
 			list($y, $m, $d) = explode('/', $productedit['leavedate']);
 			if(checkdate($m, $d, $y)) {
@@ -66,7 +66,7 @@ if (isset($_POST['productedit'])) {
 	}
 
 	if (!$error) {
-		if ($productedit['leavedate'])
+		if (!empty($productedit['leavedate']))
 			$productedit['leavedate'] = LMSST::DateChange($productedit['leavedate']);
 		$taxvalue = isset($productedit['taxid']) ? $taxeslist[$productedit['taxid']]['value'] : 0;
 		if ($productedit['pricebuynet'] != 0) {

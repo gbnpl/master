@@ -135,5 +135,6 @@ $_LANG['Product on stock can\'t be deleted.'] = 'Produkt znajdujący się magazy
 
 $_LANG['Sell date:'] = 'Data sprzedaży:';
 $_LANG['Sell price:'] = 'Cena sprzedaży:';
+$_LANG['Product\'s sale date'] = 'Data sprzedaży produktu';
 
 ?>
