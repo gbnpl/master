@@ -130,4 +130,10 @@ $_LANG['Edit product group'] = 'Edycja grupy produktów';
 $_LANG['Edit manufacturer'] = 'Edycja producenta';
 $_LANG['Edit warehouse'] = 'Edycja magazynu';
 
+$_LANG['Deletion of product with ID: $a'] = 'Usuwanie produktu o identyfikatorze: $a';
+$_LANG['Product on stock can\'t be deleted.'] = 'Produkt znajdujący się magazynie nie może być usunięty.';
+
+$_LANG['Sell date:'] = 'Data sprzedaży:';
+$_LANG['Sell price:'] = 'Cena sprzedaży:';
+
 ?>

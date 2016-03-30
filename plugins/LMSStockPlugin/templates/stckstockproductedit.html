@@ -75,7 +75,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/calendar.gif" ALT="">
-			<B>{trans("Sell date")}:</B>
+			<B>{trans("Sell date:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT type="TEXT" name="productedit[leavedate]" value="{$productedit.leavedate|date_format:"%Y/%m/%d"}" OnClick="cal3.popup();" {tip text="Product`s sale date" trigger="leavedate"} SIZE="10">
@@ -84,7 +84,7 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/money.gif" ALT="">
-			<B>{trans("Sell price")}:</B>
+			<B>{trans("Sell price:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT type="text" name="productedit[pricesell]" SIZE="6" style="text-align: right;" VALUE="{$productedit.pricesell}" {tip text="Enter value" trigger="pricesell"}>
