@@ -42,7 +42,7 @@
 	<TR class="{cycle values="light,lucid"}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
 		<TD>{$item.id}</TD>
 		<TD class="valign-top"><a href="?m=customerinfo&id={$item.customerid}" onmouseover="return overlib('<iframe id=&quot;autoiframe&quot; width=100 height=10 frameborder=0 scrolling=no src=&quot;?m=customerinfoshort&amp;id={$item.customerid}&amp;popup=1&quot;></iframe>',HAUTO,VAUTO,OFFSETX,30,OFFSETY,15);" onmouseout="nd();">{$item.customerid} <img src="img/customer.gif" alt="[ Klient w LMS ]"></a></td>
-		<TD class="valign-top"><a href="{$smsurl}customer/show/id/{$item.cust_number|substr:3:6}">{$item.cust_number} <img src="img/customer.gif" alt="[ Klient w SMS ]"></a></TD>
+		<TD class="valign-top"><a href="{$smsurl}customer/show/id/{$item.cust_number|substr:3}">{$item.cust_number} <img src="img/customer.gif" alt="[ Klient w SMS ]"></a></TD>
 		<TD class="valign-top"><div id="msg3{$item.id}" style="display: block">{$item.msg_body|substr:0:20}...</div> <div id="msg4{$item.id}" style="display: none">{$item.msg_body}</div></TD>
 		<TD class="valign-top">{$item.msg_teaser_impressions}</TD>
 		<TD class="valign-top" onclick="showOrHide('msg1{$item.id}');showOrHide('msg2{$item.id}');showOrHide('msg3{$item.id}');showOrHide('msg4{$item.id}');"><div id="msg1{$item.id}" style="display: block">{$item.msg_body_extended|substr:0:20}...</div> <div id="msg2{$item.id}" style="display: none">{$item.msg_body_extended}</div></TD>

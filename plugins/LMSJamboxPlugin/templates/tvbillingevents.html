@@ -47,7 +47,7 @@
 		<TD>{$item.be_vat}</TD>
 		<TD>{$item.be_gross}</TD>
 		<TD>{$item.be_b2b_netto}</TD>
-		<TD class="valign-top"><a href="{$smsurl}customer/show/id/{$item.cust_number|substr:3:6}">{$item.cust_number} <img src="img/customer.gif" alt="[ Klient w SMS ]"></a></TD>
+		<TD class="valign-top"><a href="{$smsurl}customer/show/id/{$item.cust_number|substr:3}">{$item.cust_number} <img src="img/customer.gif" alt="[ Klient w SMS ]"></a></TD>
 		<TD class="valign-top bold"><a href="?m=customerinfo&id={$item.customerid}">{$item.customerid} <img src="img/customer.gif" alt="[ Klient w LMS ]"></a></TD>
 		<TD>{$item.group_id}</TD>
 		<TD>{if $item.docid > 0}<a href="?m=invoice&amp;id={$item.docid}" target="_blank"><img src="img/print.gif" alt="[ Faktura ]" onmouseover="return overlib('<iframe id=&quot;autoiframe&quot; width=100 height=10 frameborder=0 scrolling=no src=&quot;?m=number&amp;id={$item.docid}&amp;popup=1&quot;></iframe>',HAUTO,VAUTO,OFFSETX,30,OFFSETY,15);" onmouseout="nd();"></a>{/if}</TD>
