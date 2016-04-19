@@ -50,7 +50,7 @@ class JamboxQuickSearchHandler {
 					foreach ($list as $row)
 						if (strpos(strtoupper($row['stb_mac']), strtoupper($search)) !== false && count($eglible) < 20) {
 							$customer = $DB->GetRow("SELECT id, (" . $DB->Concat('lastname', "' '", 'name') . ") AS name
-								FROM customersview WHERE tv_cust_number = ?",
+								FROM customerview WHERE tv_cust_number = ?",
 								array($row['cust_number']));
 							$actions[$row['id']] = '?m=customerinfo&id=' . $customer['id'] . '#tvaccountbox';
 							$eglible[$row['id']] = escape_js($row['stb_mac']);

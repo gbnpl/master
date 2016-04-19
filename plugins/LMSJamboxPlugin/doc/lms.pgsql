@@ -18,19 +18,35 @@ CREATE TABLE tv_billingevent (
 
 CREATE UNIQUE INDEX hash ON tv_billingevent (hash);
 
-DROP VIEW customersview;
+DROP VIEW customerview;
 DROP VIEW contractorview;
 ALTER TABLE customers ADD COLUMN tv_cust_number varchar(12) DEFAULT NULL;
 ALTER TABLE customers ADD COLUMN tv_suspend_billing smallint DEFAULT 0 NOT NULL;
-CREATE VIEW customersview AS
-	SELECT c.* FROM customers c
+CREATE VIEW customerview AS
+	SELECT c.*,
+		(CASE WHEN building IS NULL THEN street ELSE (CASE WHEN apartment IS NULL THEN street || ' ' || building
+			ELSE street || ' ' || building || '/' || apartment END) END) AS address,
+		(CASE WHEN post_street IS NULL THEN '' ELSE
+			(CASE WHEN post_building IS NULL THEN post_street ELSE (CASE WHEN post_apartment IS NULL THEN post_street || ' ' || post_building
+				ELSE post_street || ' ' || post_building || '/' || post_apartment END)
+			END)
+		END) AS post_address
+	FROM customers c
 	WHERE NOT EXISTS (
-			SELECT 1 FROM customerassignments a
-			JOIN excludedgroups e ON (a.customergroupid = e.customergroupid)
-			WHERE e.userid = lms_current_user() AND a.customerid = c.id)
+			SELECT 1 FROM customerassignments a 
+			JOIN excludedgroups e ON (a.customergroupid = e.customergroupid) 
+			WHERE e.userid = lms_current_user() AND a.customerid = c.id) 
 		AND c.type < 2;
 CREATE VIEW contractorview AS
-	SELECT c.* FROM customers c
+	SELECT c.*,
+		(CASE WHEN building IS NULL THEN street ELSE (CASE WHEN apartment IS NULL THEN street || ' ' || building
+			ELSE street || ' ' || building || '/' || apartment END) END) AS address,
+		(CASE WHEN post_street IS NULL THEN '' ELSE
+			(CASE WHEN post_building IS NULL THEN post_street ELSE (CASE WHEN post_apartment IS NULL THEN post_street || ' ' || post_building
+				ELSE post_street || ' ' || post_building || '/' || post_apartment END)
+			END)
+		END) AS post_address
+	FROM customers c
 	WHERE c.type = 2;
 
 INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2015121500');
