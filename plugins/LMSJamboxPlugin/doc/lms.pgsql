@@ -20,6 +20,7 @@ CREATE UNIQUE INDEX hash ON tv_billingevent (hash);
 
 DROP VIEW customerview;
 DROP VIEW contractorview;
+DROP VIEW customeraddressview;
 ALTER TABLE customers ADD COLUMN tv_cust_number varchar(12) DEFAULT NULL;
 ALTER TABLE customers ADD COLUMN tv_suspend_billing smallint DEFAULT 0 NOT NULL;
 CREATE VIEW customerview AS
@@ -48,5 +49,16 @@ CREATE VIEW contractorview AS
 		END) AS post_address
 	FROM customers c
 	WHERE c.type = 2;
+CREATE VIEW customeraddressview AS
+	SELECT c.*,
+		(CASE WHEN building IS NULL THEN street ELSE (CASE WHEN apartment IS NULL THEN street || ' ' || building
+			ELSE street || ' ' || building || '/' || apartment END) END) AS address,
+		(CASE WHEN post_street IS NULL THEN '' ELSE
+			(CASE WHEN post_building IS NULL THEN post_street ELSE (CASE WHEN post_apartment IS NULL THEN post_street || ' ' || post_building
+				ELSE post_street || ' ' || post_building || '/' || post_apartment END)
+			END)
+		END) AS post_address
+	FROM customers c
+	WHERE c.type < 2;
 
 INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2015121500');
