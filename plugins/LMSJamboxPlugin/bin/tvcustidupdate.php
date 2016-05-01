@@ -135,7 +135,7 @@ if (!empty($customers))
 			array(
 				$r['cust_number'],
 				empty($r['cust_external_id']) ? 0 : $r['cust_external_id'],
-			));				
+			));
 	}
 
 $DB->Destroy();

@@ -213,7 +213,7 @@ foreach ($to_insert as $key => $i){
 				GROUP BY d.id", array($customerid, $starttime, $endtime, DOC_INVOICE));
 	if (empty($document)) {
 		$customer = $DB->GetRow("SELECT lastname, name, address, city, zip, ssn, ten, countryid, divisionid, paytime, paytype
-			FROM customers WHERE id = ?", array($customerid));
+			FROM customeraddressview WHERE id = ?", array($customerid));
 
 		if ($customer['paytime'] != -1)
 			$paytime = $customer['paytime'];
