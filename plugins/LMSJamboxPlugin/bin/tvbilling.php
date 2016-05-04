@@ -172,7 +172,7 @@ if (!empty($groupsql))
 
 $res = $DB->GetAll("SELECT b.* FROM tv_billingevent b
 	JOIN customers c ON c.id = b.customerid
-	WHERE c.tv_suspend_billing = ? AND (docid = 0 OR docid IS NULL)
+	WHERE b.tv_suspend_billing = ? AND (docid = 0 OR docid IS NULL)
 		AND be_selling_date >= ? AND be_selling_date <= ?
 		" . (!empty($groupnames) ? $customergroups : "") . "
 	ORDER BY account_id", array(0, $start_date, $end_date));

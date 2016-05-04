@@ -13,6 +13,7 @@ CREATE TABLE tv_billingevent (
   beid integer NOT NULL,
   be_b2b_netto numeric(5,2) DEFAULT NULL,
   docid integer DEFAULT NULL,
+  tv_suspend_billing smallint DEFAULT 0 NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -61,4 +62,4 @@ CREATE VIEW customeraddressview AS
 	FROM customers c
 	WHERE c.type < 2;
 
-INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2015121500');
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2016050400');

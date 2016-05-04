@@ -13,6 +13,7 @@ CREATE TABLE tv_billingevent (
   beid int(11) NOT NULL,
   be_b2b_netto float(5,2) DEFAULT NULL,
   docid int(11) DEFAULT NULL,
+  tv_suspend_billing smallint DEFAULT 0 NOT NULL,
   PRIMARY KEY (id),
   UNIQUE KEY hash (hash)
 ) ENGINE=InnoDB;
@@ -60,4 +61,4 @@ CREATE VIEW customeraddressview AS
 	FROM customers c
 	WHERE c.type < 2;
 
-INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2015121500');
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSJamboxPlugin', '2016050400');

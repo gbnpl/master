@@ -141,6 +141,9 @@ $AUTH = null;
 $SYSLOG = null;
 $LMSTV = new LMSTV($DB, $AUTH, $SYSLOG);
 
+$suspended_customers = $DB->GetAllByKey('SELECT id, tv_suspend_billing FROM customers
+	WHERE tv_suspend_billing <> 0', 'id');
+
 $res = $LMSTV->GetBillingEvents(date('Y-m-d', $start_date), date('Y-m-d', $end_date));
 
 if (!empty($res)) {
@@ -148,10 +151,17 @@ if (!empty($res)) {
 		try {
 			if ($DB->GetOne('SELECT beid FROM tv_billingevent WHERE beid = ?', array($r['id'])))
 				continue;
-			$DB->Execute('INSERT INTO tv_billingevent (customerid, account_id, be_selling_date, be_desc, be_vat, be_gross, be_b2b_netto, group_id, cust_number, package_id, hash, beid)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+
+			if (empty($r['cust_external_id']))
+				$custid = 0;
+			else
+				$custid = intval($r['cust_external_id']);
+
+			$DB->Execute('INSERT INTO tv_billingevent (customerid, account_id, be_selling_date, be_desc, be_vat, be_gross, be_b2b_netto,
+					group_id, cust_number, package_id, tv_suspend_billing, hash, beid)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 				array(
-					empty($r['cust_external_id']) ? 0 : $r['cust_external_id'],
+					$custid,
 					$r['account_id'],
 					$r['be_selling_date'],
 					$r['be_desc'],
@@ -161,6 +171,7 @@ if (!empty($res)) {
 					empty($r['group_id']) ? 0 : $r['group_id'],
 					$r['cust_number'],
 					$r['package_id'],
+					$custid && isset($suspended_customers[$custid]) ? $suspended_customers[$custid]['tv_suspend_billing'] : 0,
 					md5($r['id']),
 					$r['id'],
 				)
