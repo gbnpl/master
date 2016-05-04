@@ -25,7 +25,7 @@ $this->BeginTrans();
 
 $this->Execute("ALTER TABLE tv_billingevent ADD COLUMN tv_suspend_billing smallint DEFAULT 0 NOT NULL");
 
-$this->Execute("UPDATE dbinfo SET keyvalue = ? WHERE keytype = ?", array('2016050400', 'dbversion'));
+$this->Execute("UPDATE dbinfo SET keyvalue = ? WHERE keytype = ?", array('2016050400', 'dbversion_LMSJamboxPlugin'));
 
 $this->CommitTrans();
 
