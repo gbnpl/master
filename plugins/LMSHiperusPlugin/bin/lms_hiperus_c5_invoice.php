@@ -198,7 +198,7 @@ $customers = $DB->GetAll("SELECT hc.id AS id, hc.ext_billing_id AS id_ext, "
 			. " FROM hv_customers hc 
 			JOIN hv_assign ha ON (ha.customerid = hc.id) 
 			WHERE ha.keytype = ? AND ha.keyvalue = ?
-				AND create_date <= ?",
+				AND hc.create_date <= ?",
 			array('issue_invoice', '2', $datetime));
 
 if (empty($customers))
