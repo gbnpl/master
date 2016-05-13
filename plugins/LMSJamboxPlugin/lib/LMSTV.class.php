@@ -45,7 +45,11 @@ class send {
 		}
 		return $instance;
 	}
-	
+
+	public function setTimeout($timeout) {
+		$this->h->getHttpClient()->setConfig(array('timeout' => $timeout));
+	}
+
 	public function get($name, $params = array()){
 		array_unshift($params, $this->auth_data);
 		try {
@@ -117,6 +121,7 @@ class LMSTV extends LMS {
 	public function GetBillingEvents($start_date = '', $end_date = '', $id = '') {
 		$start_date = str_replace("/", "-", $start_date);
 		$end_date = str_replace("/", "-", $end_date);
+		$this->s->setTimeout(30);
 		return $this->s->get('billingEventsGet', array($start_date, $end_date, $id));
 	}
 	
