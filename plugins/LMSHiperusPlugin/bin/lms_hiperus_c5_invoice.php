@@ -370,10 +370,11 @@ foreach ($customers as $i => $customer) {
 
 		if ($customerinfo['paytype'])
 			$paytype = $customerinfo['paytype'];
-		elseif ($paytype = $DB->GetOne('SELECT inv_paytype FROM divisions WHERE id = ?',
-			array($customerinfo['divisionid'])) === NULL)
-			if (isset($PAYTYPES[$paytype]))
-				$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
+		else
+			$paytype = $DB->GetOne('SELECT inv_paytype FROM divisions WHERE id = ?',
+				array($customerinfo['divisionid']));
+		if (empty($paytype) || !isset($PAYTYPES[$paytype]))
+			$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
 
 		$numberplanid = $customer['numberplanid'];
 		if (empty($numberplanid))
