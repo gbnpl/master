@@ -183,7 +183,7 @@ if (!empty($res))
 		$to_insert[$r['cust_number']][] = $r;
 	}
 if (empty($to_insert))
-	die("No billing records!\n");
+	die($quiet ? '' : "No billing records!" . PHP_EOL);
 
 $numbertemplates = array();
 $numberplans = array();
@@ -196,7 +196,7 @@ foreach ($results as $row)
 	if ($row['isdefault'])
 		$numberplans[$row['divid']] = $row['id'];
 if (empty($numberplans))
-	die("No invoice number plans found!\n");
+	die($quiet ? '' : "No invoice number plans found!" . PHP_EOL);
 
 //$DB->BeginTrans();
 foreach ($to_insert as $key => $i){
