@@ -223,10 +223,11 @@ foreach ($to_insert as $key => $i){
 
 		if ($customer['paytype'])
 			$paytype = $customer['paytype'];
-		elseif ($paytype = $DB->GetOne("SELECT inv_paytype FROM divisions WHERE id = ?",
-			array($customer['divisionid'])) === NULL)
-			if (isset($PAYTYPES[$paytype]))
-				$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
+		else
+			$paytype = $DB->GetOne("SELECT inv_paytype FROM divisions WHERE id = ?",
+				array($customer['divisionid']));
+		if (empty($paytype) || !isset($PAYTYPES[$paytype]))
+			$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
 
 		$numberplanid = $customer['numberplanid'];
 		if (empty($numberplanid))
