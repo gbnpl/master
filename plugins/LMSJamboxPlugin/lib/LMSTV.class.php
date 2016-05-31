@@ -179,6 +179,7 @@ class LMSTV extends LMS {
 				'cust_c_street' 	=> $customeradd['address'],
 				'cust_c_home_nr' 	=> '.',
 				'cust_c_flat' 		=> '.',
+				'cust_valid_num'	=> $customeradd['icn'],
 				'cust_external_id' => $customeradd['id'],
 			);
 
