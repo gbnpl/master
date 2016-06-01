@@ -319,8 +319,17 @@ foreach ($results as $row)
 
 foreach ($customers as $i => $customer) {
 	$cid = intval($customer['id_ext']);
+	$customerinfo = $LMS->GetCustomer($cid, true);
+	$numberplanid = $customer['numberplanid'];
+	if (empty($numberplanid))
+		$numberplanid = $numberplans[$customerinfo['divisionid']];
+
 	$add_new_invoices = ConfigHelper::checkValue(ConfigHelper::getConfig('hiperus_c5.add_new_invoices', true));
 	if (!$add_new_invoices) {
+		$numberplanid = $customer['numberplanid'];
+		if (empty($numberplanid))
+			$numberplanid = $numberplans[$customerinfo['divisionid']];
+
 		$invoice = $DB->GetRow("SELECT d.id, cdate, MAX(itemid) AS items, d3.id AS id2 FROM documents d
 			JOIN invoicecontents ic ON ic.docid = d.id
 			LEFT JOIN (
@@ -332,11 +341,12 @@ foreach ($customers as $i => $customer) {
 				GROUP BY d2.id
 			) d3 ON d3.id = d.id
 			WHERE d.customerid = ? AND d.type = ? AND sdate >= ? AND sdate < ?
+				AND d.numberplanid = ?
 			GROUP BY d.id, cdate, d3.id
 			ORDER BY d.cdate DESC LIMIT 1", 
 			array(DOC_INVOICE, $starttime, $endtime,
 				'Abonament VoIP%', 'Koszt rozmów poza abonamentem%',
-				$cid, DOC_INVOICE, $starttime, $endtime));
+				$cid, DOC_INVOICE, $starttime, $endtime, $numberplanid));
 		if (!$invoice)
 			$add_new_invoices = true;
 		elseif (empty($invoice['id2'])) {
@@ -360,8 +370,6 @@ foreach ($customers as $i => $customer) {
 		}
 	}
 	if ($add_new_invoices) {
-		$customerinfo = $LMS->GetCustomer($cid, true);
-
 		if ($customerinfo['paytime'] != -1)
 			$paytime = $customerinfo['paytime'];
 		elseif (($paytime = $DB->GetOne('SELECT inv_paytime FROM divisions WHERE id = ?',
@@ -376,9 +384,6 @@ foreach ($customers as $i => $customer) {
 		if (empty($paytype) || !isset($PAYTYPES[$paytype]))
 			$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
 
-		$numberplanid = $customer['numberplanid'];
-		if (empty($numberplanid))
-			$numberplanid = $numberplans[$customerinfo['divisionid']];
 		if (!isset($numbertemplates[$numberplanid]))
 			$numbertemplates[$numberplanid] = $DB->GetOne("SELECT template FROM numberplans WHERE id = ?", array($numberplanid));
 		$number = $LMS->GetNewDocumentNumber(DOC_INVOICE, $numberplanid, $currtime);
