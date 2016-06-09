@@ -85,14 +85,12 @@ class RrdStatsInitHandler {
 //				'accesskey' =>'x',
 				'prio' => 47,
 				'submenu' => array(
-/*
 					array(
 						'name' => trans('Filter'),
 						'link' => '?m=rrdtraffic',
 						'tip' => trans('User-defined stats'),
 						'prio' => 10,
 					),
-*/
 					array(
 						'name' => trans('Last Hour'),
 						'link' => '?m=rrdtraffic&bar=hour',

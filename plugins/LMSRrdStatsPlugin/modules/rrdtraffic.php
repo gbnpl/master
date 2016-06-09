@@ -2,7 +2,7 @@
 
 /* LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -32,11 +32,12 @@ function float_key_sort($key1, $key2) {
 	return 0;
 }
 
-function Traffic($from = 0, $to = 0, $order = '') {
+function Traffic($from = 0, $to = 0, $net = 0, $order = '') {
 	global $LMS;
 
 	$db = LMSDB::getInstance();
-	$nodes = $db->GetAllByKey('SELECT id, name, ipaddr FROM vnodes WHERE ownerid > 0', 'id');
+	$nodes = $db->GetAllByKey('SELECT id, name, INET_NTOA(ipaddr) AS ip FROM vnodes WHERE ownerid > 0'
+		. (!empty($net) ? ' AND netid = ' . intval($net) : ''), 'id');
 	if (empty($nodes))
 		return null;
 
@@ -140,8 +141,8 @@ function Traffic($from = 0, $to = 0, $order = '') {
 		$traffic['download']['avg'][] = $node['download'] * 8 / ($delta * 1000);
 		$traffic['upload']['name'][] = ($node['name'] ? $node['name'] : trans('unknown') . ' (ID: ' . $node['id'] . ')');
 		$traffic['download']['name'][] = ($node['name'] ? $node['name'] : trans('unknown') . ' (ID: ' . $node['id'] . ')');
-		$traffic['upload']['ipaddr'][] = $node['ipaddr'];
-		$traffic['download']['ipaddr'][] = $node['ipaddr'];
+		$traffic['upload']['ipaddr'][] = $node['ip'];
+		$traffic['download']['ipaddr'][] = $node['ip'];
 		$traffic['upload']['nodeid'][] = $node['id'];
 		$traffic['download']['nodeid'][] = $node['id'];
 	}
@@ -183,9 +184,13 @@ function Traffic($from = 0, $to = 0, $order = '') {
 
 $layout['pagetitle'] = trans('Network Statistics');
 
+$bars = 1;
+
 if (isset($_GET['bar'])) {
 	if (isset($_POST['order']))
 		$SESSION->save('trafficorder', $_POST['order']);
+	if (isset($_POST['net']))
+		$SESSION->save('trafficnet', $_POST['net']);
 }
 
 $bar = isset($_GET['bar']) ? $_GET['bar'] : '';
@@ -193,23 +198,48 @@ $bar = isset($_GET['bar']) ? $_GET['bar'] : '';
 switch ($bar) {
 	case 'hour':
 		$traffic = Traffic(time() - (60 * 60), time(),
+			$SESSION->is_set('trafficnet') ? $SESSION->get('trafficnet') : 0,
 			$SESSION->is_set('trafficorder') ? $SESSION->get('trafficorder') : 'download');
 		break;
 
 	case 'day':
 		$traffic = Traffic(time() - (60 * 60 * 24), time(),
+			$SESSION->is_set('trafficnet') ? $SESSION->get('trafficnet') : 0,
 			$SESSION->is_set('trafficorder') ? $SESSION->get('trafficorder') : 'download');
 		break;
 
 	case 'month':
 		$traffic = Traffic(time() - (60 * 60 * 24 * 30), time(),
+			$SESSION->is_set('trafficnet') ? $SESSION->get('trafficnet') : 0,
 			$SESSION->is_set('trafficorder') ? $SESSION->get('trafficorder') : 'download');
 		break;
 
 	case 'year':
 		$traffic = Traffic(time() - (60 * 60 * 24 * 365), time(),
+			$SESSION->is_set('trafficnet') ? $SESSION->get('trafficnet') : 0,
 			$SESSION->is_set('trafficorder') ? $SESSION->get('trafficorder') : 'download');
 		break;
+
+	case 'user':
+		$from = !empty($_POST['from']) ? $_POST['from'] : time() - (60 * 60 * 24);
+		$to = !empty($_POST['to']) ? $_POST['to'] : time();
+		$net = !empty($_POST['net']) ? $_POST['net'] : 0;
+
+		if (is_array($from))
+			$from = mktime($from['Hour'], $from['Minute'], 0, $from['Month'], $from['Day'], $from['Year']);
+		if (is_array($to))
+			$to = mktime($to['Hour'], $to['Minute'], 0, $to['Month'], $to['Day'], $to['Year']);
+
+		$SMARTY->assign('datefrom', $from);
+		$SMARTY->assign('dateto', $to);
+		$SMARTY->assign('net', $net);
+
+		$traffic = Traffic($from, $to, $net, isset($_POST['order']) ? $_POST['order'] : '');
+		break;
+
+	default:
+		$SMARTY->assign('netlist', $LMS->GetNetworks());
+		$bars = 0;
 }
 
 if (isset($traffic)) {
@@ -217,9 +247,20 @@ if (isset($traffic)) {
 	$SMARTY->assign('upload', $traffic['upload']);
 }
 
+$starttime = time();
+$endtime = time();
+$startyear = date('Y', $starttime);
+$endyear = date('Y', $endtime);
+
+$SMARTY->assign('starttime',$starttime);
+$SMARTY->assign('startyear',$startyear);
+$SMARTY->assign('endtime',$endtime);
+$SMARTY->assign('endyear',$endyear);
 $SMARTY->assign('showips', isset($_POST['showips']));
+$SMARTY->assign('bars', $bars);
 $SMARTY->assign('bar', $bar);
 $SMARTY->assign('trafficorder', $SESSION->is_set('trafficorder') ? $SESSION->get('trafficorder') : 'download');
+$SMARTY->assign('trafficnet', $SESSION->is_set('trafficnet') ? $SESSION->get('trafficnet') : 0);
 $SMARTY->display('rrdtraffic.html');
 
 ?>
