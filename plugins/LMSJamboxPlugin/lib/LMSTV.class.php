@@ -176,7 +176,7 @@ class LMSTV extends LMS {
 				'cust_m_flat'		=> empty($customeradd['apartment']) ? '.' : $customeradd['apartment'],
 				'cust_c_city'		=> empty($customeradd['post_city']) ? $customeradd['city'] : $customeradd['post_city'],
 				'cust_c_postal_code'	=> empty($customeradd['post_zip']) ? $customeradd['zip'] : $customeradd['post_zip'],
-				'cust_c_street'		=> empty($customeradd['post_street']) ? $customeradd['street'] : empty($customeradd['post_street']),
+				'cust_c_street'		=> empty($customeradd['post_street']) ? $customeradd['street'] : $customeradd['post_street'],
 				'cust_c_home_nr'	=> empty($customeradd['post_building']) ? (empty($customeradd['building']) ? '.' : $customeradd['building'])
 											: $customeradd['post_building'],
 				'cust_c_flat' 		=> empty($customeradd['post_apartment']) ? (empty($customeradd['apartment']) ? '.' : $customeradd['apartment'])
