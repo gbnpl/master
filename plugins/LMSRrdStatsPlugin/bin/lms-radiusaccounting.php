@@ -101,7 +101,7 @@ if (!is_readable($CONFIG_FILE)) {
 
 $accounting_file = array_key_exists('accounting-file', $options) ? $options['accounting-file'] : 'php://stdin';
 
-if (!is_readable($accounting_file)) {
+if (!preg_match('/^php:\/\//', $accounting_file) && !is_readable($accounting_file)) {
 	print "Cannot open accounting file: $accounting_file!" . PHP_EOL;
 	exit(2);
 }
