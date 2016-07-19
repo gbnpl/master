@@ -1,10 +1,10 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -56,7 +56,7 @@ foreach ($short_to_longs as $short => $long)
 if (array_key_exists('version', $options)) {
 	print <<<EOF
 lms-radiusaccounting.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 	exit(0);
@@ -65,7 +65,7 @@ EOF;
 if (array_key_exists('help', $options)) {
 	print <<<EOF
 lms-radiusaccounting.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 -C, --config-file=/etc/lms/lms.ini      alternate config file (default: /etc/lms/lms.ini);
 -h, --help                      print this help and exit;
@@ -81,7 +81,7 @@ $quiet = array_key_exists('quiet', $options);
 if (!$quiet) {
 	print <<<EOF
 lms-radiusaccounting.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 }
@@ -216,8 +216,8 @@ while (!feof($fh)) {
 		$datetokens[1], $datetokens[2], $datetokens[0]);
 
 	if ($type & EVENT_STATS) {
-		$download = $m['gigadownload'] * $full32bit + $m['download'];
-		$upload = $m['gigaupload'] * $full32bit + $m['upload'];
+		$download = intval($m['gigadownload']) * $full32bit + $m['download'];
+		$upload = intval($m['gigaupload']) * $full32bit + $m['upload'];
 	} else
 		$download = $upload = 0;
 
