@@ -236,9 +236,10 @@ while (!feof($fh)) {
 	} else {
 		$prev_download = 0;
 		$prev_upload = 0;
+		$m['ip'] = ip_long($m['ip']);
 		$session = $DB->GetRow('SELECT ownerid AS customerid, n.id AS nodeid,
 				ipaddr, mac FROM vmacs n
-			WHERE n.ipaddr = ?', array(ip_long($m['ip'])));
+			WHERE n.ipaddr = ?', array($m['ip']));
 		$session['ipaddr'] = $m['ip'];
 		$session['start'] = $session['stop'] = $dt;
 		$session['mac'] = $m['mac'];
