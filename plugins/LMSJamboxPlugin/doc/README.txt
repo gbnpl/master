@@ -15,8 +15,12 @@ KONFIGURACJA
 
 Dane rejestracyjne platformy Jambox są przechowywane w ustawieniach LMS:
 jambox.username
-jambox.password (hasło powinno być zakodowane MD5 w formacie tekstowym, szesnastkowym)
+jambox.password (hasło powinno być zakodowane MD5 w formacie tekstowym, szesnastkowym, np.
+	poleceniem: echo -ne "hasło" |md5sum)
 jambox.server (domyślnie: https://sms.sgtsa.pl/sms/xmlrpc)
+
+Inne ustawienia:
+jambox.http_timeout (domyślnie: 10 [sekund])
 
 SKRYPTY
 
