@@ -108,8 +108,10 @@ class LMSTV extends LMS {
 		$this->tv_cache = Zend_Cache::factory('Page', 'File', $frontendOptions, $backendOptions);
 	
 		$_SESSION['tv_cache'] = ConfigHelper::checkValue(ConfigHelper::getConfig('jambox.cache', '1'));
+
+		$this->s->setTimeout(intval(ConfigHelper::getConfig('jambox.http_timeout', 10)));
 	}
-	
+
 	public function cleanCache() {
 		$this->tv_cache->clean(Zend_Cache::CLEANING_MODE_ALL);
 	}
