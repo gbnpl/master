@@ -32,15 +32,18 @@ class send {
 		if (!isset($instance)) {
 			$c = __CLASS__;
 			$instance = new $c;
-			
+
 			try {
 				$instance->h = new Zend_XmlRpc_Client(ConfigHelper::getConfig('jambox.server', 'https://sms.sgtsa.pl/sms/xmlrpc'));
 				$instance->h->getHttpClient()->setHeaders(array('User-Agent: LMS SGT')); 
+				$password = ConfigHelper::getConfig('jambox.password');
+				if (!preg_match('/^[0-9a-f]{36}$/', $password))
+					$password = md5($password);
 				$instance->auth_data = array(
 					'user_name' => ConfigHelper::getConfig('jambox.username'),
-					'user_pass' => ConfigHelper::getConfig('jambox.password'),
+					'user_pass' => $password,
 				);
-				
+
 			} catch (Exception $e) {;}
 		}
 		return $instance;
