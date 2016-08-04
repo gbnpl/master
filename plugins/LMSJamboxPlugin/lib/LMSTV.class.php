@@ -301,10 +301,11 @@ class LMSTV extends LMS {
 		if ((int)$cust_number) $id = $this->DB->GetOne('SELECT id FROM customers WHERE tv_cust_number = ?', array($cust_number));
 		
 		if (!$_SESSION['tv_cache'] || !$res = $this->tv_cache->load($cache_name)){
-			try{
+			try {
 				$res = $this->s->get('custList', array($cust_number));
-			}catch (Exception $e){
-			var_dump($e);
+			} catch (Exception $e){
+				//var_dump($e);
+				//$res = $e->getMessage();
 				$res = null;
 			}
 			if ($_SESSION['tv_cache']) $this->tv_cache->save($res, $cache_name, array('customer'.$id));
