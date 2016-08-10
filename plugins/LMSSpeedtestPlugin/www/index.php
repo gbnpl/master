@@ -103,6 +103,7 @@ if (count($ver_chunks) < 1 || version_compare('3.1', $ver_chunks[0]) > 0)
 
 // Include required files (including sequence is important)
 
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
 require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
 
