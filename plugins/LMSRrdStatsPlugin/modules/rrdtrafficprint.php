@@ -52,14 +52,15 @@ switch ($type) {
 
 		$nodes = $DB->GetCol('SELECT id FROM nodes WHERE ownerid = ?', array($customer));
 		if (!empty($nodes)) {
+			$rrd_dir = LMSRrdStatsPlugin::getRrdDirectory();
 			foreach ($nodes as $nodeid) {
-				$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
+				$rrd_file = $rrd_dir . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
 				if (!is_readable($rrd_file))
 					continue;
 
 				$out = array();
 				$ret = 0;
-				exec(RRDTOOL_BINARY . ' fetch ' . RRD_DIR . DIRECTORY_SEPARATOR . $nodeid . ".rrd AVERAGE -s $from -e $to", $out, $ret);
+				exec(RRDTOOL_BINARY . ' fetch ' . $rrd_dir . DIRECTORY_SEPARATOR . $nodeid . ".rrd AVERAGE -s $from -e $to", $out, $ret);
 				if ($ret)
 					continue;
 

@@ -36,8 +36,6 @@ class RrdStatsInitHandler {
      * @param LMS $hook_data Hook data
      */
 	public function lmsInit(LMS $hook_data) {
-		define('RRD_DIR', ConfigHelper::getConfig('rrdstats.directory',
-			PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSRrdStatsPlugin::plugin_directory_name . DIRECTORY_SEPARATOR . 'rrd'));
 		define('RRDTOOL_BINARY', ConfigHelper::getConfig('rrdstats.rrdtool_binary', '/usr/bin/rrdtool'));
 
 		return $hook_data;

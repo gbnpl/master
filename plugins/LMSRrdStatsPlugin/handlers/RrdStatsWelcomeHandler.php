@@ -33,8 +33,9 @@ class RrdStatsWelcomeHandler {
 	public function welcomeBeforeModuleDisplay(array $hook_data) {
 		$SMARTY = $hook_data['smarty'];
 
-		$SMARTY->assign('online', file_exists(RRD_DIR . DIRECTORY_SEPARATOR . 'online.rrd'));
-		$SMARTY->assign('traffic', file_exists(RRD_DIR . DIRECTORY_SEPARATOR . 'traffic.rrd'));
+		$rrd_dir = LMSRrdStatsPlugin::getRrdDirectory();
+		$SMARTY->assign('online', file_exists($rrd_dir . DIRECTORY_SEPARATOR . 'online.rrd'));
+		$SMARTY->assign('traffic', file_exists($rrd_dir . DIRECTORY_SEPARATOR . 'traffic.rrd'));
 	}
 }
 

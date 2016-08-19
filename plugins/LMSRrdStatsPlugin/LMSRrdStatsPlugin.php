@@ -3,7 +3,7 @@
 /*
  *  LMS version 1.11-git
  *
- *  Copyright (C) 2001-2015 LMS Developers
+ *  Copyright (C) 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -35,6 +35,11 @@ class LMSRrdStatsPlugin extends LMSPlugin {
 	const PLUGIN_NAME = 'RRD Statistics';
 	const PLUGIN_DESCRIPTION = 'Rrdtool Node Traffic Statistics Support';
 	const PLUGIN_AUTHOR = 'Tomasz Chiliński &lt;tomasz.chilinski@chilan.com&gt;';
+
+	public static function getRrdDirectory() {
+		return ConfigHelper::getConfig('rrdstats.directory', SYS_DIR . DIRECTORY_SEPARATOR
+			. 'plugins' . DIRECTORY_SEPARATOR . self::plugin_directory_name . DIRECTORY_SEPARATOR . 'rrd');
+	}
 
 	public function registerHandlers() {
 		$this->handlers = array(

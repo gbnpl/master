@@ -37,7 +37,8 @@ function RRDGraph($nodeid, $type, $from, $to) {
 			die;
 	}
 
-	$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
+	$rrd_dir = LMSRrdStatsPlugin::getRrdDirectory();
+	$rrd_file = $rrd_dir . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
 	if (!file_exists($rrd_file))
 		die;
 

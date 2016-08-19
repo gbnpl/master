@@ -137,15 +137,14 @@ try {
 	exit(3);
 }
 
-define('RRD_DIR', ConfigHelper::getConfig('rrdstats.directory',
-	dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'rrd'));
+define('RRD_DIR', LMSRrdStatsPlugin::getRrdDirectory());
 define('RRDTOOL_BINARY', ConfigHelper::getConfig('rrdstats.rrdtool_binary', '/usr/bin/rrdtool'));
 
 // Include required files (including sequence is important)
 
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 //require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
 //include_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 
 define('EVENT_CONNECT', 1);
 define('EVENT_UPDATE', 2);

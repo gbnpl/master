@@ -1,10 +1,10 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -49,7 +49,7 @@ foreach ($short_to_longs as $short => $long)
 if (array_key_exists('version', $options)) {
 	print <<<EOF
 lms-online.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 	exit(0);
@@ -58,7 +58,7 @@ EOF;
 if (array_key_exists('help', $options)) {
 	print <<<EOF
 lms-online.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 -f, --traffic-log-file=/var/log/traffic.log  traffic log file (default: /var/log/traffic.log);
 -C, --config-file=/etc/lms/lms.ini      alternate config file (default: /etc/lms/lms.ini);
@@ -75,7 +75,7 @@ $quiet = array_key_exists('quiet', $options);
 if (!$quiet) {
 	print <<<EOF
 lms-online.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 }
@@ -121,15 +121,14 @@ try {
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
-define('RRD_DIR', ConfigHelper::getConfig('rrdstats.directory',
-	dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'rrd'));
+define('RRD_DIR', LMSRrdStatsPlugin::getRrdDirectory());
 define('RRDTOOL_BINARY', ConfigHelper::getConfig('rrdstats.rrdtool_binary', '/usr/bin/rrdtool'));
 
 // Include required files (including sequence is important)
 
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 //require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
 //include_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 
 $online_freq = intval(ConfigHelper::getConfig('rrdstats.online_freq',
 	intval(ConfigHelper::getConfig('rrdstats.stat_freq',

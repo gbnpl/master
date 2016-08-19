@@ -68,14 +68,15 @@ function Traffic($from = 0, $to = 0, $net = 0, $order = '') {
 
 	$orderednodes = array();
 	$total_download = $total_upload = 0;
+	$rrd_dir = LMSRrdStatsPlugin::getRrdDirectory();
 	foreach ($nodes as $nodeid => &$node) {
-		$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
+		$rrd_file =  $rrd_dir . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
 		if (!is_readable($rrd_file))
 			continue;
 
 		$out = array();
 		$ret = 0;
-		exec(RRDTOOL_BINARY . ' fetch ' . RRD_DIR . DIRECTORY_SEPARATOR . $nodeid . ".rrd AVERAGE -s $fromdate -e $todate", $out, $ret);
+		exec(RRDTOOL_BINARY . ' fetch ' . $rrd_dir . DIRECTORY_SEPARATOR . $nodeid . ".rrd AVERAGE -s $fromdate -e $todate", $out, $ret);
 		if ($ret)
 			continue;
 
