@@ -30,9 +30,9 @@
  * @author Tomasz Chiliński <tomasz.chilinski@chilan.com>
  */
 class RrdStatsNodeHandler {
-	private function getLastStats($nodeid, $period) {
-		$rrd_dir = LMSRrdStatsPlugin::getRrdDirectory();
+	private $rrd_dir;
 
+	private function getLastStats($nodeid, $period) {
 		$out = array();
 		$ret = 0;
 
@@ -44,7 +44,7 @@ class RrdStatsNodeHandler {
 		}
 		$delta = $todate - $fromdate;
 
-		exec(RRDTOOL_BINARY . ' fetch ' . $rrd_dir . DIRECTORY_SEPARATOR . $nodeid . ".rrd AVERAGE -s $fromdate -e $todate", $out, $ret);
+		exec(RRDTOOL_BINARY . ' fetch ' . $this->rrd_dir . DIRECTORY_SEPARATOR . $nodeid . ".rrd AVERAGE -s $fromdate -e $todate", $out, $ret);
 		if ($ret)
 			return null;
 
@@ -78,10 +78,12 @@ class RrdStatsNodeHandler {
 	}
 
 	private function getStats($SMARTY, $nodeid) {
+		$this->rrd_dir = LMSRrdStatsPlugin::getRrdDirectory();
+
 		$rrdstats = array();
 		$SMARTY->assignByRef('rrdstats', $rrdstats);
 
-		$rrd_file = $rrd_dir . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
+		$rrd_file = $this->rrd_dir . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
 		if (!is_readable($rrd_file))
 			return $rrdstats;
 
