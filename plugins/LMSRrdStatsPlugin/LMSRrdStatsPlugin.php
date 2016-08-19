@@ -37,8 +37,8 @@ class LMSRrdStatsPlugin extends LMSPlugin {
 	const PLUGIN_AUTHOR = 'Tomasz Chiliński &lt;tomasz.chilinski@chilan.com&gt;';
 
 	public static function getRrdDirectory() {
-		return ConfigHelper::getConfig('rrdstats.directory', SYS_DIR . DIRECTORY_SEPARATOR
-			. 'plugins' . DIRECTORY_SEPARATOR . self::plugin_directory_name . DIRECTORY_SEPARATOR . 'rrd');
+		return ConfigHelper::getConfig('rrdstats.directory', PLUGINS_DIR . DIRECTORY_SEPARATOR
+			. self::plugin_directory_name . DIRECTORY_SEPARATOR . 'rrd');
 	}
 
 	public function registerHandlers() {
