@@ -1,8 +1,8 @@
 <!--// $Id$ //-->
-<TABLE class="lmsbox">
+<TABLE class="lmsbox" id="speedtests">
 	<THEAD>
 	<TR>
-		<TD class="fall hand" onclick="showOrHide('speedtestpanel');">
+		<TD class="fall hand lmsbox-titlebar" data-lmsbox-content="speedtestpanel">
 			<IMG src="img/traffic.gif" alt="">
 			<span class="bold"><A name="speedtests">{trans("Speed tests:")}</A></span> {t a=ConfigHelper::getConfig('speedtest.display_limit', 20)}(last $a tests){/t}
 		</TD>
@@ -46,7 +46,7 @@
 </TABLE>
 <SCRIPT type="text/javascript">
 <!--
-	if (getCookie('speedtestpanel')=='1')
+	if (getCookie('speedtestpanel') == '1')
 		document.getElementById('speedtestpanel').style.display = '';
 //-->
 </SCRIPT>
