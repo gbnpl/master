@@ -4,7 +4,7 @@
 		<COL style="width: 100%;">
 	</COLGROUP>
 	<THEAD>
-	<TR class="hand lmsbox-titlebar" data-lmsbox-content="speedtestpanel">
+	<TR class="hand lmsbox-titlebar" data-lmsbox-content="speedtestpanel" onclick="showOrHide('speedtestpanel')">
 		<TD class="fall">
 			<IMG src="img/traffic.gif" alt="">
 			<span class="bold">{trans("Speed tests:")}</span> {t a=ConfigHelper::getConfig('speedtest.display_limit', 20)}(last $a tests){/t}
