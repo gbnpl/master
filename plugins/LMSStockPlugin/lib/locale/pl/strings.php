@@ -15,6 +15,7 @@ $_LANG['Receive Note Info: $a'] = 'Dane dokumentu przyjęcia: $a';
 $_LANG['Receive notes list'] = 'Lista dokumentów przyjęcia';
 $_LANG['Show paid receive notes'] = 'Pokaż zapłacone dokumenty';
 $_LANG['Show sold positions'] = 'Pokaż sprzedane pozycje';
+$_LANG['Show unsold positions'] = 'Pokaż niesprzedane pozycje';
 $_LANG['Manufacturers'] = 'Producenci';
 $_LANG['Manufacturer'] = 'Producent';
 $_LANG['Add manufacturer'] = 'Dodaj producenta';

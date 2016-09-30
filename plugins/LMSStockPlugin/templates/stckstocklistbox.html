@@ -5,7 +5,7 @@
 <TABLE CELLPADDING="3" width="100%">
 	<TR class="dark">
 		<TD COLSPAN="10" ALIGN="right" class="fleftu frightu">
-			<A HREF="?m={$module}&amp;ssp={!$ssp}"{if $ssp} CLASS="bold"{/if}>{trans("Show sold positions")}</A>
+			<A HREF="?m={$module}&ssp={if $ssp}0{else}1{/if}">{if $ssp}{trans("Show unsold positions")}{else}{trans("Show sold positions")}{/if}</A>
 		</TD>
 	<TR class="dark" {tip text="Click on column name to change sorting order"}>
 		<TD class="fleftu" width="30%">
