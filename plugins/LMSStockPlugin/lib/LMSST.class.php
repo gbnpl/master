@@ -660,6 +660,9 @@ class LMSST {
 			case 'id':
 				$sqlord = ' ORDER BY p.id';
 				break;
+			case 'sn':
+				$sqlord = ' ORDER BY s.serialnumber';
+				break;
 			case 'name':
 				$sqlord = ' ORDER BY pname';
 				break;
