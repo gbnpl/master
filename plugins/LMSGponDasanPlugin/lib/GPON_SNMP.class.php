@@ -730,12 +730,13 @@ class GPON_DASAN_SNMP {
 				foreach($MacOltId as $k=>$v)
 				{
 					$mac=$this->clean_snmp_value($MacAddress[$k]);
-					$mac_replace=str_replace('&nbsp;',':',trim($mac));
+					$mac_replace = trim(str_replace('&nbsp;', ' ', $mac));
+					$mac_replace = str_replace(' ', ':', $mac_replace);
 					$result.='<tr>
 					<td>'.$num.'</td>
 					<td>'.$this->clean_snmp_value($v).'</td>
 					<td>'.$this->clean_snmp_value($MacOnuId[$k]).'</td>
-					<td>'.$mac.'</td>
+					<td>'.$mac_replace.'</td>
 					<td>'.get_producer($mac_replace).'</td>
 					<td>'.$this->clean_snmp_value($MacPortId[$k]).'</td>
 					<td>'.$this->clean_snmp_value($MacVlanId[$k]).'</td>
