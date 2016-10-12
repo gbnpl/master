@@ -587,7 +587,7 @@ class LMSST {
 			$product['price']['taxid'],
 			(string) str_replace(',','.', $product['price']['gross']),
 			$product['group'],
-			$product['warranty']
+			empty($product['warranty']) ? null : $product['warranty'],
 			)))
 			return $this->db->GetLastInsertID('stck_stock');
 		else
