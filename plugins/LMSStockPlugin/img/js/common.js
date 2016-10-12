@@ -1,13 +1,13 @@
 function modalwindow(module, width, height, reload) {
 //	var src = 'https://admin2.mojasiec.com/?m=' + module + '&popup=1';
 	var src = '?m=' + module + '&popup=1';
-	$.modal('<iframe src="' + src + '" style="border:0; width: ' + width + 'px; height: ' + height + 'px;">', {
+	$stock.modal('<iframe src="' + src + '" style="border:0; width: ' + width + 'px; height: ' + height + 'px;">', {
 		opacity: 60,
 		containerCss:{
 			padding: 3
 		},
 		onClose: function (dialog) {
-			$.modal.close();
+			$stock.modal.close();
 			if (reload) {
 				location.reload(true);
 			}
@@ -16,19 +16,19 @@ function modalwindow(module, width, height, reload) {
 }
 
 function modalclose() {
-	parent.$.modal.close();
+	parent.$stock.modal.close();
 }
 
 function pad(id) {
-	$('#pid').val(id);
+	$stock('#pid').val(id);
 }
 
 function pinv(id, net, gross) {
 	pad(id);
 	if (gross > 0) {
-		$('input[name="valuebrutto"]').val(gross);
+		$stock('input[name="valuebrutto"]').val(gross);
 	} else {
-		$('input[name="valuenetto"]').val(net);
+		$stock('input[name="valuenetto"]').val(net);
 	}
 }
 
