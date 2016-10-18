@@ -165,12 +165,12 @@ $query = "SELECT o.id AS gpononuid, o.name, o.properties, m.id AS modelid, m.nam
 	JOIN " . GPON_DASAN::SQL_TABLE_GPONONUMODELS . " m ON m.id = o.gpononumodelsid
 	JOIN " . GPON_DASAN::SQL_TABLE_GPONOLTPROFILES . " p ON p.id = o.gponoltprofilesid
 	LEFT JOIN (
-		SELECT n.id, (" . $DB->Concat('INET_NTOA(ipaddr)', "'/'", 'mask', "'/'", 'gateway', "'/'", 'n.name', "'/'", 'passwd', "'/'", 'authtype', "'/'", 'vlanid') . ") AS details
+		SELECT n.id, (" . $DB->Concat('INET_NTOA(ipaddr)', "'/'", 'mask', "'/'", 'gateway', "'/'", 'n.name', "'/'", 'passwd', "'/'", 'n.authtype', "'/'", 'vlanid') . ") AS details
 		FROM nodes n
 		JOIN networks net ON net.address = (n.ipaddr & INET_ATON(mask))
 	) h1 ON h1.id = o.host_id1
 	LEFT JOIN (
-		SELECT n.id, (" . $DB->Concat('INET_NTOA(ipaddr)', "'/'", 'mask', "'/'", 'gateway', "'/'", 'n.name', "'/'", 'passwd', "'/'", 'authtype', "'/'", 'vlanid') . ") AS details
+		SELECT n.id, (" . $DB->Concat('INET_NTOA(ipaddr)', "'/'", 'mask', "'/'", 'gateway', "'/'", 'n.name', "'/'", 'passwd', "'/'", 'n.authtype', "'/'", 'vlanid') . ") AS details
 		FROM nodes n
 		JOIN networks net ON net.address = (n.ipaddr & INET_ATON(mask))
 	) h2 ON h2.id = o.host_id2
