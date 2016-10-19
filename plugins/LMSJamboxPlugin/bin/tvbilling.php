@@ -120,6 +120,7 @@ try {
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
 require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
 
