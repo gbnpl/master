@@ -138,9 +138,9 @@ try {
 // Include required files (including sequence is important)
 
 //require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSGponDasanPlugin::plugin_directory_name
 	. DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'definitions.php');
-//require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 
 $AUTH = null;
 $GPON = new GPON_DASAN();
