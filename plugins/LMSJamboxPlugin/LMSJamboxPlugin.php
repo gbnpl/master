@@ -54,6 +54,10 @@ class LMSJamboxPlugin extends LMSPlugin {
 				'class' => 'JamboxInitHandler',
 				'method' => 'menuInit'
 			),
+			'access_table_initialized' => array(
+				'class' => 'JamboxInitHandler',
+				'method' => 'accessTableInit'
+			),
 			'customerinfo_before_display' => array(
 				'class' => 'JamboxCustomerHandler',
 				'method' => 'customerInfoBeforeDisplay'

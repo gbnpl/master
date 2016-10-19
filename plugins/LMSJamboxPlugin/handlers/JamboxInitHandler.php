@@ -152,6 +152,19 @@ class JamboxInitHandler {
 
 		return $hook_data;
 	}
+
+	/**
+	 * Modifies access table
+	 *
+	*/
+	public function accessTableInit() {
+		$access = AccessRights::getInstance();
+		$access->insertPermission(new Permission('jambox_full_access', 'JAMBOX - Pełny dostęp',
+			'^tv.*'), AccessRights::FIRST_FORBIDDEN_PERMISSION);
+		$access->insertPermission(new Permission('jambox_read_only', 'JAMBOX - Tylko do odczytu',
+			'^(tv(cleancache|messagessend|export|stb(add|remove)))$'),
+			AccessRights::FIRST_FORBIDDEN_PERMISSION);
+	}
 }
 
 ?>
