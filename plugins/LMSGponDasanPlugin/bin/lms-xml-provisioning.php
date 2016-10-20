@@ -203,6 +203,9 @@ if (empty($models)) {
 		echo "No gpon onu models found!" . PHP_EOL;
 	die;
 }
+foreach ($models as &$model)
+	$model['xmltemplate'] = str_replace("\r\n", "\n", $model['xmltemplate']);
+unset($model);
 
 $SMARTY = new Smarty;
 $SMARTY->setTemplateDir(null);
@@ -285,7 +288,11 @@ foreach ($onus as $onu) {
 
 	$SMARTY->assign('customerid', intval($customerid));
 
-	$contents = $SMARTY->fetch('string:' . $models[$modelid]['xmltemplate']);
+	try {
+		$contents = $SMARTY->fetch('string:' . $models[$modelid]['xmltemplate']);
+	} catch (Exception $e) {
+		die('XML template compilation error: line: ' . $e->getMessage() . PHP_EOL);
+	}
 
 	$fh = fopen($filename, "w+");
 	if (empty($fh)) {
