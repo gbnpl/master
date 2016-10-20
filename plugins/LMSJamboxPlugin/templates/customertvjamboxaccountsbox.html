@@ -177,10 +177,10 @@
 						{/foreach}
 					</table><br>	
 					{if $acc.subscriptions|@count eq 0 }
-					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj i aktywuj <img src="img/save.gif" alt=""></a>
-					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj nieaktywną <img src="img/save.gif" alt=""></a>
+					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.acttype.value=1;document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj i aktywuj <img src="img/save.gif" alt=""></a>&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.acttype.value=0;document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj nieaktywną <img src="img/save.gif" alt=""></a>&nbsp;&nbsp;&nbsp;
 					{else}
-					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj <img src="img/save.gif" alt=""></a>
+					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.acttype.value=0;javascript:document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj <img src="img/save.gif" alt=""></a>&nbsp;&nbsp;&nbsp;
 					{/if}
 					<br><br>
 					<input type="hidden" id="account_id" name="account_id" value="{$acc.account_id}">
