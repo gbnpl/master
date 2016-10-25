@@ -269,8 +269,10 @@ function create_data_record($voipaccount) {
 			$customer = "${voipaccount['name']}|${voipaccount['lastname']}|${voipaccount['location']}|"
 				. (!empty($voipaccount['email']) ? $voipaccount['email'] : '') . "|"
 				. (!empty($voipaccount['ssn']) ? "1:${voipaccount['ssn']}" : (!empty($voipaccount['icn']) ? "2:${voipaccount['icn']}" : ''));
-		} else
+		} else {
+			$voipaccount['owner'] = str_replace('&', '&amp;', $voipaccount['owner']);
 			$customer = "${voipaccount['owner']}||${voipaccount['location']}";
+		}
 		$buffer .= "\t\t\t\t<customer_name>$customer</customer_name>\n";
 		$terc = sprintf("%02d%02d%02d%s", $voipaccount['state_ident'], $voipaccount['district_ident'], $voipaccount['borough_ident'], $voipaccount['borough_type']);
 		$buffer .= "\t\t\t\t<Address_line1>*$terc</Address_line1>\n";
