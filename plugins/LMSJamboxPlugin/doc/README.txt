@@ -10,6 +10,10 @@ INSTALACJA
 2) Tworzymy dowiązanie symboliczne w katalogu img LMS-a o nazwie LMSJamboxPlugin
 do katalogu ../plugins/LMSJamboxPlugin/img
 3) Aktywujemy wtyczkę z poziomu menu "Konfiguracja"/"Wtyczki" LMS-a.
+4) Katalog <lms-path>/plugins/LMSJamboxPlugin/tmp uczynić zapisywalnych dla serwera
+www, np.
+	chmod u+w <lms-path>/plugins/LMSJamboxPlugin/tmp
+	chown apache <lms-path>/plugins/LMSJamboxPlugin/tmp
 
 KONFIGURACJA
 
