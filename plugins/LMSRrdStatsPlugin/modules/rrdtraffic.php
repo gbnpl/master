@@ -154,9 +154,12 @@ function Traffic($from = 0, $to = 0, $net = 0, $order = '') {
 	$traffic['download']['avgsum'] = $total_download * 8 / ($delta * 1000);
 
 	// get maximum data from array
-	$maximum = max($traffic['download']['data']);
-	if($maximum < max($traffic['upload']['data']))
-		$maximum = max($traffic['upload']['data']);
+	if (!empty($traffic['download']['data'])) {
+		$maximum = max($traffic['download']['data']);
+		if($maximum < max($traffic['upload']['data']))
+			$maximum = max($traffic['upload']['data']);
+	} else
+		$maximum = 0;
 
 	if ($maximum == 0)		// do not need divide by zero
 		$maximum = 1;
