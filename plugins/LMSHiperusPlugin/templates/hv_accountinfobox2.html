@@ -1,11 +1,11 @@
 {include file="hv_js.html"}
-<table class="lmsbox lms-ui-sortable" id="voip-account-hiperus">
+<table class="lmsbox lms-ui-sortable" id="hiperus-voip-accounts">
 	<COLGROUP>
 		<COL style="width: 99%;">
 		<COL style="width: 1%;">
 	</COLGROUP>
 	<THEAD>
-	<TR class="hand lmsbox-titlebar" data-lmsbox-content="voip-account-hiperus-panel" onclick="showOrHide('voip-account-hiperus-panel')">
+	<TR class="hand lmsbox-titlebar" data-lmsbox-content="hiperus-voip-accounts-panel" onclick="showOrHide('hiperus-voia-accounts-panel')">
 		<td class="bold">
 			<img src="img/voip.gif" alt="">Konta VoIP Hiperus C5 ({$hiperusaccountcustomerlist|@count})
 		</td>
@@ -17,7 +17,7 @@
 	</TR>
 	</THEAD>
 	<TBODY>
-    <tr id="voip-account-hiperus-panel" style="display:none;">
+    <tr id="hiperus-voip-accounts-panel" style="display:none;">
 	<td colspan="2" class="fall">
 	    <table width="100%" cellpadding="3" cellspacing="0">
 		<tr class="dark">
@@ -64,7 +64,7 @@
 </table>
 <script type="text/javascript">
 <!--
-if (getCookie('voipaccounthiperusbox') == '1')
-	document.getElementById('voipaccounthiperusbox').style.display = '';
+if (getCookie('hiperus-voip-accounts-panel') == '1')
+	document.getElementById('hiperus-voip-accounts-panel').style.display = '';
 //-->
 </script>
