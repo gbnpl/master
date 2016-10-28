@@ -47,6 +47,6 @@ $_LANG['<!rrdstats>Traffic'] = 'Ruch';
 
 $_LANG['RRD Traffic stats from last (download/upload):'] = 'Statystyki ruchu RRD z ostatnich (download/upload):';
 
-$_LANG['Last year'] = 'Ostatni rok';
+$_LANG['Last Year'] = 'Ostatni rok';
 
 ?>
