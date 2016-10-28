@@ -25,6 +25,8 @@ jambox.server (domyślnie: https://sms.sgtsa.pl/sms/xmlrpc)
 
 Inne ustawienia:
 jambox.http_timeout (domyślnie: 10 [sekund])
+jambox.long_timeout (domyślnie: 30 [sekund]) - maksymalny czas przez jaki oczekujemy
+	na odpowiedź serwera API przy pobieraniu zdarzeń billingowych
 
 SKRYPTY
 

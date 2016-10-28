@@ -126,7 +126,7 @@ class LMSTV extends LMS {
 	public function GetBillingEvents($start_date = '', $end_date = '', $id = '') {
 		$start_date = str_replace("/", "-", $start_date);
 		$end_date = str_replace("/", "-", $end_date);
-		$this->s->setTimeout(30);
+		$this->s->setTimeout(intval(ConfigHelper::getConfig('jambox.long_timeout', 30)));
 		return $this->s->get('billingEventsGet', array($start_date, $end_date, $id));
 	}
 	
