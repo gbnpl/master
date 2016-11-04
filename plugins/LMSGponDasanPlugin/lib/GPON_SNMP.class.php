@@ -765,6 +765,16 @@ class GPON_DASAN_SNMP {
 		}
 		return $table1;
 	}
+	function secondsToTime($s)
+	{
+		$h = floor($s / 3600);
+		$s -= $h * 3600;
+		$m = floor($s / 60);
+		$s -= $m * 60;
+		$d = floor($h / 24);
+		$h -= $d * 24;
+		return $d.' d, '.$h.':'.sprintf('%02d', $m).':'.sprintf('%02d', $s);
+	}
 	function ONU_get_param($OLT_id,$ONU_id)
 	{
 		$result=array();
@@ -876,6 +886,7 @@ class GPON_DASAN_SNMP {
 			$result['Vender Product']=$this->get('sleGponOnuVenderProduct.'.$OLT_id.'.'.$ONU_id);
 			$result['Voip Avail Signal Protocol']=$this->get('sleGponOnuVoipAvailSignalProtocol.'.$OLT_id.'.'.$ONU_id);
 			*/
+			$result['Sys Up Time']=$this->get('sleGponOnuSysUpTime.'.$OLT_id.'.'.$ONU_id);
 		}
 		return $result;
 	}
@@ -922,7 +933,6 @@ class GPON_DASAN_SNMP {
 				{
 					$snmp_result['AccountPassword'] = "*********";
 				}
-
 				$result.='
 				<table border="0" cellspacing="2">
 				<tr>
@@ -939,7 +949,8 @@ class GPON_DASAN_SNMP {
 					<tr><td><b>Poziom sygnału 1490nm<br />odbieranego na ONU:</b></td><td'.$this->style_gpon_rx_power($snmp_result['Rx Power']).'>'.$snmp_result['Rx Power'].'</td></tr>
 					<tr><td><b>Tłumienie trasy do abonenta:</b></td><td>'.$tlumienie.' dBm</td></tr>
 					<tr><td><b>Dystans:</b></td><td>'.$snmp_result['Distance'].'</td></tr>
-					<tr><td><b>Czas pracy:</b></td><td>'.$snmp_result['Link Up Time'].'</td></tr>
+					<tr><td><b>Czas pracy linku:</b></td><td>'.$snmp_result['Link Up Time'].'</td></tr>
+					<tr><td><b>Uptime urządzenia:</b></td><td>'.$this->secondsToTime($snmp_result['Sys Up Time']).'</td></tr>
 					<tr><td><b>Czas nieaktywności:</b></td><td>'.$snmp_result['Inactive Time'].'</td></tr>
 					<tr><td><b>Adres MAC ONU:</b></td><td>'.$snmp_result['Mac'].'</td></tr>
 					<tr><td><b>OS1 Standby Version:</b></td><td>'.$snmp_result['OS1 Standby Version'].'</td></tr>
@@ -1190,7 +1201,8 @@ class GPON_DASAN_SNMP {
 					<tr><td><b>Powód odłączenia:</b></td><td>'.$snmp_result['Deactive Reason'].'</td></tr>
 					<tr><td><b>Poziom sygnału 1490nm<br />odbieranego na ONU:</b></td><td'.$this->style_gpon_rx_power($snmp_result['Rx Power']).'>'.$snmp_result['Rx Power'].'</td></tr>
 					<tr><td><b>Dystans:</b></td><td>'.$snmp_result['Distance'].'</td></tr>
-					<tr><td><b>Czas pracy:</b></td><td>'.$snmp_result['Link Up Time'].'</td></tr>
+					<tr><td><b>Czas pracy linku:</b></td><td>'.$snmp_result['Link Up Time'].'</td></tr>
+					<tr><td><b>Uptime urządzenia:</b></td><td>'.$this->secondsToTime($snmp_result['Sys Up Time']).'</td></tr>
 					<tr><td><b>Adres MAC ONU:</b></td><td>'.$snmp_result['Mac'].'</td></tr>
 					<tr><td><b>OS1 Standby Version:</b></td><td>'.$snmp_result['OS1 Standby Version'].'</td></tr>
 					<tr><td><b>OS2 Active Version:</b></td><td>'.$snmp_result['OS2 Active Version'].'</td></tr>
