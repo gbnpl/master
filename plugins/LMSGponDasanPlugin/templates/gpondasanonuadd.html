@@ -88,23 +88,6 @@
 
 	<TR class="light">
 		<TD WIDTH="1%">
-			<IMG SRC="img/settings.gif" ALT="">
-		</TD>
-		<TD WIDTH="1%" NOWRAP>
-			<B>Profil:</B>
-		</TD>
-		<TD WIDTH="98%">
-			<SELECT {tip trigger="gponoltprofiles"} SIZE="1" NAME="netdev[gponoltprofilesid]" {tip text="Wybierz profil"}>
-			<option value="">Wybierz</option>
-				{foreach $gponoltprofiles as $profile}
-				<OPTION VALUE="{$profile.id}"{if $netdevinfo.gponoltprofilesid == $profile.id} selected{/if}>{$profile.name}{if array_key_exists('oltname', $profile)} ({$profile.oltname}){/if}</OPTION>
-				{/foreach}
-			</SELECT>
-		</TD>
-	</TR>
-					        
-					        <TR class="light">
-		<TD WIDTH="1%">
 			<IMG SRC="img/netdev_model.gif" ALT="">
 		</TD>
 		<TD WIDTH="1%" NOWRAP>
@@ -122,9 +105,24 @@
 			{/if}
 		</TD>
 	</TR>
-	
-	
-	
+
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/settings.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{trans("Profile:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<SELECT {tip trigger="gponoltprofiles"} SIZE="1" NAME="netdev[gponoltprofilesid]" {tip text="Wybierz profil"}>
+			<option value="">Wybierz</option>
+				{foreach $gponoltprofiles as $profile}
+				<OPTION VALUE="{$profile.id}"{if $netdevinfo.gponoltprofilesid == $profile.id} selected{/if}>{$profile.name}{if array_key_exists('oltname', $profile)} ({$profile.oltname}){/if}</OPTION>
+				{/foreach}
+			</SELECT>
+		</TD>
+	</TR>
+
 	<TR class="light">
 		<TD WIDTH="1%">
 			<IMG SRC="img/passwd.gif" ALT="">
