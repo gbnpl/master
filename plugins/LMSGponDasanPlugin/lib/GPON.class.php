@@ -668,8 +668,10 @@ class GPON_DASAN {
 			WHERE o.id = ?", 'name', array($id));
 
 		$result['properties'] = unserialize($result['properties']);
-		$result['createdby'] = $this->DB->GetOne('SELECT name FROM users WHERE id=?', array($result['creatorid']));
-		$result['modifiedby'] = $this->DB->GetOne('SELECT name FROM users WHERE id=?', array($result['modid']));
+		$users_table = $this->DB->ResourceExists('vusers', LMSDB::RESOURCE_TYPE_VIEW)
+			? 'vusers' : 'users';
+		$result['createdby'] = $this->DB->GetOne('SELECT name FROM ' . $users_table . ' WHERE id=?', array($result['creatorid']));
+		$result['modifiedby'] = $this->DB->GetOne('SELECT name FROM ' . $users_table . ' WHERE id=?', array($result['modid']));
 		$result['creationdateh'] = date('Y/m/d, H:i', $result['creationdate']);
 		$result['moddateh'] = date('Y/m/d, H:i', $result['moddate']);
 
