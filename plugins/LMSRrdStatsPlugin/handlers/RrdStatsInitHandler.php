@@ -56,6 +56,29 @@ class RrdStatsInitHandler {
 	}
 
     /**
+     * Sets plugin managers
+     * 
+     * @param LMS $hook_data Hook data
+     */
+	public function userpanelLmsInit(LMS $hook_data) {
+		define('RRDTOOL_BINARY', ConfigHelper::getConfig('rrdstats.rrdtool_binary', '/usr/bin/rrdtool'));
+
+		return $hook_data;
+	}
+
+    /**
+     * Sets plugin userpanel modules directory
+     * 
+     * @param array $hook_data Hook data
+     * @return array Hook data
+     */
+	public function userpanelModulesDirInit(array $hook_data = array()) {
+		$plugin_modules = PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSRrdStatsPlugin::plugin_directory_name . DIRECTORY_SEPARATOR . 'userpanel' . DIRECTORY_SEPARATOR;
+		array_unshift($hook_data, $plugin_modules);
+		return $hook_data;
+	}
+
+    /**
      * Sets plugin userpanel modules directory
      * 
      * @param array $hook_data Hook data

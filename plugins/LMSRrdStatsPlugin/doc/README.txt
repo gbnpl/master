@@ -26,9 +26,7 @@ następujące:
 1. lms-online.php - gromadzenie statystyk dostępności komputerów w pliku online.rrd
    w oparciu o pole bazy danych nodes.lastonline.
 2. lms-radiusaccounting.php - zbieranie statystyk ruchu komputerów w plikach <node-id>.rrd
-   (wersja dedykowana do zbierania statystyk z serwera radius w formacie linelog - odwołanie
-   do linelog powinno być utworzone w sekcji accounting aktywnego hosta w konfiguracji
-   serwera freeradius).
+   (wersja dedykowana do zbierania statystyk z serwera radius w formacie linelog).
    Plik doc/freeradius/modules/linelog zawiera konfigurację freeradius formatu gromadzonych
    informacji o ruchu w postaci pliku tekstowego zgodnego z tym skryptem.
 3. lms-traffic.php - zbieranie statystyk ruchu komputerów w plikach <node-id>.rrd

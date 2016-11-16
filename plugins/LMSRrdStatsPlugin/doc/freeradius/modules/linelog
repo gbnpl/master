@@ -78,13 +78,13 @@ linelog {
 	Accounting-Request {
 		#Start = "Connect: [%{User-Name}] (did %{Called-Station-Id} cli %{Calling-Station-Id} port %{NAS-Port} ip %{Framed-IP-Address})"
 		#Stop = "Disconnect: [%{User-Name}] (did %{Called-Station-Id} cli %{Calling-Station-Id} port %{NAS-Port} ip %{Framed-IP-Address}) %{Acct-Session-Time} seconds"
-		Start = "%T|C|%{Acct-Unique-Session-ID}|%{Framed-IP-Address}|%{Calling-Station-Id}|%{NAS-IP-Address}|%{NAS-Identifier}|%{User-Name}"
-		Stop = "%T|D|%{Acct-Unique-Session-ID}|%{Framed-IP-Address}|%{Calling-Station-Id}|%{NAS-IP-Address}|%{NAS-Identifier}|%{Acct-Output-Gigawords}|%{Acct-Output-Octets}|%{Acct-Input-Gigawords}|%{Acct-Input-Octets}|%{User-Name}"
+		Start = "%T|C|%{Acct-Unique-Session-ID}|%{Framed-IP-Address}|%{Calling-Station-Id}|%{NAS-IP-Address}|%{NAS-Identifier}"
+		Stop = "%T|D|%{Acct-Unique-Session-ID}|%{Framed-IP-Address}|%{Calling-Station-Id}|%{NAS-IP-Address}|%{NAS-Identifier}|%{Acct-Output-Gigawords}|%{Acct-Output-Octets}|%{Acct-Input-Gigawords}|%{Acct-Input-Octets}"
 
 		#  Don't log anything for these packets.
 		Alive = ""
 
-		Interim-Update = "%T|U|%{Acct-Unique-Session-ID}|%{Framed-IP-Address}|%{Calling-Station-Id}|%{NAS-IP-Address}|%{NAS-Identifier}|%{Acct-Output-Gigawords}|%{Acct-Output-Octets}|%{Acct-Input-Gigawords}|%{Acct-Input-Octets}|%{User-Name}"
+		Interim-Update = "%T|U|%{Acct-Unique-Session-ID}|%{Framed-IP-Address}|%{Calling-Station-Id}|%{NAS-IP-Address}|%{NAS-Identifier}|%{Acct-Output-Gigawords}|%{Acct-Output-Octets}|%{Acct-Input-Gigawords}|%{Acct-Input-Octets}"
 
 		#Accounting-On = "NAS %C (%{NAS-IP-Address}) just came online"
 		#Accounting-Off = "NAS %C (%{NAS-IP-Address}) just went offline"

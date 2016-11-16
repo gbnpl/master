@@ -25,13 +25,13 @@
  */
 
 /**
- * LMSRrdStatsStats
+ * LMSRrdStatsPlugin
  *
  * @author Tomasz Chiliński <tomasz.chilinski@chilan.com>
  */
 class LMSRrdStatsPlugin extends LMSPlugin {
 	const plugin_directory_name = 'LMSRrdStatsPlugin';
-//	const PLUGIN_DBVERSION = '2015102800';
+	const PLUGIN_DBVERSION = '2016111600';
 	const PLUGIN_NAME = 'RRD Statistics';
 	const PLUGIN_DESCRIPTION = 'Rrdtool Node Traffic Statistics Support';
 	const PLUGIN_AUTHOR = 'Tomasz Chiliński &lt;tomasz.chilinski@chilan.com&gt;';
@@ -50,6 +50,14 @@ class LMSRrdStatsPlugin extends LMSPlugin {
 			'smarty_initialized' => array(
 				'class' => 'RrdStatsInitHandler',
 				'method' => 'smartyInit',
+			),
+			'userpanel_lms_initialized' => array(
+				'class' => 'RrdStatsInitHandler',
+				'method' => 'userpanelLmsInit'
+			),
+			'userpanel_modules_dir_initialized' => array(
+				'class' => 'RrdStatsInitHandler',
+				'method' => 'userpanelModulesDirInit'
 			),
 			'modules_dir_initialized' => array(
 				'class' => 'RrdStatsInitHandler',
