@@ -1,9 +1,4 @@
 {block name="quicksearchcontents" append}
 	&nbsp;<img src="img/{LMSJamboxPlugin::plugin_directory_name}/tv_icon.png" alt="">
-	<input class="blend" type="text" id="stbinput" name="qs[stb]" value="" size="15" {tip text="Enter STB mac address and press Enter"}>
-	<script type="text/javascript">
-	<!--
-		new AutoSuggest(document.getElementById('quicksearch'),document.getElementById('stbinput'),'?m=quicksearch&ajax=1&mode=stb&what=',1);
-	//-->
-	</script>
+	<input class="blend lms-ui-quick-search" type="text" id="stbinput" name="qs[stb]" data-mode="stb" value="" size="15" {tip text="Enter STB mac address and press Enter"}>
 {/block}
