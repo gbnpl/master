@@ -734,7 +734,7 @@ class GPON_DASAN {
 
 	public function GponOnuAdd($gpononudata) {
 		$gpononudata['onu_description'] = iconv('UTF-8', 'ASCII//TRANSLIT', $gpononudata['onu_description']);
-		$gpononudata['gpononumodelsid'] = intval($gpononudata['gpononumodelsid']);
+		$gpononudata['gpononumodelsid'] = intval($gpononudata['gpononumodelid']);
 		$gpononumodelid = 1;
 		if (empty($gpononudata['gpononumodelsid'])) {
 			$gpononudata['onu_model'] = trim($gpononudata['onu_model']);
