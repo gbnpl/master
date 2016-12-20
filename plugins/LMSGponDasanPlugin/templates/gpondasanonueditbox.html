@@ -172,11 +172,10 @@
 						{$index+1}.
 					</TD>
 					<TD>
-						{$cid="customersid_"|cat:$index}
-						{customerlist form="netdevedit" customers=$customers selected=$netdevinfo.$cid selectname="netdev[customersid_$index]" inputname="netdev[cid_$index]" customOnChange="customerlist_change();"}
+						{customerlist form="netdevedit" customers=$customers selected=$netdevinfo.cid[$index] selectname="netdev[customerid][$index]" inputname="netdev[cid][$index]" customOnChange="customerlist_change();"}
 						<SCRIPT type="text/javascript">
 						<!--
-							input_elems.push(document.forms['netdevedit'].elements['netdev[cid_{$index}]']);
+							input_elems.push(document.forms['netdevedit'].elements['netdev[cid][{$index}]']);
 						//-->
 						</SCRIPT>
 					</TD>

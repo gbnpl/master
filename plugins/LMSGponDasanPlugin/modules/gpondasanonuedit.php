@@ -173,34 +173,22 @@ if (isset($_POST['netdev']) && (!isset($_POST['snmpsend']) || empty($_POST['snmp
 	if(isset($netdevdata['autoprovisioning']) && intval($netdevdata['autoprovisioning'])==1)
 	{
 		//customer
-		if(is_array($netdevdata) && count($netdevdata)>0)
-		{
-			foreach($netdevdata as $k5=>$v5)
-			{
-				if(preg_match('/customersid\_/', $k5))
-				{
-					$cust_list_num[]=intval(str_replace('customersid_','',$k5));
+		$cust_list_num = array();
+		if (is_array($netdevdata) && count($netdevdata))
+			foreach ($netdevdata['cid'] as $k5)
+				$cust_list_num[] = intval($k5);
+		$customer_test = 0;
+		if (!empty($cust_list_num))
+			for ($ii = 0; $ii < intval(max($cust_list_num)) + 1; $ii++)
+				if (intval($netdevdata['cid'][$ii])) {
+					$customer_test = 1;
+					break;
 				}
-			}
-		}
-		$customer_test=0;
-		for($ii=0;$ii<intval(max($cust_list_num))+1;$ii++)	
-		{
-			if(intval($netdevdata['customersid_'.$ii])>0)
-			{
-				$customer_test=1;
-				break;
-			}
-		}
-		if($customer_test==0)
-		{
+		if (!$customer_test)
 			$error['customer_test'] = trans('Należy przypisać conajmniej do jednego klienta, jeżeli zaznaczono Wydany do klienta');
-		}
 		//profil
-		if(!isset($netdevdata['gponoltprofilesid']) || intval($netdevdata['gponoltprofilesid'])==0)
-		{
+		if (!isset($netdevdata['gponoltprofilesid']) || !intval($netdevdata['gponoltprofilesid']))
 			$error['gponoltprofiles'] = trans('Wybierz profil, jeżeli zaznaczono Wydany do klienta');
-		}
 	}
 
 	if ($netdevdata['xmlprovisioning']) {
@@ -231,19 +219,13 @@ if (isset($_POST['netdev']) && (!isset($_POST['snmpsend']) || empty($_POST['snmp
 		$netdevdata['properties'] = serialize($netdevdata['properties']);
 
 		$GPON->GponOnuClearCustomers($_GET['id']);
-		if(is_array($netdevdata) && count($netdevdata)>0)
-		{
-			foreach($netdevdata as $k5=>$v5)
-			{
-				if(preg_match('/customersid\_/',$k5))
-				{
-					$cust_list_num[]=intval(str_replace('customersid_','',$k5));
-				}
-			}
-		}
-		for($ii=0;$ii<intval(max($cust_list_num))+1;$ii++)	
-		{
-			$GPON->GponOnuAddCustomer($_GET['id'],$netdevdata['customersid_'.$ii]);
+		if (is_array($netdevdata) && count($netdevdata)) {
+			$cust_list_num = array();
+			foreach ($netdevdata['cid'] as $k5 => $v5)
+				$cust_list_num[] = intval($k5);
+			if (!empty($cust_list_num))
+				for($ii = 0; $ii < intval(max($cust_list_num)) + 1; $ii++)
+					$GPON->GponOnuAddCustomer($_GET['id'], $netdevdata['cid'][$ii]);
 		}
 		$netdevdata_old = $GPON->GetGponOnu($_GET['id']);
 		$GPON->GponOnuUpdate($netdevdata);
@@ -583,12 +565,10 @@ $layout['pagetitle'] = 'GPON-ONU: '.trans('$a ($b/$c)', $netdevdata['name'], $ne
 if($subtitle) $layout['pagetitle'] .= ' - '.$subtitle;
 
 $gpononu2customers=$GPON->GetGponOnu2Customers($_GET['id']);
-if(is_array($gpononu2customers) && count($gpononu2customers)>0 && (!isset($_POST) || count($_POST)==0))
-{
-	$i=0;
-	foreach($gpononu2customers as $k=>$v)
-	{
-		$netdevdata['customersid_'.$i]=$v['customersid'];
+if (is_array($gpononu2customers) && count($gpononu2customers) && (!isset($_POST) || count($_POST)==0)) {
+	$i = 0;
+	foreach($gpononu2customers as $k => $v) {
+		$netdevdata['cid'][$i] = $v['customersid'];
 		$i++;
 	}
 }

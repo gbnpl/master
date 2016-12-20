@@ -67,37 +67,24 @@ if(isset($_POST['netdev']))
 		$error['name'] = 'Nazwa musi być unikalna. Taka nazwa już istnieje.';
 	}
 
-	if(isset($netdevdata['autoprovisioning']) && intval($netdevdata['autoprovisioning'])==1)
-	{
+	if (isset($netdevdata['autoprovisioning']) && intval($netdevdata['autoprovisioning'])) {
 		//customer
-		if(is_array($netdevdata) && count($netdevdata)>0)
-		{
-			foreach($netdevdata as $k5=>$v5)
-			{
-				if(preg_match('/customersid_/',$k5))
-				{
-					$cust_list_num[]=intval(str_replace('customersid_','',$k5));
+		$cust_list_num = array();
+		if (is_array($netdevdata) && count($netdevdata))
+			foreach ($netdevdata['cid'] as $k5 => $v5)
+				$cust_list_num[] = intval($k5);
+		$customer_test = 0;
+		if (!empty($cust_list_num))
+			for ($ii = 0; $ii < intval(max($cust_list_num)) + 1; $ii++)
+				if (intval($netdevdata['cid'][$ii])) {
+					$customer_test = 1;
+					break;
 				}
-			}
-		}
-		$customer_test=0;
-		for($ii=0;$ii<intval(max($cust_list_num))+1;$ii++)	
-		{
-			if(intval($netdevdata['customersid_'.$ii])>0)
-			{
-				$customer_test=1;
-				break;
-			}
-		}
-		if($customer_test==0)
-		{
+		if (!$customer_test)
 			$error['customer_test'] = trans('Należy przypisać conajmniej do jednego klienta, jeżeli zaznaczono Wydany do klienta');
-		}
 		//profil
-		if(!isset($netdevdata['gponoltprofilesid']) || intval($netdevdata['gponoltprofilesid'])==0)
-		{
+		if (!isset($netdevdata['gponoltprofilesid']) || !intval($netdevdata['gponoltprofilesid']))
 			$error['gponoltprofiles'] = trans('Wybierz profil, jeżeli zaznaczono Wydany do klienta');
-		}
 	}
 /*	if($onu_check_add==1)
 	{
@@ -133,19 +120,14 @@ if(isset($_POST['netdev']))
 		if (!empty($netdevid))
 			$GPON->UpdateGponOnuPorts($netdevid, $netdevdata['portsettings']);
 
-			if(is_array($netdevdata) && count($netdevdata)>0)
-			{
-				foreach($netdevdata as $k5=>$v5)
-				{
-					if(preg_match('/customersid_/',$k5))
-					{
-						$cust_list_num[]=intval(str_replace('customersid_','',$k5));
-					}
-				}
-			}
+			$cust_list_num = array();
+			if (is_array($netdevdata) && count($netdevdata))
+				foreach ($netdevdata['cid'] as $k5 => $v5)
+					$cust_list_num[] = intval($k5);
+			if (!empty($cust_list_num))
+				for ($ii=0; $ii < intval(max($cust_list_num)) + 1; $ii++)
+					$GPON->GponOnuAddCustomer($netdevid,$netdevdata['cid'][$ii]);
 
-			for ($ii=0;$ii<intval(max($cust_list_num))+1;$ii++)
-				$GPON->GponOnuAddCustomer($netdevid,$netdevdata['customersid_'.$ii]);
 			if ($onu_check_add==1 && intval($netdevid) && isset($_POST['netdevicesid']) && intval($_POST['netdevicesid'])
 				&& isset($_POST['olt_port']) && intval($_POST['olt_port']) && isset($_POST['onu_id']) && intval($_POST['onu_id'])) {
 				$GPON->GponOnuUpdateOnuId($netdevid,$_POST['onu_id']);
@@ -172,9 +154,7 @@ if(isset($_POST['netdev']))
 
 	$SMARTY->assign('error', $error);
 
-	$onu_keys = array('onu_description', 'gpononumodelid');
-	for ($i = 0; $i < $onu_customerlist; $i++)
-		$onu_keys[] = 'customersid_' . $i;
+	$onu_keys = array('onu_description', 'gpononumodelid', 'cid');
 } else
 	$netdevdata['xmlprovisioning'] = ConfigHelper::checkConfig('gpon-dasan.xml_provisioning_default_enabled') ? 1 : 0;
 
