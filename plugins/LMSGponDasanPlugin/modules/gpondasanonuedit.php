@@ -622,7 +622,8 @@ $SMARTY->assign('notgpononudevices', $GPON->GetNotGponOnuDevices($_GET['id']));
 $SMARTY->assign('netdevinfo',$netdevdata);
 $SMARTY->assign('numports',$numports);
 $SMARTY->assign('gpononumodels',$gpononumodels);
-$SMARTY->assign('customers', $LMS->GetCustomerNames());
+if (!ConfigHelper::checkConfig('phpui.big_networks'))
+	$SMARTY->assign('customers', $LMS->GetCustomerNames());
 $SMARTY->assign('gpononu2customers', $gpononu2customers);
 $SMARTY->assign('netdevlist',$netdevconnected);
 $SMARTY->assign('netcomplist',$netcomplist);

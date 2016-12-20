@@ -326,7 +326,8 @@ $SMARTY->assign('onu_customerlimit',$onu_customerlimit);
 
 $SMARTY->assign('vlans', parse_vlans());
 
-$SMARTY->assign('customers', $LMS->GetCustomerNames());
+if (!ConfigHelper::checkConfig('phpui.big_networks'))
+	$SMARTY->assign('customers', $LMS->GetCustomerNames());
 
 $SMARTY->assign('onu_check_add', $onu_check_add);
 if ($onu_check_add) {
