@@ -243,6 +243,7 @@ function UpdateGponPorts(countPorts) {
 		<TD colspan="3">
 		{$error_snmp}
 
+		{if isset($snmpoltdata)}
 		{$snmpoltdata}
 		<br>
 		<FORM ID="myformaddprofile" name="myformaddprofile" METHOD="POST" ACTION="?m=gpondasanoltedit&id={$netdevinfo.netdeviceid}">
@@ -289,6 +290,7 @@ function UpdateGponPorts(countPorts) {
 		</TD>
 		</table>
 		</form>
+		{/if}
 	</TR>
 	{if $nagiosON}
 	<TR>

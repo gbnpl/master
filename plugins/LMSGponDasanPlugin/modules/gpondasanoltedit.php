@@ -403,13 +403,15 @@ if(is_array($netdevconnected) && count($netdevconnected)>0)
 $options_snmp=$GPON->GetGponOlt($netdevdata['gponoltid']);
 $GPON->snmp->set_options($options_snmp);
 $error_snmp=$GPON->snmp->get_correct_connect_snmp();
-$trafficprofiles=$GPON->snmp->OLT_GetTrafficProfiles();
-$gponoltprofiles=$GPON->snmp->OLT_GetProfiles();
-$snmpoltdata=$GPON->snmp->OLT_get_param_edit($netdevdata['gponoltid']);
-$SMARTY->assign('trafficprofiles',$trafficprofiles);
-$SMARTY->assign('gponoltprofiles',$gponoltprofiles);
-$SMARTY->assign('snmpoltdata',$snmpoltdata);
-$SMARTY->assign('error_snmp',$error_snmp);
+if (empty($error_snmp)) {
+	$trafficprofiles=$GPON->snmp->OLT_GetTrafficProfiles();
+	$gponoltprofiles=$GPON->snmp->OLT_GetProfiles();
+	$snmpoltdata=$GPON->snmp->OLT_get_param_edit($netdevdata['gponoltid']);
+	$SMARTY->assign('trafficprofiles',$trafficprofiles);
+	$SMARTY->assign('gponoltprofiles',$gponoltprofiles);
+	$SMARTY->assign('snmpoltdata',$snmpoltdata);
+}
+$SMARTY->assign('error_snmp', $error_snmp);
 
 if(method_exists('LMS', 'GetDev2Nagios')) //nie wszyscy maja naszego nagiosa
 {

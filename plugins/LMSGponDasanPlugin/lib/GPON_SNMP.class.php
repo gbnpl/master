@@ -1935,101 +1935,75 @@ class GPON_DASAN_SNMP {
 		return $result;
 	}
 
-	function OLT_get_param($OLT_id=0)
-	{
-		$result=array();
-		$result['Version']=$this->get('sysDescr.0','SNMPv2-MIB::');
-		$result['Up time']=$this->get('sysUpTimeInstance','DISMAN-EVENT-MIB::');
-		$result['Contact']=$this->get('sysContact.0','SNMPv2-MIB::');
-		$result['Name']=$this->get('sysName.0','SNMPv2-MIB::');
-		$result['Location']=$this->get('sysLocation.0','SNMPv2-MIB::');	
-		$result['OLT ID']=$OLT_id;
-		$PowerState=$this->walk('slePowerState','SLE-DEVICE-MIB::');
-		if(is_array($PowerState) && count($PowerState)>0)
-		{
-			foreach($PowerState as $k=>$v)
-			{
-				if($this->clean_snmp_value($v)=='ok(1)')
-				{
-					$PowerS[]='<img src="img/' . LMSGponDasanPlugin::plugin_directory_name . '/green.png" /> (ok)';
-				}
-				else 
-				{
-					$PowerS[]='<img src="img/' . LMSGponDasanPlugin::plugin_directory_name . '/red.png" /> (fail)';
-				}
-			}
-			if(is_array($PowerS) && count($PowerS)>0)
-			{
-				$result['Power State']=implode(', ',$PowerS);
-			}
-		}
-		$FanUnitOperState=$this->walk('sleFanUnitOperState','SLE-DEVICE-MIB::');
-		if(is_array($FanUnitOperState) && count($FanUnitOperState)>0)
-		{
-			foreach($FanUnitOperState as $k=>$v)
-			{
-				if($this->clean_snmp_value($v)=='ok(1)')
-				{
-					$FanU[]='<img src="img/' . LMSGponDasanPlugin::plugin_directory_name . '/green.png" /> (ok)';
-				}
-				else 
-				{
-					$FanU[]='<img src="img/' . LMSGponDasanPlugin::plugin_directory_name . '/red.png" /> (fail)';
-				}
-			}
-			if(is_array($FanU) && count($FanU)>0)
-			{
-				$result['Fan']=implode(', ',$FanU);
-			}
-		}
-		$FanUnitSpeed=$this->walk('sleFanUnitSpeed','SLE-DEVICE-MIB::');
-		if(is_array($FanUnitSpeed) && count($FanUnitSpeed)>0)
-		{
-			foreach($FanUnitSpeed as $k=>$v)
-			{
-				$FanS[]=str_replace('SLE-DEVICE-MIB::sleFanUnitSpeed.','',$k).': '.$this->clean_snmp_value($v);
-			}
-			if(is_array($FanS) && count($FanS)>0)
-			{
-				$result['Fan speed']=implode(', ',$FanS);
-			}
-		}
-		$TemperatureValue=$this->walk('sleTemperatureValue','SLE-DEVICE-MIB::');
-		if(is_array($TemperatureValue) && count($TemperatureValue)>0)
-		{
-			foreach($TemperatureValue as $k=>$v)
-			{
-				$TempV[]=str_replace('SLE-DEVICE-MIB::sleTemperatureValue.','',$k).': '.$this->clean_snmp_value($v).' &deg;C';
-			}
-			if(is_array($TempV) && count($TempV)>0)
-			{
-				$result['Temp']=implode(', ',$TempV);
-			}
-		}
-		
-		$result['CPU Load All']=$this->get('sleSystemCPULoadAll','SLE-SYSTEMMAINTENANCE-MIB::');	
-		$result['CPU Load Interrupt']=$this->get('sleSystemCPULoadInterrupt','SLE-SYSTEMMAINTENANCE-MIB::');	
-		$result['System Memory Total']=$this->get('sleSystemMemoryTotal','SLE-SYSTEMMAINTENANCE-MIB::');	
-		$result['System Memory Free']=$this->get('sleSystemMemoryFree','SLE-SYSTEMMAINTENANCE-MIB::');	
+	public function OLT_get_param($OLT_id = 0) {
+		$result = array();
+		$result['Version'] = $this->get('sysDescr.0', 'SNMPv2-MIB::');
+		$result['Up time'] = $this->get('sysUpTimeInstance', 'DISMAN-EVENT-MIB::');
+		$result['Contact'] = $this->get('sysContact.0', 'SNMPv2-MIB::');
+		$result['Name'] = $this->get('sysName.0', 'SNMPv2-MIB::');
+		$result['Location'] = $this->get('sysLocation.0', 'SNMPv2-MIB::');
+		$result['OLT ID'] = $OLT_id;
 
-		$index=$this->walk('sleGponOnuAuthIndex');
-		if(is_array($index) && count($index)>0)
-		{
-			$num=0;
-			foreach($index as $k=>$v)
-			{
-				$num=intval($this->clean_snmp_value($v));
-				$serv = $this->get('sleGponOnuAuthAddress.'.$num);
-				$port = $this->get('sleGponOnuAuthPort.'.$num);
-				$key  = $this->get('sleGponOnuAuthKey.'.$num);
-				$result['Radius Server '.$num]= $serv.':'.$port."  ".$key;
+		$PowerState=$this->walk('slePowerState', 'SLE-DEVICE-MIB::');
+		if (is_array($PowerState) && count($PowerState)) {
+			foreach ($PowerState as $k => $v)
+				if ($this->clean_snmp_value($v) == 'ok(1)')
+					$PowerS[] = '<img src="img/' . LMSGponDasanPlugin::plugin_directory_name . '/green.png"> (ok)';
+				else
+					$PowerS[] = '<img src="img/' . LMSGponDasanPlugin::plugin_directory_name . '/red.png"> (fail)';
+			if (is_array($PowerS) && count($PowerS))
+				$result['Power State'] = implode(', ', $PowerS);
+		}
+
+		$FanUnitOperState = $this->walk('sleFanUnitOperState','SLE-DEVICE-MIB::');
+		if (is_array($FanUnitOperState) && count($FanUnitOperState)) {
+			foreach ($FanUnitOperState as $k => $v)
+				if ($this->clean_snmp_value($v) == 'ok(1)')
+					$FanU[] = '<img src="img/' . LMSGponDasanPlugin::plugin_directory_name . '/green.png"> (ok)';
+				else
+					$FanU[] = '<img src="img/' . LMSGponDasanPlugin::plugin_directory_name . '/red.png"> (fail)';
+			if (is_array($FanU) && count($FanU))
+				$result['Fan'] = implode(', ', $FanU);
+		}
+
+		$FanUnitSpeed = $this->walk('sleFanUnitSpeed', 'SLE-DEVICE-MIB::');
+		if (is_array($FanUnitSpeed) && count($FanUnitSpeed)) {
+			foreach ($FanUnitSpeed as $k => $v)
+				$FanS[] = str_replace('SLE-DEVICE-MIB::sleFanUnitSpeed.', '', $k) . ': ' . $this->clean_snmp_value($v);
+			if (is_array($FanS) && count($FanS))
+				$result['Fan speed'] = implode(', ', $FanS);
+		}
+
+		$TemperatureValue = $this->walk('sleTemperatureValue', 'SLE-DEVICE-MIB::');
+		if (is_array($TemperatureValue) && count($TemperatureValue)) {
+			foreach ($TemperatureValue as $k => $v)
+				$TempV[] = str_replace('SLE-DEVICE-MIB::sleTemperatureValue.', '', $k) . ': ' . $this->clean_snmp_value($v) . ' &deg;C';
+			if (is_array($TempV) && count($TempV))
+				$result['Temp'] = implode(', ', $TempV);
+		}
+
+		$result['CPU Load All'] = $this->get('sleSystemCPULoadAll','SLE-SYSTEMMAINTENANCE-MIB::');
+		$result['CPU Load Interrupt'] = $this->get('sleSystemCPULoadInterrupt','SLE-SYSTEMMAINTENANCE-MIB::');
+		$result['System Memory Total'] = $this->get('sleSystemMemoryTotal','SLE-SYSTEMMAINTENANCE-MIB::');
+		$result['System Memory Free'] = $this->get('sleSystemMemoryFree','SLE-SYSTEMMAINTENANCE-MIB::');
+
+		$index = $this->walk('sleGponOnuAuthIndex');
+		if (is_array($index) && count($index)) {
+			$num = 0;
+			foreach ($index as $k => $v) {
+				$num = intval($this->clean_snmp_value($v));
+				$serv = $this->get('sleGponOnuAuthAddress.' . $num);
+				$port = $this->get('sleGponOnuAuthPort.' . $num);
+				$key = $this->get('sleGponOnuAuthKey.' . $num);
+				$result['Radius Server ' . $num]= $serv . ':' . $port . '  ' . $key;
 			}
 		}
-		$result['Radius Username type']=$this->get('sleGponOnuAuthRadiusUserName');
-		$result['Service Profile']=$this->get('sleGponDefaultServiceProfile');
-		
+		$result['Radius Username type'] = $this->get('sleGponOnuAuthRadiusUserName');
+		$result['Service Profile'] = $this->get('sleGponDefaultServiceProfile');
+
 		return $result;
 	}
+
 	function OLT_get_autoupgrade_array()
 	{
 		$result=array();
@@ -2072,41 +2046,37 @@ class GPON_DASAN_SNMP {
 		
 		return $result;
 	}
-	function OLT_get_param_table($OLT_id=0)
-	{
-		$result='';
-		$snmp_result=$this->OLT_get_param($OLT_id);
+
+	public function OLT_get_param_table($OLT_id = 0) {
+		$result = '';
+
+		$snmp_result = $this->OLT_get_param($OLT_id);
 		$snmp_profiles = $this->OLT_GetServiceProfiles();
-		$result='Dane z dnia: <b>'.date('Y-m-d H:i:s').'</b><br /><br />';
-		if(is_array($snmp_result) && count($snmp_result)>0)
-		{
-			$result.='<table cellpadding="3" border="1">';
-			foreach($snmp_result as $k=>$v)
-			{
-				$result.='<tr><td>'.$k.':</td><td align="right"><b>'.$v.'</b></td></tr>';
+
+		$result = 'Dane z dnia: <b>' . date('Y-m-d H:i:s') . '</b><br><br>';
+		if (is_array($snmp_result) && count($snmp_result)) {
+			$result .= '<table cellpadding="3" border="1">';
+			foreach ($snmp_result as $k => $v)
+				$result .= '<tr><td>' . $k . ':</td><td align="right"><b>' . $v . '</b></td></tr>';
+			if (is_array($snmp_profiles) && count($snmp_profiles)) {
+				$result .= '<tr><td colspan="2" align="center"><b>Service Profiles</b></td></tr>';
+				foreach ($snmp_profiles as $m => $p)
+					$result .= '<tr><td align="right">' . $m . '</td><td align="left"><b>' . $p . '</b></td></tr>';
 			}
-			if(is_array($snmp_profiles) && count($snmp_profiles)>0)
-			{
-				$result.='<tr><td colspan="2" align="center"><b>Service Profiles</b></td></tr>';
-				foreach($snmp_profiles as $m => $p)
-				{
-					$result.='<tr><td align="right">'.$m.'</td><td align="left"><b>'.$p.'</b></td></tr>';
-				}
-			}
-			$result.='</table>';
+			$result .= '</table>';
 		}
-		$param_array=$this->OLT_get_param_array();
-		if(is_array($param_array) && count($param_array)>0)
-		{
-			$result.='<br /><table cellpadding="3" border="1"><tr class="dark"><td colspan="40" align="center"> OLT ports </td></tr>';
-			$result.='<tr><td><b>Port</b></td><td><b>Status</b></td>
-			    <td onmouseover="popup(\'Protection\')" onmouseout="pophide()"><b>Prot.</b></td>
-			    <td onmouseover="popup(\'Max Distance\')" onmouseout="pophide()"><b>Max Dist.</b></td>
-			    <td><b>Fec Mode DS/US</b></td><td><b>Moc Tx</b></td>
-			    <td onmouseover="popup(\'Liczba aktywnych / niekatywnych onu na porcie\')" onmouseout="pophide()"><b>Act/Inact Onu</b></td>
-			    <td onmouseover="popup(\'Automatyczne usuwanie ONT z OLT, gdy będzie NIEAKTYWNE przez zdefiniowaną liczbę dni, 0 - wyłączone\')" onmouseout="pophide()"><b>Aging Time</b></td>
-			    <td onmouseover="popup(\'AutoUpgrade\')" onmouseout="pophide()"><b>Auto Upgrade</b></td>
-			    <td onmouseover="popup(\'Autentykacja poprzez serwer radius\')" onmouseout="pophide()"><b>Auth radius</b></td>';
+
+		$param_array = $this->OLT_get_param_array();
+		if (is_array($param_array) && count($param_array)) {
+			$result .= '<br><table cellpadding="3" border="1"><tr class="dark"><td colspan="40" align="center"> OLT ports </td></tr>';
+			$result .= '<tr><td><b>Port</b></td><td><b>Status</b></td>'
+				. '<td onmouseover="popup(\'Protection\')" onmouseout="pophide()"><b>Prot.</b></td>'
+				. '<td onmouseover="popup(\'Max Distance\')" onmouseout="pophide()"><b>Max Dist.</b></td>'
+				. '<td><b>Fec Mode DS/US</b></td><td><b>Moc Tx</b></td>'
+				. '<td onmouseover="popup(\'Liczba aktywnych / niekatywnych onu na porcie\')" onmouseout="pophide()"><b>Act/Inact Onu</b></td>'
+				. '<td onmouseover="popup(\'Automatyczne usuwanie ONT z OLT, gdy będzie NIEAKTYWNE przez zdefiniowaną liczbę dni, 0 - wyłączone\')" onmouseout="pophide()"><b>Aging Time</b></td>'
+				. '<td onmouseover="popup(\'AutoUpgrade\')" onmouseout="pophide()"><b>Auto Upgrade</b></td>'
+				. '<td onmouseover="popup(\'Autentykacja poprzez serwer radius\')" onmouseout="pophide()"><b>Auth radius</b></td>';
 			foreach($param_array as $k=>$v)
 			{
 				if($k=='Status')
@@ -2136,79 +2106,61 @@ class GPON_DASAN_SNMP {
 		}
 
 		//auto upgrade params
-		$autoupgrade_time=$this->OLT_get_autoupgrade_times();
-		if(is_array($autoupgrade_time) && count($autoupgrade_time)>0)
-		{
-			$result.='<br /><table cellpadding="3" border="1"><tr class="dark"><td colspan="4" align="center"> AutoUpgrade Time </td></tr>';
-			$result.='<tr><td><b>Model</b></td><td><b>Start</b></td>
-			    <td><b>Stop</b></td>
-			    <td><b>Reboot Time</b></td>';
-			foreach($autoupgrade_time as $k=>$v)
-			{
-				if($k=='Model')
-				{
-					if(is_array($v) && count($v)>0)
-					{
-						foreach($v as $k1=>$v1)
-						{
-							$num=str_replace($this->path_OID.'sleGponOnuFWAutoUpgradeMTimeModelName.','',$k1);
-							$result.='<tr>
-							<td>'.$this->clean_snmp_value($v1).'</td>
-							<td>'.$this->clean_snmp_value($autoupgrade_time['Start'][$this->path_OID.'sleGponOnuFWAutoUpgradeMTimeStartTime.'.$num]).'</td>
-							<td>'.$this->clean_snmp_value($autoupgrade_time['Stop'][$this->path_OID.'sleGponOnuFWAutoUpgradeMTimeEndTime.'.$num]).'</td>';
-							$reboottime = $this->clean_snmp_value($autoupgrade_time['Reboot'][$this->path_OID.'sleGponOnuFWAutoUpgradeMTimeRebootTime.'.$num]);
-							if($reboottime == 24)
-							    $reboottime .= ' - immediately';
-							if($reboottime == -1)
-							    $reboottime .= ' - unused';
+		$autoupgrade_time = $this->OLT_get_autoupgrade_times();
+		if (is_array($autoupgrade_time) && count($autoupgrade_time)) {
+			$result .= '<br><table cellpadding="3" border="1"><tr class="dark"><td colspan="4" align="center"> AutoUpgrade Time </td></tr>';
+			$result .= '<tr><td><b>Model</b></td><td><b>Start</b></td>'
+				. '<td><b>Stop</b></td>'
+				. '<td><b>Reboot Time</b></td>';
+			foreach ($autoupgrade_time as $k => $v)
+				if ($k == 'Model' && is_array($v) && count($v))
+					foreach ($v as $k1 => $v1) {
+						$num = str_replace($this->path_OID.'sleGponOnuFWAutoUpgradeMTimeModelName.','',$k1);
+						$result .= '<tr>'
+							.'<td>' . $this->clean_snmp_value($v1) . '</td>'
+							.'<td>' . $this->clean_snmp_value($autoupgrade_time['Start'][$this->path_OID . 'sleGponOnuFWAutoUpgradeMTimeStartTime.' . $num]) . '</td>'
+							.'<td>' . $this->clean_snmp_value($autoupgrade_time['Stop'][$this->path_OID . 'sleGponOnuFWAutoUpgradeMTimeEndTime.' . $num]) . '</td>';
+						$reboottime = $this->clean_snmp_value($autoupgrade_time['Reboot'][$this->path_OID . 'sleGponOnuFWAutoUpgradeMTimeRebootTime.' . $num]);
+						if ($reboottime == 24)
+							$reboottime .= ' - immediately';
+						if ($reboottime == -1)
+							$reboottime .= ' - unused';
 
-							$result.= '<td>'.$reboottime.' h</td>';
-						}
+						$result .=  '<td>' . $reboottime . ' h</td>';
 					}
-				}
-			}
-			$result.='</table>';
+			$result .= '</table>';
 		}
-		
-		$autoupgrade_array=$this->OLT_get_autoupgrade_array();
-		if(is_array($autoupgrade_array) && count($autoupgrade_array)>0)
-		{
-			$result.='<br /><table cellpadding="3" border="1"><tr class="dark"><td colspan="8" align="center"> AutoUpgrade </td></tr>';
-			$result.='<tr><td><b>Model</b></td><td><b>Status</b></td>
-			    <td><b>Metoda</b></td>
-			    <td><b>Adres serwera</b></td>
-			    <td><b>Login</b></td>
-			    <td><b>Nazwa pliku firmware</b></td>
-			    <td><b>Wersja</b></td>
-			    <td><b>Wyklucz</b></td>';
-			foreach($autoupgrade_array as $k=>$v)
-			{
-				if($k=='Model')
-				{
-					if(is_array($v) && count($v)>0)
-					{
-						foreach($v as $k1=>$v1)
-						{
-							$num=str_replace($this->path_OID.'sleGponOnuFWAutoUpgradeModelName.','',$k1);
-							$result.='<tr>
-							<td>'.$this->clean_snmp_value($v1).'</td>
-							<td>'.$this->clean_snmp_value($autoupgrade_array['Status'][$this->path_OID.'sleGponOnuFWAutoUpgradeModelStatus.'.$num]).'</td>
-							<td>'.$this->clean_snmp_value($autoupgrade_array['Method'][$this->path_OID.'sleGponOnuFWAutoUpgradeModelMethod.'.$num]).'</td>
-							<td>'.$this->clean_snmp_value($autoupgrade_array['Address'][$this->path_OID.'sleGponOnuFWAutoUpgradeModelServerAddress.'.$num]).'</td>
-							<td>'.$this->clean_snmp_value($autoupgrade_array['User'][$this->path_OID.'sleGponOnuFWAutoUpgradeModelUser.'.$num]).'</td>
-							<td>'.$this->clean_snmp_value($autoupgrade_array['FWName'][$this->path_OID.'sleGponOnuFWAutoUpgradeModelFWName.'.$num]).'</td>
-							<td>'.$this->clean_snmp_value($autoupgrade_array['TargetVersion'][$this->path_OID.'sleGponOnuFWAutoUpgradeModelFWTargetVersion.'.$num]).'</td>
-							<td>'.$this->clean_snmp_value($autoupgrade_array['Exclude'][$this->path_OID.'sleGponOnuFWAutoUpgradeModelExclude.'.$num]).'</td>';
 
-						}
+		$autoupgrade_array = $this->OLT_get_autoupgrade_array();
+		if (is_array($autoupgrade_array) && count($autoupgrade_array)) {
+			$result.='<br><table cellpadding="3" border="1"><tr class="dark"><td colspan="8" align="center"> AutoUpgrade </td></tr>';
+			$result.='<tr><td><b>Model</b></td><td><b>Status</b></td>'
+				. '<td><b>Metoda</b></td>'
+				. '<td><b>Adres serwera</b></td>'
+				. '<td><b>Login</b></td>'
+				. '<td><b>Nazwa pliku firmware</b></td>'
+				. '<td><b>Wersja</b></td>'
+				. '<td><b>Wyklucz</b></td>';
+			foreach ($autoupgrade_array as $k => $v)
+				if ($k == 'Model' && is_array($v) && count($v))
+					foreach ($v as $k1 => $v1) {
+						$num = str_replace($this->path_OID . 'sleGponOnuFWAutoUpgradeModelName.', '', $k1);
+						$result .= '<tr>'
+							. '<td>' . $this->clean_snmp_value($v1) . '</td>'
+							. '<td>' . $this->clean_snmp_value($autoupgrade_array['Status'][$this->path_OID . 'sleGponOnuFWAutoUpgradeModelStatus.' . $num]) . '</td>'
+							. '<td>' . $this->clean_snmp_value($autoupgrade_array['Method'][$this->path_OID . 'sleGponOnuFWAutoUpgradeModelMethod.' . $num]) . '</td>'
+							. '<td>' . $this->clean_snmp_value($autoupgrade_array['Address'][$this->path_OID . 'sleGponOnuFWAutoUpgradeModelServerAddress.' . $num]) . '</td>'
+							. '<td>' . $this->clean_snmp_value($autoupgrade_array['User'][$this->path_OID . 'sleGponOnuFWAutoUpgradeModelUser.' . $num]) . '</td>'
+							. '<td>' . $this->clean_snmp_value($autoupgrade_array['FWName'][$this->path_OID . 'sleGponOnuFWAutoUpgradeModelFWName.' . $num]) . '</td>'
+							. '<td>' . $this->clean_snmp_value($autoupgrade_array['TargetVersion'][$this->path_OID . 'sleGponOnuFWAutoUpgradeModelFWTargetVersion.' . $num]) . '</td>'
+							. '<td>' . $this->clean_snmp_value($autoupgrade_array['Exclude'][$this->path_OID . 'sleGponOnuFWAutoUpgradeModelExclude.' . $num]) . '</td>';
 					}
-				}
-			}
-			$result.='</table>';
+			$result .= '</table>';
 		}
-	
+
 		return $result;
 	}
+
 	function ONU_Reset($OLT_id,$ONU_id)
 	{
 		$result=array();

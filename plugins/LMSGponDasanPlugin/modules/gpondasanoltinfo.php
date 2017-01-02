@@ -104,9 +104,12 @@ $SMARTY->assign('xajax', $LMS->RunXajax());
 /* end AJAX plugin stuff */
 
 $GPON->snmp->set_options($gponoltdata);
-$error_snmp=$GPON->snmp->get_correct_connect_snmp();
-$table_OLT_param=$GPON->snmp->OLT_get_param_table($netdevinfo['gponoltid']);
-$SMARTY->assign('table_OLT_param',$error_snmp.$table_OLT_param);
+$error_snmp = $GPON->snmp->get_correct_connect_snmp();
+if (empty($error_snmp))
+	$table_OLT_param = $GPON->snmp->OLT_get_param_table($netdevinfo['gponoltid']);
+else
+	$table_OLT_param = '';
+$SMARTY->assign('table_OLT_param', $error_snmp . $table_OLT_param);
 
 //nie wszyscy maja wezly
 if($DB->GetOne("SELECT count(*) FROM information_schema.tables WHERE table_name = 'netdevnodes'") > 0)
