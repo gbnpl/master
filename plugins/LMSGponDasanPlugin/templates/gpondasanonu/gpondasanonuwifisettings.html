@@ -22,7 +22,7 @@
 				{if ConfigHelper::getConfig('gpon-dasan.xml_provisioning_default_wifi_ssid', '') || ConfigHelper::getConfig('gpon-dasan.xml_provisioning_default_wifi_password', '')}
 				<tr>
 					<TD colspan="2" class="text-center">
-						<a onclick="javascript:xajax_ONU_GenerateWifiSettings({ {if $netdevinfo.id}'id': {$netdevinfo.id}{else}'sn': xjx.$('netdevname').value, 'customerid': document.forms['netdevadd'].elements['netdev[customersid_0]'].value{/if} });">
+						<a onclick="javascript:xajax_ONU_GenerateWifiSettings({ {if $netdevinfo.id}'id': {$netdevinfo.id}{else}'sn': xjx.$('netdevname').value, 'customerid': document.forms['netdevadd'].elements['netdev[cid][0]'].value{/if} });">
 							<IMG src="img/reload.gif" alt=""> {trans("Generate automatically")}
 						</a>
 					</TD>
