@@ -9,6 +9,15 @@ $onus = $this->GetAllByKey("SELECT id, name, location, description, serialnumber
 	FROM gpononu
 	WHERE location <> '' OR description <> '' OR serialnumber <> ''
 		OR purchasetime > 0 OR guaranteeperiod > 0", 'id');
+
+$this->Execute("
+	ALTER TABLE gpononu DROP COLUMN location;
+	ALTER TABLE gpononu DROP COLUMN description;
+	ALTER TABLE gpononu DROP COLUMN serialnumber;
+	ALTER TABLE gpononu DROP COLUMN purchasetime;
+	ALTER TABLE gpononu DROP COLUMN guaranteeperiod;
+");
+
 if (!empty($onus))
 	foreach ($onus as $id => $onu) {
 		$this->Execute("INSERT INTO netdevices (name, location, description, serialnumber,
@@ -22,14 +31,6 @@ if (!empty($onus))
 		$this->Execute("UPDATE gpononu SET netdevid = ? WHERE id = ?",
 			array($netdevid, $id));
 	}
-
-$this->Execute("
-	ALTER TABLE gpononu DROP COLUMN location;
-	ALTER TABLE gpononu DROP COLUMN description;
-	ALTER TABLE gpononu DROP COLUMN serialnumber;
-	ALTER TABLE gpononu DROP COLUMN purchasetime;
-	ALTER TABLE gpononu DROP COLUMN guaranteeperiod;
-");
 
 $this->Execute("UPDATE dbinfo SET keyvalue = ? WHERE keytype = ?", array('2016062200', 'dbversion_LMSGponDasanPlugin'));
 
