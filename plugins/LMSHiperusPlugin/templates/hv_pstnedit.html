@@ -22,12 +22,12 @@
 			    <tr>
 				<td width="1%" align="left" nowrap>Kod kraju</td>
 				<td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td>
-				<td width="98%" align="left" ><input type="text" name="pstnedit[country_code]" value="{$pstninfo.country_code}" id="id_country_code" oninput="javascript:document.getElementById('id_extension').value = this.value + document.getElementById('id_number').value;" {if !ConfigHelper::checkConfig('hiperus_c5.number_manually')}readonly{/if}></td>
+				<td width="98%" align="left" ><input type="text" name="pstnedit[country_code]" value="{$pstninfo.country_code}" id="id_country_code" oninput="javascript:document.getElementById('id_extension').value = this.value + document.getElementById('id_number').value;" {if !ConfigHelper::checkValue(ConfigHelper::getConfig('hiperus_c5.number_manually', 'true'))}readonly{/if}></td>
 			    </tr>
 			    <tr>
 				<td width="1%" align="left" nowrap>Nr. krajowy</td>
 				<td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td>
-				<td width="98%" align="left" ><input type="text" name="pstnedit[number]" value="{$pstninfo.number}" id="id_number" oninput="javascript:document.getElementById('id_extension').value = document.getElementById('id_country_code').value + this.value;" {if !ConfigHelper::checkConfig('hiperus_c5.number_manually')}readonly{/if}></td>
+				<td width="98%" align="left" ><input type="text" name="pstnedit[number]" value="{$pstninfo.number}" id="id_number" oninput="javascript:document.getElementById('id_extension').value = document.getElementById('id_country_code').value + this.value;" {if !ConfigHelper::checkValue(ConfigHelper::getConfig('hiperus_c5.number_manually', 'true'))}readonly{/if}></td>
 			    </tr>
 			    <tr>
 				<td width="1%" align="left" nowrap>Nr. międzynarodowy</td>

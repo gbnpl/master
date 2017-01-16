@@ -140,3 +140,6 @@ Ogólny opis jak to działa.
 Uwaga! Skrypt lms-plicbd-localisation.php jest adaptacją skryptu o tej samej nazwie, pochodzącego z wtyczki LMSPlicbdPlugin
   i został dostosowany do działania z platformą Hiperus.
 
+Inne ustawienia konfiguracyjne:
+	- hiperus_c5.number_manually (domyślnie: true) - określa czy jest dostępna możliwość ręcznego wpisywania numerów
+		telefonów w polach na to przeznaczonych (można wyłączyć jeśli nie przenosimy numerów od innego operatora)
