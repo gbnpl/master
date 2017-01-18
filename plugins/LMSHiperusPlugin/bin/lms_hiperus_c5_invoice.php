@@ -4,7 +4,7 @@
 /*
  *
  *  (C) Copyright 2012 LMS iNET Developers
- *  (c) Copyright 2015 Tomasz Chiliński <tomasz.chilinski@chilan.com>
+ *  (c) Copyright 2015-2016 Tomasz Chiliński <tomasz.chilinski@chilan.com>
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -83,7 +83,7 @@ if (!$quiet) {
 
 lms_hiperus_c5_invoice.php
 (C) 2012-2013 LMS iNET,
-(C) 2015 Tomasz Chiliński <tomasz.chilinski@chilan.com>
+(C) 2015-2016 Tomasz Chiliński <tomasz.chilinski@chilan.com>
 
 EOF;
 }
@@ -94,17 +94,17 @@ else
 	$CONFIG_FILE = '/etc/lms/lms.ini';
 
 if (!$quiet)
-	echo "Using file ".$CONFIG_FILE." as config.\n\n";
+	echo "Using file ".$CONFIG_FILE." as config." . PHP_EOL . PHP_EOL;
 
 if (!is_readable($CONFIG_FILE))
-	die("Nie mozna odczytac pliku konfiguracyjnego file [".$CONFIG_FILE."]!\n");
+	die("Nie mozna odczytac pliku konfiguracyjnego file [".$CONFIG_FILE."]!" . PHP_EOL);
 
 define('CONFIG_FILE', $CONFIG_FILE);
 
 $CONFIG = (array) parse_ini_file($CONFIG_FILE, true);
 
 $CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
-$CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
+$CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'lib' : $CONFIG['directories']['lib_dir']);
 $CONFIG['directories']['plugin_dir'] = (!isset($CONFIG['directories']['plugin_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'plugins' : $CONFIG['directories']['plugin_dir']);
 $CONFIG['directories']['plugins_dir'] = $CONFIG['directories']['plugin_dir'];
 
@@ -114,10 +114,11 @@ define('PLUGIN_DIR', $CONFIG['directories']['plugin_dir']);
 define('PLUGINS_DIR', $CONFIG['directories']['plugin_dir']);
 
 // Load autoloader
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'autoloader.php');
-
-// Do some checks and load config defaults
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'config.php');
+$composer_autoload_path = SYS_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (file_exists($composer_autoload_path))
+	require_once $composer_autoload_path;
+else
+	die("Composer autoload not found. Run 'composer install' command from LMS directory and try again. More informations at https://getcomposer.org/" . PHP_EOL);
 
 // Init database
 
@@ -131,9 +132,9 @@ try {
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
-require_once(LIB_DIR.'/language.php');
-require_once(LIB_DIR.'/common.php');
-require_once(LIB_DIR.'/definitions.php');
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
 
 function localtime2() {
 	global $fakedate;
@@ -155,7 +156,7 @@ function GetDefaultNumberplanidByCustomer($cid, $doctype = DOC_INVOICE) {
 		 array($doctype,$cid));
 }
 
-require_once(LIB_DIR . '/SYSLOG.class.php');
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'SYSLOG.class.php');
 $SYSLOG = new SYSLOG($DB);
 
 $AUTH = null;
@@ -197,20 +198,25 @@ $customers = $DB->GetAll("SELECT hc.id AS id, hc.ext_billing_id AS id_ext, "
 			. " FROM hv_customers hc 
 			JOIN hv_assign ha ON (ha.customerid = hc.id) 
 			WHERE ha.keytype = ? AND ha.keyvalue = ?
-				AND create_date <= ?",
+				AND hc.create_date <= ?",
 			array('issue_invoice', '2', $datetime));
 
 if (empty($customers))
-	die("No customers data found!\n");
+	die("No customers data found!" . PHP_EOL);
 
 $tax = $DB->GetRow('SELECT id, value FROM taxes WHERE value = ? LIMIT 1',
 	array(ConfigHelper::getConfig('hiperus_c5.taxrate', ConfigHelper::getConfig('phpui.default_taxrate', 23))));
 if (!$tax)
-	die("Couldn't find valid tax rate!\n");
+	die("Couldn't find valid tax rate!" . PHP_EOL);
 $taxid = $tax['id'];
 $vat = ($tax['value'] + 100) / 100;
 
 $months = array('', 'styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień');
+
+$invoice_subscription_comment = ConfigHelper::getConfig('hiperus_c5.invoice_subscription_comment',
+	'Abonament VoIP: %pricelist %numbers za okres %month_name %year');
+$invoice_call_comment = ConfigHelper::getConfig('hiperus_c5.invoice_call_comment',
+	'Kosz rozmów poza abonamentem %pricelist %numbers za okres %month_name %year');
 
 foreach ($customers as $i => $customer) {
 	$customers[$i]['year'] = $year;
@@ -219,7 +225,8 @@ foreach ($customers as $i => $customer) {
 	$customers[$i]['terminals'] = array();
 	$customers[$i]['numberplanid'] = ConfigHelper::getConfig('hiperus_c5.numberplanid',
 		GetDefaultNumberPlanIDByCustomer($customer['id_ext'], DOC_INVOICE));
-	$terminals = $DB->GetAll("SELECT t.* FROM hv_terminal AS t
+	$terminals = $DB->GetAll("SELECT t.*, s.name AS subscription_name FROM hv_terminal AS t
+		JOIN hv_subscriptionlist s ON s.id = t.id_subscription
 		WHERE t.customerid = ? AND (subscription_from IS NULL OR subscription_from <= ?)
 			AND (subscription_to IS NULL OR subscription_to >= ?)",
 		array($customer['id'], $date, $date));
@@ -227,6 +234,7 @@ foreach ($customers as $i => $customer) {
 		continue;
 	foreach ($terminals as $j => $terminal) {
 		$customers[$i]['terminals'][$j]['pricelist_name'] = $terminal['pricelist_name'];
+		$customers[$i]['terminals'][$j]['subscription_name'] = $terminal['subscription_name'];
 		$customers[$i]['terminals'][$j]['name'] = $terminal['username'];
 		$customers[$i]['terminals'][$j]['invoice_value'] = $DB->GetOne("SELECT invoice_value FROM hv_subscriptionlist
 			WHERE id = ? LIMIT 1",
@@ -238,7 +246,15 @@ foreach ($customers as $i => $customer) {
 		$customers[$i]['terminals'][$j]['cost'] = ($cost[0]['cost'] ? $cost[0]['cost'] : 0);
 		$customers[$i]['sum_cost'] += ($customers[$i]['terminals'][$j]['invoice_value'] + $customers[$i]['terminals'][$j]['cost']) * $vat;
 		$invoice_value = str_replace(',', '.', $customers[$i]['terminals'][$j]['invoice_value'] * $vat);
-		if ($invoice_value > 0)
+
+		if ($invoice_value > 0) {
+			$comment = $invoice_subscription_comment;
+			$comment = str_replace('%pricelist', $customers[$i]['terminals'][$j]['pricelist_name'], $comment);
+			$comment = str_replace('%subscription', $customers[$i]['terminals'][$j]['subscription_name'], $comment);
+			$comment = str_replace('%numbers', (empty($numbers) ? '' : '(' . implode(', ', $numbers) . ')'), $comment);
+			$comment = str_replace('%month_name', $months[$month_sub], $comment);
+			$comment = str_replace('%year', $year_sub, $comment);
+
 			$customers[$i]['content'][] = array(
 				'valuebrutto'	=> $invoice_value,
 				'taxid'			=> $taxid,
@@ -248,12 +264,21 @@ foreach ($customers as $i => $customer) {
 				'discount'		=> '0',
 				'pdiscount'		=> '0',
 				'vdiscount'		=> '0',
-				'name'			=> 'Abonament VoIP: ' . $customers[$i]['terminals'][$j]['pricelist_name'] . (empty($numbers) ? '' : ' (' . implode(', ', $numbers) . ')') . ' za okres ' . $months[$month_sub] . ' ' . $year_sub,
+				'name'			=> $comment,
 				'tariffid'		=> 0
 			);
-		if ($customers[$i]['terminals'][$j]['cost'] > 0)
+		}
+
+		if ($customers[$i]['terminals'][$j]['cost'] > 0) {
+			$comment = $invoice_call_comment;
+			$comment = str_replace('%pricelist', $customers[$i]['terminals'][$j]['pricelist_name'], $comment);
+			$comment = str_replace('%subscription', $customers[$i]['terminals'][$j]['subscription_name'], $comment);
+			$comment = str_replace('%numbers', (empty($numbers) ? '' : '(' . implode(', ', $numbers) . ')'), $comment);
+			$comment = str_replace('%month_name', $months[$month], $comment);
+			$comment = str_replace('%year', $year, $comment);
+
 			$customers[$i]['content'][] = array(
-				'valuebrutto'		=> str_replace(',', '.', $customers[$i]['terminals'][$j]['cost'] * $vat),
+				'valuebrutto'	=> str_replace(',', '.', $customers[$i]['terminals'][$j]['cost'] * $vat),
 				'taxid'			=> $taxid,
 				'prodid'		=> ConfigHelper::getConfig('hiperus_c5.prodid',''),
 				'jm'			=> ConfigHelper::getConfig('hiperus_c5.content','szt'),
@@ -261,9 +286,10 @@ foreach ($customers as $i => $customer) {
 				'discount'		=> '0',
 				'pdiscount'		=> '0',
 				'vdiscount'		=> '0',
-				'name'			=> 'Koszt rozmów poza abonamentem ' . $customers[$i]['terminals'][$j]['pricelist_name']  . (empty($numbers) ? '' : ' (' . implode(', ', $numbers) . ')') . ' za okres ' . $months[$month] . ' ' . $year,
+				'name'			=> $comment,
 				'tariffid'		=> 0
 			);
+		}
 	}
 	$customers[$i]['sum_cost'] = str_replace(',', '.', $customers[$i]['sum_cost']);
 }
@@ -293,8 +319,17 @@ foreach ($results as $row)
 
 foreach ($customers as $i => $customer) {
 	$cid = intval($customer['id_ext']);
+	$customerinfo = $LMS->GetCustomer($cid, true);
+	$numberplanid = $customer['numberplanid'];
+	if (empty($numberplanid))
+		$numberplanid = $numberplans[$customerinfo['divisionid']];
+
 	$add_new_invoices = ConfigHelper::checkValue(ConfigHelper::getConfig('hiperus_c5.add_new_invoices', true));
 	if (!$add_new_invoices) {
+		$numberplanid = $customer['numberplanid'];
+		if (empty($numberplanid))
+			$numberplanid = $numberplans[$customerinfo['divisionid']];
+
 		$invoice = $DB->GetRow("SELECT d.id, cdate, MAX(itemid) AS items, d3.id AS id2 FROM documents d
 			JOIN invoicecontents ic ON ic.docid = d.id
 			LEFT JOIN (
@@ -306,11 +341,12 @@ foreach ($customers as $i => $customer) {
 				GROUP BY d2.id
 			) d3 ON d3.id = d.id
 			WHERE d.customerid = ? AND d.type = ? AND sdate >= ? AND sdate < ?
+				AND d.numberplanid = ?
 			GROUP BY d.id, cdate, d3.id
 			ORDER BY d.cdate DESC LIMIT 1", 
 			array(DOC_INVOICE, $starttime, $endtime,
 				'Abonament VoIP%', 'Koszt rozmów poza abonamentem%',
-				$cid, DOC_INVOICE, $starttime, $endtime));
+				$cid, DOC_INVOICE, $starttime, $endtime, $numberplanid));
 		if (!$invoice)
 			$add_new_invoices = true;
 		elseif (empty($invoice['id2'])) {
@@ -334,8 +370,6 @@ foreach ($customers as $i => $customer) {
 		}
 	}
 	if ($add_new_invoices) {
-		$customerinfo = $LMS->GetCustomer($cid, true);
-
 		if ($customerinfo['paytime'] != -1)
 			$paytime = $customerinfo['paytime'];
 		elseif (($paytime = $DB->GetOne('SELECT inv_paytime FROM divisions WHERE id = ?',
@@ -344,14 +378,12 @@ foreach ($customers as $i => $customer) {
 
 		if ($customerinfo['paytype'])
 			$paytype = $customerinfo['paytype'];
-		elseif ($paytype = $DB->GetOne('SELECT inv_paytype FROM divisions WHERE id = ?',
-			array($customerinfo['divisionid'])) === NULL)
-			if (isset($PAYTYPES[$paytype]))
-				$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
+		else
+			$paytype = $DB->GetOne('SELECT inv_paytype FROM divisions WHERE id = ?',
+				array($customerinfo['divisionid']));
+		if (empty($paytype) || !isset($PAYTYPES[$paytype]))
+			$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
 
-		$numberplanid = $customer['numberplanid'];
-		if (empty($numberplanid))
-			$numberplanid = $numberplans[$customerinfo['divisionid']];
 		if (!isset($numbertemplates[$numberplanid]))
 			$numbertemplates[$numberplanid] = $DB->GetOne("SELECT template FROM numberplans WHERE id = ?", array($numberplanid));
 		$number = $LMS->GetNewDocumentNumber(DOC_INVOICE, $numberplanid, $currtime);

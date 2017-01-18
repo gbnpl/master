@@ -4,7 +4,7 @@
 /*
  *
  *  (C) Copyright 2012 LMS iNET Developers
- *  (C) Copyright 2015 LMS Developers
+ *  (C) Copyright 2015-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -52,7 +52,7 @@ if (array_key_exists('help', $options)) {
 	print <<<EOF
 lms_hiperus_c5_test.php
 (C) 2012-2013 LMS iNET,
-(C) 2015 Tomasz Chiliński <tomasz.chilinski@chilan.com>
+(C) 2015-2016 Tomasz Chiliński <tomasz.chilinski@chilan.com>
 
 -C, --config-file		alternatywny plik konfiguracyjny, -C /etc/lms/lms.ini
 -h, --help			pomoc
@@ -66,7 +66,7 @@ if (!$quiet) {
 	print <<<EOF
 lms_hiperus_c5_test.php
 (C) 2012-2013 LMS iNET,
-(C) 2015 Tomasz Chiliński <tomasz.chilinski@chilan.com>
+(C) 2015-2016 Tomasz Chiliński <tomasz.chilinski@chilan.com>
 
 EOF;
 }
@@ -77,17 +77,17 @@ else
 	$CONFIG_FILE = '/etc/lms/lms.ini';
 
 if (!$quiet)
-	echo "Using file ".$CONFIG_FILE." as config.\n\n";
+	echo "Using file ".$CONFIG_FILE." as config." . PHP_EOL;
 
 if (!is_readable($CONFIG_FILE))
-	die("Nie można odczytać pliku konfiguracyjnego [".$CONFIG_FILE."]!\n");
+	die("Nie można odczytać pliku konfiguracyjnego [".$CONFIG_FILE."]!" . PHP_EOL);
 
 define('CONFIG_FILE', $CONFIG_FILE);
 
 $CONFIG = (array) parse_ini_file($CONFIG_FILE, true);
 
 $CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
-$CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'].'/lib' : $CONFIG['directories']['lib_dir']);
+$CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'lib' : $CONFIG['directories']['lib_dir']);
 $CONFIG['directories']['plugin_dir'] = (!isset($CONFIG['directories']['plugin_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'plugins' : $CONFIG['directories']['plugin_dir']);
 $CONFIG['directories']['plugins_dir'] = $CONFIG['directories']['plugin_dir'];
 
@@ -96,21 +96,12 @@ define('LIB_DIR', $CONFIG['directories']['lib_dir']);
 define('PLUGIN_DIR', $CONFIG['directories']['plugin_dir']);
 define('PLUGINS_DIR', $CONFIG['directories']['plugin_dir']);
 
-function dberr() {
-	global $DB;
-	if ($DB->GetErrors()) {
-		fprintf(STDERR, "\n\nDatabase error:");
-		foreach ($DB->GetErrors() as $item)
-			fprintf(STDERR,"\nQuery: %s\n\nError: %s\n\n", $item['query'], $item['error']);
-		die;
-	}
-}
-
 // Load autoloader
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'autoloader.php');
-
-// Do some checks and load config defaults
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'config.php');
+$composer_autoload_path = SYS_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (file_exists($composer_autoload_path))
+	require_once $composer_autoload_path;
+else
+	die("Composer autoload not found. Run 'composer install' command from LMS directory and try again. More informations at https://getcomposer.org/" . PHP_EOL);
 
 // Init database
 

@@ -95,7 +95,24 @@ Wystawianie faktur
 
 	Skrypt domyślnie tworzy nowe faktury dla usług VoIP. Jeśli chcemy, żeby dopisywał nowe pozycje za usługi VoIP
 	do istniejących faktur z bieżącego miesiąca, używamy ustawienia konfiguracyjnego hiperus_c5.add_new_invoices=false
-	
+
+	Dodatkowe ustawienia konfiguracyjne:
+	- hiperus_c5.invoice_subscription_comment (domyślnie: Abonament VoIP: %pricelist %numbers za okres %month_name %year) - określa
+		komentarz dla pozycji faktury odpowiadającej abonamentowi
+	- hiperus_c5.invoice_call_comment (domyślnie: Kosz rozmów poza abonamentem %pricelist %numbers za okres %month_name %year) - określa
+		komentarz dla pozycji faktury odpowiadającej kosztom rozmów poza abonamentem
+		Obydwa powyższe ustawienia obsługują następujące symbole specjalne:
+		%pricelist - nazwa cennika,
+		%subscription - nazwa abonamentu,
+		%numbers - lista numerów telefonów przypisanych do terminala,
+		%month_name - nazwa miesiąca, np. maj,
+		%year - rok w formacie YYYY.
+	- hiperus_c5.taxrate (domyślnie: pobierane z phpui.default_taxrate lub 23 jeśli brak tego ustawienia) - określa domyślną stawkę
+		podatkową VAT dla obciążeń generowanych przez skrypt,
+	- hiperus_c5.numberplanid (domyślnie: takie jak przypisany do klienta plan numeracyjny pośrednio poprzez przypisanie do firmy)
+		- plan numeracyjny dla wystawianych faktur
+	- hiperus_c5.prodid (domyślnie: puste) - domyślne PKWIU dla pozycji faktur
+	- hiperus_c5.content (domyślnie: szt) - domyślna jednostka miary dla pozycji faktur
 
 Ogólny opis jak to działa.
 
@@ -123,3 +140,6 @@ Ogólny opis jak to działa.
 Uwaga! Skrypt lms-plicbd-localisation.php jest adaptacją skryptu o tej samej nazwie, pochodzącego z wtyczki LMSPlicbdPlugin
   i został dostosowany do działania z platformą Hiperus.
 
+Inne ustawienia konfiguracyjne:
+	- hiperus_c5.number_manually (domyślnie: true) - określa czy jest dostępna możliwość ręcznego wpisywania numerów
+		telefonów w polach na to przeznaczonych (można wyłączyć jeśli nie przenosimy numerów od innego operatora)

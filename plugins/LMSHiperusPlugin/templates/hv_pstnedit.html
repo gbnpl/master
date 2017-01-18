@@ -15,25 +15,25 @@
 		    <td width="33%" style="text-align:left;vertical-align:top;">
 			<table width="100%" cellpadding="3">
 			    <tr>
-				<td width="1%" align="left" nowrap /><b>ID (Hiperus)</b></td>
+				<td width="1%" align="left" nowrap><b>ID (Hiperus)</b></td>
 				<td width="1%"><b>&nbsp;:&nbsp;</b></td>
 				<td width="98%" align="left" >{$pstninfo.id}</td>
 			    </tr>
 			    <tr>
-				<td width="1%" align="left" nowrap />Kod kraju</td>
-				<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
-				<td width="98%" align="left" ><input type="text" name="pstnedit[country_code]" value="{$pstninfo.country_code}" id="id_country_code" {if !ConfigHelper::getConfig('hiperus_c5.number_manually')}readonly{/if}></td>
+				<td width="1%" align="left" nowrap>Kod kraju</td>
+				<td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td>
+				<td width="98%" align="left" ><input type="text" name="pstnedit[country_code]" value="{$pstninfo.country_code}" id="id_country_code" oninput="javascript:document.getElementById('id_extension').value = this.value + document.getElementById('id_number').value;" {if !ConfigHelper::checkValue(ConfigHelper::getConfig('hiperus_c5.number_manually', 'true'))}readonly{/if}></td>
 			    </tr>
 			    <tr>
-				<td width="1%" align="left" nowrap />Nr. krajowy</td>
-				<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
-				<td width="98%" align="left" ><input type="text" name="pstnedit[number]" value="{$pstninfo.number}" id="id_number" {if !ConfigHelper::getConfig('hiperus_c5.number_manually')}readonly{/if}></td>
+				<td width="1%" align="left" nowrap>Nr. krajowy</td>
+				<td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td>
+				<td width="98%" align="left" ><input type="text" name="pstnedit[number]" value="{$pstninfo.number}" id="id_number" oninput="javascript:document.getElementById('id_extension').value = document.getElementById('id_country_code').value + this.value;" {if !ConfigHelper::checkValue(ConfigHelper::getConfig('hiperus_c5.number_manually', 'true'))}readonly{/if}></td>
 			    </tr>
 			    <tr>
-				<td width="1%" align="left" nowrap />Nr. międzynarodowy</td>
-				<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
+				<td width="1%" align="left" nowrap>Nr. międzynarodowy</td>
+				<td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td>
 				<td width="98%" align="left">
-				    <input type="text" name="pstnedit[extension]" value="{$pstninfo.extension}" id="id_extension" {if !ConfigHelper::getConfig('hiperus_c5.number_manually')}readonly{/if}>&nbsp;&nbsp;
+				    <input type="text" name="pstnedit[extension]" value="{$pstninfo.extension}" id="id_extension" readonly>&nbsp;&nbsp;
 				    <a href="javascript:searchemptypstn('{$pstninfo.extension}')" {tip text="Wybierz nowy numer"}>&raquo;&raquo;&raquo;</a>
 				</td>
 			    </tr>
@@ -42,7 +42,7 @@
 		    <td width="33%" style="text-align:left;vertical-align:top;">
 			<table width="100%" cellpadding="3">
 			    <tr>
-				<td width="1%" align="left" nowrap /><b>Terminal</b></td>
+				<td width="1%" align="left" nowrap><b>Terminal</b></td>
 				<td width="1%"><b>&nbsp;:&nbsp;</b></td>
 				<td width="98%" align="left" >
 				    <select name="pstnedit[terminal_name]">
@@ -53,8 +53,8 @@
 				</td>
 			    </tr>
 			    <tr>
-				<td width="1%" align="left" nowrap />Głowny numer</td>
-				<td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td>
+				<td width="1%" align="left" nowrap>Głowny numer</td>
+				<td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td>
 				<td width="98%" align="left" >
 				    <select name="pstnedit[is_main]">
 					<option value='t' {if $pstninfo.is_main=='t'} selected{/if}>TAK</option>
@@ -62,15 +62,15 @@
 				    </select>&nbsp;( {if $pstninfo.is_main=='t'}TAK{else}NIE{/if} )
 				</td>
 			    </tr>
-			    <tr><td width="1%" align="left" nowrap />DISA</td><td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" ><select name="pstnedit[disa_enabled]"><option value='t' {if $pstninfo.disa_enabled=='t'} selected{/if}>TAK</option><option value='f' {if $pstninfo.disa_enabled=='f'} selected{/if}>NIE</option></select>&nbsp;( {if $pstninfo.disa_enabled=='t'}TAK{else}NIE{/if} )</td></tr>
-			    <tr><td width="1%" align="left" nowrap />CLIR</td><td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" ><select name="pstnedit[clir]"><option value='t' {if $pstninfo.clir=='t'} selected{/if}>TAK</option><option value='f' {if $pstninfo.clir=='f'} selected{/if}>NIE</option></select>&nbsp;( {if $pstninfo.clir=='t'}TAK{else}NIE{/if} )</td></tr>
+			    <tr><td width="1%" align="left" nowrap>DISA</td><td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" ><select name="pstnedit[disa_enabled]"><option value='t' {if $pstninfo.disa_enabled=='t'} selected{/if}>TAK</option><option value='f' {if $pstninfo.disa_enabled=='f'} selected{/if}>NIE</option></select>&nbsp;( {if $pstninfo.disa_enabled=='t'}TAK{else}NIE{/if} )</td></tr>
+			    <tr><td width="1%" align="left" nowrap>CLIR</td><td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" ><select name="pstnedit[clir]"><option value='t' {if $pstninfo.clir=='t'} selected{/if}>TAK</option><option value='f' {if $pstninfo.clir=='f'} selected{/if}>NIE</option></select>&nbsp;( {if $pstninfo.clir=='t'}TAK{else}NIE{/if} )</td></tr>
 			</table>
 		    </td>
 		    <td width="auto" style="text-align:left;vertical-align:top;">
 			<table width="100%" cellpadding="3">
-			    <tr><td width="1%" align="left" nowrap />FAX</td><td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" ><select name="pstnedit[virtual_fax]"><option value='t' {if $pstninfo.virtual_fax=='t'} selected{/if}>TAK</option><option value='f' {if $pstninfo.virtual_fax=='f'} selected{/if}>NIE</option></select>&nbsp;( {if $pstninfo.virtual_fax=='t'}TAK{else}NIE{/if} )</td></tr>
-			    <tr><td width="1%" align="left" nowrap />Poczta głosowa</td><td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" ><select name="pstnedit[voicemail_enabled]"><option value='t' {if $pstninfo.voicemail_enabled=='t'} selected{/if}>TAK</option><option value='f' {if $pstninfo.voicemail_enabled=='f'} selected{/if}>NIE</option></select>&nbsp;( {if $pstninfo.voicemail_enabled=='t'}TAK{else}NIE{/if} )</td></tr>
-			    <tr><td width="1%" align="left" nowrap />Utworzony</td><td width="1%" align="left" nowrap /><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" >{$pstninfo.create_date}</td></tr>
+			    <tr><td width="1%" align="left" nowrap>FAX</td><td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" ><select name="pstnedit[virtual_fax]"><option value='t' {if $pstninfo.virtual_fax=='t'} selected{/if}>TAK</option><option value='f' {if $pstninfo.virtual_fax=='f'} selected{/if}>NIE</option></select>&nbsp;( {if $pstninfo.virtual_fax=='t'}TAK{else}NIE{/if} )</td></tr>
+			    <tr><td width="1%" align="left" nowrap>Poczta głosowa</td><td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" ><select name="pstnedit[voicemail_enabled]"><option value='t' {if $pstninfo.voicemail_enabled=='t'} selected{/if}>TAK</option><option value='f' {if $pstninfo.voicemail_enabled=='f'} selected{/if}>NIE</option></select>&nbsp;( {if $pstninfo.voicemail_enabled=='t'}TAK{else}NIE{/if} )</td></tr>
+			    <tr><td width="1%" align="left" nowrap>Utworzony</td><td width="1%" align="left" nowrap><b>&nbsp;:&nbsp;</b></td><td width="98%" align="left" >{$pstninfo.create_date}</td></tr>
 			</table>
 
 		    </td>
@@ -88,9 +88,9 @@
 </table>
 {include file="footer.html"}
 {if $blad}
-<script type="text/javascript" language="JavaScript">
+<script type="text/javascript">
 <!--
-    alert('Nie można zapisać danych !!!');
+	alert('Nie można zapisać danych !!!');
 //-->
 </script>
 {/if}

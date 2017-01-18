@@ -1,18 +1,24 @@
 {include file="hv_js.html"}
-<table class="lmsbox">
+<table class="lmsbox lms-ui-sortable" id="hiperus-voip-accounts">
+	<COLGROUP>
+		<COL style="width: 99%;">
+		<COL style="width: 1%;">
+	</COLGROUP>
 	<THEAD>
-	<TR>
-	<td width="99%" class="fleftu hand" onclick="showOrHide('voipaccounthiperusbox');">
-	    <img src="img/voip.gif" alt=""><b>Konta VoIP Hiperus C5 ({$hiperusaccountcustomerlist|@count})</b> 
-	</td>
-	<td width="1%" class="frightu" align="right" nowrap>
-		{if $customerinfo.status neq "1" and ! $customerinfo.deleted}<a href="?m=hv_accountadd&cusid={$customerinfo.id}">Dodaj nowe konto VoIP &raquo;</a>&nbsp;{/if}
-	</td>
+	<TR class="hand lmsbox-titlebar" data-lmsbox-content="hiperus-voip-accounts-panel" onclick="showOrHide('hiperus-voia-accounts-panel')">
+		<td class="bold">
+			<img src="img/voip.gif" alt="">Konta VoIP Hiperus C5 ({$hiperusaccountcustomerlist|@count})
+		</td>
+		<td class="text-right nobr">
+			{if $customerinfo.status != "1" && !$customerinfo.deleted}
+			<a href="?m=hv_accountadd&cusid={$customerinfo.id}">Dodaj nowe konto VoIP &raquo;</a>&nbsp;
+			{/if}
+		</td>
 	</TR>
 	</THEAD>
 	<TBODY>
-    <tr id="voipaccounthiperusbox" style="display:none;">
-	<td width="100%" colspan="2" class="fall">
+    <tr id="hiperus-voip-accounts-panel" style="display:none;">
+	<td colspan="2" class="fall">
 	    <table width="100%" cellpadding="3" cellspacing="0">
 		<tr class="dark">
 		    <td width="auto" class="fleftu" style="padding-right:10px;" nowrap>Konto&nbsp;VoIP</td>
@@ -58,7 +64,7 @@
 </table>
 <script type="text/javascript">
 <!--
-if (getCookie('voipaccounthiperusbox') == '1')
-	document.getElementById('voipaccounthiperusbox').style.display = '';
+if (getCookie('hiperus-voip-accounts-panel') == '1')
+	document.getElementById('hiperus-voip-accounts-panel').style.display = '';
 //-->
 </script>

@@ -109,10 +109,11 @@ define('PLUGINS_DIR', $CONFIG['directories']['plugin_dir']);
 $incremental = array_key_exists('incremental', $options);
 
 // Load autoloader
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'autoloader.php');
-
-// Do some checks and load config defaults
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'config.php');
+$composer_autoload_path = SYS_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (file_exists($composer_autoload_path))
+	require_once $composer_autoload_path;
+else
+	die("Composer autoload not found. Run 'composer install' command from LMS directory and try again. More informations at https://getcomposer.org/" . PHP_EOL);
 
 // Init database
 
@@ -268,8 +269,10 @@ function create_data_record($voipaccount) {
 			$customer = "${voipaccount['name']}|${voipaccount['lastname']}|${voipaccount['location']}|"
 				. (!empty($voipaccount['email']) ? $voipaccount['email'] : '') . "|"
 				. (!empty($voipaccount['ssn']) ? "1:${voipaccount['ssn']}" : (!empty($voipaccount['icn']) ? "2:${voipaccount['icn']}" : ''));
-		} else
+		} else {
+			$voipaccount['owner'] = str_replace('&', '&amp;', $voipaccount['owner']);
 			$customer = "${voipaccount['owner']}||${voipaccount['location']}";
+		}
 		$buffer .= "\t\t\t\t<customer_name>$customer</customer_name>\n";
 		$terc = sprintf("%02d%02d%02d%s", $voipaccount['state_ident'], $voipaccount['district_ident'], $voipaccount['borough_ident'], $voipaccount['borough_type']);
 		$buffer .= "\t\t\t\t<Address_line1>*$terc</Address_line1>\n";

@@ -3,7 +3,7 @@
 /*
  *  LMS version 1.11-git
  *
- *  Copyright (C) 2001-2015 LMS Developers
+ *  Copyright (C) 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -34,7 +34,7 @@ class LMSHiperusPlugin extends LMSPlugin {
 	const PLUGIN_DBVERSION = '2015110300';
 	const PLUGIN_NAME = 'Hiperus C5';
 	const PLUGIN_DESCRIPTION = 'Hiperus C5 Platform Support';
-	const PLUGIN_AUTHOR = 'Sylwester Kondracki &lt;sylwester.kondracki@gmail.com&gt;,<br>Tomasz Chiliński &lt;tomasz.chilinski@chilan.com&gt;';
+	const PLUGIN_AUTHOR = 'Tomasz Chiliński &lt;tomasz.chilinski@chilan.com&gt;';
 
 	public function registerHandlers() {
 		$this->handlers = array(
@@ -89,6 +89,10 @@ class LMSHiperusPlugin extends LMSPlugin {
 			'nodeedit_before_display' => array(
 				'class' => 'HiperusNodeHandler',
 				'method' => 'nodeEditBeforeDisplay'
+			),
+			'quicksearch_after_submit' => array(
+				'class' => 'HiperusQuickSearchHandler',
+				'method' => 'quicksearchAfterSubmit',
 			),
 		);
 	 }

@@ -4,6 +4,7 @@
  * LMS iNET
  *
  *  (C) Copyright 2012 LMS iNET Developers
+ *  (C) Copyright 2015-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -30,7 +31,6 @@ define('H_LOCK_FILE', PLUGINS_DIR . DIRECTORY_SEPARATOR . 'LMSHiperusPlugin' . D
 
 class LMSHiperus {
 	private $DB;
-
 
 	public function __construct(&$DB) {
 		$this->DB = &$DB;
@@ -287,107 +287,124 @@ class LMSHiperus {
 		return HiperusActions::GetBilling($from, $to);
 	}
 
-    function GetCustomerList() {
-    
-	return $this->DB->GetAll('SELECT * FROM hv_customers');
-	
-    }
-    
-    
-    function GetCustomerListList($sort=NULL,$filtr=NULL)
-    {
-	
-	if (is_null($sort)) $sort = ' ORDER BY hv.name ASC';
-	else
-	{
-	    switch ($sort)
-	    {
-		case 'name,asc'		: $sort = ' ORDER BY hv.name ASC';	break;
-		case 'name,desc'	: $sort = ' ORDER BY hv.name DESC';	break;
-		default 		: $sort = ' ORDER BY hv.name ASC';	break;
-	    }
+	public function GetCustomerList() {
+		return $this->DB->GetAll('SELECT * FROM hv_customers');
 	}
-	$hvext = $hvvat = $hvpayment = $hvprice = $extid = '';
-	if (!is_null($filtr) && is_array($filtr))
-	{
-	    if (isset($filtr['hvext'])) { 
-		switch ($filtr['hvext'])
-		{
-		    case '1'		: $hvext = ' AND hv.ext_billing_id!=0'; break;
-		    case '2'		: $hvext = ' AND ( hv.ext_billing_id=0 OR hv.ext_billing_id IS NULL) '; break;
-		    default		: $hvext = ''; break;
+
+	public function GetCustomerListList($sort = NULL, $filtr = NULL) {
+		if (is_null($sort))
+			$sort = ' ORDER BY hv.name ASC';
+		else
+			switch ($sort) {
+				case 'name,asc':
+					$sort = ' ORDER BY hv.name ASC';
+					break;
+				case 'name,desc':
+					$sort = ' ORDER BY hv.name DESC';
+					break;
+				default:
+					$sort = ' ORDER BY hv.name ASC';
+					break;
+			}
+		$hvext = $hvvat = $hvpayment = $hvprice = $extid = '';
+		if (!is_null($filtr) && is_array($filtr)) {
+			if (isset($filtr['hvext']))
+				switch ($filtr['hvext']) {
+					case '1':
+						$hvext = ' AND hv.ext_billing_id <> 0';
+						break;
+					case '2':
+						$hvext = ' AND (hv.ext_billing_id = 0 OR hv.ext_billing_id IS NULL) ';
+						break;
+					default:
+						$hvext = '';
+						break;
+				}
+			else
+				$hvext = '';
+
+			if (isset($filtr['hvvat']))
+				switch ($filtr['hvvat']) {
+					case 'none':
+						$hvvat = ' AND ha.keyvalue=\'0\' ';
+						break;
+					case 'hiperus':
+						$hvvat = ' AND ha.keyvalue=\'1\' ';
+						break;
+					case 'lms':
+						$hvvat = ' AND ha.keyvalue=\'2\' ';
+						break;
+					default:
+						$hvvat = '';
+						break;
+				}
+			else
+				$hvvat = '';
+
+			if (isset($filtr['hvpayment']))
+				switch ($filtr['hvpayment']) {
+					case 'postpaid':
+						$hvpayment = ' AND hv.payment_type=\'postpaid\' ';
+						break;
+					case 'prepaid':
+						$hvpayment = ' AND hv.payment_type=\'prepaid\' ';
+						break;
+					default:
+						$hvpayment = '';
+						break;
+				}
+			else
+				$hvpayment = '';
+
+			if (isset($filtr['hvprice'])) {
+				if ($filtr['hvprice'] == 'noprice')
+					$hvprice = ' AND id_default_pricelist IS NULL ';
+				elseif ($filtr['hvprice'] == '')
+					$hvprice = ' ';
+				else
+					$hvprice = ' AND hv.id_default_pricelist = ' . $filtr['hvprice'] . ' ';
+			} else $hvprice = '';
+
+			if (isset($filtr['extid']))
+				$extid = ' AND hv.ext_billing_id = ' . $filtr['extid'] . ' ';
+			else
+				$extid = '';
 		}
-	    } else $hvext = '';
-	    
-	    if (isset($filtr['hvvat'])) {
-		switch ($filtr['hvvat'])
-		{
-		    case 'none'		: $hvvat = ' AND ha.keyvalue=\'0\' '; break;
-		    case 'hiperus'	: $hvvat = ' AND ha.keyvalue=\'1\' '; break;
-		    case 'lms'		: $hvvat = ' AND ha.keyvalue=\'2\' '; break;
-		    default		: $hvvat = ''; break;
-		}
-	    } else $hvvat = '';
-	    
-	    if (isset($filtr['hvpayment'])) {
-		switch ($filtr['hvpayment'])
-		{
-		    case 'postpaid'	: $hvpayment = ' AND hv.payment_type=\'postpaid\' '; break;
-		    case 'prepaid'	: $hvpayment = ' AND hv.payment_type=\'prepaid\' '; break;
-		    default		: $hvpayment = ''; break;
-		}
-	    } else $hvpayment = '';
-	    
-	    if (isset($filtr['hvprice'])) {
-		{
-		    if ($filtr['hvprice'] == 'noprice') $hvprice = ' AND id_default_pricelist IS NULL ';
-		    elseif ($filtr['hvprice'] == '') $hvprice = ' ';
-		    else $hvprice = ' AND hv.id_default_pricelist = '.$filtr['hvprice'].' ';
-		}
-	    } else $hvprice = '';
-	    
-	    if (isset($filtr['extid']))
-	    {
-		$extid = ' AND hv.ext_billing_id = '.$filtr['extid'].' ';
-	    }
-	    else $extid = '';
+		$sql = 'SELECT
+			hv.id, hv.name, hv.address, hv.street_number, hv.apartment_number, hv.postcode, hv.city, hv.ext_billing_id , hv.id_default_pricelist,
+			hv.payment_type, hv.active,
+			c.id AS cid, c.lastname AS clastname, c.name AS cname, c.address AS caddress, c.zip AS czip, c.city AS ccity,
+			COALESCE((SELECT hv_pricelist.name FROM hv_pricelist WHERE hv_pricelist.id = hv.id_default_pricelist LIMIT 1), NULL) AS price_name,
+			COALESCE((SELECT COUNT(*) FROM hv_pstn WHERE hv_pstn.customerid=hv.id),0) AS pstncount,
+			COALESCE((SELECT COUNT(*) FROM hv_terminal WHERE hv_terminal.customerid=hv.id),0) AS terminalcount,
+			ha.keyvalue AS invoice
+			FROM hv_customers AS hv
+			LEFT JOIN hv_assign AS ha ON (ha.customerid = hv.id)
+			LEFT JOIN customeraddressview AS c ON (c.id = hv.ext_billing_id)
+			WHERE 1=1 '
+			. $hvext
+			. $hvvat
+			. $hvpayment
+			. $hvprice
+			. $extid
+			. ($sort ? $sort : '');
+		return $this->DB->GetAll($sql);
 	}
-	$sql = 'SELECT 
-		hv.id, hv.name, hv.address, hv.street_number, hv.apartment_number, hv.postcode, hv.city, hv.ext_billing_id ,hv.id_default_pricelist ,
-		hv.payment_type, hv.active, 
-		c.id AS cid, c.lastname AS clastname, c.name AS cname, c.address AS caddress, c.zip AS czip, c.city AS ccity,'
-		.' COALESCE( (SELECT hv_pricelist.name FROM hv_pricelist WHERE hv_pricelist.id = hv.id_default_pricelist LIMIT 1),NULL) AS price_name, '
-		.' COALESCE((SELECT COUNT(*) FROM hv_pstn WHERE hv_pstn.customerid=hv.id),0) AS pstncount, '
-		.' COALESCE((SELECT COUNT(*) FROM hv_terminal WHERE hv_terminal.customerid=hv.id),0) AS terminalcount, '
-		.' ha.keyvalue AS invoice '
-		.' FROM hv_customers AS hv '
-		.' LEFT JOIN hv_assign AS ha ON (ha.customerid = hv.id) '
-		.' LEFT JOIN customers AS c ON (c.id = hv.ext_billing_id) '
-		.' WHERE 1=1 '
-		.$hvext
-		.$hvvat
-		.$hvpayment
-		.$hvprice
-		.$extid
-		.($sort ? $sort : '')
-		.' ;';
-	return $this->DB->GetAll($sql);
-	
-    }
-    
-    
-    
-    function GetCustomerLMSMinList($id=NULL)
-    {
-	if (is_null($id))
-	return $this->DB->GetAll('SELECT id, lastname, name, (SELECT contact FROM customercontacts WHERE customerid = customers.id AND type = ? LIMIT 1) AS email,
-		address,zip,city,ten,ssn,regon,post_address,post_zip,post_city FROM customers WHERE deleted=0 AND status=3
-		ORDER BY lastname,name ASC', array(CONTACT_EMAIL));
-	else
-	return $this->DB->GetRow('SELECT id, lastname, name, (SELECT contact FROM customercontacts WHERE customerid = customers.id AND type = ? LIMIT 1) AS email,
-		address,zip,city,ten,ssn,regon,post_address,post_zip,post_city FROM customers WHERE  id=?', array(CONTACT_EMAIL,$id));
-    }
-    
+
+	public function GetCustomerLMSMinList($id = NULL) {
+		if (is_null($id))
+			return $this->DB->GetAll('SELECT id, lastname, name,
+					(SELECT contact FROM customercontacts WHERE customerid = c.id AND type = ? LIMIT 1) AS email,
+				address, zip, city, ten, ssn, regon, post_address, post_zip, post_city
+				FROM customeraddressview c WHERE deleted = 0 AND status = ?
+				ORDER BY lastname, name ASC', array(CONTACT_EMAIL, CSTATUS_CONNECTED));
+		else
+			return $this->DB->GetRow('SELECT id, lastname, name,
+					(SELECT contact FROM customercontacts WHERE customerid = c.id AND type = ? LIMIT 1) AS email,
+				address, zip, city, ten, ssn, regon, post_address, post_zip, post_city
+				FROM customeraddressview c WHERE id = ?', array(CONTACT_EMAIL, $id));
+	}
+
     function GetPriceList()
     {
 	return $this->DB->GetAll('SELECT * FROM hv_pricelist ;');
@@ -993,12 +1010,12 @@ class LMSHiperus {
 	else return false;
 	
     }
-    
-    function GetLMSCustomerByVoIPID($id)
-    {
-	return $this->DB->GetRow('SELECT c.* FROM customers c JOIN hv_customers h ON (c.id = h.ext_billing_id) WHERE h.id = '.$id.' LIMIT 1');
-    }
-    
+
+	public function GetLMSCustomerByVoIPID($id) {
+		return $this->DB->GetRow('SELECT c.* FROM customeraddressview c
+			JOIN hv_customers h ON c.id = h.ext_billing_id
+			WHERE h.id = ? LIMIT 1', array($id));
+	}
 
     function getterminalexists($id)
     {
