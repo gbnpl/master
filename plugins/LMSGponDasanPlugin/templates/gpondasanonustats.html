@@ -1,0 +1,28 @@
+<!--// $Id$ //-->
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="dark">
+		<TD WIDTH="1%" class="fall" colspan="2">
+			<IMG SRC="img/traffic.gif" ALT="">
+		
+			<B>Statystyki ONU {$netdevinfo.name} ({$netdevinfo.id|string_format:"%04d"})</B>
+		</TD>
+	</TR>
+
+	<TR class="light">
+		<TD WIDTH="100%" class="fleft" ALIGN="CENTER">
+		    <IMG SRC="?m=gpondasanonusignalimage&id={$netdevinfo.id}&ext=1&period=7d" ALT="signal 7d">
+	    	</TD>
+	</TR>
+	<TR class="light">
+	    	<TD WIDTH="100%" class="fleft" ALIGN="CENTER">
+		    <IMG SRC="?m=gpondasanonusignalimage&id={$netdevinfo.id}&ext=1&period=60d" ALT="signal 60d">
+	    	</TD>
+	</TR>
+	<TR class="light">
+	    	<TD WIDTH="100%" class="fbl" ALIGN="CENTER">
+		    <IMG SRC="?m=gpondasanonusignalimage&id={$netdevinfo.id}&ext=1&period=730d" ALT="signal 730d">
+	    	</TD>
+	</TR>
+
+</TABLE>
+

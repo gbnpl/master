@@ -1,0 +1,31 @@
+{include file="header.html"}
+<!--// $Id$ //-->
+<H1>{$layout.pagetitle}</H1>
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR>
+		<TD WIDTH="100%">
+			{include file="gpondasanonuinfobox.html"}
+		</TD>
+	</TR>
+	{if $netdevinfo.rrd > 0}
+	<TR>
+                <TD WIDTH="100%">
+                        {include file="gpondasanonustats.html"}
+                 </TD>
+        <TR>
+	{/if}
+	<TR>
+		<TD WIDTH="100%">
+			{include file="gpondasanonuconnbox.html"}
+		</TD>
+	<TR>
+	{if $gpononu2customerscount gt 0}
+	<TR>
+		<TD WIDTH="100%">
+			{include file="customerinfobox.html" customerpanel=1}
+		</TD>
+	</TR>
+	
+	{/if}
+</TABLE>
+{include file="footer.html"}

@@ -1,0 +1,245 @@
+<!--// $Id$ //-->
+{$xajax}
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR{if $devicepanel} class="dark hand" onClick="showOrHide('devicepanel');"{else} class="dark"{/if}>
+		<TD WIDTH="1%" class="fleftu">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt.gif" ALT="">
+		</TD>
+		<TD WIDTH="99%" class="frightu">
+			<B>{$netdevinfo.name} ({$netdevinfo.id|string_format:"%04d"})</B>
+		</TD>
+	</TR>
+	<TR class="light"{if $devicepanel} id="devicepanel" style="display:none;"{/if}>
+	        <TD WIDTH="100%" COLSPAN="2"{if $devicepanel} class="fall" ALIGN="RIGHT"{else}class="flr"{/if}>
+			<TABLE WIDTH="100%" CELLPADDING="0">
+				<TR class="light">
+					<TD WIDTH="50%" style="vertical-align:top;">
+						<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="light">
+		<TD style="width: 1%;">
+			<IMG SRC="img/netdev.gif" ALT="">
+		</TD>
+		<TD style="width: 1%;" class="bold">
+			{trans("Network device:")}
+		</TD>
+		<TD style="width: 98%;">
+			<A href="?m=netdevinfo&id={$netdevinfo.id}">{$netdevinfo.name}</A>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/port.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" class="bold nobr">
+			{trans("Number of ports:")}
+		</TD>
+		<TD WIDTH="98%">
+			{count($gponoltportsinfo)}
+		</TD>
+	</TR>
+		<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/port.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>Porty:</B>
+		</TD>
+		<TD WIDTH="98%">
+		<table cellpadding="2" border="1"><tr><td><b>Port:</b></td><td><b>Zajęty przez ONU:</b></td><td><b>Max.ONU na port:</b></td></tr>
+		{foreach from=$gponoltportsinfo item=gponoltports}
+		<tr><td align="right">{if $gponoltports.numportf}{$gponoltports.numportf}{else}{$gponoltports.numport}{/if}</td><td align="right">{$gponoltports.countlinkport}</td><td align="right">{$gponoltports.maxonu}</td></tr>
+		{/foreach}
+		</table>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD COLSPAN="3">
+			<HR SIZE="1" />
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP wersja:</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.snmp_version}
+		</TD>
+	</TR>
+	<TR CLASS="LIGHT{if $netdevinfo.snmp_version eq 0} blend{/if}">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP opis:</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.snmp_description}
+		</TD>
+	</TR>
+	<TR CLASS="LIGHT{if $netdevinfo.snmp_version eq 0} blend{/if}">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP IP host:</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.snmp_host}
+		</TD>
+	</TR>
+	<TR CLASS="LIGHT{if $netdevinfo.snmp_version eq 3 or $netdevinfo.snmp_version eq 0} blend{/if}">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Community (v.2):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.snmp_community}
+		</TD>
+	</TR>
+	<TR CLASS="LIGHT{if $netdevinfo.snmp_version lt 3} blend{/if}">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Auth protocol (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.snmp_auth_protocol}
+		</TD>
+	</TR>
+	<TR CLASS="LIGHT{if $netdevinfo.snmp_version lt 3} blend{/if}">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Username (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.snmp_username}
+		</TD>
+	</TR>
+	<TR CLASS="LIGHT{if $netdevinfo.snmp_version lt 3} blend{/if}">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Password (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.snmp_password}
+		</TD>
+	</TR>
+	<TR CLASS="LIGHT{if $netdevinfo.snmp_version lt 3} blend{/if}">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Security level (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.snmp_sec_level}
+		</TD>
+	</TR>
+	<TR CLASS="LIGHT{if $netdevinfo.snmp_version lt 3} blend{/if}">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Privacy passphrase (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.snmp_privacy_passphrase}
+		</TD>
+	</TR>
+	<TR CLASS="LIGHT{if $netdevinfo.snmp_version lt 3} blend{/if}">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt_takenports.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+		        <B>SNMP Privacy protocol (v.3):</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.snmp_privacy_protocol}
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD COLSPAN="3">
+			<HR SIZE="1" />
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT="">
+		</TD>
+		<TD WIDTH="99%" COLSPAN="2">
+			<a href="?m=gpondasanonucheck&id={$netdevinfo.id}">Wykryj onu</a>
+		</TD>
+	</TR>
+				    </TABLE>
+				</TD>
+				<TD WIDTH="50%" style="vertical-align:top;">
+					<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="light">
+		<TD WIDTH="1%" style="vertical-align:top;">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/configuration-icon.png" ALT="">
+		</TD>
+		<TD WIDTH="99%" COLSPAN="2">
+		    <A href="?m=gpondasanoltedit&id={$netdevinfo.id}&action=writememory" onclick="return confirmLink(this,'Czy na pewno zapisać konfigurację?');"> <B>Zapisz konfigurację </B></A>(write memory)
+		</TD>
+	</TR>
+        <TR class="light">
+		<TD WIDTH="1%" style="vertical-align:top;">
+                        <IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt.gif" ALT="">
+                </TD>
+		<TD WIDTH="99%" COLSPAN="2">
+		    <B>Dane z SNMP:</B><br><br>
+                </TD>
+                <TD WIDTH="98%" COLSPAN="2">
+                {$table_OLT_param}  
+                </TD>
+        </TR>
+	{if $nagiosON}
+	<TR><TD height=10 colspan="3"></td></tr>
+	<TR>
+	    <TD WIDTH="1%"><img src=img/nagios.gif></TD>
+	    <TD nowrap><B>monitoruj w NAGIOSie</B></TD>
+	    <TD>
+		{if $dev2nagios.nagios=='1'}TAK
+		    {if $netdevinfo.mon==0 && $netdevips|@count>1}
+			<img src=img/warningon.gif {tip text="posiadasz więcej niż jeden adres IP dla tego urządzenia. Musisz wybrać który adres ma być monitorowany."}>
+                   {/if}
+		{else}NIE
+		{/if}
+	    </TD>
+	</TR>
+	{/if}
+
+	                                        </TABLE>
+					</TD>
+				</TR>
+			</TABLE>
+{if !$devicepanel}
+    		</TD>
+	</TR>
+	<TR class="light">
+	        <TD WIDTH="100%" COLSPAN="2" class="fbottomu" ALIGN="RIGHT">
+{/if}
+			<A href="?m=gpondasanoltedit&id={$netdevinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
+			<A href="?m=gpondasanoltdel&id={$netdevinfo.id}" OnClick="return confirmLink(this, '{t a=$netdevinfo.name}Are you sure, you want to remove device \'$a\' from database?{/t}');">{trans("Delete")} <img src="img/delete.gif" ALT=""></A>
+			<A href="?m=gpondasanoltdel&id={$netdevinfo.id}&netdev=1" OnClick="return confirmLink(this, '{t a=$netdevinfo.name}Are you sure, you want to remove device \'$a\' from database?{/t}');">{trans("Delete with network device")} <img src="img/delete.gif" ALT=""></A>
+		</TD>
+	</TR>
+</TABLE>
+{if $devicepanel}
+<SCRIPT type="text/javascript">
+<!--
+if(getCookie('devicepanel')=='1')
+        document.getElementById('devicepanel').style.display = '';
+//-->
+</SCRIPT>
+{/if}

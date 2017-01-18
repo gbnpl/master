@@ -1,0 +1,50 @@
+<!-- $Id$ -->
+{include file="calendar_js.html"}
+<SCRIPT TYPE="text/javascript" SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpon.js""></SCRIPT>
+<FORM NAME="netdevedit" METHOD="POST" ACTION="?m=gpondasanonutvedit&id={$netdevinfo.id}">
+	<INPUT type="submit" class="hiddenbtn">
+	<INPUT TYPE="HIDDEN" NAME="netdev[gpononutvid]" VALUE="{$netdevinfo.gpononutvid}">
+<TABLE WIDTH="100%" CELLPADDING="3">
+	
+	<TR class="dark">
+		<TD WIDTH="1%" class="fleftu">
+			<IMG SRC="img/ip.gif" ALT="{trans("IP address:")}">
+		</TD>
+		<TD WIDTH="1%" class="fbt">
+			<B>Adres IP:</B>
+		</TD>
+		<TD WIDTH="98%" class="frightu">
+			<INPUT TYPE="TEXT" NAME="netdev[ipaddr]" VALUE="{$netdevinfo.ipaddr}"  {tip text="Enter IP address" trigger="ipaddr"}>
+		</TD>
+	</TR>
+	<TR class="light">
+                <TD WIDTH="100%" COLSPAN="3" class="flr">
+		        <TABLE WIDTH="100%" CELLPADDING="0">
+		                <TR class="light">
+		                        <TD WIDTH="50%" style="vertical-align:top;">
+		                                <TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/desc.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>Kanał TV:</B>
+		</TD>
+		<TD WIDTH="98%">
+			<TEXTAREA NAME="netdev[channel]" COLS="40" ROWS="5" {tip text="Wpisz nazwę kanału TV" trigger="channel"}>{$netdevinfo.channel}</TEXTAREA>
+		</TD>
+	</TR>
+                                    		</TABLE>
+                            		</TD>
+                    		</TR>
+            		</TABLE>
+        	</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="100%" class="fbottomu" COLSPAN="3" ALIGN="RIGHT">
+			<A HREF="javascript:document.netdevedit.submit();" ACCESSKEY="S">{trans("Submit")} <IMG SRC="img/save.gif" alt=""></A>
+			<A HREF="?m=gpondasanonutvinfo&id={$netdevinfo.id}">{trans("Cancel")} <IMG SRC="img/cancel.gif" alt=""></A>
+		</TD>
+	</TR>	
+</TABLE>
+</FORM>

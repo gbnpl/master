@@ -1,0 +1,98 @@
+<!--// $Id$ //-->
+{$xajax}
+<TABLE class="lmsbox lms-ui-sortable" id="gpon-dasan-onu">
+	<COLGROUP>
+		<COL style="width: 100%;">
+	</COLGROUP>
+	<THEAD>
+	<TR class="hand lmsbox-titlebar" data-lmsbox-content="gpon-dasan-onu-panel" onclick="showOrHide('gpon-dasan-onu-panel')">
+		<TD class="fall text-left bold nobr">
+			<IMG SRC="img/mac.gif" alt="">
+			{t a=$gpondasanonus|@count}Dasan GPON ONU's ($a):{/t}
+		</TD>
+	</TR>
+	</THEAD>
+	<TBODY>
+	<TR id="gpon-dasan-onu-panel" style="display: none;">
+		<TD class="fall">
+			<TABLE cellpadding="5" cellspacing="0" WIDTH="100%">
+	<TR class="dark">
+		<TD class="fleftu" style="width: 57%;">
+			<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT=""> <span class="bold">{trans("Name")} / {trans("Profile")} / {trans("Model")}:</span><BR>
+			<IMG src="img/home.gif" ALT=""> {trans("Location:")}
+			<br>{trans("ONU description:")}
+		</TD>
+		<TD class="fleftu" style="border-left:0px; width: 10%;">
+			&nbsp;
+		</TD>
+		<TD class="fleftu" style="border-left:0px; width: 10%;">
+			<img src="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt.gif" ALT=""> <A href="?m=gpondasanonulist&o=gponolt{if $listdata.direction == "asc" && $listdata.order == "gponolt"},desc{/if}">OLT</A>{if $listdata.order == "gponolt"} <IMG SRC="img/{if $listdata.direction == "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+		</TD>
+		<TD class="fbt text-right nobr" style="width: 1%;">
+			{trans("ID:")}<br>
+			<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu_takenports.gif" ALT=""> {trans("ONU ID:")}
+		</TD>
+		<TD class="fbt nobr" style="width: 1%;">
+			<IMG src="img/port.gif" ALT=""> {trans("ONU Port Count:")}
+		</TD>
+		<TD class="frightu" style="width: 1%;">
+			&nbsp;
+		</TD>
+	</TR>
+	{cycle values="light,lucid" print=false}
+	{section name=gpondasanonus loop=$gpondasanonus start=$start}
+	<TR class="{cycle}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+		<TD style="width: 57%;" onClick="return self.location.href='?m=gpondasanonuinfo&id={$gpondasanonus[gpondasanonus].id}';" class="valign-top nobr">
+			<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT=""> <a name="{$gpondasanonus[gpondasanonus].id}">
+			<B>{$gpondasanonus[gpondasanonus].name} {if $gpondasanonus[gpondasanonus].producer}/ {$gpondasanonus[gpondasanonus].producer}{/if} {if $gpondasanonus[gpondasanonus].model}/ {$gpondasanonus[gpondasanonus].model}{/if}</B></A><BR>
+			<IMG src="img/home.gif" ALT=""> {$gpondasanonus[gpondasanonus].location}
+			<br>{if $gpondasanonus[gpondasanonus].onudescription}{$gpondasanonus[gpondasanonus].onudescription}{/if}
+		</TD>
+		<TD style="width: 10%; border-left: 0px;" class="valign-top text-center nobr">
+			{if $gpondasanonus[gpondasanonus].gponoltnetdevicesid gt 0}
+			<input type="button" value="{trans("Show parameters")}" id="pokaz_parametry_{$gpondasanonus[gpondasanonus].id}" OnClick="xajax_ONU_get_param_Xj({$gpondasanonus[gpondasanonus].gponoltid},{$gpondasanonus[gpondasanonus].gponoltnumport},{$gpondasanonus[gpondasanonus].onuid},{$gpondasanonus[gpondasanonus].id},'{$gpondasanonus[gpondasanonus].name}');">
+			{/if}
+		</TD>
+		<TD style="width: 30%; border-left: 0px;" class="valign-top nobr">
+			{if $gpondasanonus[gpondasanonus].gponoltnetdevicesid gt 0}
+			<A href="?m=gpondasanoltinfo&id={$gpondasanonus[gpondasanonus].gponoltnetdevicesid}"><img src="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt.gif" ALT=""> {$gpondasanonus[gpondasanonus].gponolt}</A><br>
+			{trans("OLT Port:")} <span class="bold">{if $gpondasanonus[gpondasanonus].gponoltnumportf}{$gpondasanonus[gpondasanonus].gponoltnumportf}{else}{$gpondasanonus[gpondasanonus].gponoltnumport}{/if}, {$gpondasanonus[gpondasanonus].onuid}</span>
+			{/if}
+		</TD>
+		<TD style="width: 1%;" class="text-right nobr" onClick="return self.location.href='?m=gpondasanonuinfo&id={$gpondasanonus[gpondasanonus].id}';">
+			<IMG src="img/empty.gif" height="16"><BR>
+			({$gpondasanonus[gpondasanonus].id|string_format:"%04d"})
+			<br>
+			<span class="bold">{$gpondasanonus[gpondasanonus].onuid}</span>
+		</TD>
+		<TD style="width: 1%;" onClick="return self.location.href='?m=gpondasanonuinfo&id={$gpondasanonus[gpondasanonus].id}';" class="nobr">
+			<BR><IMG SRC="img/port.gif" ALT=""> {$gpondasanonus[gpondasanonus].ports}
+		</TD>
+		<TD style="width: 1%;" class="fright text-right nobr">
+			<a href="?m=gpondasanonuedit&id={$gpondasanonus[gpondasanonus].id}"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
+			<a href="?m=gpondasanonuinfo&id={$gpondasanonus[gpondasanonus].id}"><IMG src="img/info.gif" alt="[ {trans("Info")} ]" title="[ {trans("Info")} ]"></A>
+		</TD>
+	</TR>
+	<TR>
+		<TD colspan="6" class="fall text-center" id="ONU_param_{$gpondasanonus[gpondasanonus].id}"></TD>
+	</TR>
+	{sectionelse}
+	<TR>
+		<TD colspan="6" class="text-center">
+			<P>&nbsp;</P>
+			<P><span class="bold">{trans("No such connected devices.")}</span></P>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	{/section}
+</TABLE>
+		</TD>
+	</TR>
+	</TBODY>
+</TABLE>
+<SCRIPT type="text/javascript">
+<!--
+	if (getCookie('gpon-dasan-onu-panel') == '1')
+		document.getElementById('gpon-dasan-onu-panel').style.display = '';
+//-->
+</SCRIPT>

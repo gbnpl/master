@@ -208,7 +208,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 	
 	-- 1.3.6.1.4.1.6296.0.17
 	temperatureOverThreshold NOTIFICATION-TYPE
-		OBJECTS { dsTemperatureStatus }
+		OBJECTS { dsTemperatureStatus}
 		STATUS current
 		DESCRIPTION 
 			"TemperatureOverThreshold Trap is sent when temperature is over the certain threshold."
@@ -281,7 +281,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 	
 	-- 1.3.6.1.4.1.6296.0.25
 	memoryOverThreshold NOTIFICATION-TYPE
-		OBJECTS { sysDescr, dsFreeMem }
+		OBJECTS { sysDescr, dsFreeMem, sleSlotSystemIndex }
 		STATUS current
 		DESCRIPTION 
 			"MemoryOverThreshold trap is sent when used memory size is over the given limit 
@@ -291,7 +291,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 	
 	-- 1.3.6.1.4.1.6296.0.26
 	memoryFallThreshold NOTIFICATION-TYPE
-		OBJECTS { sysDescr, dsFreeMem }
+		OBJECTS { sysDescr, dsFreeMem, sleSlotSystemIndex }
 		STATUS current
 		DESCRIPTION 
 			"MemoryFallThreshold trap is sent when free memory size is over the given limit."
@@ -349,7 +349,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 -- 
 	-- 1.3.6.1.4.1.6296.0.32
 	temperatureHighOverThreshold NOTIFICATION-TYPE
-		OBJECTS { dsTemperatureStatus }
+		OBJECTS { dsTemperatureStatus, sleSlotSystemIndex }
 		STATUS current
 		DESCRIPTION 
 			"The temperatureHighOverThreshold Trap is sent when temperature is over the high-threshold."
@@ -358,7 +358,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 	
 	-- 1.3.6.1.4.1.6296.0.33
 	temperatureHighFallThreshold NOTIFICATION-TYPE
-		OBJECTS { dsTemperatureStatus }
+		OBJECTS { dsTemperatureStatus, sleSlotSystemIndex }
 		STATUS current
 		DESCRIPTION 
 			"The temperatureHighFallThreshold Trap is sent when temperature fall the high-threshold."
@@ -367,7 +367,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 	
 	-- 1.3.6.1.4.1.6296.0.34
 	temperatureLowOverThreshold NOTIFICATION-TYPE
-		OBJECTS { dsTemperatureStatus }
+		OBJECTS { dsTemperatureStatus, sleSlotSystemIndex }
 		STATUS current
 		DESCRIPTION 
 			"The temperatureLowOverThreshold Trap is sent when 1st temperature is over the low-threshold."
@@ -376,7 +376,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 	
 	-- 1.3.6.1.4.1.6296.0.35
 	temperatureLowFallThreshold NOTIFICATION-TYPE
-		OBJECTS { dsTemperatureStatus }
+		OBJECTS { dsTemperatureStatus, sleSlotSystemIndex }
 		STATUS current
 		DESCRIPTION 
 			"The temperatureLowFallThreshold Trap is sent when temperature fall under the low-threshold."
@@ -412,7 +412,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 	
 	-- 1.3.6.1.4.1.6296.0.39
 	cpuLoadHighOverThreshold NOTIFICATION-TYPE
-		OBJECTS { sysDescr }
+		OBJECTS { sysDescr, sleSlotSystemIndex, sleSlotSystemCPULoadCurrent, sleSlotSystemCPULoadHighThreshold}
 		STATUS current
 		DESCRIPTION 
 			"The cpuloadHighOverThreshold Trap is sent when temperature is over the high-threshold."
@@ -421,7 +421,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 	
 	-- 1.3.6.1.4.1.6296.0.40
 	cpuLoadHighFallThreshold NOTIFICATION-TYPE
-		OBJECTS { sysDescr }
+		OBJECTS { sysDescr, sleSlotSystemIndex, sleSlotSystemCPULoadCurrent, sleSlotSystemCPULoadHighThreshold}
 		STATUS current
 		DESCRIPTION 
 			"The cpuloadHighFallThreshold Trap is sent when temperature fall the high-threshold."
@@ -430,7 +430,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 	
 	-- 1.3.6.1.4.1.6296.0.41
 	cpuLoadLowOverThreshold NOTIFICATION-TYPE
-		OBJECTS { sysDescr }
+		OBJECTS { sysDescr, sleSlotSystemIndex, sleSlotSystemCPULoadCurrent, sleSlotSystemCPULoadLowThreshold}
 		STATUS current
 		DESCRIPTION 
 			"The cpuloadLowOverThreshold Trap is sent when 1st temperature is over the low-threshold."
@@ -439,7 +439,7 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 	
 	-- 1.3.6.1.4.1.6296.0.42
 	cpuLoadLowFallThreshold NOTIFICATION-TYPE
-		OBJECTS { sysDescr }
+		OBJECTS { sysDescr, sleSlotSystemIndex, sleSlotSystemCPULoadCurrent, sleSlotSystemCPULoadLowThreshold}
 		STATUS current
 		DESCRIPTION 
 			"The cpuloadLowFallThreshold Trap is sent when temperature fall under the low-threshold."
@@ -457,6 +457,55 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 			"System NOS Upgrade status"
 		::= { dasanEvents 44 }
 
+	-- 1.3.6.1.4.1.6296.0.45
+	interfaceOperDown NOTIFICATION-TYPE
+		OBJECTS { ifIndex, ifOperStatus, sleSlotSystemIndex }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the interface oper down."
+		::= { dasanEvents 45 }
+
+	
+	-- 1.3.6.1.4.1.6296.0.46
+	interfaceOperUp NOTIFICATION-TYPE
+		OBJECTS { ifIndex, ifOperStatus, sleSlotSystemIndex }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the interface poer up."
+		::= { dasanEvents 46 }
+
+	-- 1.3.6.1.4.1.6296.0.47
+	macLearnOverMax NOTIFICATION-TYPE
+		OBJECTS { sysDescr }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the count of L2 mac is over the max."
+		::= { dasanEvents 47 }
+
+	-- 1.3.6.1.4.1.6296.0.48
+	macLearnOverMaxCleared NOTIFICATION-TYPE
+		OBJECTS { sysDescr }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the count of L2 mac is over the max is cleared"
+		::= { dasanEvents 48 }
+
+	-- 1.3.6.1.4.1.6296.0.49
+	interfaceMacLearnOverMax NOTIFICATION-TYPE
+		OBJECTS { sysDescr, ifindex }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the count of interface's L2 mac is over the max."
+		::= { dasanEvents 49 }
+
+	-- 1.3.6.1.4.1.6296.0.50
+	interfaceMacLearnOverMaxCleared NOTIFICATION-TYPE
+		OBJECTS { sysDescr, ifindex }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the count of interface's L2 mac is over the max is cleared"
+		::= { dasanEvents 50 }
+	
 	
 	-- 1.3.6.1.4.1.6296.0.51
 	adslAtucPerfLofsThresh NOTIFICATION-TYPE
@@ -566,7 +615,22 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 			"Packet Dropped by arule .  "
 		::= { dasanEvents 66 }
 
-	
+        -- 1.3.6.1.4.1.6296.0.69
+	portMododuleInstall NOTIFICATION-TYPE
+		OBJECTS { ifindex }
+		STATUS current
+		DESCRIPTION 
+			"port module install"
+		::= { dasanEvents 69 }
+
+  	-- 1.3.6.1.4.1.6296.0.70
+	portMododuleRemove NOTIFICATION-TYPE
+		OBJECTS { ifindex }
+		STATUS current
+		DESCRIPTION 
+			"port module remove"
+		::= { dasanEvents 70 }
+
 --    flood-guard (CPU|SYSTEM) 
 -- 
 	-- 1.3.6.1.4.1.6296.0.71
@@ -1077,7 +1141,61 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 		     "This trap indicate that reload mate SFU."
 	    ::= { dasanEvents 130 }
 
+	processDown NOTIFICATION-TYPE
+	    OBJECTS {
+		sleSlotSystemIndex, sleProcessID
+	    }
+	    STATUS             current
+	    DESCRIPTION
+		     "This trap indicate that certain process is crashed and restarted."
+	    ::= { dasanEvents 131 }
 
+	processTimeout NOTIFICATION-TYPE
+	    OBJECTS {
+		sleSlotSystemIndex, sleProcessID
+	    }
+	    STATUS             current
+	    DESCRIPTION
+		     "This trap indicate that certain process is timeout."
+	    ::= { dasanEvents 132 }
+
+	sdcardInstalled NOTIFICATION-TYPE
+	    OBJECTS {
+		sleSlotSystemIndex
+	    }
+	    STATUS             current
+	    DESCRIPTION
+		     "This trap indicate that SD card is installed."
+	    ::= { dasanEvents 133 }
+
+	sdcardRemoved NOTIFICATION-TYPE
+	    OBJECTS {
+		sleSlotSystemIndex
+	    }
+	    STATUS             current
+	    DESCRIPTION
+		     "This trap indicate that SD card is removed."
+	    ::= { dasanEvents 134 }
+
+	bootedNonDefaultOS NOTIFICATION-TYPE
+	    OBJECTS {
+		sleSystemDefaultOS, sleSystemRunningOS, sleSlotSystemIndex
+	    }
+	    STATUS             current
+	    DESCRIPTION
+		     "This trap indicate that the system started with non-default OS."
+	    ::= { dasanEvents 141 } 
+	    
+       slotBootedNonDefaultOS NOTIFICATION-TYPE
+	    OBJECTS {
+		sleSlotSystemIndex
+	    }
+	    STATUS             current
+	    DESCRIPTION
+		     "This trap indicate that the IU card started with non-default OS."
+	    ::= { dasanEvents 142 }
+
+		
 	-- 1.3.6.1.4.1.6296.0.145
 	cpuPpsOverThreshold NOTIFICATION-TYPE
 		OBJECTS { slePerformanceBaseCpuPpsStatus, slePerformanceBaseCpuPpsThreshold, slePerformanceBaseCpuPpsAvg}
@@ -1094,6 +1212,19 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 		"The PPS of cpu is under the threshold."
 		::= { dasanEvents 146}
 
+	redundantPacketDetected NOTIFICATION-TYPE
+		OBJECTS { }
+		STATUS  current
+		DESCRIPTION
+		"Redundant packets is detected."
+		::= { dasanEvents 147}
+		
+	redundantPacketDetectedCleared NOTIFICATION-TYPE
+		OBJECTS { }
+		STATUS  current
+		DESCRIPTION
+		"Redundant packets detection is cleared."
+		::= { dasanEvents 148}
 
 --   GE-PON
 	-- 1.3.6.1.4.1.6296.0.151
@@ -2464,6 +2595,17 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 		"This trap indicate the Port is unblocked by loop-detect's link	down."
 		::= { dasanEvents 322}
 
+	writeMemoryFailSeveralTimes NOTIFICATION-TYPE
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the writing memory is failed 3 times"
+		::= { dasanEvents 341 }
+
+	writeMemoryFailSeveralTimesCleared NOTIFICATION-TYPE
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the writing memory is ok"
+		::= { dasanEvents 342 }
 
 --   EM Log
 	emLogDefectCPUHighOver NOTIFICATION-TYPE
@@ -2770,6 +2912,930 @@ DASAN-NOTIFICATION DEFINITIONS ::= BEGIN
 			" This trap indicates the slot health status time-out trap is cleared "
 		::= { dasanEvents 398 }
 
+	sfpDMIDiagTemperOverHighAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITemper }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the temperature of sfp is over the high threshold.(Alarm) "
+		::= { dasanEvents 401 }
+
+	sfpDMIDiagTemperUnderHighAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITemper }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the temperature of sfp is under the high threshold.(Alarm)"
+		::= { dasanEvents 402 }
+
+	sfpDMIDiagTemperUnderLowAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITemper }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the temperature of sfp is under the low threshold.(Alarm)"
+		::= { dasanEvents 403 }
+
+	sfpDMIDiagTemperOverLowAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITemper }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the temperature of sfp is over the low threshold.(Alarm)"
+		::= { dasanEvents 404 }
+
+
+	sfpDMIDiagTemperOverHighWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITemper }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the temperature of sfp is over the high threshold.(Warn)"
+		::= { dasanEvents 405 }
+
+	sfpDMIDiagTemperUnderHighWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITemper }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the temperature of sfp is under the high threshold.(Warn)"
+		::= { dasanEvents 406 }
+
+	sfpDMIDiagTemperUnderLowWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITemper }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the temperature of sfp is under the low threshold.(Warn)"
+		::= { dasanEvents 407 }
+
+	sfpDMIDiagTemperOverLowWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITemper }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the temperature of sfp is over the low threshold.(Warn)"
+		::= { dasanEvents 408 }
+
+
+	sfpDMIDiagVoltageOverHighAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIVoltage }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the voltage of sfp is over the high threshold.(Alarm) "
+		::= { dasanEvents 409 }
+
+	sfpDMIDiagVoltageUnderHighAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIVoltage }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the voltage of sfp is under the high threshold.(Alarm)"
+		::= { dasanEvents 410 }
+
+	sfpDMIDiagVoltageUnderLowAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIVoltage }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the voltage of sfp is under the low threshold.(Alarm)"
+		::= { dasanEvents 411 }
+
+	sfpDMIDiagVoltageOverLowAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIVoltage }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the voltage of sfp is over the low threshold.(Alarm)"
+		::= { dasanEvents 412 }
+
+
+	sfpDMIDiagVoltageOverHighWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIVoltage }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the voltage of sfp is over the high threshold.(Warn)"
+		::= { dasanEvents 413 }
+
+	sfpDMIDiagVoltageUnderHighWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIVoltage }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the voltage of sfp is under the high threshold.(Warn)"
+		::= { dasanEvents 414 }
+
+	sfpDMIDiagVoltageUnderLowWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIVoltage }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the voltage of sfp is under the low threshold.(Warn)"
+		::= { dasanEvents 415 }
+
+	sfpDMIDiagVoltageOverLowWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIVoltage }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the voltage of sfp is over the low threshold.(Warn)"
+		::= { dasanEvents 416 }
+
+	sfpDMIDiagTxBiasOverHighAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxBias }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxBias of sfp is over the high threshold.(Alarm) "
+		::= { dasanEvents 417 }
+
+	sfpDMIDiagTxBiasUnderHighAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxBias }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxBias of sfp is under the high threshold.(Alarm)"
+		::= { dasanEvents 418 }
+
+	sfpDMIDiagTxBiasUnderLowAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxBias }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxBias of sfp is under the low threshold.(Alarm)"
+		::= { dasanEvents 419 }
+
+	sfpDMIDiagTxBiasOverLowAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxBias }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxBias of sfp is over the low threshold.(Alarm)"
+		::= { dasanEvents 420 }
+
+
+	sfpDMIDiagTxBiasOverHighWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxBias }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxBias of sfp is over the high threshold.(Warn)"
+		::= { dasanEvents 421 }
+
+	sfpDMIDiagTxBiasUnderHighWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxBias }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxBias of sfp is under the high threshold.(Warn)"
+		::= { dasanEvents 422 }
+
+	sfpDMIDiagTxBiasUnderLowWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxBias }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxBias of sfp is under the low threshold.(Warn)"
+		::= { dasanEvents 423 }
+
+	sfpDMIDiagTxBiasOverLowWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxBias }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxBias of sfp is over the low threshold.(Warn)"
+		::= { dasanEvents 424 }
+
+	sfpDMIDiagTxPowerOverHighAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxPower of sfp is over the high threshold.(Alarm) "
+		::= { dasanEvents 425 }
+
+	sfpDMIDiagTxPowerUnderHighAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxPower of sfp is under the high threshold.(Alarm)"
+		::= { dasanEvents 426 }
+
+	sfpDMIDiagTxPowerUnderLowAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxPower of sfp is under the low threshold.(Alarm)"
+		::= { dasanEvents 427 }
+
+	sfpDMIDiagTxPowerOverLowAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxPower of sfp is over the low threshold.(Alarm)"
+		::= { dasanEvents 428 }
+
+
+	sfpDMIDiagTxPowerOverHighWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxPower of sfp is over the high threshold.(Warn)"
+		::= { dasanEvents 429 }
+
+	sfpDMIDiagTxPowerUnderHighWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxPower of sfp is under the high threshold.(Warn)"
+		::= { dasanEvents 430 }
+
+	sfpDMIDiagTxPowerUnderLowWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxPower of sfp is under the low threshold.(Warn)"
+		::= { dasanEvents 431 }
+
+	sfpDMIDiagTxPowerOverLowWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMITxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the TxPower of sfp is over the low threshold.(Warn)"
+		::= { dasanEvents 432 }
+
+	sfpDMIDiagRxPowerOverHighAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIRxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the RxPower of sfp is over the high threshold.(Alarm) "
+		::= { dasanEvents 433 }
+
+	sfpDMIDiagRxPowerUnderHighAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIRxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the RxPower of sfp is under the high threshold.(Alarm)"
+		::= { dasanEvents 434 }
+
+	sfpDMIDiagRxPowerUnderLowAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIRxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the RxPower of sfp is under the low threshold.(Alarm)"
+		::= { dasanEvents 435 }
+
+	sfpDMIDiagRxPowerOverLowAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIRxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the RxPower of sfp is over the low threshold.(Alarm)"
+		::= { dasanEvents 436 }
+
+
+	sfpDMIDiagRxPowerOverHighWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIRxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the RxPower of sfp is over the high threshold.(Warn)"
+		::= { dasanEvents 437 }
+
+	sfpDMIDiagRxPowerUnderHighWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIRxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the RxPower of sfp is under the high threshold.(Warn)"
+		::= { dasanEvents 438 }
+
+	sfpDMIDiagRxPowerUnderLowWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIRxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the RxPower of sfp is under the low threshold.(Warn)"
+		::= { dasanEvents 439 }
+
+	sfpDMIDiagRxPowerOverLowWarn NOTIFICATION-TYPE
+		OBJECTS { sleEthernetPortDMIIndex, sleEthernetPortDMIRxPower }
+		STATUS current
+		DESCRIPTION 
+			" This trap indicates the RxPower of sfp is over the low threshold.(Warn)"
+		::= { dasanEvents 440 }
+
+	 gponOnuOnuServiceOpModeAlarm  NOTIFICATION-TYPE
+		STATUS current
+		DESCRIPTION 
+			"GPON ONU service operational mode alarm."
+		::= { dasanEvents 441 }
+
+	 gponOnuOnuServiceOpModeAlarmOff  NOTIFICATION-TYPE
+		STATUS current
+		DESCRIPTION 
+			"GPON ONU service operational mode cleared alarm."
+		::= { dasanEvents 442 }
+
+	systemTemperPowerCutOff NOTIFICATION-TYPE
+		OBJECTS {  }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the system temperature power cut off"
+		::= { dasanEvents 443 }
+
+	systemTemperPowerCutoffCleared NOTIFICATION-TYPE
+		OBJECTS {  }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the system temperature power cut off trap is cleared"
+		::= { dasanEvents 444 }
+
+	slotTemperPowerCutOff NOTIFICATION-TYPE
+		OBJECTS { sleSlotSystemIndex }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the slot temperature power cut off"
+		::= { dasanEvents 445 }
+
+	slotTemperPowerCutOffCleared NOTIFICATION-TYPE
+		OBJECTS { sleSlotSystemIndex }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the slot temperature power cut off is cleared"
+		::= { dasanEvents 446 }
+
+
+	gponOnuAuthErrorReasonUpdated NOTIFICATION-TYPE
+		OBJECTS { sleGponOltId, sleGponOnuId, sleGponOnuAuthOnuErrorReason }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates GPON ONU authentication error reason is updated"
+		::= { dasanEvents 461 }
+
+	ponRegErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon registration is not ok"
+		::= { dasanEvents 501 }
+
+	ponBadEncryptionKey NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon encryption key is bad"
+		::= { dasanEvents 502 }
+
+	ponLloidMismatch NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon LLOID is mismatched"
+		::= { dasanEvents 503 }
+
+	ponTooManyOnu NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon has too many of ONU"
+		::= { dasanEvents 504 }
+
+	ponDyingGasp NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon dying GASP"
+		::= { dasanEvents 505 }
+
+	ponRegister NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon is registered"
+		::= { dasanEvents 506 }
+
+	ponDeregister NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon is deregistered"
+		::= { dasanEvents 507 }
+
+	ponLastOnuDeregister NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the last ONU is deregistered"
+		::= { dasanEvents 508 }
+
+	ponCableDown NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon cable is down"
+		::= { dasanEvents 509 }
+
+	ponCableDownRecover NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon cable down is recovered"
+		::= { dasanEvents 510 }
+
+	ponFirstRegistration NOTIFICATION-TYPE
+		OBJECTS { sysDescr, dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the first pon registration"
+		::= { dasanEvents 511 }
+
+	ponOntLinkUp NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the ont link up"
+		::= { dasanEvents 512 }
+
+	ponOltOnuDown NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Onu down"
+		::= { dasanEvents 513 }
+
+	ponHealthCheckErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon health check error"
+		::= { dasanEvents 514 }
+
+
+	ponRegisterModeChange NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon register mode is changed"
+		::= { dasanEvents 515 }
+
+	ponOpticSignalErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon optic signal error"
+		::= { dasanEvents 516 }
+
+	ponOpticSignalErrRecover NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon optic signal error is recovered"
+		::= { dasanEvents 517 }
+
+	ponOverVolSigErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon over volatage signal error"
+		::= { dasanEvents 518 }
+
+	ponOverVolSigErrRecover NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon over volatage signal error is recovered"
+		::= { dasanEvents 519 }
+
+
+	ponOnuRssiInfoErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Onu RSSI information error"
+		::= { dasanEvents 520 }
+
+	ponOnuRssiInfoErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Onu RSSI information error is cleard"
+		::= { dasanEvents 521 }
+
+	ponOnuCrcUpAlarmErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the ONU CRC up alarm error"
+		::= { dasanEvents 522 }
+
+	ponOnuCrcUpAlarmErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the ONU CRC up alarm error is cleared"
+		::= { dasanEvents 523 }
+
+	ponOnuCrcDownAlarmErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the ONU CRC down alarm error"
+		::= { dasanEvents 524 }
+
+	ponOnuCrcDownAlarmErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the ONU CRC down alarm error is cleared"
+		::= { dasanEvents 525 }
+
+	ponOnuTooFrequentlyRegErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the ONU is registered too frequently."
+		::= { dasanEvents 526 }
+
+	ponOnuTooFrequentlyRegErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the ONU registration frequently error is cleared."
+		::= { dasanEvents 527 }
+
+
+	ponOnuOpticPowerAlarmErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon ONU optic power alarm error"
+		::= { dasanEvents 528 }
+
+	ponOnuOpticPowerAlarmErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon ONU optic power alarm error is cleared"
+		::= { dasanEvents 529 }
+
+	ponOnuDcVoltageAlarmErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon ONU DC voltage alarm error"
+		::= { dasanEvents 530 }
+
+	ponOnuDcVoltageAlarmErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon ONU DC voltage alarm error is cleared"
+		::= { dasanEvents 531 }
+
+	ponOnuLoopingAlarmErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon ONU looping alarm error"
+		::= { dasanEvents 532 }
+
+	ponOnuLoopingAlarmErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the pon ONU looping alarm error is cleared"
+		::= { dasanEvents 533 }
+
+	ponDetectRogueOnu NOTIFICATION-TYPE
+		OBJECTS { sysDescr, dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Rogue ONU detection."
+		::= { dasanEvents 534 }
+
+	ponDetectRogueOnuCleared NOTIFICATION-TYPE
+		OBJECTS { sysDescr, dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Rogue ONU detection is cleared."
+		::= { dasanEvents 535 }
+
+
+	ponDetectRogueOnuPowerOff NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Rogue ONU power off is detected."
+		::= { dasanEvents 536 }
+
+	ponDetectRogueOnuDeregisterSuccess NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Rogue ONU deregister success is detected"
+		::= { dasanEvents 537 }
+
+	ponDectectRogueOnuFoundFailed NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Rogue ONU found fail is detected."
+		::= { dasanEvents 538 }
+
+	ponDectectRogueOnuTurn NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Rogue ONU turn is detected."
+		::= { dasanEvents 539 }
+
+	ponOltStandbyRxpowerOverHigh NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Olt standby RX power is over high threshold"
+		::= { dasanEvents 540 }
+
+	ponOltStandbyRxpowerUnderLow NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Olt standby RX power is under low threshold"
+		::= { dasanEvents 541}
+
+	ponOltRedundancyPortDown NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Olt redundancy port is down"
+		::= { dasanEvents 542}
+
+	ponOltRedundancyRxpower NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Olt redundancy RXpower"
+		::= { dasanEvents 543}
+
+	ponOnuBcastStormLlidUpErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the broadcast storm llid up error"
+		::= { dasanEvents 544}
+
+	ponOnuBcastStormLlidUpErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the broadcast storm llid up error is cleared"
+		::= { dasanEvents 545}
+
+	ponOnuBcastStormLlidDownErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the broadcast storm llid down error"
+		::= { dasanEvents 546}
+
+	ponOnuBcastStormLlidDownErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the broadcast storm llid down error is cleared"
+		::= { dasanEvents 547}
+
+	ponOnuBcastStormUniUpErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the broadcast storm UNI up error"
+		::= { dasanEvents 548}
+
+	ponOnuBcastStormUniUpErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the broadcast storm Uni up error is cleared"
+		::= { dasanEvents 549}
+
+	ponOnuReset NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates Pon ONU reset"
+		::= { dasanEvents 550}
+
+
+	ponOnuLifLcErrAlarmErr NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates Pon ONU LIF Error"
+		::= { dasanEvents 551}
+
+	ponOnuLifLcErrAlarmErrCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates Pon ONU LIF Error is cleared"
+		::= { dasanEvents 552}
+
+	ponOltResetPonMac NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates Pon OLT MAC reset"
+		::= { dasanEvents 561}
+
+	ponOltRedSwitchover NOTIFICATION-TYPE
+		OBJECTS { sleEponOltRedundancyGroupID, sleEponOltRedundancyMaster, sleEponOltRedundancyMasteStatus, sleEponOltRedundancySlave, sleEponOltRedundancySlaveStatus, sleEponOltRedundancyLastReason }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the OLT redundancy switchover"
+		::= { dasanEvents 581}
+
+
+	ponOltRedGroupCreated NOTIFICATION-TYPE
+		OBJECTS { sleEponOltRedundancyGroupID, sleEponOltRedundancyMaster, sleEponOltRedundancySlave }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the OLT redundancy group is created"
+		::= { dasanEvents 582}
+
+	ponOltRedGroupDeleted NOTIFICATION-TYPE
+		OBJECTS { sleEponOltRedundancyGroupID, sleEponOltRedundancyMaster, sleEponOltRedundancySlave }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the OLT redundancy group is deleted"
+		::= { dasanEvents 583}
+
+
+	ponOltRedTriggerChanged NOTIFICATION-TYPE
+		OBJECTS { sleEponOltRedundancyGroupID, sleEponOltRedundancyMaster, sleEponOltRedundancySlave, sleEponOltRedundancyTriggerLos, sleEponOltRedundancyTriggerManual, sleEponOltRedundancyTriggerSlot, sleEponOltRedundancyTriggerEponMac }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the OLT redundancy trigger is changed"
+		::= { dasanEvents 584}
+
+
+	 ponOltRedDbResyncChanged NOTIFICATION-TYPE
+		OBJECTS { sleEponOltRedundancyGroupID, sleEponOltRedundancyMaster, sleEponOltRedundancyMasteStatus, sleEponOltRedundancySlave, sleEponOltRedundancySlaveStatus }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the OLT redundancy DB resync is changed"
+		::= { dasanEvents 585}
+
+
+	 ponOltRedDbSyncChecked NOTIFICATION-TYPE
+		OBJECTS { sleEponOltRedundancyGroupID, sleEponOltRedundancyMaster, sleEponOltRedundancyMasteStatus, sleEponOltRedundancySlave, sleEponOltRedundancySlaveStatus }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the OLT redundancy DB sync is checked"
+		::= { dasanEvents 586}
+
+
+	ponOnuRssiWarn NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RSSI warning"
+		::= { dasanEvents 601}
+
+	ponOnuRssiWarnCleared NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RSSI warning is cleared"
+		::= { dasanEvents 602}
+
+	ponOnuRssiAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RSSI alarm"
+		::= { dasanEvents 603}
+
+	ponOnuRssiAlarmCleared NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RSSI alarm is cleared"
+		::= { dasanEvents 604}
+
+	ponOnuRxpowerWarn NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power warning"
+		::= { dasanEvents 605}
+
+	ponOnuRxpowerWarnCleared NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power warning is cleared"
+		::= { dasanEvents 606}
+
+	ponOnuRxpowerAlarm NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power alarm"
+		::= { dasanEvents 607}
+
+	ponOnuRxpowerAlarmCleared NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power alarm is cleared"
+		::= { dasanEvents 608}
+
+	ponMacTableOverFlow NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the Mac table is over Max entry."
+		::= { dasanEvents 609 }
+
+	ponMacTableOverFlowCleared NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the Mac over max entry is cleared."
+		::= { dasanEvents 610 }
+
+	fiberLengthChangedWarningAlarm NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the fiber length is changed"
+		::= { dasanEvents 611}
+
+	fiberLengthChangedWarningAlarmCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the fiber length trap is cleared"
+		::= { dasanEvents 612}
+		
+	ponOnuFrameReplicationAlarm NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the frame is replicated."
+		::= { dasanEvents 613}
+		
+	ponOnuFrameReplicationAlarmCleared NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelNodeIndex, dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, dsEPonSystemChannelMacAddress }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the frame is replicated."
+		::= { dasanEvents 614}  
+		
+	ponOnuRxpowerWarnOverHigh NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power high over warning"
+		::= { dasanEvents 615}
+
+    ponOnuRxpowerWarnOverHighCleared NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power high over warning is cleared"
+		::= { dasanEvents 616}
+
+	ponOnuRxpowerWarnUnderLow NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power low under warning"
+		::= { dasanEvents 617}
+
+    ponOnuRxpowerWarnUnderLowCleared NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power low under warning is cleared"
+		::= { dasanEvents 618}
+                                 
+	ponOnuRxpowerAlarmOverHigh NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power high over alarm"
+		::= { dasanEvents 619}
+
+    ponOnuRxpowerAlarmOverHighCleared NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power high over alarm is cleared"
+		::= { dasanEvents 620}
+                                 
+	ponOnuRxpowerAlarmUnderLow NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power low under alarm"
+		::= { dasanEvents 621}
+
+    ponOnuRxpowerAlarmUnderLowCleared NOTIFICATION-TYPE
+		OBJECTS { sleEponOltIndex, sleEponOnuIndex }
+		STATUS current
+		DESCRIPTION 
+		"This trap indicates the ONU RX-power low under alarm is cleared"
+		::= { dasanEvents 622}
+
+	ponOnuUniLinkDown NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, sleEponOnuPortIndex }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Onu Uni link is down."
+		::= { dasanEvents 623}        
+		
+	ponOnuUniLinkUp NOTIFICATION-TYPE
+		OBJECTS { dsEPonSystemChannelPortIndex, dsEPonSystemChannelId, sleEponOnuPortIndex }
+		STATUS current
+		DESCRIPTION 
+			"This trap indicates the Onu Uni link is up."
+		::= { dasanEvents 624} 		                           
 END
 
 --

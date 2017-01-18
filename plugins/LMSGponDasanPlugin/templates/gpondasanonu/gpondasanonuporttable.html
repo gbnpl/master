@@ -1,0 +1,31 @@
+<tr class="dark">
+	<td class="bold nobr">{trans("Port")}</td>
+	<td class="bold nobr">{trans("<!gpon-dasan>Administrative status")}</td>
+	<td class="bold text-center nobr"{if !$netdevinfo.xmlprovisioning || empty($vlans)} style="display: none;"{/if}>
+		{trans("<!gpon-dasan>VLAN 802.1q")}
+	</td>
+</tr>
+{foreach $netdevinfo.portsettings as $portname => $port}
+<tr>
+	<td class="text-right">
+		{$portname}
+	</td>
+	<td class="text-center">
+		<SELECT NAME="netdev[portsettings][{$portname}][portdisable]">
+			<option value="0">{trans("- up -")}</option>
+			<option value="1"{if $netdevinfo['portsettings'][$portname]['portdisable']} selected{/if}>{trans("- down -")}</option>
+		</SELECT>
+	</td>
+	<td{if !$netdevinfo.xmlprovisioning || empty($vlans)} style="display: none;"{/if}>
+		<SELECT NAME="netdev[properties][vlans][{$portname}]">
+			<option value="">{trans("<!gpon-dasan>- default -")}</option>
+			<option value="0"{if $netdevinfo['properties']['vlans'][$portname] == "0"} selected{/if}>{trans("<!gpon-dasan>- tagged/trunk -")}</option>
+			{foreach $vlans as $vlanname => $vlanid}
+			<option value="{$vlanid}"{if $netdevinfo['properties']['vlans'][$portname] == $vlanid} selected{/if}>
+				{t a=$vlanname b=$vlanid}<!gpon-dasan>$a (id: $b){/t}
+			</option>
+			{/foreach}
+		</SELECT>
+	</td>
+</tr>
+{/foreach}

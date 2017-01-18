@@ -1,0 +1,6 @@
+<config>
+	<admin_login>{$admin_login}</admin_login>
+	<admin_password>{$admin_password}</admin_password>
+	<web_port>{$web_port}</web_port>
+	<modified_time>{$modified_time}</modified_time>
+</config>

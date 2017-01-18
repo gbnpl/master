@@ -1,0 +1,3940 @@
+<?xml version="1.0"?>
+<Motive.Development.Common.H660.Configuration_H660>
+  <MediaConfiguration>
+    <VideoStatus apply="false">
+      <AGCSetting>0.0</AGCSetting>
+    </VideoStatus>
+  </MediaConfiguration>
+  <AdvacnedConfiguration>
+    <RegisterID>00000001</RegisterID>
+    <WANConnectionsConfigurations apply="true">
+      <DictionaryEntry>
+        <Key ClassID="1" IsNewClass="true" ClassName="java.lang.Integer">0</Key>
+        <Value ClassID="2" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.AdvacnedConfiguration.WANConnectionsConfigrations">
+          <ISP>1</ISP>
+          <DEFAULTROUTE>Yes</DEFAULTROUTE>
+          <Active>Yes</Active>
+          <IPVERSION>IPv4</IPVERSION>
+          <dot1q>Yes</dot1q>
+          <VLANID>570</VLANID>
+          <DOT1PREMARK>Remark</DOT1PREMARK>
+          <DOT1P>0</DOT1P>
+          <TPID>8100</TPID>
+          <Start_VID>0</Start_VID>
+          <End_VID>0</End_VID>
+          <ignore_wantag>No</ignore_wantag>
+          <allow_untag>No</allow_untag>
+          <IPADDR>10.30.14.19</IPADDR>
+          <NETMASK>255.255.252.0</NETMASK>
+          <GATEWAY>10.30.12.1</GATEWAY>
+          <PRIMARYDNS>91.235.192.1</PRIMARYDNS>
+          <SECONDARYDNS>8.8.8.8</SECONDARYDNS>
+          <NATENABLE>Enable</NATENABLE>
+          <MulticastVLan>-1</MulticastVLan>
+          <IPADDR6>0000:0000:0000:0000</IPADDR6>
+          <PREFIX6/>
+          <DEFGATEWAY6>0000:0000:0000:0000</DEFGATEWAY6>
+          <DNSIPv61st>0000:0000:0000:0000</DNSIPv61st>
+          <DNSIPv62nd>0000:0000:0000:0000</DNSIPv62nd>
+          <USERNAME/>
+          <PASSWORD/>
+          <PPPoE_Passthrough>No</PPPoE_Passthrough>
+          <CONNECTION>Connect_Keep_Alive</CONNECTION>
+          <CLOSEIFIDLE>0</CLOSEIFIDLE>
+          <MSS>0</MSS>
+          <ECHO_INTERVAL>60</ECHO_INTERVAL>
+          <ECHO_FAILURE>3</ECHO_FAILURE>
+          <IGMPproxy>No</IGMPproxy>
+          <IGMPproxyQL>No</IGMPproxyQL>
+          <MLDproxy>No</MLDproxy>
+          <PPPv6Mode>1</PPPv6Mode>
+          <PPPv6PD>No</PPPv6PD>
+          <MTU>0</MTU>
+          <Opt60active>0</Opt60active>
+          <Opt60>ONU_HGW_ANY</Opt60>
+          <Opt61active>0</Opt61active>
+          <Opt61type>0</Opt61type>
+          <Opt61type0id/>
+          <Opt61type1id/>
+          <Opt61type255iaid/>
+          <Opt61type255duidtype>01</Opt61type255duidtype>
+          <Opt125active>0</Opt125active>
+          <Opt125eno/>
+          <Opt125oui/>
+          <Opt125class/>
+          <Opt125model/>
+          <Opt125serialnum/>
+          <DhcpManualDnsActive>0</DhcpManualDnsActive>
+          <DHCPPRIMARYDNS/>
+          <DHCPSECONDARYDNS/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="2">
+          <ISP>3</ISP>
+          <DEFAULTROUTE>No</DEFAULTROUTE>
+          <Active>Yes</Active>
+          <IPVERSION>IPv4/IPv6</IPVERSION>
+          <dot1q>Yes</dot1q>
+          <VLANID>1112</VLANID>
+          <DOT1PREMARK>Remark</DOT1PREMARK>
+          <DOT1P>0</DOT1P>
+          <TPID>8100</TPID>
+          <Start_VID>0</Start_VID>
+          <End_VID>0</End_VID>
+          <ignore_wantag>No</ignore_wantag>
+          <allow_untag>No</allow_untag>
+          <IPADDR>0.0.0.0</IPADDR>
+          <NETMASK>0.0.0.0</NETMASK>
+          <GATEWAY>0.0.0.0</GATEWAY>
+          <PRIMARYDNS>0.0.0.0</PRIMARYDNS>
+          <SECONDARYDNS>0.0.0.0</SECONDARYDNS>
+          <NATENABLE>Disabled</NATENABLE>
+          <MulticastVLan>-1</MulticastVLan>
+          <IPADDR6>0000:0000:0000:0000</IPADDR6>
+          <PREFIX6/>
+          <DEFGATEWAY6>0000:0000:0000:0000</DEFGATEWAY6>
+          <DNSIPv61st>0000:0000:0000:0000</DNSIPv61st>
+          <DNSIPv62nd>0000:0000:0000:0000</DNSIPv62nd>
+          <USERNAME/>
+          <PASSWORD/>
+          <PPPoE_Passthrough>No</PPPoE_Passthrough>
+          <CONNECTION>Connect_Keep_Alive</CONNECTION>
+          <CLOSEIFIDLE>0</CLOSEIFIDLE>
+          <MSS>0</MSS>
+          <ECHO_INTERVAL>60</ECHO_INTERVAL>
+          <ECHO_FAILURE>3</ECHO_FAILURE>
+          <IGMPproxy>No</IGMPproxy>
+          <IGMPproxyQL>No</IGMPproxyQL>
+          <MLDproxy>No</MLDproxy>
+          <PPPv6Mode>1</PPPv6Mode>
+          <PPPv6PD>No</PPPv6PD>
+          <MTU>1492</MTU>
+          <Opt60active>0</Opt60active>
+          <Opt60>ONU_HGW_ANY</Opt60>
+          <Opt61active>0</Opt61active>
+          <Opt61type>0</Opt61type>
+          <Opt61type0id/>
+          <Opt61type1id/>
+          <Opt61type255iaid/>
+          <Opt61type255duidtype>01</Opt61type255duidtype>
+          <Opt125active>0</Opt125active>
+          <Opt125eno/>
+          <Opt125oui/>
+          <Opt125class/>
+          <Opt125model/>
+          <Opt125serialnum/>
+          <DhcpManualDnsActive>0</DhcpManualDnsActive>
+          <DHCPPRIMARYDNS/>
+          <DHCPSECONDARYDNS/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="2">
+          <ISP>3</ISP>
+          <DEFAULTROUTE>No</DEFAULTROUTE>
+          <Active>No</Active>
+          <IPVERSION>IPv4/IPv6</IPVERSION>
+          <dot1q>No</dot1q>
+          <VLANID>0</VLANID>
+          <DOT1PREMARK>Remark</DOT1PREMARK>
+          <DOT1P>0</DOT1P>
+          <TPID>8100</TPID>
+          <Start_VID>0</Start_VID>
+          <End_VID>0</End_VID>
+          <ignore_wantag>No</ignore_wantag>
+          <allow_untag>No</allow_untag>
+          <IPADDR>0.0.0.0</IPADDR>
+          <NETMASK>0.0.0.0</NETMASK>
+          <GATEWAY>0.0.0.0</GATEWAY>
+          <PRIMARYDNS>0.0.0.0</PRIMARYDNS>
+          <SECONDARYDNS>0.0.0.0</SECONDARYDNS>
+          <NATENABLE>Disabled</NATENABLE>
+          <MulticastVLan>-1</MulticastVLan>
+          <IPADDR6>0000:0000:0000:0000</IPADDR6>
+          <PREFIX6/>
+          <DEFGATEWAY6>0000:0000:0000:0000</DEFGATEWAY6>
+          <DNSIPv61st>0000:0000:0000:0000</DNSIPv61st>
+          <DNSIPv62nd>0000:0000:0000:0000</DNSIPv62nd>
+          <USERNAME/>
+          <PASSWORD/>
+          <PPPoE_Passthrough>No</PPPoE_Passthrough>
+          <CONNECTION>Connect_Keep_Alive</CONNECTION>
+          <CLOSEIFIDLE>0</CLOSEIFIDLE>
+          <MSS>0</MSS>
+          <ECHO_INTERVAL>60</ECHO_INTERVAL>
+          <ECHO_FAILURE>3</ECHO_FAILURE>
+          <IGMPproxy>No</IGMPproxy>
+          <IGMPproxyQL>No</IGMPproxyQL>
+          <MLDproxy>No</MLDproxy>
+          <PPPv6Mode>1</PPPv6Mode>
+          <PPPv6PD>No</PPPv6PD>
+          <MTU>1492</MTU>
+          <Opt60active>0</Opt60active>
+          <Opt60>ONU_HGW_ANY</Opt60>
+          <Opt61active>0</Opt61active>
+          <Opt61type>0</Opt61type>
+          <Opt61type0id/>
+          <Opt61type1id/>
+          <Opt61type255iaid/>
+          <Opt61type255duidtype>01</Opt61type255duidtype>
+          <Opt125active>0</Opt125active>
+          <Opt125eno/>
+          <Opt125oui/>
+          <Opt125class/>
+          <Opt125model/>
+          <Opt125serialnum/>
+          <DhcpManualDnsActive>0</DhcpManualDnsActive>
+          <DHCPPRIMARYDNS/>
+          <DHCPSECONDARYDNS/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="2">
+          <ISP>3</ISP>
+          <DEFAULTROUTE>No</DEFAULTROUTE>
+          <Active>No</Active>
+          <IPVERSION>IPv4/IPv6</IPVERSION>
+          <dot1q>No</dot1q>
+          <VLANID>0</VLANID>
+          <DOT1PREMARK>Remark</DOT1PREMARK>
+          <DOT1P>0</DOT1P>
+          <TPID>8100</TPID>
+          <Start_VID>0</Start_VID>
+          <End_VID>0</End_VID>
+          <ignore_wantag>No</ignore_wantag>
+          <allow_untag>No</allow_untag>
+          <IPADDR>0.0.0.0</IPADDR>
+          <NETMASK>0.0.0.0</NETMASK>
+          <GATEWAY>0.0.0.0</GATEWAY>
+          <PRIMARYDNS>0.0.0.0</PRIMARYDNS>
+          <SECONDARYDNS>0.0.0.0</SECONDARYDNS>
+          <NATENABLE>Disabled</NATENABLE>
+          <MulticastVLan>-1</MulticastVLan>
+          <IPADDR6>0000:0000:0000:0000</IPADDR6>
+          <PREFIX6/>
+          <DEFGATEWAY6>0000:0000:0000:0000</DEFGATEWAY6>
+          <DNSIPv61st>0000:0000:0000:0000</DNSIPv61st>
+          <DNSIPv62nd>0000:0000:0000:0000</DNSIPv62nd>
+          <USERNAME/>
+          <PASSWORD/>
+          <PPPoE_Passthrough>No</PPPoE_Passthrough>
+          <CONNECTION>Connect_Keep_Alive</CONNECTION>
+          <CLOSEIFIDLE>0</CLOSEIFIDLE>
+          <MSS>0</MSS>
+          <ECHO_INTERVAL>60</ECHO_INTERVAL>
+          <ECHO_FAILURE>3</ECHO_FAILURE>
+          <IGMPproxy>No</IGMPproxy>
+          <IGMPproxyQL>No</IGMPproxyQL>
+          <MLDproxy>No</MLDproxy>
+          <PPPv6Mode>1</PPPv6Mode>
+          <PPPv6PD>No</PPPv6PD>
+          <MTU>1492</MTU>
+          <Opt60active>0</Opt60active>
+          <Opt60>ONU_HGW_ANY</Opt60>
+          <Opt61active>0</Opt61active>
+          <Opt61type>0</Opt61type>
+          <Opt61type0id/>
+          <Opt61type1id/>
+          <Opt61type255iaid/>
+          <Opt61type255duidtype>01</Opt61type255duidtype>
+          <Opt125active>0</Opt125active>
+          <Opt125eno/>
+          <Opt125oui/>
+          <Opt125class/>
+          <Opt125model/>
+          <Opt125serialnum/>
+          <DhcpManualDnsActive>0</DhcpManualDnsActive>
+          <DHCPPRIMARYDNS/>
+          <DHCPSECONDARYDNS/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="2">
+          <ISP>3</ISP>
+          <DEFAULTROUTE>No</DEFAULTROUTE>
+          <Active>No</Active>
+          <IPVERSION>IPv4/IPv6</IPVERSION>
+          <dot1q>No</dot1q>
+          <VLANID>0</VLANID>
+          <DOT1PREMARK>Remark</DOT1PREMARK>
+          <DOT1P>0</DOT1P>
+          <TPID>8100</TPID>
+          <Start_VID>0</Start_VID>
+          <End_VID>0</End_VID>
+          <ignore_wantag>No</ignore_wantag>
+          <allow_untag>No</allow_untag>
+          <IPADDR>0.0.0.0</IPADDR>
+          <NETMASK>0.0.0.0</NETMASK>
+          <GATEWAY>0.0.0.0</GATEWAY>
+          <PRIMARYDNS>0.0.0.0</PRIMARYDNS>
+          <SECONDARYDNS>0.0.0.0</SECONDARYDNS>
+          <NATENABLE>Disabled</NATENABLE>
+          <MulticastVLan>-1</MulticastVLan>
+          <IPADDR6>0000:0000:0000:0000</IPADDR6>
+          <PREFIX6/>
+          <DEFGATEWAY6>0000:0000:0000:0000</DEFGATEWAY6>
+          <DNSIPv61st>0000:0000:0000:0000</DNSIPv61st>
+          <DNSIPv62nd>0000:0000:0000:0000</DNSIPv62nd>
+          <USERNAME/>
+          <PASSWORD/>
+          <PPPoE_Passthrough>No</PPPoE_Passthrough>
+          <CONNECTION>Connect_Keep_Alive</CONNECTION>
+          <CLOSEIFIDLE>0</CLOSEIFIDLE>
+          <MSS>0</MSS>
+          <ECHO_INTERVAL>60</ECHO_INTERVAL>
+          <ECHO_FAILURE>3</ECHO_FAILURE>
+          <IGMPproxy>No</IGMPproxy>
+          <IGMPproxyQL>No</IGMPproxyQL>
+          <MLDproxy>No</MLDproxy>
+          <PPPv6Mode>1</PPPv6Mode>
+          <PPPv6PD>No</PPPv6PD>
+          <MTU>1492</MTU>
+          <Opt60active>0</Opt60active>
+          <Opt60>ONU_HGW_ANY</Opt60>
+          <Opt61active>0</Opt61active>
+          <Opt61type>0</Opt61type>
+          <Opt61type0id/>
+          <Opt61type1id/>
+          <Opt61type255iaid/>
+          <Opt61type255duidtype>01</Opt61type255duidtype>
+          <Opt125active>0</Opt125active>
+          <Opt125eno/>
+          <Opt125oui/>
+          <Opt125class/>
+          <Opt125model/>
+          <Opt125serialnum/>
+          <DhcpManualDnsActive>0</DhcpManualDnsActive>
+          <DHCPPRIMARYDNS/>
+          <DHCPSECONDARYDNS/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">5</Key>
+        <Value ClassID="2">
+          <ISP>0</ISP>
+          <DEFAULTROUTE>No</DEFAULTROUTE>
+          <Active>Yes</Active>
+          <IPVERSION>IPv4</IPVERSION>
+          <dot1q>Yes</dot1q>
+          <VLANID>560</VLANID>
+          <DOT1PREMARK>Remark</DOT1PREMARK>
+          <DOT1P>0</DOT1P>
+          <TPID>8100</TPID>
+          <Start_VID>0</Start_VID>
+          <End_VID>0</End_VID>
+          <ignore_wantag>No</ignore_wantag>
+          <allow_untag>No</allow_untag>
+          <IPADDR>0.0.0.0</IPADDR>
+          <NETMASK>0.0.0.0</NETMASK>
+          <GATEWAY>0.0.0.0</GATEWAY>
+          <PRIMARYDNS>0.0.0.0</PRIMARYDNS>
+          <SECONDARYDNS>0.0.0.0</SECONDARYDNS>
+          <NATENABLE>Enabled</NATENABLE>
+          <MulticastVLan>-1</MulticastVLan>
+          <IPADDR6>0000:0000:0000:0000</IPADDR6>
+          <PREFIX6/>
+          <DEFGATEWAY6>0000:0000:0000:0000</DEFGATEWAY6>
+          <DNSIPv61st>0000:0000:0000:0000</DNSIPv61st>
+          <DNSIPv62nd>0000:0000:0000:0000</DNSIPv62nd>
+          <USERNAME/>
+          <PASSWORD/>
+          <PPPoE_Passthrough>No</PPPoE_Passthrough>
+          <CONNECTION>Connect_Keep_Alive</CONNECTION>
+          <CLOSEIFIDLE>0</CLOSEIFIDLE>
+          <MSS>0</MSS>
+          <ECHO_INTERVAL>60</ECHO_INTERVAL>
+          <ECHO_FAILURE>3</ECHO_FAILURE>
+          <IGMPproxy>No</IGMPproxy>
+          <IGMPproxyQL>No</IGMPproxyQL>
+          <MLDproxy>No</MLDproxy>
+          <PPPv6Mode>1</PPPv6Mode>
+          <PPPv6PD>No</PPPv6PD>
+          <MTU>1492</MTU>
+          <Opt60active>0</Opt60active>
+          <Opt60>ONU_HGW_ANY</Opt60>
+          <Opt61active>0</Opt61active>
+          <Opt61type>0</Opt61type>
+          <Opt61type0id/>
+          <Opt61type1id/>
+          <Opt61type255iaid/>
+          <Opt61type255duidtype>01</Opt61type255duidtype>
+          <Opt125active>0</Opt125active>
+          <Opt125eno/>
+          <Opt125oui/>
+          <Opt125class/>
+          <Opt125model/>
+          <Opt125serialnum/>
+          <DhcpManualDnsActive>0</DhcpManualDnsActive>
+          <DHCPPRIMARYDNS/>
+          <DHCPSECONDARYDNS/>
+        </Value>
+      </DictionaryEntry>
+    </WANConnectionsConfigurations>
+    <LANConectionsConfiguration apply="true">
+      <IPAddress>192.168.7.1</IPAddress>
+      <SubnetMask>255.255.255.0</SubnetMask>
+      <SecondIPAddressEnable>0</SecondIPAddressEnable>
+      <SecondIPAddress>192.168.56.1</SecondIPAddress>
+      <SecondSubnetMask>255.255.255.0</SecondSubnetMask>
+      <IGMPSnoopingEnable>Yes</IGMPSnoopingEnable>
+      <EthernetPort>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="3" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.LANConectionsConfiguration.EthernetPort">
+            <Mode>Auto/Auto</Mode>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="3">
+            <Mode>Auto/Auto</Mode>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="3">
+            <Mode>Auto/Auto</Mode>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="3">
+            <Mode>Auto/Auto</Mode>
+          </Value>
+        </DictionaryEntry>
+      </EthernetPort>
+      <PortBridge>No</PortBridge>
+      <DHCPEnable>1</DHCPEnable>
+      <DHCPRelayServer>0.0.0.0</DHCPRelayServer>
+      <DHCPEnableMainPool1Start>192.168.7.101</DHCPEnableMainPool1Start>
+      <DHCPEnableMainPool1End>192.168.7.252</DHCPEnableMainPool1End>
+      <DHCPEnableMainPool2Start>192.168.56.101</DHCPEnableMainPool2Start>
+      <DHCPEnableMainPool2End>192.168.56.252</DHCPEnableMainPool2End>
+      <DHCPLeaseTime>3600</DHCPLeaseTime>
+      <DHCPOption>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="4" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.LANConectionsConfiguration.DHCPOption">
+            <Active>Yes</Active>
+            <Option_Type>01</Option_Type>
+            <Action_Type>03</Action_Type>
+            <Option60_enable>No</Option60_enable>
+            <Option60_VCI/>
+            <Match_Type>01</Match_Type>
+            <Option61_enable>No</Option61_enable>
+            <Option61_type>0</Option61_type>
+            <Option61_type0/>
+            <Option61_type1/>
+            <Option61_IAID/>
+            <Option61_DUID_type>01</Option61_DUID_type>
+            <Option61_IANA/>
+            <Option61_DUID/>
+            <Option125_enable>No</Option125_enable>
+            <Option125_enter/>
+            <Option125_manu/>
+            <Option125_product/>
+            <Option125_model/>
+            <Option125_serial/>
+            <ETH1>1</ETH1>
+            <ETH2>1</ETH2>
+            <ETH3>0</ETH3>
+            <ETH4>0</ETH4>
+            <WLAN1>0</WLAN1>
+            <WLAN2>0</WLAN2>
+            <WLAN3>0</WLAN3>
+            <WLAN4>0</WLAN4>
+            <vid/>
+            <start>192.168.55.110</start>
+            <end>192.168.55.114</end>
+            <wan>1</wan>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="4">
+            <Active>No</Active>
+            <Option_Type>01</Option_Type>
+            <Action_Type>03</Action_Type>
+            <Option60_enable>No</Option60_enable>
+            <Option60_VCI/>
+            <Match_Type>01</Match_Type>
+            <Option61_enable>No</Option61_enable>
+            <Option61_type>0</Option61_type>
+            <Option61_type0/>
+            <Option61_type1/>
+            <Option61_IAID/>
+            <Option61_DUID_type>01</Option61_DUID_type>
+            <Option61_IANA/>
+            <Option61_DUID/>
+            <Option125_enable>No</Option125_enable>
+            <Option125_enter/>
+            <Option125_manu/>
+            <Option125_product/>
+            <Option125_model/>
+            <Option125_serial/>
+            <ETH1>0</ETH1>
+            <ETH2>0</ETH2>
+            <ETH3>0</ETH3>
+            <ETH4>0</ETH4>
+            <WLAN1>0</WLAN1>
+            <WLAN2>0</WLAN2>
+            <WLAN3>0</WLAN3>
+            <WLAN4>0</WLAN4>
+            <vid/>
+            <start>192.168.55.120</start>
+            <end>192.168.55.124</end>
+            <wan>1</wan>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="4">
+            <Active>No</Active>
+            <Option_Type>01</Option_Type>
+            <Action_Type>01</Action_Type>
+            <Option60_enable>No</Option60_enable>
+            <Option60_VCI/>
+            <Match_Type>01</Match_Type>
+            <Option61_enable>No</Option61_enable>
+            <Option61_type>0</Option61_type>
+            <Option61_type0/>
+            <Option61_type1/>
+            <Option61_IAID/>
+            <Option61_DUID_type>01</Option61_DUID_type>
+            <Option61_IANA/>
+            <Option61_DUID/>
+            <Option125_enable>No</Option125_enable>
+            <Option125_enter/>
+            <Option125_manu/>
+            <Option125_product/>
+            <Option125_model/>
+            <Option125_serial/>
+            <ETH1>0</ETH1>
+            <ETH2>0</ETH2>
+            <ETH3>0</ETH3>
+            <ETH4>0</ETH4>
+            <WLAN1>0</WLAN1>
+            <WLAN2>0</WLAN2>
+            <WLAN3>0</WLAN3>
+            <WLAN4>0</WLAN4>
+            <vid/>
+            <start>192.168.55.130</start>
+            <end>192.168.55.134</end>
+            <wan>0</wan>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="4">
+            <Active>No</Active>
+            <Option_Type>01</Option_Type>
+            <Action_Type>01</Action_Type>
+            <Option60_enable>No</Option60_enable>
+            <Option60_VCI/>
+            <Match_Type>01</Match_Type>
+            <Option61_enable>No</Option61_enable>
+            <Option61_type>0</Option61_type>
+            <Option61_type0/>
+            <Option61_type1/>
+            <Option61_IAID/>
+            <Option61_DUID_type>01</Option61_DUID_type>
+            <Option61_IANA/>
+            <Option61_DUID/>
+            <Option125_enable>No</Option125_enable>
+            <Option125_enter/>
+            <Option125_manu/>
+            <Option125_product/>
+            <Option125_model/>
+            <Option125_serial/>
+            <ETH1>0</ETH1>
+            <ETH2>0</ETH2>
+            <ETH3>0</ETH3>
+            <ETH4>0</ETH4>
+            <WLAN1>0</WLAN1>
+            <WLAN2>0</WLAN2>
+            <WLAN3>0</WLAN3>
+            <WLAN4>0</WLAN4>
+            <vid/>
+            <start>192.168.55.140</start>
+            <end>192.168.55.144</end>
+            <wan>0</wan>
+          </Value>
+        </DictionaryEntry>
+      </DHCPOption>
+      <DNSProxy>0</DNSProxy>
+      <PrimaryDNS>8.8.8.8</PrimaryDNS>
+      <SecondaryDNS>8.8.4.4</SecondaryDNS>
+      <DefaultDNSInterface> </DefaultDNSInterface>
+      <StaticIPAddress>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="5" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.LANConectionsConfiguration.StaticIPAddress">
+            <IP>0.0.0.0</IP>
+            <MAC>00:00:00:00:00:00</MAC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="5">
+            <IP>0.0.0.0</IP>
+            <MAC>00:00:00:00:00:00</MAC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="5">
+            <IP>0.0.0.0</IP>
+            <MAC>00:00:00:00:00:00</MAC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="5">
+            <IP>0.0.0.0</IP>
+            <MAC>00:00:00:00:00:00</MAC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="5">
+            <IP>0.0.0.0</IP>
+            <MAC>00:00:00:00:00:00</MAC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">6</Key>
+          <Value ClassID="5">
+            <IP>0.0.0.0</IP>
+            <MAC>00:00:00:00:00:00</MAC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">7</Key>
+          <Value ClassID="5">
+            <IP>0.0.0.0</IP>
+            <MAC>00:00:00:00:00:00</MAC>
+          </Value>
+        </DictionaryEntry>
+      </StaticIPAddress>
+      <IPv6GlobalAddress>0000:0000:0000:0000</IPv6GlobalAddress>
+      <IPv6GlobalAddressPrefix/>
+      <RADVDEnable>0</RADVDEnable>
+      <RADVDMode>0</RADVDMode>
+      <RADVDManagedAddr>Off</RADVDManagedAddr>
+      <RADVDOtherConfig>Off</RADVDOtherConfig>
+      <RADVDManualPrefix>0000:0000:0000:0000</RADVDManualPrefix>
+      <RADVDManualLength/>
+      <RADVDManualPreferredLifetime/>
+      <RADVDManualValidLifetime/>
+      <DHCPV6Enable>0</DHCPV6Enable>
+      <DHCPV6Mode>0</DHCPV6Mode>
+      <DHCPV6AUTOPrefix>0000:0000:0000:0000</DHCPV6AUTOPrefix>
+      <DHCPV6AUTOLength/>
+      <DHCPV6AUTOPreferredLifetime>3600</DHCPV6AUTOPreferredLifetime>
+      <DHCPV6AUTOValidLifetime/>
+      <DHCPV6AUTOPrimaryDNS>0000:0000:0000:0000</DHCPV6AUTOPrimaryDNS>
+      <DHCPV6AUTOSecondaryDNS>0000:0000:0000:0000</DHCPV6AUTOSecondaryDNS>
+      <LANVLANIDEnable>No</LANVLANIDEnable>
+      <LANVLANIDMin/>
+      <LANVLANIDMax/>
+      <UpMcast>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="6" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.LANConectionsConfiguration.UpMcast">
+            <Enable>0</Enable>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="6">
+            <Enable>0</Enable>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="6">
+            <Enable>0</Enable>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="6">
+            <Enable>0</Enable>
+          </Value>
+        </DictionaryEntry>
+      </UpMcast>
+    </LANConectionsConfiguration>
+    <DynamicDNSConfiguration apply="false">
+      <Active>No</Active>
+      <Interface>0</Interface>
+      <Service_Mode>Manually</Service_Mode>
+      <Service_Provider1>www.dyn.com</Service_Provider1>
+      <Service_Provider2/>
+      <MYHOST/>
+      <USERNAME/>
+      <PASSWORD/>
+      <WILDCARD>No</WILDCARD>
+    </DynamicDNSConfiguration>
+    <RouteConfiguration apply="false">
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="7" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.AdvacnedConfiguration.RouteConfiguration">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">5</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">6</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">7</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">8</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">9</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">10</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">11</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">12</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">13</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">14</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">15</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">16</Key>
+        <Value ClassID="7">
+          <DST_IP>0.0.0.0</DST_IP>
+          <Sub_mask>255.255.255.255</Sub_mask>
+          <Gateway>0.0.0.0</Gateway>
+          <metric/>
+          <Device>WAN0</Device>
+          <Active>No</Active>
+        </Value>
+      </DictionaryEntry>
+    </RouteConfiguration>
+    <RoutePolicyConfiguration apply="false">
+      <RouteIP>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="8" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.AdvacnedConfiguration.RouteIP">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">6</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">7</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">8</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">9</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">10</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">11</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">12</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">13</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">14</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">15</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">16</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">17</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">18</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">19</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">20</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">21</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">22</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">23</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">24</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">25</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">26</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">27</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">28</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">29</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">30</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">31</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">32</Key>
+          <Value ClassID="8">
+            <Active>0</Active>
+            <srcMac>00:00:00:00:00:00</srcMac>
+            <SourceIP>0.0.0.0</SourceIP>
+            <SourceMask>0.0.0.0</SourceMask>
+            <DestIP>0.0.0.0</DestIP>
+            <DestMask>0.0.0.0</DestMask>
+            <Ethertype> </Ethertype>
+            <Protocol> </Protocol>
+            <startSrcPort/>
+            <endSrcPort/>
+            <startDstPort/>
+            <endDstPort/>
+            <PolicyPVC>WAN0</PolicyPVC>
+          </Value>
+        </DictionaryEntry>
+      </RouteIP>
+      <RouteURL>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="9" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.AdvacnedConfiguration.RouteURL">
+            <Active>0</Active>
+            <DomainName/>
+            <WanConnection>WAN0</WanConnection>
+            <Netmask>0.0.0.0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="9">
+            <Active>0</Active>
+            <DomainName/>
+            <WanConnection>WAN0</WanConnection>
+            <Netmask>0.0.0.0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="9">
+            <Active>0</Active>
+            <DomainName/>
+            <WanConnection>WAN0</WanConnection>
+            <Netmask>0.0.0.0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="9">
+            <Active>0</Active>
+            <DomainName/>
+            <WanConnection>WAN0</WanConnection>
+            <Netmask>0.0.0.0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="9">
+            <Active>0</Active>
+            <DomainName/>
+            <WanConnection>WAN0</WanConnection>
+            <Netmask>0.0.0.0</Netmask>
+          </Value>
+        </DictionaryEntry>
+      </RouteURL>
+    </RoutePolicyConfiguration>
+    <RatelimitConfiguration apply="false">
+      <Active>0</Active>
+      <RateLimitGroup>
+        <DictionaryEntry>
+          <Key ClassID="1">0</Key>
+          <Value ClassID="10" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.AdvacnedConfiguration.RateLimitGroup">
+            <UpPir>0</UpPir>
+            <UpCir>0</UpCir>
+            <DownPir>0</DownPir>
+            <DownCir>0</DownCir>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="10">
+            <UpPir>0</UpPir>
+            <UpCir>0</UpCir>
+            <DownPir>0</DownPir>
+            <DownCir>0</DownCir>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="10">
+            <UpPir>0</UpPir>
+            <UpCir>0</UpCir>
+            <DownPir>0</DownPir>
+            <DownCir>0</DownCir>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="10">
+            <UpPir>0</UpPir>
+            <UpCir>0</UpCir>
+            <DownPir>0</DownPir>
+            <DownCir>0</DownCir>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="10">
+            <UpPir>0</UpPir>
+            <UpCir>0</UpCir>
+            <DownPir>0</DownPir>
+            <DownCir>0</DownCir>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="10">
+            <UpPir>0</UpPir>
+            <UpCir>0</UpCir>
+            <DownPir>0</DownPir>
+            <DownCir>0</DownCir>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">6</Key>
+          <Value ClassID="10">
+            <UpPir>0</UpPir>
+            <UpCir>0</UpCir>
+            <DownPir>0</DownPir>
+            <DownCir>0</DownCir>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">7</Key>
+          <Value ClassID="10">
+            <UpPir>0</UpPir>
+            <UpCir>0</UpCir>
+            <DownPir>0</DownPir>
+            <DownCir>0</DownCir>
+          </Value>
+        </DictionaryEntry>
+      </RateLimitGroup>
+    </RatelimitConfiguration>
+  </AdvacnedConfiguration>
+  <FirewallConfiguration>
+    <NATConfiguration apply="true">
+      <ALGSwitchFTPEnable>on</ALGSwitchFTPEnable>
+      <ALGSwitchSIPEnable>on</ALGSwitchSIPEnable>
+      <ALGSwitchH323Enable>on</ALGSwitchH323Enable>
+      <ALGSwitchRTSPEnable>off</ALGSwitchRTSPEnable>
+      <ALGSwitchPPTPEnable>off</ALGSwitchPPTPEnable>
+      <PortTriggering>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="11" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.FirewallConfiguration.PortTriggering">
+            <PortTriggeringApplicationName> </PortTriggeringApplicationName>
+            <ApplicationName/>
+            <TriggeringPortStart/>
+            <TriggeringPortEnd/>
+            <TriggeringPortProtocol>TCP/UDP</TriggeringPortProtocol>
+            <OpeningPortStart/>
+            <OpeningPortEnd/>
+            <OpeningPortProtocol>TCP/UDP</OpeningPortProtocol>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="11">
+            <PortTriggeringApplicationName> </PortTriggeringApplicationName>
+            <ApplicationName/>
+            <TriggeringPortStart/>
+            <TriggeringPortEnd/>
+            <TriggeringPortProtocol>TCP/UDP</TriggeringPortProtocol>
+            <OpeningPortStart/>
+            <OpeningPortEnd/>
+            <OpeningPortProtocol>TCP/UDP</OpeningPortProtocol>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="11">
+            <PortTriggeringApplicationName> </PortTriggeringApplicationName>
+            <ApplicationName/>
+            <TriggeringPortStart/>
+            <TriggeringPortEnd/>
+            <TriggeringPortProtocol>TCP/UDP</TriggeringPortProtocol>
+            <OpeningPortStart/>
+            <OpeningPortEnd/>
+            <OpeningPortProtocol>TCP/UDP</OpeningPortProtocol>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="11">
+            <PortTriggeringApplicationName> </PortTriggeringApplicationName>
+            <ApplicationName/>
+            <TriggeringPortStart/>
+            <TriggeringPortEnd/>
+            <TriggeringPortProtocol>TCP/UDP</TriggeringPortProtocol>
+            <OpeningPortStart/>
+            <OpeningPortEnd/>
+            <OpeningPortProtocol>TCP/UDP</OpeningPortProtocol>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="11">
+            <PortTriggeringApplicationName> </PortTriggeringApplicationName>
+            <ApplicationName/>
+            <TriggeringPortStart/>
+            <TriggeringPortEnd/>
+            <TriggeringPortProtocol>TCP/UDP</TriggeringPortProtocol>
+            <OpeningPortStart/>
+            <OpeningPortEnd/>
+            <OpeningPortProtocol>TCP/UDP</OpeningPortProtocol>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">6</Key>
+          <Value ClassID="11">
+            <PortTriggeringApplicationName> </PortTriggeringApplicationName>
+            <ApplicationName/>
+            <TriggeringPortStart/>
+            <TriggeringPortEnd/>
+            <TriggeringPortProtocol>TCP/UDP</TriggeringPortProtocol>
+            <OpeningPortStart/>
+            <OpeningPortEnd/>
+            <OpeningPortProtocol>TCP/UDP</OpeningPortProtocol>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">7</Key>
+          <Value ClassID="11">
+            <PortTriggeringApplicationName> </PortTriggeringApplicationName>
+            <ApplicationName/>
+            <TriggeringPortStart/>
+            <TriggeringPortEnd/>
+            <TriggeringPortProtocol>TCP/UDP</TriggeringPortProtocol>
+            <OpeningPortStart/>
+            <OpeningPortEnd/>
+            <OpeningPortProtocol>TCP/UDP</OpeningPortProtocol>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">8</Key>
+          <Value ClassID="11">
+            <PortTriggeringApplicationName> </PortTriggeringApplicationName>
+            <ApplicationName/>
+            <TriggeringPortStart/>
+            <TriggeringPortEnd/>
+            <TriggeringPortProtocol>TCP/UDP</TriggeringPortProtocol>
+            <OpeningPortStart/>
+            <OpeningPortEnd/>
+            <OpeningPortProtocol>TCP/UDP</OpeningPortProtocol>
+          </Value>
+        </DictionaryEntry>
+      </PortTriggering>
+      <NATConfigs>
+        <DictionaryEntry>
+          <Key ClassID="1">0</Key>
+          <Value ClassID="12" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.FirewallConfiguration.NATConfigs">
+            <DMZEnable>No</DMZEnable>
+            <DMZIPAddress>0.0.0.0</DMZIPAddress>
+            <NATLoopbackActive>No</NATLoopbackActive>
+            <NATLoopbackSIPAddMask/>
+            <NATLoopbackDIPAddress/>
+            <NATLoopbackDstPortMin/>
+            <NATLoopbackDstPortMAX/>
+            <NATLoopbackTranslatedDIPAddress/>
+            <NATLoobackProtocol>TCP/UDP</NATLoobackProtocol>
+            <NATDstPortMin/>
+            <NATDstPortMAX/>
+            <PortFowarding>
+              <DictionaryEntry>
+                <Key ClassID="1">0</Key>
+                <Value ClassID="13" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.FirewallConfiguration.PortFowarding">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">1</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">2</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">3</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">4</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">5</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">6</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">7</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">8</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">9</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+            </PortFowarding>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="12">
+            <DMZEnable>No</DMZEnable>
+            <DMZIPAddress>0.0.0.0</DMZIPAddress>
+            <NATLoopbackActive>No</NATLoopbackActive>
+            <NATLoopbackSIPAddMask/>
+            <NATLoopbackDIPAddress/>
+            <NATLoopbackDstPortMin/>
+            <NATLoopbackDstPortMAX/>
+            <NATLoopbackTranslatedDIPAddress/>
+            <NATLoobackProtocol>TCP/UDP</NATLoobackProtocol>
+            <NATDstPortMin/>
+            <NATDstPortMAX/>
+            <PortFowarding>
+              <DictionaryEntry>
+                <Key ClassID="1">0</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">1</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">2</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">3</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">4</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">5</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">6</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">7</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">8</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">9</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+            </PortFowarding>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="12">
+            <DMZEnable>No</DMZEnable>
+            <DMZIPAddress>0.0.0.0</DMZIPAddress>
+            <NATLoopbackActive>No</NATLoopbackActive>
+            <NATLoopbackSIPAddMask/>
+            <NATLoopbackDIPAddress/>
+            <NATLoopbackDstPortMin/>
+            <NATLoopbackDstPortMAX/>
+            <NATLoopbackTranslatedDIPAddress/>
+            <NATLoobackProtocol>TCP/UDP</NATLoobackProtocol>
+            <NATDstPortMin/>
+            <NATDstPortMAX/>
+            <PortFowarding>
+              <DictionaryEntry>
+                <Key ClassID="1">0</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">1</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">2</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">3</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">4</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">5</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">6</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">7</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">8</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">9</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+            </PortFowarding>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="12">
+            <DMZEnable>No</DMZEnable>
+            <DMZIPAddress>0.0.0.0</DMZIPAddress>
+            <NATLoopbackActive>No</NATLoopbackActive>
+            <NATLoopbackSIPAddMask/>
+            <NATLoopbackDIPAddress/>
+            <NATLoopbackDstPortMin/>
+            <NATLoopbackDstPortMAX/>
+            <NATLoopbackTranslatedDIPAddress/>
+            <NATLoobackProtocol>TCP/UDP</NATLoobackProtocol>
+            <NATDstPortMin/>
+            <NATDstPortMAX/>
+            <PortFowarding>
+              <DictionaryEntry>
+                <Key ClassID="1">0</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">1</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">2</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">3</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">4</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">5</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">6</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">7</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">8</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">9</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+            </PortFowarding>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="12">
+            <DMZEnable>No</DMZEnable>
+            <DMZIPAddress>0.0.0.0</DMZIPAddress>
+            <NATLoopbackActive>No</NATLoopbackActive>
+            <NATLoopbackSIPAddMask/>
+            <NATLoopbackDIPAddress/>
+            <NATLoopbackDstPortMin/>
+            <NATLoopbackDstPortMAX/>
+            <NATLoopbackTranslatedDIPAddress/>
+            <NATLoobackProtocol>TCP/UDP</NATLoobackProtocol>
+            <NATDstPortMin/>
+            <NATDstPortMAX/>
+            <PortFowarding>
+              <DictionaryEntry>
+                <Key ClassID="1">0</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">1</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">2</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">3</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">4</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">5</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">6</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">7</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">8</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">9</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+            </PortFowarding>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="12">
+            <DMZEnable>No</DMZEnable>
+            <DMZIPAddress>0.0.0.0</DMZIPAddress>
+            <NATLoopbackActive>No</NATLoopbackActive>
+            <NATLoopbackSIPAddMask/>
+            <NATLoopbackDIPAddress/>
+            <NATLoopbackDstPortMin/>
+            <NATLoopbackDstPortMAX/>
+            <NATLoopbackTranslatedDIPAddress/>
+            <NATLoobackProtocol>TCP/UDP</NATLoobackProtocol>
+            <NATDstPortMin/>
+            <NATDstPortMAX/>
+            <PortFowarding>
+              <DictionaryEntry>
+                <Key ClassID="1">0</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">1</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">2</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">3</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">4</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">5</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">6</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">7</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">8</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+              <DictionaryEntry>
+                <Key ClassID="1">9</Key>
+                <Value ClassID="13">
+                  <PROTOCOL>TCP</PROTOCOL>
+                  <STARTPORT/>
+                  <ENDPORT/>
+                  <LOCALIP/>
+                  <LOCAL_SPORT/>
+                  <LOCAL_EPORT/>
+                </Value>
+              </DictionaryEntry>
+            </PortFowarding>
+          </Value>
+        </DictionaryEntry>
+      </NATConfigs>
+    </NATConfiguration>
+    <PortMappingConfiguration apply="true">
+      <Enable>1</Enable>
+      <PortMappingGroup>
+        <DictionaryEntry>
+          <Key ClassID="1">0</Key>
+          <Value ClassID="14" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.FirewallConfiguration.PortMappingGroup">
+            <WAN_P0>1</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>1</Ethernet_P3>
+            <Ethernet_P4>1</Ethernet_P4>
+            <WLan_P1>1</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>1</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>1</Ethernet_P1>
+            <Ethernet_P2>1</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">6</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">7</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">8</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">9</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">10</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">11</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">12</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">13</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">14</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">15</Key>
+          <Value ClassID="14">
+            <WAN_P0>0</WAN_P0>
+            <WAN_P1>0</WAN_P1>
+            <WAN_P2>0</WAN_P2>
+            <WAN_P3>0</WAN_P3>
+            <Ethernet_P1>0</Ethernet_P1>
+            <Ethernet_P2>0</Ethernet_P2>
+            <Ethernet_P3>0</Ethernet_P3>
+            <Ethernet_P4>0</Ethernet_P4>
+            <WLan_P1>0</WLan_P1>
+            <WLan_P2>0</WLan_P2>
+            <WLan_P3>0</WLan_P3>
+            <WLan_P4>0</WLan_P4>
+          </Value>
+        </DictionaryEntry>
+      </PortMappingGroup>
+    </PortMappingConfiguration>
+    <UPNPConfiguration apply="true">
+      <Enable>Yes</Enable>
+      <AutoConfiguredEnable>Yes</AutoConfiguredEnable>
+    </UPNPConfiguration>
+    <L2FilterConfiguration apply="false">
+      <Enable>No</Enable>
+      <RuleType>Black</RuleType>
+      <L2Fileter>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="15" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.FirewallConfiguration.L2Fileter">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">6</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">7</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">8</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">9</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">10</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">11</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">12</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">13</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">14</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">15</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">16</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">17</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">18</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">19</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">20</Key>
+          <Value ClassID="15">
+            <ipfilter_id>No</ipfilter_id>
+            <SrcMacAddr>00:00:00:00:00:00</SrcMacAddr>
+            <DesMacAddr>00:00:00:00:00:00</DesMacAddr>
+          </Value>
+        </DictionaryEntry>
+      </L2Fileter>
+    </L2FilterConfiguration>
+    <L3FilterConfiguration apply="false">
+      <Enable>No</Enable>
+      <RuleType>Black</RuleType>
+      <L3FilterConfigs>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="16" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.FirewallConfiguration.L3Fileter">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">6</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">7</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">8</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">9</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">10</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">11</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">12</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">13</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">14</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">15</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">16</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">17</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">18</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">19</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">20</Key>
+          <Value ClassID="16">
+            <SrcIPAddr>0.0.0.0</SrcIPAddr>
+            <SrcIPMask>255.255.255.255</SrcIPMask>
+            <SrcPort>0</SrcPort>
+            <DesIPAddr>0.0.0.0</DesIPAddr>
+            <DesIPMask>255.255.255.255</DesIPMask>
+            <DesPort>0</DesPort>
+            <Protocol> </Protocol>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+      </L3FilterConfigs>
+    </L3FilterConfiguration>
+  </FirewallConfiguration>
+  <WifiConfiguration>
+    <APOn apply="true">1</APOn>
+    <Country apply="true">POLAND</Country>
+    <CountryRegion apply="true">1</CountryRegion>
+    <AutoChannelSelect apply="true">1</AutoChannelSelect>
+    <Channel apply="true">1,2,3,4,5,6,7,8,9,10,11,12,13</Channel>
+    <ManualChannel apply="false">0</ManualChannel>
+    <BeaconPeriod apply="true">100</BeaconPeriod>
+    <RTSThreshold apply="true">2347</RTSThreshold>
+    <FragThreshold apply="true">1024</FragThreshold>
+    <DtimPeriod apply="true">1</DtimPeriod>
+    <WirelessMode apply="true">9</WirelessMode>
+    <BGProtection apply="true">0</BGProtection>
+    <TxPower apply="true">100</TxPower>
+    <HT_BW apply="true">1</HT_BW>
+    <HT_EXTCHA apply="true">1</HT_EXTCHA>
+    <GI apply="true">0</GI>
+    <IgmpSnEnable apply="false">1</IgmpSnEnable>
+    <SSIDConfiguration apply="true">
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="17" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.WifiConfiguration.SSIDConfiguration">
+          <EnableSSID>1</EnableSSID>
+          <SSID>CP_0376_Limonka-Fiber_746379999</SSID>
+          <HideSSID>0</HideSSID>
+          <MaxStaNum>0</MaxStaNum>
+          <HT_MCS>33</HT_MCS>
+          <WPSConfMode>7</WPSConfMode>
+          <WPSMode>1</WPSMode>
+          <AuthMode>WPAPSKWPA2PSK</AuthMode>
+          <EncrypType>TKIPAES</EncrypType>
+          <WPAPSK>Mojezajebistehaslo</WPAPSK>
+          <RekeyInterval>10</RekeyInterval>
+          <WEPAuthType>Both</WEPAuthType>
+          <Key1Str/>
+          <Key2Str/>
+          <Key3Str/>
+          <Key4Str/>
+          <NoForwardingBTNBSSID>0</NoForwardingBTNBSSID>
+          <UpstreamRateLimit>0</UpstreamRateLimit>
+          <DownstreamRateLimit>0</DownstreamRateLimit>
+          <WMM>1</WMM>
+          <APSDCapable>0</APSDCapable>
+          <RADIUS_Server/>
+          <RADIUS_Port>1812</RADIUS_Port>
+          <RADIUS_Key/>
+          <BAK_RADIUS_Server/>
+          <BAK_RADIUS_Port/>
+          <BAK_RADIUS_Key/>
+          <session_timeout_interval>0</session_timeout_interval>
+          <MACFilterActive>0</MACFilterActive>
+          <MACFilterAction>1</MACFilterAction>
+          <WLan_MAC0/>
+          <WLan_MAC1/>
+          <WLan_MAC2/>
+          <WLan_MAC3/>
+          <WLan_MAC4/>
+          <WLan_MAC5/>
+          <WLan_MAC6/>
+          <WLan_MAC7/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="17">
+          <EnableSSID>1</EnableSSID>
+          <SSID>Limonka_Hotspot</SSID>
+          <HideSSID>0</HideSSID>
+          <MaxStaNum>0</MaxStaNum>
+          <HT_MCS>33</HT_MCS>
+          <WPSConfMode>7</WPSConfMode>
+          <WPSMode>1</WPSMode>
+          <AuthMode>WPAPSKWPA2PSK</AuthMode>
+          <EncrypType>TKIPAES</EncrypType>
+          <WPAPSK>123456adcbef</WPAPSK>
+          <RekeyInterval>10</RekeyInterval>
+          <WEPAuthType>Both</WEPAuthType>
+          <Key1Str/>
+          <Key2Str/>
+          <Key3Str/>
+          <Key4Str/>
+          <NoForwardingBTNBSSID>0</NoForwardingBTNBSSID>
+          <UpstreamRateLimit>0</UpstreamRateLimit>
+          <DownstreamRateLimit>0</DownstreamRateLimit>
+          <WMM>1</WMM>
+          <APSDCapable>0</APSDCapable>
+          <RADIUS_Server/>
+          <RADIUS_Port>1812</RADIUS_Port>
+          <RADIUS_Key/>
+          <BAK_RADIUS_Server/>
+          <BAK_RADIUS_Port/>
+          <BAK_RADIUS_Key/>
+          <session_timeout_interval>0</session_timeout_interval>
+          <MACFilterActive>0</MACFilterActive>
+          <MACFilterAction>1</MACFilterAction>
+          <WLan_MAC0/>
+          <WLan_MAC1/>
+          <WLan_MAC2/>
+          <WLan_MAC3/>
+          <WLan_MAC4/>
+          <WLan_MAC5/>
+          <WLan_MAC6/>
+          <WLan_MAC7/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="17">
+          <EnableSSID>0</EnableSSID>
+          <SSID>GONT_WIFI_XXXX</SSID>
+          <HideSSID>0</HideSSID>
+          <MaxStaNum>0</MaxStaNum>
+          <HT_MCS>33</HT_MCS>
+          <WPSConfMode>7</WPSConfMode>
+          <WPSMode>1</WPSMode>
+          <AuthMode>WPAPSKWPA2PSK</AuthMode>
+          <EncrypType>AES</EncrypType>
+          <WPAPSK/>
+          <RekeyInterval>10</RekeyInterval>
+          <WEPAuthType>Both</WEPAuthType>
+          <Key1Str/>
+          <Key2Str/>
+          <Key3Str/>
+          <Key4Str/>
+          <NoForwardingBTNBSSID>0</NoForwardingBTNBSSID>
+          <UpstreamRateLimit>0</UpstreamRateLimit>
+          <DownstreamRateLimit>0</DownstreamRateLimit>
+          <WMM>1</WMM>
+          <APSDCapable>0</APSDCapable>
+          <RADIUS_Server/>
+          <RADIUS_Port>1812</RADIUS_Port>
+          <RADIUS_Key/>
+          <BAK_RADIUS_Server/>
+          <BAK_RADIUS_Port/>
+          <BAK_RADIUS_Key/>
+          <session_timeout_interval>0</session_timeout_interval>
+          <MACFilterActive>0</MACFilterActive>
+          <MACFilterAction>1</MACFilterAction>
+          <WLan_MAC0/>
+          <WLan_MAC1/>
+          <WLan_MAC2/>
+          <WLan_MAC3/>
+          <WLan_MAC4/>
+          <WLan_MAC5/>
+          <WLan_MAC6/>
+          <WLan_MAC7/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="17">
+          <EnableSSID>0</EnableSSID>
+          <SSID>GONT_WIFI_XXXX</SSID>
+          <HideSSID>0</HideSSID>
+          <MaxStaNum>0</MaxStaNum>
+          <HT_MCS>33</HT_MCS>
+          <WPSConfMode>7</WPSConfMode>
+          <WPSMode>1</WPSMode>
+          <AuthMode>WPAPSKWPA2PSK</AuthMode>
+          <EncrypType>AES</EncrypType>
+          <WPAPSK/>
+          <RekeyInterval>10</RekeyInterval>
+          <WEPAuthType>Both</WEPAuthType>
+          <Key1Str/>
+          <Key2Str/>
+          <Key3Str/>
+          <Key4Str/>
+          <NoForwardingBTNBSSID>0</NoForwardingBTNBSSID>
+          <UpstreamRateLimit>0</UpstreamRateLimit>
+          <DownstreamRateLimit>0</DownstreamRateLimit>
+          <WMM>1</WMM>
+          <APSDCapable>0</APSDCapable>
+          <RADIUS_Server/>
+          <RADIUS_Port>1812</RADIUS_Port>
+          <RADIUS_Key/>
+          <BAK_RADIUS_Server/>
+          <BAK_RADIUS_Port/>
+          <BAK_RADIUS_Key/>
+          <session_timeout_interval>0</session_timeout_interval>
+          <MACFilterActive>0</MACFilterActive>
+          <MACFilterAction>1</MACFilterAction>
+          <WLan_MAC0/>
+          <WLan_MAC1/>
+          <WLan_MAC2/>
+          <WLan_MAC3/>
+          <WLan_MAC4/>
+          <WLan_MAC5/>
+          <WLan_MAC6/>
+          <WLan_MAC7/>
+        </Value>
+      </DictionaryEntry>
+    </SSIDConfiguration>
+    <WLanSchedulingConfiguration apply="false">
+      <Active>No</Active>
+      <WLanSchedulingConfigs>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="18" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.WifiConfiguration.WLanSchedulingConfigs">
+            <OnOff>1</OnOff>
+            <Day>0</Day>
+            <StartHour>0</StartHour>
+            <StartMin>0</StartMin>
+            <EndHour>0</EndHour>
+            <EndMin>0</EndMin>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="18">
+            <OnOff>1</OnOff>
+            <Day>0</Day>
+            <StartHour>0</StartHour>
+            <StartMin>0</StartMin>
+            <EndHour>0</EndHour>
+            <EndMin>0</EndMin>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="18">
+            <OnOff>1</OnOff>
+            <Day>0</Day>
+            <StartHour>0</StartHour>
+            <StartMin>0</StartMin>
+            <EndHour>0</EndHour>
+            <EndMin>0</EndMin>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="18">
+            <OnOff>1</OnOff>
+            <Day>0</Day>
+            <StartHour>0</StartHour>
+            <StartMin>0</StartMin>
+            <EndHour>0</EndHour>
+            <EndMin>0</EndMin>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="18">
+            <OnOff>1</OnOff>
+            <Day>0</Day>
+            <StartHour>0</StartHour>
+            <StartMin>0</StartMin>
+            <EndHour>0</EndHour>
+            <EndMin>0</EndMin>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">6</Key>
+          <Value ClassID="18">
+            <OnOff>1</OnOff>
+            <Day>0</Day>
+            <StartHour>0</StartHour>
+            <StartMin>0</StartMin>
+            <EndHour>0</EndHour>
+            <EndMin>0</EndMin>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">7</Key>
+          <Value ClassID="18">
+            <OnOff>1</OnOff>
+            <Day>0</Day>
+            <StartHour>0</StartHour>
+            <StartMin>0</StartMin>
+            <EndHour>0</EndHour>
+            <EndMin>0</EndMin>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">8</Key>
+          <Value ClassID="18">
+            <OnOff>1</OnOff>
+            <Day>0</Day>
+            <StartHour>0</StartHour>
+            <StartMin>0</StartMin>
+            <EndHour>0</EndHour>
+            <EndMin>0</EndMin>
+            <Active>No</Active>
+          </Value>
+        </DictionaryEntry>
+      </WLanSchedulingConfigs>
+    </WLanSchedulingConfiguration>
+    <WDSConfiguration apply="false">
+      <WdsEnable>0</WdsEnable>
+      <WdsEncrypType>TKIP</WdsEncrypType>
+      <WdsKey>12345678</WdsKey>
+      <Wds_MAC0/>
+      <Wds_MAC1/>
+      <Wds_MAC2/>
+      <Wds_MAC3/>
+    </WDSConfiguration>
+    <WMMConfiguration apply="false">
+      <AccessPoint>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="19" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.WifiConfiguration.AccessPoint">
+            <APAifsn>4</APAifsn>
+            <APCwmin>3</APCwmin>
+            <APCwmax>4</APCwmax>
+            <APTxop>0</APTxop>
+            <APACM>0</APACM>
+            <AckPolicy>0</AckPolicy>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="19">
+            <APAifsn>7</APAifsn>
+            <APCwmin>4</APCwmin>
+            <APCwmax>10</APCwmax>
+            <APTxop>0</APTxop>
+            <APACM>0</APACM>
+            <AckPolicy>0</AckPolicy>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="19">
+            <APAifsn>1</APAifsn>
+            <APCwmin>3</APCwmin>
+            <APCwmax>4</APCwmax>
+            <APTxop>94</APTxop>
+            <APACM>0</APACM>
+            <AckPolicy>0</AckPolicy>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="19">
+            <APAifsn>1</APAifsn>
+            <APCwmin>2</APCwmin>
+            <APCwmax>3</APCwmax>
+            <APTxop>47</APTxop>
+            <APACM>0</APACM>
+            <AckPolicy>0</AckPolicy>
+          </Value>
+        </DictionaryEntry>
+      </AccessPoint>
+      <Station>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="20" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.WifiConfiguration.Station">
+            <BSSAifsn>3</BSSAifsn>
+            <BSSCwmin>4</BSSCwmin>
+            <BSSCwmax>10</BSSCwmax>
+            <BSSTxop>0</BSSTxop>
+            <BSSACM>0</BSSACM>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="20">
+            <BSSAifsn>7</BSSAifsn>
+            <BSSCwmin>4</BSSCwmin>
+            <BSSCwmax>10</BSSCwmax>
+            <BSSTxop>0</BSSTxop>
+            <BSSACM>0</BSSACM>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="20">
+            <BSSAifsn>2</BSSAifsn>
+            <BSSCwmin>3</BSSCwmin>
+            <BSSCwmax>4</BSSCwmax>
+            <BSSTxop>94</BSSTxop>
+            <BSSACM>0</BSSACM>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="20">
+            <BSSAifsn>2</BSSAifsn>
+            <BSSCwmin>2</BSSCwmin>
+            <BSSCwmax>3</BSSCwmax>
+            <BSSTxop>47</BSSTxop>
+            <BSSACM>0</BSSACM>
+          </Value>
+        </DictionaryEntry>
+      </Station>
+    </WMMConfiguration>
+  </WifiConfiguration>
+  <MaintenanceConfiguration>
+    <AdministrationConfiguration apply="true">
+      <AdminPassword>{$admin_password}</AdminPassword>
+      <AdminWANAllowHGU>Yes</AdminWANAllowHGU>
+      <AdminLANAllowHGU>No</AdminLANAllowHGU>
+      <UserPassword>userpassword</UserPassword>
+      <UserWANAllowHGU>Yes</UserWANAllowHGU>
+      <UserLANAllowHGU>Yes</UserLANAllowHGU>
+      <SessionTimeOut>300</SessionTimeOut>
+    </AdministrationConfiguration>
+    <NTPConfiguration apply="true">
+      <ENABLE>Yes</ENABLE>
+      <TYPE>0</TYPE>
+      <TZ>GMT+01:00</TZ>
+      <DAYLIGHT>1</DAYLIGHT>
+      <SERVER>91.235.192.10</SERVER>
+      <SERVER2/>
+      <SERVER3/>
+      <Year>2016</Year>
+      <Month>5</Month>
+      <Date>27</Date>
+      <Hour>0</Hour>
+      <Min>0</Min>
+      <Sec>0</Sec>
+      <RefreshTime>0</RefreshTime>
+    </NTPConfiguration>
+    <Autoprovision apply="true">
+      <IntervalTime>11</IntervalTime>
+      <RetryCount>3</RetryCount>
+    </Autoprovision>
+    <WebPort apply="true">{$web_port}</WebPort>
+  </MaintenanceConfiguration>
+  <UtilitiesConfiguration>
+    <SNMPConfiguration apply="true">
+      <Active>No</Active>
+      <rocommunity/>
+      <rwcommunity/>
+    </SNMPConfiguration>
+    <ACLConfiguration apply="true">
+      <Enable>No</Enable>
+      <ACLIndexList>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="21" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.UtilitiesConfiguration.ACLIndexList">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">6</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">7</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">8</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">9</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">10</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">11</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">12</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">13</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">14</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">15</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">16</Key>
+          <Value ClassID="21">
+            <IPAddress>0.0.0.0</IPAddress>
+            <Netmask>0</Netmask>
+          </Value>
+        </DictionaryEntry>
+      </ACLIndexList>
+      <TelnetAccess>Both</TelnetAccess>
+      <SSHAccess>Both</SSHAccess>
+      <TFTPAccess>LAN</TFTPAccess>
+      <WEBAccess>Both</WEBAccess>
+      <SNMPAccess>LAN</SNMPAccess>
+      <FTPAccess>LAN</FTPAccess>
+      <ICMPAccess>Both</ICMPAccess>
+    </ACLConfiguration>
+  </UtilitiesConfiguration>
+  <VoIPConfiguration>
+    <voip_wan_binding apply="true">0</voip_wan_binding>
+    <voip_pvc apply="true">0</voip_pvc>
+    <pots_uni_rx_gain apply="false">0</pots_uni_rx_gain>
+    <pots_uni_tx_gain apply="false">0</pots_uni_tx_gain>
+    <sip_information_config apply="true">
+      <sip_agent_proxy_server_address>176.109.163.34</sip_agent_proxy_server_address>
+      <sip_agent_proxy_server_port>5060</sip_agent_proxy_server_port>
+      <sip_agent_outbound_proxy_address_enable>1</sip_agent_outbound_proxy_address_enable>
+      <sip_agent_outbound_proxy_address>176.109.163.34</sip_agent_outbound_proxy_address>
+      <sip_agent_outbound_proxy_port>5060</sip_agent_outbound_proxy_port>
+      <sip_agent_sip_registrar>176.109.163.34</sip_agent_sip_registrar>
+      <sip_agent_sip_registrar_port>5060</sip_agent_sip_registrar_port>
+      <sip_agent_tcp_udp_port_id>5060</sip_agent_tcp_udp_port_id>
+      <rtp_local_port_min>60000</rtp_local_port_min>
+      <sip_agent_sip_reg_exp_time>3600</sip_agent_sip_reg_exp_time>
+      <sip_agent_sip_retry_time>60</sip_agent_sip_retry_time>
+      <sip_agent_primary_sip_dns>91.235.192.1</sip_agent_primary_sip_dns>
+      <sip_agent_secondary_sip_dns>8.8.8.8</sip_agent_secondary_sip_dns>
+      <sip_agent_softswitch>MSSW</sip_agent_softswitch>
+      <sip_agent_region>POL</sip_agent_region>
+      <sip_timer_t1>500</sip_timer_t1>
+      <sip_timer_t2>4000</sip_timer_t2>
+      <sip_timer_td>32000</sip_timer_td>
+      <sip_user_data_configs>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="22" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.VoIPConfiguration.sip_user_data_configs">
+            <user_data_userpart_aor/>
+            <user_data_displayname/>
+            <user_data_use_encryption>0</user_data_use_encryption>
+            <user_data_auth_security_username/>
+            <user_data_auth_security_password/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="22">
+            <user_data_userpart_aor/>
+            <user_data_displayname/>
+            <user_data_use_encryption>0</user_data_use_encryption>
+            <user_data_auth_security_username/>
+            <user_data_auth_security_password/>
+          </Value>
+        </DictionaryEntry>
+      </sip_user_data_configs>
+    </sip_information_config>
+    <media_information_config apply="true">
+      <media_fax_mode>T38</media_fax_mode>
+      <media_voice_service_echo_cancel>1</media_voice_service_echo_cancel>
+      <media_codec_silence_suppersion>0</media_codec_silence_suppersion>
+      <media_oob_dtmf>1</media_oob_dtmf>
+      <media_jb_mode>1</media_jb_mode>
+      <media_jb_fixed>0</media_jb_fixed>
+      <media_jb_adapt>100</media_jb_adapt>
+      <media_g711a_codec_period>20</media_g711a_codec_period>
+      <media_g711u_codec_period>20</media_g711u_codec_period>
+      <media_g722_codec_period>20</media_g722_codec_period>
+      <media_g726_32codec_period>20</media_g726_32codec_period>
+      <media_g729_codec_period>20</media_g729_codec_period>
+      <media_g723_codec_period>30</media_g723_codec_period>
+      <media_call_waiting_support>1</media_call_waiting_support>
+      <media_codec_list>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="23" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.VoIPConfiguration.media_codec_item">
+            <media_codec_selection>G.711 A-law</media_codec_selection>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="23">
+            <media_codec_selection>G.711 U-law</media_codec_selection>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="23">
+            <media_codec_selection>G.726 - 32</media_codec_selection>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="23">
+            <media_codec_selection>G.729</media_codec_selection>
+          </Value>
+        </DictionaryEntry>
+      </media_codec_list>
+    </media_information_config>
+    <dial_plan_information_config apply="true">
+      <sip_end_sharp_token>1</sip_end_sharp_token>
+      <dial_plan_critical_dial_timeout>4000</dial_plan_critical_dial_timeout>
+      <dial_plan_partial_dial_timeout>16000</dial_plan_partial_dial_timeout>
+      <dial_plan_item_list>
+        <DictionaryEntry>
+          <Key ClassID="1">1</Key>
+          <Value ClassID="24" IsNewClass="true" ClassName="Motive.Development.BaseData.H660.VoIPConfiguration.dial_plan_item">
+            <token_string>X.T</token_string>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">2</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">3</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">4</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">5</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">6</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">7</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">8</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">9</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">10</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">11</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">12</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">13</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">14</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">15</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">16</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">17</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">18</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">19</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+        <DictionaryEntry>
+          <Key ClassID="1">20</Key>
+          <Value ClassID="24">
+            <token_string/>
+          </Value>
+        </DictionaryEntry>
+      </dial_plan_item_list>
+    </dial_plan_information_config>
+  </VoIPConfiguration>
+  <m_ConfigType>H660</m_ConfigType>
+  <m_Version>1.0.39.41</m_Version>
+  <modified_time>{$modified_time}</modified_time>
+</Motive.Development.Common.H660.Configuration_H660>

@@ -1,10 +1,10 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -56,7 +56,7 @@ foreach ($short_to_longs as $short => $long)
 if (array_key_exists('version', $options)) {
 	print <<<EOF
 lms-radiususers-dasan.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 	exit(0);
@@ -65,7 +65,7 @@ EOF;
 if (array_key_exists('help', $options)) {
 	print <<<EOF
 lms-radiususers-dasan.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 -C, --config-file=/etc/lms/lms.ini      alternate config file (default: /etc/lms/lms.ini);
 -h, --help                      print this help and exit;
@@ -82,7 +82,7 @@ $quiet = array_key_exists('quiet', $options);
 if (!$quiet) {
 	print <<<EOF
 lms-radiususers-dasan.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 }
@@ -107,15 +107,20 @@ $CONFIG = (array) parse_ini_file($CONFIG_FILE, true);
 // Check for configuration vars and set default values
 $CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
 $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'lib' : $CONFIG['directories']['lib_dir']);
+$CONFIG['directories']['plugin_dir'] = (!isset($CONFIG['directories']['plugin_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'plugins' : $CONFIG['directories']['plugin_dir']);
+$CONFIG['directories']['plugins_dir'] = $CONFIG['directories']['plugin_dir'];
 
 define('SYS_DIR', $CONFIG['directories']['sys_dir']);
 define('LIB_DIR', $CONFIG['directories']['lib_dir']);
+define('PLUGIN_DIR', $CONFIG['directories']['plugin_dir']);
+define('PLUGINS_DIR', $CONFIG['directories']['plugin_dir']);
 
 // Load autoloader
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'autoloader.php');
-
-// Do some checks and load config defaults
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'config.php');
+$composer_autoload_path = SYS_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (file_exists($composer_autoload_path))
+	require_once $composer_autoload_path;
+else
+	die("Composer autoload not found. Run 'composer install' command from LMS directory and try again. More informations at https://getcomposer.org/" . PHP_EOL);
 
 // Init database
 
@@ -132,7 +137,8 @@ try {
 // Include required files (including sequence is important)
 
 //require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
-//require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
+require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSGponDasanPlugin::plugin_directory_name
+	. DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'definitions.php');
 //require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 
 $config_owneruid = ConfigHelper::getConfig($config_section . '.config_owneruid', 0);
@@ -156,7 +162,7 @@ if (!empty($xml_provisioning_url)) {
 	if (!array_key_exists('path', $data))
 		die("Fatal error: missed path in xml provisioning url " . $xml_provisioning_url . "!" . PHP_EOL);
 	list ($xml_scheme, $xml_host, $xml_user, $xml_pass, $xml_path) = array(
-		$data['scheme'], $data['host'], $data['user'], $data['pass'], preg_replace('/^\//', '', $data['path'])
+		$data['scheme'], $data['host'], $data['user'], $data['pass'], $data['path']
 	);
 }
 
@@ -164,10 +170,11 @@ $query = "SELECT o.name, m.name AS model, p.name AS profile, o.onudescription AS
 		host1.ip AS ip1, host2.ip AS ip2,
 		phone1.phone AS sipnumber1, phone1.auth AS sipauth1,
 		phone2.phone AS sipnumber2, phone2.auth AS sipauth2,
-		disabledports.portnames, disabledports.portids
-	FROM gpononu o
-	JOIN gpononumodels m ON m.id = o.gpononumodelsid
-	JOIN gponoltprofiles p ON p.id = o.gponoltprofilesid
+		disabledports.portnames, disabledports.portids,
+		xmlprovisioning
+	FROM " . GPON_DASAN::SQL_TABLE_GPONONU . " o
+	JOIN " . GPON_DASAN::SQL_TABLE_GPONONUMODELS . " m ON m.id = o.gpononumodelsid
+	JOIN " . GPON_DASAN::SQL_TABLE_GPONOLTPROFILES . " p ON p.id = o.gponoltprofilesid
 	LEFT JOIN (
 		SELECT n.id, (" . $DB->Concat('INET_NTOA(ipaddr)', "'/'", 'MASK2PREFIX(INET_ATON(mask))', "' '", 'gateway') . ") AS ip FROM nodes n
 		JOIN networks net ON net.address = (n.ipaddr & INET_ATON(mask))
@@ -177,17 +184,17 @@ $query = "SELECT o.name, m.name AS model, p.name AS profile, o.onudescription AS
 		JOIN networks net ON net.address = (n.ipaddr & INET_ATON(mask))
 	) host2 ON host2.id = o.host_id2
 	LEFT JOIN (
-		SELECT id, phone, (" . $DB->Concat('login', "' '", 'passwd') . ") AS auth FROM voipaccounts
+		SELECT id, login AS phone, (" . $DB->Concat('login', "' '", 'passwd') . ") AS auth FROM voipaccounts
 	) phone1 ON phone1.id = o.voipaccountsid1
 	LEFT JOIN (
-		SELECT id, phone, (" . $DB->Concat('login', "' '", 'passwd') . ") AS auth FROM voipaccounts
+		SELECT id, login AS phone, (" . $DB->Concat('login', "' '", 'passwd') . ") AS auth FROM voipaccounts
 	) phone2 ON phone2.id = o.voipaccountsid2
 	LEFT JOIN (
 		SELECT onuid,
 			(" . $DB->GroupConcat('t.name') . ") AS portnames,
 			(" . $DB->GroupConcat('portid') . ") AS portids
-		FROM gpononuport p
-		JOIN gpononuportstype t ON t.id = p.typeid
+		FROM " . GPON_DASAN::SQL_TABLE_GPONONUPORTS . " p
+		JOIN " . GPON_DASAN::SQL_TABLE_GPONONUPORTTYPES . " t ON t.id = p.typeid
 		WHERE portdisable = 1
 		GROUP BY onuid
 	) disabledports ON disabledports.onuid = o.id";
@@ -214,7 +221,7 @@ if (!empty($onus))
 				$contents .= sprintf("," . PHP_EOL . "\tDasan-Gpon-Onu-Voip-Sip-Auth += \"%d %s\"",
 					$i, $onu["sipauth$i"]);
 			}
-		if (!empty($xml_provisioning_url)) {
+		if ($onu['xmlprovisioning'] && !empty($xml_provisioning_url)) {
 			$contents .= sprintf("," . PHP_EOL . "\tDasan-Gpon-Onu-Mgmt-Mode-Ip-Path-Ftp += \"id %s password %s\"",
 				$xml_user, $xml_pass);
 			$file = str_replace('%sn%', $onu['name'], $xml_path);

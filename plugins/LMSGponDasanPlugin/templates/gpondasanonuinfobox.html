@@ -1,0 +1,459 @@
+<!--// $Id$ //-->
+{$xajax}
+<TABLE WIDTH="100%" class="lmsbox">
+	<COLGROUP>
+		<COL style="width: 1%;">
+		<COL style="width: 99%;">
+	</COLGROUP>
+	<THEAD>
+	<TR>
+		<TD>
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT="">
+		</TD>
+		<TD class="bold">
+			{$netdevinfo.name} ({$netdevinfo.id|string_format:"%04d"})
+		</TD>
+	</TR>
+	</THEAD>
+	<TBODY>
+	<TR>
+		<TD COLSPAN="2">
+			<TABLE WIDTH="100%" CELLPADDING="0">
+				<TR class="light">
+					<TD WIDTH="50%" style="vertical-align:top;">
+						<TABLE WIDTH="100%" CELLPADDING="3">
+						<TR class="light">
+		<TD WIDTH="1%">
+			 <IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%">
+		        <B>ONU ID:</B>
+		</TD>
+		<TD WIDTH="98%">
+		       <b>{$netdevinfo.onuid}</b>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD style="width: 1%;">
+			<IMG SRC="img/settings.gif" ALT="">
+		</TD>
+		<TD style="width: 1%;" class="bold nobr">
+			Wydany do klienta:
+		</TD>
+		<TD style="width: 98%;">
+			{if $netdevinfo.autoprovisioning == 1}{trans("yes")}{else}{trans("no")}{/if}
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD style="width: 1%;">
+			<IMG SRC="img/settings.gif" ALT="">
+		</TD>
+		<TD style="width: 1%;" class="bold nobr">
+			{trans("XML provisioning:")}
+		</TD>
+		<TD style="width: 98%;">
+			{if $netdevinfo.xmlprovisioning}{trans("yes")}{else}{trans("no")}{/if}
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/settings.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>Profil:</B>
+		</TD>
+		<TD WIDTH="98%">
+			{$netdevinfo.profil_olt}
+		</TD>
+	</TR>
+	
+						{if $netdevinfo.producer}
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/producer.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%">
+		        <B>{trans("Producer:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.producer}
+		</TD>
+	</TR>
+	{/if}
+	{if $netdevinfo.model}
+	<TR class="light">
+		<TD style="width: 1%;">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu_model.gif" ALT="">
+		</TD>
+		<TD style="width: 1%;" class="bold">
+			<B>{trans("Model:")}
+		</TD>
+		<TD style="width: 98%;">
+			<a href="?m=gpondasanonumodelsinfo&id={$netdevinfo.gpononumodelsid}">{$netdevinfo.model}</a>
+		</TD>
+	</TR>
+	{/if}
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/passwd.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%">
+		        <B>{trans("Password:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {if $netdevinfo.password eq ''}(auto-learning){else}{$netdevinfo.password}{/if}
+		</TD>
+	</TR>
+	{if $netdevinfo.onudescription}
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%">
+			<B>ONU description:</B>
+		<TD WIDTH="98%">
+		{$netdevinfo.onudescription}
+		</TD>
+	</TR>
+	{/if}
+	<TR class="light">
+		<TD style="width: 1%;">
+			<IMG SRC="img/netdev.gif" ALT="">
+		</TD>
+		<TD style="width: 1%;" class="bold nobr">
+			{trans("Network device:")}
+		</TD>
+		<TD style="width: 98%;">
+			{if $netdevinfo.netdevid}
+			<A href="?m=netdevinfo&id={$netdevinfo.netdevid}">{$netdevinfo.netdevname}</A>
+			{else}
+			{trans("- none -")}
+			{/if}
+		</TD>
+	</TR>
+
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/customer.gif" ALT="{trans("Customer:")}">
+		</TD>
+		<TD WIDTH="99%" COLSPAN="2">
+		<ol>
+			{foreach from=$gpononu2customers item=c}
+				<li><a href="?m=customerinfo&id={$c.customersid}">{$c.customersname}</a></li>
+				{/foreach}
+				</ol>
+		</TD>
+	</TR>                      	</TABLE>
+	{if isset($netdevinfo.portdetails.pots.portscount)}
+	<table id="show_voip">
+		<TR class="light">
+			<TD WIDTH="1%">
+				<IMG SRC="img/voip.gif" ALT="">
+			</TD>
+			<TD WIDTH="1%" NOWRAP>
+				<B>VoIP:</B>
+			</TD>
+			<TD WIDTH="98%" id="ONU_Voip_Phone" align="left">
+				<table>
+				<tr><td align="right">1.</td><td>{$netdevinfo.voipaccountsid1_phone}</td></tr>
+				<tr><td align="right">2.</td><td>{$netdevinfo.voipaccountsid2_phone}</td></tr>
+				</table>
+			</TD>
+		</TR>
+	</table>
+	{/if}
+	<table>
+	<TR class="light">
+		<TD style="width: 1%;">
+			<IMG SRC="img/node.gif" ALT="">
+		</TD>
+		<TD style="width: 1%;" class="bold nobr">
+			<B>Host:</B>
+		</TD>
+		<TD style="width: 98%;" id="ONU_Host_id" class="text-left">
+			<table>
+				<tr>
+					<td class="text-right">1.</td>
+					<td>{$netdevinfo.host_id1_host|default:trans("- none -")}</td>
+				</tr>
+				<tr>
+					<td class="text-right">2.</td>
+					<td>{$netdevinfo.host_id2_host|default:trans("- none -")}</td>
+				</tr>
+			</table>
+		</TD>
+	</TR> 
+	{if $onulastauth}
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/radius.gif" ALT="">
+		</TD>
+		<TD WIDTH="99%" NOWRAP colspan="2">
+			<B>Ostatnie autoryzacje radius:</B>
+		</TD>
+	</tr>
+	<TR class="light">
+	    <td colspan="3">
+		<table border="1" CELLPADDING="3">
+		<tr class="dark">
+		    <td align="center">Czas:</td><td align="center">NAS IP:</td><td align="center">Olt Id:</td><td align="center">Onu Id:</td><td align="center">Version:</td>
+		</tr>
+		{section name=onulastauth loop=$onulastauth max=15} {* jest sens to konfigurowac? *}
+		    <tr>
+			<td>{$onulastauth[onulastauth].time}</td>
+			<td>{$onulastauth[onulastauth].nas}</td>
+			<td align="right">{$onulastauth[onulastauth].oltport}</td>
+			<td align="right">{$onulastauth[onulastauth].onuoltid}</td>
+			<td>{$onulastauth[onulastauth].version}</td>
+		    </tr>
+		{/section}
+		</table>
+	    </td>
+	</TR>
+	{/if}
+		</TABLE>
+				</TD>
+				<TD WIDTH="50%" style="vertical-align:top;">
+				        <TABLE WIDTH="100%" CELLPADDING="3">
+		{if $netdevinfo.xmlprovisioning}
+		{if $netdevinfo.properties.admin_password || $netdevinfo.properties.telnet_password
+			|| $netdevinfo.properties.user_password}
+		<TR class="light">
+			<TD colspan="3">
+				<fieldset style="width: 1%;" class="nobr">
+					<legend class="bold">
+						<IMG SRC="img/passwd.gif" ALT="">
+						{trans("<!gpon-dasan>Passwords")}
+					</legend>
+					<table cellpadding="2">
+						<tr>
+							<TD class="bold nobr">
+								{trans("Administrator:")}
+							</TD>
+							<TD>
+								{$netdevinfo.properties.admin_password|default:trans("<!gpon-dasan>- default -")}
+							</TD>
+						</tr>
+						<tr>
+							<TD class="bold nobr">
+								{trans("Telnet:")}
+							</TD>
+							<TD>
+								{$netdevinfo.properties.telnet_password|default:trans("<!gpon-dasan>- default -")}
+							</TD>
+						</tr>
+						<tr>
+							<TD class="bold nobr">
+								{trans("User:")}
+							</TD>
+							<TD>
+								{$netdevinfo.properties.user_password|default:trans("- none -")}
+							</TD>
+						</tr>
+					</table>
+				</fieldset>
+			</TD>
+		</TR>
+		{/if}
+		{/if}
+		{if $netdevinfo.xmlprovisioning && $netdevinfo.properties.lan_netaddress}
+		<TR class="light">
+			<TD colspan="3">
+				<fieldset style="width: 1%;" class="nobr">
+					<legend class="bold"><IMG SRC="img/netdev.gif" ALT=""> {trans("LAN settings")}</legend>
+					<table cellpadding="2">
+						<tr>
+							<TD class="bold nobr">
+								{trans("Network address:")}
+							</TD>
+							<TD>
+								{$netdevinfo.properties.lan_netaddress}
+							</TD>
+						</tr>
+						<tr>
+							<TD class="bold nobr">
+								{trans("Network mask:")}
+							</TD>
+							<TD>
+								{$netdevinfo.properties.lan_netmask}
+							</TD>
+						</tr>
+						<tr>
+							<TD class="bold nobr">
+								{trans("Gateway:")}
+							</TD>
+							<TD>
+								{$netdevinfo.properties.lan_gateway}
+							</TD>
+						</tr>
+						{if $netdevinfo.properties.lan_firstdhcpip != '' && $netdevinfo.properties.lan_lastdhcpip != ''}
+						<tr>
+							<TD class="bold nobr">
+								{trans("First DHCP address:")}
+							</TD>
+							<TD>
+								{$netdevinfo.properties.lan_firstdhcpip}
+							</TD>
+						</tr>
+						<tr>
+							<TD class="bold nobr">
+								{trans("Last DHCP address:")}
+							</TD>
+							<TD>
+								{$netdevinfo.properties.lan_lastdhcpip}
+							</TD>
+						</tr>
+						{else}
+						<tr>
+							<TD class="bold text-center nobr" colspan="2">
+								{trans("DHCP server disabled")}
+							</TD>
+						</tr>
+						{/if}
+					</table>
+				</fieldset>
+			</TD>
+		</TR>
+		{/if}
+		{if $netdevinfo.xmlprovisioning && isset($netdevinfo.portdetails.wifi.portscount)}
+		{if $netdevinfo.properties.wifi_ssid || $netdevinfo.properties.wifi_password}
+		<TR class="light">
+			<TD colspan="3">
+				<fieldset style="width: 1%;" class="nobr">
+					<legend class="bold"><IMG SRC="img/wireless.gif" ALT=""> {trans("WiFi settings")}</legend>
+					<table cellpadding="2">
+						<tr>
+							<TD class="bold nobr">
+								{trans("SSID:")}
+							</TD>
+							<TD>
+								{$netdevinfo.properties.wifi_ssid}
+							</TD>
+						</tr>
+						<tr>
+							<TD class="bold nobr">
+								{trans("Password:")}
+							</TD>
+							<TD>
+								{$netdevinfo.properties.wifi_password}
+							</TD>
+						</tr>
+					</table>
+				</fieldset>
+			</TD>
+		</TR>
+		{/if}
+		{/if}
+		{if ($netdevinfo.xmlprovisioning || ConfigHelper::checkConfig('gpon-dasan.use_radius')) && $netdevinfo.portsettings}
+		<TR class="light">
+			<TD colspan="3">
+				<fieldset style="width: 1%;" class="nobr">
+					<legend class="bold">
+						<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu_takenports.gif" ALT="">
+						{trans("<!gpon-dasan>Ports")}
+					</legend>
+					<table cellpadding="2">
+						<tr class="dark">
+							<td class="bold nobr">{trans("Port")}</td>
+							<td class="bold nobr">{trans("<!gpon-dasan>Administrative status")}</td>
+							{if $netdevinfo.xmlprovisioning}
+							<td class="bold nobr">{trans("<!gpon-dasan>VLAN 802.1q")}</td>
+							{/if}
+						</tr>
+						{foreach $netdevinfo.portsettings as $port}
+						{$portname = $port.name|cat:"."|cat:$port.portid}
+						<tr>
+							<td class="text-right nobr">
+								{$portname}
+							</td>
+							<td class="text-center nobr">
+								{if $port.portdisable}{trans("- down -")}{else}{trans("- up -")}{/if}
+							</td>
+							{if $netdevinfo.xmlprovisioning}
+							<td class="text-center nobr">
+								{$vlanid = $netdevinfo.properties.vlans[$portname]}
+								{if $vlanid == ""}
+									{trans("<!gpon-dasan>- default -")}
+								{elseif $vlanid == "0"}
+									{trans("<!gpon-dasan>- tagged/trunk -")}
+								{else}
+									{t a=$vlans[$vlanid] b=$vlanid}$a (id: $b){/t}
+								{/if}
+							</td>
+							{/if}
+						</tr>
+						{/foreach}
+					</table>
+				</fieldset>
+			</TD>
+		</TR>
+		{/if}
+        <TR class="light">
+                <TD WIDTH="1%">
+                        <IMG SRC="img/users.gif" ALT="">
+                </TD>
+                <TD WIDTH="1%" NOWRAP>
+                        <B>{trans("Created:")}<BR>
+                        {trans("Modified:")}</B>
+                </TD>
+                <TD WIDTH="98%">
+                        {if $netdevinfo.creationdate}{$netdevinfo.createdby}, {$netdevinfo.creationdateh}{else} ? {/if}<BR>
+                        {if $netdevinfo.moddate}{$netdevinfo.modifiedby}, {$netdevinfo.moddateh}{else}-{/if}
+                </TD>
+        </TR>
+
+	{if $netdevinfo.gponoltid gt 0}
+	<TR class="light">
+		<TD WIDTH="100%" COLSPAN="3">
+		    Historia sygnału 1490nm/<font color="#00c080">1310nm</font> odbieranego na ONU/OLT (RxPower):
+			{if $netdevinfo.rrd == 1}
+			    <a href="?m=gpondasanonuinfo&id={$netdevinfo.id}&rrd=0"> <img src="?m=gpondasanonusignalimage&id={$netdevinfo.id}" alt="wykres sygnału" /></a>  
+			{else}
+			    <a href="?m=gpondasanonuinfo&id={$netdevinfo.id}&rrd=1"> <img src="?m=gpondasanonusignalimage&id={$netdevinfo.id}" alt="wykres sygnału" /></a>  
+			{/if}
+		</TD>
+	</TR>
+	{/if}
+						</TABLE>
+					</TD>
+				</TR>
+			</TABLE>
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN="2" class="text-right">
+			{if ConfigHelper::checkConfig('gpon-dasan.use_radius')}
+			<a href="#" id="disconnectbutton" onclick="if (confirm('{trans("Are you sure you want to disconnect ONU?")}')) { this.style.display = 'none'; xajax_ONU_radius_disconnect({$netdevinfo.id}); } else return false;">{trans("<!gpon-dasan>Disconnect")} <IMG SRC="img/radius.gif" ALT=""></a>
+			{/if}
+			{if $netdevinfo.xmlprovisioning}
+			<a href="#" id="xmlprovisioningbutton"  onclick="if (confirm('{trans("Are you sure you want to make XML provisioning for ONU?")}')) { this.style.display = 'none'; xajax_ONU_xml_provisioning({$netdevinfo.id}); } else return false;">{trans("XML provisioning")} <IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT=""></a>
+			{/if}
+			<a href="#" id="resetbutton"  onclick="if (confirm('{trans("Are you sure you want to reset ONU?")}')) { this.style.display = 'none'; xajax_ONU_reset({$netdevinfo.id}); } else return false;">{trans("<!gpon-dasan>Reset")} <IMG SRC="img/reload.gif" ALT=""></a>
+			<A href="?m=gpondasanonuedit&id={$netdevinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
+			<A href="?m=gpondasanonudel&id={$netdevinfo.id}" OnClick="return confirmLink(this, '{t a=$netdevinfo.name}Are you sure, you want to remove device \'$a\' from database?{/t}');">{trans("Delete")} <img src="img/delete.gif" ALT=""></A>
+		</TD>
+	</TR>
+	{if $netdevinfo.gponoltid > 0}
+	<TR>
+		<TD COLSPAN="2" class="text-center">
+			<HR>
+			<input type="button" value="{trans("Show SNMP settings")}" id="pokaz_parametry_{$netdevinfo.id}" OnClick="xajax_ONU_get_param_Xj({$netdevinfo.gponoltid},{$netdevinfo.gponoltnumport},{$netdevinfo.onuid},{$netdevinfo.id},'{$netdevinfo.name}');">
+			<br>
+			<input style="display:none;" type="button" value="{trans("Refresh SNMP settings")}" id="odswiez_parametry_{$netdevinfo.id}" OnClick="xajax_ONU_get_param_Xj({$netdevinfo.gponoltid},{$netdevinfo.gponoltnumport},{$netdevinfo.onuid},{$netdevinfo.id},'{$netdevinfo.name}');">
+			<div id="ONU_param_{$netdevinfo.id}"></div>
+		</TD>
+	</TR>
+	{/if}
+	<TR>
+		<TD COLSPAN="2"></TD>
+	</TR>
+	</TBODY>
+</TABLE>
+{if $devicepanel}
+<SCRIPT type="text/javascript">
+<!--
+if(getCookie('devicepanel')=='1')
+        document.getElementById('devicepanel').style.display = '';
+//-->
+</SCRIPT>
+{/if}

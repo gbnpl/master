@@ -77,7 +77,9 @@ olt_pagelimit		- jw
 max_onu_to_olt		- domyślna wartość nakładająca limit onu na port olt
 onu_customerlimit	- do ilu użytkowników może byc przypisany onu (np
 			przypadek gdzie jest jedno onu na dom bliźniak)
-tx_output_power_weak	- poniżej jakiej wartości rx power jest sygnalizowane
+rx_power_weak	- poniżej jakiej wartości rx power jest sygnalizowane
+			na czerwono
+rx_power_overload	- powyżej jakiej wartości rx power jest sygnalizowane
 			na czerwono
 use_radius		- czy autoryzacja onu w oparciu o serwer radius
 

@@ -1,0 +1,178 @@
+<!--// $Id$ //-->
+{$xajax}
+<script type="text/javascript">
+<!--
+	var current_port = 0;
+
+	function OLT_ONU_walk_callback() {
+		xajax_OLT_ONU_walk_Xj({$netdevinfo.gponoltid}, ++current_port,
+			current_port == {count($gponoltportsinfo)} ? null : 'OLT_ONU_walk_callback');
+		if (current_port == {count($gponoltportsinfo)})
+			current_port = 0;
+	}
+
+	function OLT_ONU_walk() {
+		var filter = document.forms['choosefilter'].elements['f'];
+		var port = parseInt(filter.options[filter.selectedIndex].value);
+		if (port)
+			xajax_OLT_ONU_walk_Xj({$netdevinfo.gponoltid}, port);
+		else
+			OLT_ONU_walk_callback();
+	}
+//-->
+</script>
+<TABLE WIDTH="100%" CELLPADDING="3">
+        <TR class="dark">
+	        <TD width="100%" class="fall hand" align="left" nowrap="nowrap" onClick="showOrHide('devicedevices');">
+			<IMG SRC="img/mac.gif" alt="">
+			<B>{t a=$netdevlist|@count}Podłączone ONU ($a){/t}</B>
+		</TD>
+	</TR>
+	<TR id="devicedevices" style="display:none;">
+	        <TD WIDTH="100%" class="fall">
+	        
+	<TABLE cellpadding="5" cellspacing="0" WIDTH="100%">
+	<TR class="dark">
+		<TD class="fleftu" width="1%" rowspan="2">
+			<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT=""><br>
+			<IMG src="img/customer.gif" ALT="">
+		</TD>
+		<TD class="fbt" width="37%" rowspan="2">
+			<B>{trans("Name")} / {trans("Producer")} / {trans("Model")} /</B> ONU description:<BR>
+			 {trans("Customer:")}
+		</TD>
+		<TD class="fleftu" style="border-left:0px;border-bottom:0px;" width="10%" align="center" colspan="5">
+		<input type="button" value="Pokaż dane SNMP" id="pokaz_dane_ONU" OnClick="OLT_ONU_walk();">
+		<div id="OLT_ONU_date"></div>
+		</TD>
+		<TD class="fbt" width="1%" align="right" rowspan="2" NOWRAP>
+			<A href="?m=gpondasanoltinfo&id={$netdevinfo.id}&o=id{if $listdata.direction eq "asc" && $listdata.order eq "id"},desc{/if}">ID:</A> {if $listdata.order eq "id"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if} <br />
+				<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu_takenports.gif" ALT="">
+				<A href="?m=gpondasanoltinfo&id={$netdevinfo.id}&o=onuid{if $listdata.direction eq "asc" && $listdata.order eq "onuid"},desc{/if}">ONU ID:</A> {if $listdata.order eq "onuid"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+		</TD>
+		<TD class="fbt" width="1%" rowspan="2" NOWRAP>
+			<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu_takenports.gif" ALT=""><A href="?m=gpondasanoltinfo&id={$netdevinfo.id}&o=numport{if $listdata.direction eq "asc" && $listdata.order eq "numport"},desc{/if}">Port OLT:</A> {if $listdata.order eq "numport"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if} <BR>Filtr:
+			<FORM METHOD="GET" ACTION="?m={$layout.module}" NAME="choosefilter">
+                            <INPUT type="submit" class="hiddenbtn">
+                            <INPUT TYPE="HIDDEN" NAME="m" VALUE="gpondasanoltinfo">
+                            <INPUT TYPE="HIDDEN" NAME="id" VALUE="{$netdevinfo.id}">
+                            <SELECT SIZE="1" NAME="f" ONCHANGE="document.choosefilter.submit();">
+			    <option value="0">- {t}all{/t} -</option>
+			    {foreach from=$gponoltportsinfo item=gponoltports}
+				<option value="{$gponoltports.numport}" {if $listdata.filtr eq $gponoltports.numport} SELECTED{/if}> {if $gponoltports.numportf}{$gponoltports.numportf}{else}{$gponoltports.numport}{/if} </option>
+			    {/foreach}
+			    </select>
+			</form>
+		</TD>
+		<TD class="frightu" rowspan="2" width="1%">
+			&nbsp;
+		</TD>
+	</TR>
+	<TR class="dark">
+	<td class="fbt" style="border-left:0px;border-top:0px;"><b>Distance:</b></td>
+	<td class="fbt" style="border-left:0px;border-top:0px;"><b>RX Power:</b></td>
+	<td class="fbt" style="border-left:0px;border-top:0px;"><b>Profile:</b></td>
+	<td class="fbt" style="border-left:0px;border-top:0px;"><b>Status:</b></td>
+	<td class="fbt" style="border-left:0px;border-top:0px;"><b>Deactive Reason:</b></td>
+	</TR>
+	{cycle values="light,lucid" print=false}
+	{section name=netdevlist loop=$netdevlist start=$start}
+	<TR class="{cycle}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+		<TD>
+                        <IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT=""><br>
+                        <IMG src="img/customer.gif" ALT="">
+                </TD>
+
+		<TD width="37%" onClick="return self.location.href='?m=gpondasanonuinfo&id={$netdevlist[netdevlist].id}';" VALIGN="TOP" NOWRAP>
+			<a name="{$netdevlist[netdevlist].id}"><B>{$netdevlist[netdevlist].name} {if $netdevlist[netdevlist].producer}/ {$netdevlist[netdevlist].producer}{/if} {if $netdevlist[netdevlist].model}/ {$netdevlist[netdevlist].model}{/if} </B> {if $netdevlist[netdevlist].onudescription}/ {$netdevlist[netdevlist].onudescription}{/if}</A><BR>
+			<ol style="margin:0px;position:relative;">
+			{foreach from=$netdevlist[netdevlist].gpononu2customers item=c}
+				<li><a href="?m=customerinfo&id={$c.customersid}">{$c.customersname}</a></li>
+				{/foreach}
+				</ol>
+		</TD>
+		<td style="border-left:0px;"><div align="right" id="Distance_ONU_{$netdevlist[netdevlist].numport}.{$netdevlist[netdevlist].onuid}"></div></td>
+	<td style="border-left:0px;"><div align="right" id="RxPower_ONU_{$netdevlist[netdevlist].numport}.{$netdevlist[netdevlist].onuid}"></div></td>
+	<td style="border-left:0px;"><div align="right" id="Profile_ONU_{$netdevlist[netdevlist].numport}.{$netdevlist[netdevlist].onuid}"></div></td>
+	<td style="border-left:0px;"><div align="right" id="Status_ONU_{$netdevlist[netdevlist].numport}.{$netdevlist[netdevlist].onuid}"></div></td>
+	<td style="border-left:0px;"><div align="right" id="DeactiveReason_ONU_{$netdevlist[netdevlist].numport}.{$netdevlist[netdevlist].onuid}"></div></td>
+		<TD width="1%" align="right" onClick="return self.location.href='?m=gpondasanonuinfo&id={$netdevlist[netdevlist].id}';" NOWRAP>
+			({$netdevlist[netdevlist].id|string_format:"%04d"})<br />
+			<b>{$netdevlist[netdevlist].onuid}</b>
+		</TD>
+		<TD width="1%" onClick="return self.location.href='?m=gpondasanonuinfo&id={$netdevlist[netdevlist].id}';" NOWRAP>
+			{if $netdevlist[netdevlist].linktype}
+				<A href="?m=gpondasanonuedit&action=switchlinktype&linktype=0&id={$netdevinfo.id}&devid={$netdevlist[netdevlist].id}"><IMG SRC="img/wireless.gif" alt="[ {trans("Change connection type")} ]" title="[ {trans("Change connection type")} ]"></A> 
+			{else}
+				<A href="?m=gpondasanonuedit&action=switchlinktype&linktype=1&id={$netdevinfo.id}&devid={$netdevlist[netdevlist].id}"><IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu_takenports.gif" alt="[ {trans("Change connection type")} ]" title="[ {trans("Change connection type")} ]"></A> 
+			{/if}
+			[<b>{if $netdevlist[netdevlist].numport}
+				{if $netdevlist[netdevlist].numportf}{$netdevlist[netdevlist].numportf}
+				{else}{$netdevlist[netdevlist].numport}{/if}
+			    {/if}</b>]
+		<!--	<BR><IMG SRC="img/port.gif" ALT=""> {$netdevlist[netdevlist].ports} -->
+		</TD>
+		<TD WIDTH="1%">
+			<A HREF="?m=gpondasanoltedit&action=disconnect&id={$netdevinfo.id}&devid={$netdevlist[netdevlist].id}&numport={$netdevlist[netdevlist].numport}" OnClick="return confirmLink(this, '{trans("Are you sure, you want to delete that connection?")}');"><IMG SRC="img/delete.gif" {tip text="Delete connection"}></A>
+		</TD>
+	</TR>
+	{sectionelse}
+	<TR>
+		<TD  colspan="10" align="center">
+			<P>&nbsp;</P>
+			<P><B>Brak ONU do podłączenia.</B></P>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	{/section}
+	<TR class="light">
+		<TD  WIDTH="100%" class="ftop" COLSPAN="10" ALIGN="CENTER" NOWRAP>
+			{if $netdevinfo.ports eq $netdevinfo.takenports}
+			<B>{trans("All ports in that device are in use.")}</B>
+			{elseif !$restnetdevlist}
+			<B>Brak ONU do podłączenia.</B>
+			{else}
+			<FORM METHOD="GET" ACTION="?m=gpondasanoltedit" NAME="connect">
+			<INPUT type="submit" class="hiddenbtn">
+			<INPUT TYPE="HIDDEN" NAME="m" VALUE="gpondasanoltedit">
+			<INPUT TYPE="HIDDEN" NAME="id" VALUE="{$netdevinfo.id}">
+			<INPUT TYPE="HIDDEN" NAME="action" VALUE="connect">
+			<TABLE width="100%">
+			    <TR>
+				<TD width="99%" NOWRAP>
+				<b>{trans("Connect")}:</b> ONU:
+			<SELECT NAME="gpononu" style="width: 300px" {tip trigger="linkolt" text="Wybierz ONU"}>
+				{section name=restnetdevlist loop=$restnetdevlist}
+				{assign var=netdevname value=$restnetdevlist[restnetdevlist].name}
+				{if $restnetdevlist[restnetdevlist].producer}{assign var=netdevname value=$netdevname|cat:" - "|cat:$restnetdevlist[restnetdevlist].producer}{/if}
+				{if $restnetdevlist[restnetdevlist].model}{assign var=netdevname value=$netdevname|cat:" / "|cat:$restnetdevlist[restnetdevlist].model}{/if}
+				{if $restnetdevlist[restnetdevlist].location}{assign var=netdevname value=$netdevname|cat:" ("|cat:$restnetdevlist[restnetdevlist].location|cat:")"}{/if}
+				<OPTION VALUE="{$restnetdevlist[restnetdevlist].id}"{if $connect.id == $restnetdevlist[restnetdevlist].id} selected{/if}>{$netdevname|truncate:120:"...":true}</OPTION>
+				{/section}
+			</SELECT>
+			
+			{trans("Port")}:<INPUT name="numport" value="{if $connect.numport}{$connect.numport}{/if}" size="2" {tip text="Wpisz numer portu" trigger="numport"}>
+			
+				    </TD>
+				    <TD rowspan="2" width="1%">
+					<NOBR><A HREF="javascript:document.connect.submit(); ">{trans("Connect")}</A> <IMG src="img/save.gif" alt=""></NOBR>
+				    </TD>
+				</TR>
+			</TABLE>
+			</FORM>
+			{/if}
+		</TD>
+	</TR>
+</TABLE>
+{if $connect.linkolt}
+				<div style="background-color:white;border:1px solid black;margin:3px;padding:3px;"><b><font color="red">{$connect.linkolt}</font></b><br /><br /></div>
+			{/if}
+               </TD>
+       </TR>
+</TABLE>
+<SCRIPT type="text/javascript">
+<!--
+if(getCookie('devicedevices')=='1')
+	document.getElementById('devicedevices').style.display = '';
+//-->
+</SCRIPT>

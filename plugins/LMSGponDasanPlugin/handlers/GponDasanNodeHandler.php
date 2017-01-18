@@ -31,38 +31,53 @@
  */
 class GponDasanNodeHandler {
 	public function nodeAddBeforeDisplay(array $hook_data) {
-		global $LMS, $GPON;
+		global $LMS;
+
+		$GPON = LMSGponDasanPlugin::getGponInstance();
 
 		$SMARTY = $hook_data['smarty'];
+		$oldid = $_GET['id'];
 		$_GET['id'] = $_GET['ownerid'];
-		require_once(PLUGINS_DIR . '/' . LMSGponDasanPlugin::plugin_directory_name . '/modules/gpononu.inc.php');
+		require_once(PLUGINS_DIR . '/' . LMSGponDasanPlugin::plugin_directory_name . '/modules/gpondasanonu.inc.php');
+		$_GET['id'] = $oldid;
 
 		return $hook_data;
 	}
 
 	public function nodeInfoBeforeDisplay(array $hook_data) {
-		global $LMS, $GPON;
+		global $LMS;
+
+		$GPON = LMSGponDasanPlugin::getGponInstance();
 
 		$SMARTY = $hook_data['smarty'];
+		$oldid = $_GET['id'];
 		$_GET['id'] = LMSDB::GetInstance()->GetOne('SELECT ownerid FROM nodes WHERE id = ?', array($_GET['id']));
-		require_once(PLUGINS_DIR . '/' . LMSGponDasanPlugin::plugin_directory_name . '/modules/gpononu.inc.php');
+		require_once(PLUGINS_DIR . '/' . LMSGponDasanPlugin::plugin_directory_name . '/modules/gpondasanonu.inc.php');
+		$_GET['id'] = $oldid;
 
 		return $hook_data;
 	}
 
 	public function nodeEditBeforeDisplay(array $hook_data) {
-		global $LMS, $GPON;
+		global $LMS;
+
+		$GPON = LMSGponDasanPlugin::getGponInstance();
 
 		$SMARTY = $hook_data['smarty'];
+		$oldid = $_GET['id'];
 		$_GET['id'] = LMSDB::GetInstance()->GetOne('SELECT ownerid FROM nodes WHERE id = ?', array($_GET['id']));
-		require_once(PLUGINS_DIR . '/' . LMSGponDasanPlugin::plugin_directory_name . '/modules/gpononu.inc.php');
+		require_once(PLUGINS_DIR . '/' . LMSGponDasanPlugin::plugin_directory_name . '/modules/gpondasanonu.inc.php');
+		$_GET['id'] = $oldid;
 
 		return $hook_data;
 	}
 
 	public function nodeScanOnLoad() {
-		global $SMARTY, $LMS, $GPON;
-		require_once(PLUGINS_DIR . '/' . LMSGponDasanPlugin::plugin_directory_name . '/modules/gpononu.inc.php');
+		global $SMARTY, $LMS;
+
+		$GPON = LMSGponDasanPlugin::getGponInstance();
+
+		require_once(PLUGINS_DIR . '/' . LMSGponDasanPlugin::plugin_directory_name . '/modules/gpondasanonu.inc.php');
 	}
 }
 

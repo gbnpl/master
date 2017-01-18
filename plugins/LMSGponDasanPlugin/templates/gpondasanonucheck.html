@@ -1,0 +1,82 @@
+{include file="header.html"}
+<!--// $Id$ //-->
+{$xajax}
+<H1>{$layout.pagetitle}</H1>
+<TABLE CELLPADDING="3" width="100%" border="0">
+	<TR class="dark">
+		<TD class="fleftu" width="57%">
+			<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT="">&nbsp;<B>{trans("Name:")}</B><BR>
+			{trans("Model:")}<br />
+			{trans("Description:")}
+		</TD>
+		<TD class="fleftu" style="border-left:0px;" width="30%">
+		<img src="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt.gif" ALT="">OLT
+		</TD>
+		<TD class="fbt" width="1%" align="right" valign="top">
+			
+		</TD>
+		
+		<TD class="fbt" width="1%" NOWRAP>
+			
+		</TD>
+		<TD class="frightu" width="1%" align="right" nowrap>
+			<B>{trans("Total:")} {$listdata.total|default:"0"}</B>
+		</TD>
+	</TR>
+	{cycle values="light,lucid" print=false}
+	{section name=netdevlist loop=$netdevlist start=0 max=$listdata.total}
+	<TR class="{cycle}{if !$netdevlist[netdevlist].onu_model} blend{/if}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+		<TD width="57%" class="fleft" VALIGN="TOP">
+			<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu.gif" ALT=""> <B>{$netdevlist[netdevlist].onu_serial}</B><BR>
+			<IMG src="img/producer.gif" ALT=""> {if $netdevlist[netdevlist].onu_model}{$netdevlist[netdevlist].onu_model}{/if}
+			<BR>
+			{if $netdevlist[netdevlist].onu_description}{$netdevlist[netdevlist].onu_description}{/if}
+		</TD>
+		<TD width="30%" style="border-left:0px;" class="fleft" VALIGN="TOP">
+			<A href="?m=gpondasanoltinfo&id={$netdevlist[netdevlist].olt_netdevicesid}"><img src="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt.gif" ALT=""> {$netdevlist[netdevlist].olt_name}</A><br />Port OLT: <b>{$netdevlist[netdevlist].olt_port}</b> / ONU id: <b>{$netdevlist[netdevlist].onu_id}</b>
+		</td>
+		<TD WIDTH="1%"  align="right" VALIGN="TOP">
+			
+		</TD>
+		<TD width="1%"  NOWRAP>
+	
+		</TD>
+		<TD WIDTH="1%" class="fright" align="right">
+		{if $netdevlist[netdevlist].onu_error eq 1}
+		<div style="color:#CC0000;"><b>{$netdevlist[netdevlist].onu_error_text}</b></div>
+		{else}
+			<nobr>
+			{if $netdevlist[netdevlist].onu_exists eq 1}
+			<b>Auto podłączony</b>
+			{else}
+			<form method="POST" name="olt_{$netdevlist[netdevlist].olt_netdevicesid}_{$netdevlist[netdevlist].olt_port}_{$netdevlist[netdevlist].onu_id}" action="?m=gpondasanonuadd">
+				{foreach from=$netdevlist[netdevlist] key=k item=v}
+				<INPUT TYPE="hidden" NAME="onucheck[{$k}]" VALUE="{$v}"> 
+				{/foreach}
+			</form>
+			{if $netdevlist[netdevlist].onu_model}
+			<a href="#" onclick="document.forms['olt_{$netdevlist[netdevlist].olt_netdevicesid}_{$netdevlist[netdevlist].olt_port}_{$netdevlist[netdevlist].onu_id}'].submit(); return false;"><IMG src="img/add.gif" alt="[ {trans("Add")} ]" title="[ {trans("Add")} ]"></A>
+			{/if}
+			{/if}
+			</nobr>
+		{/if}
+		</TD>
+	</TR>
+	{if $netdevlist[netdevlist.index_next].ownerid eq $netdevlist[netdevlist].ownerid && $listdata.order eq "owner"}{cycle print=false}{/if}
+	{sectionelse}
+	<TR>
+		<TD colspan="5" class="fall" align="center">
+			<p>&nbsp;</p>
+			<p><B>{trans("There are no devices in your database.")}</b></p>
+			<p>&nbsp;</p>
+		</TD>
+	</TR>
+	{/section}
+	<TR class="light">
+		<TD WIDTH="99%" COLSPAN="4" class="fleftu" ALIGN="right">
+			
+		</TD>
+		<TD WIDTH="1%" COLSPAN="1" class="frightu"></TD>				
+	</TR>			
+</TABLE>
+{include file="footer.html"}

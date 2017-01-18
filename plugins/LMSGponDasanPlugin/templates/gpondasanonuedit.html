@@ -1,0 +1,25 @@
+{include file="header.html"}
+{$xajax}
+<!--// $Id$ //-->
+<H1>{$layout.pagetitle}</H1>
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR>
+		<TD WIDTH="100%">
+			{include file="gpondasanonueditbox.html"}
+		</TD>
+	</TR>
+	<TR>
+		<TD WIDTH="100%">
+			{include file="gpondasanonuconnbox.html"}
+		</TD>
+	<TR>
+	{if $netdevinfo.ownerid gt 0}
+	<TR>
+		<TD WIDTH="100%">
+			{include file="customerinfobox.html" customerpanel=1}
+		</TD>
+	</TR>
+	{/if}
+
+</TABLE>
+{include file="footer.html"}

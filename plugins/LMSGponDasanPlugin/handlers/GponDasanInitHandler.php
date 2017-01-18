@@ -31,26 +31,6 @@
  */
 class GponDasanInitHandler {
     /**
-     * Sets plugin managers
-     * 
-     * @param LMS $hook_data Hook data
-     */
-	public function lmsInit(LMS $hook_data) {
-		global $GPON;
-
-		$db = $hook_data->getDb();
-		$auth = $hook_data->getAuth();
-
-		$hook_data->SetNetDevManager(
-			new GponDasanLMSNetDevManager($db, $auth, $hook_data->getCache(), $hook_data->getSyslog())
-		);
-
-		$GPON = new GPON($db, $auth);
-
-		return $hook_data;
-	}
-
-    /**
      * Sets plugin Smarty templates directory
      * 
      * @param Smarty $hook_data Hook data
@@ -61,6 +41,10 @@ class GponDasanInitHandler {
 		$plugin_templates = PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSGponDasanPlugin::plugin_directory_name . DIRECTORY_SEPARATOR . 'templates';
 		array_unshift($template_dirs, $plugin_templates);
 		$hook_data->setTemplateDir($template_dirs);
+
+		$SMARTY = $hook_data;
+		require_once(PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSGponDasanPlugin::plugin_directory_name . DIRECTORY_SEPARATOR
+			. 'lib' . DIRECTORY_SEPARATOR . 'definitions.php');
 
 		return $hook_data;
 	}
@@ -85,30 +69,30 @@ class GponDasanInitHandler {
      */
 	public function menuInit(array $hook_data = array()) {
 		$menu_gpon = array(
-			'GPON' => array(
+			'GPON_DASAN' => array(
 				'name' => 'GPON DASAN',
 				'img' => LMSGponDasanPlugin::plugin_directory_name . '/gponolt.gif',
-				'link' =>'?m=gponoltlist',
+				'link' =>'?m=gpondasanoltlist',
 				'tip' => 'Zarządzanie GPON',
 				'accesskey' =>'k',
 				'prio' => 11,
 				'submenu' => array(
 					array(
-						'name' => 'Lista <b>OLT</b>',
-						'link' => '?m=gponoltlist',
-						'tip' => 'Lista OLT',
+						'name' => trans('OLT list'),
+						'link' => '?m=gpondasanoltlist',
+						'tip' => trans('OLT list'),
 						'prio' => 10,
 					),
 					array(
-						'name' => 'Nowy <b>OLT</b>',
-						'link' => '?m=gponoltadd',
-						'tip' => 'Dodaj OLT',
+						'name' => trans('New OLT'),
+						'link' => '?m=gpondasanoltadd',
+						'tip' => trans('New OLT'),
 						'prio' => 20,
 					),
 					array(
-						'name' => trans('Search').' <b>OLT</b>',
-						'link' => '?m=gponoltsearch',
-						'tip' => 'Szukaj OLT',
+						'name' => trans('OLT search'),
+						'link' => '?m=gpondasanoltsearch',
+						'tip' => trans('OLT search'),
 						'prio' => 30,
 					),
 					array(
@@ -116,27 +100,27 @@ class GponDasanInitHandler {
 						'prio' => 35,
 					),
 					array(
-						'name' => 'Wykryj <b>ONU</b>',
-						'link' => '?m=gpononucheck',
-						'tip' => 'Wykryj ONU',
+						'name' => trans('Detect ONU'),
+						'link' => '?m=gpondasanonucheck',
+						'tip' => trans('Detect ONU'),
 						'prio' => 37,
 					),
 					array(
-						'name' => 'Lista <b>ONU</b>',
-						'link' => '?m=gpononulist',
-						'tip' => 'Lista ONU',
+						'name' => trans('ONU list'),
+						'link' => '?m=gpondasanonulist',
+						'tip' => trans('ONU list'),
 						'prio' => 40,
 					),
 					array(
-						'name' => 'Nowy <b>ONU</b>',
-						'link' => '?m=gpononuadd',
-						'tip' => 'Dodaj ONU',
+						'name' => trans('New ONU'),
+						'link' => '?m=gpondasanonuadd',
+						'tip' => trans('New ONU'),
 						'prio' => 50,
 					),
 					array(
-						'name' => trans('Search').' <b>ONU</b>',
-						'link' => '?m=gpononusearch',
-						'tip' => 'Szukaj ONU',
+						'name' => trans('ONU search'),
+						'link' => '?m=gpondasanonusearch',
+						'tip' => trans('ONU search'),
 						'prio' => 60,
 					),
 					array(
@@ -144,15 +128,15 @@ class GponDasanInitHandler {
 						'prio' => 65,
 					),
 					array(
-						'name' => 'Lista modeli <b>ONU</b>',
-						'link' => '?m=gpononumodelslist',
-						'tip' => 'Lista modeli ONU',
+						'name' => trans('ONU model list'),
+						'link' => '?m=gpondasanonumodelslist',
+						'tip' => trans('ONU model list'),
 						'prio' => 70,
 					),
 					array(
-						'name' => 'Nowy model <b>ONU</b>',
-						'link' => '?m=gpononumodelsadd',
-						'tip' => 'Dodaj model ONU',
+						'name' => trans('New ONU model'),
+						'link' => '?m=gpondasanonumodelsadd',
+						'tip' => trans('New ONU model'),
 						'prio' => 80,
 					),
 					array(
@@ -160,15 +144,15 @@ class GponDasanInitHandler {
 						'prio' => 85,
 					),
 					array(
-						'name' => 'Lista kanałów TV',
-						'link' => '?m=gpononutvlist',
-						'tip' => 'Lista kanałów TV',
+						'name' => trans('TV channel list'),
+						'link' => '?m=gpondasanonutvlist',
+						'tip' => trans('TV channel list'),
 						'prio' => 90,
 					),
 					array(
-						'name' => 'Nowy kanał TV',
-						'link' => '?m=gpononutvadd',
-						'tip' => 'Dodaj kanał TV',
+						'name' => trans('New TV channel'),
+						'link' => '?m=gpondasanonutvadd',
+						'tip' => trans('New TV channel'),
 						'prio' => 100,
 					),
 					array(
@@ -186,10 +170,10 @@ class GponDasanInitHandler {
 		);
 
 		if (!ConfigHelper::getConfig('phpui.gpon_use_radius')) {
-			array_push($menu_gpon['GPON']['submenu'], array(
-				'name' => 'Auto podłączanie <b>ONU</b>',
-				'link' => '?m=gpononuscript',
-				'tip' => 'Auto podłączanie ONU',
+			array_push($menu_gpon['GPON_DASAN']['submenu'], array(
+				'name' => trans('ONU auto-connection'),
+				'link' => '?m=gpondasanonuscript',
+				'tip' => trans('ONU auto-connection'),
 				'prio' => 38,
 			));
 		}
@@ -208,12 +192,12 @@ class GponDasanInitHandler {
 	public function accessTableInit() {
 		$access = AccessRights::getInstance();
 
-		$access->insertPermission(new Permission('gpon_full_access', trans('GPON - module management'), '^gpon.*$'),
+		$access->insertPermission(new Permission('gpondasan_full_access', trans('GPON - module management'), '^gpon.*$'),
 			AccessRights::FIRST_FORBIDDEN_PERMISSION);
-		$access->insertPermission(new Permission('gpon_read_only', trans('GPON - information review'),
+		$access->insertPermission(new Permission('gpondasan_read_only', trans('GPON - information review'),
 			'^((gponolt|gpononu|gpononumodels)(info|list|search|tvinfo|tvlist|signalimage)|gponoffline)$'),
 			AccessRights::FIRST_FORBIDDEN_PERMISSION);
-		$access->insertPermission(new Permission('gpon_auto_provisioning', trans('GPON - auto provisioning (new onu)'),
+		$access->insertPermission(new Permission('gpondasan_auto_provisioning', trans('GPON - auto provisioning (new onu)'),
 			'^(gpononu(add|script|edit|check))$'), AccessRights::FIRST_FORBIDDEN_PERMISSION);
 	}
 }

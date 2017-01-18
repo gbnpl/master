@@ -1,0 +1,103 @@
+<!--// $Id$ //-->
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR{if $devicepanel} class="dark hand" onClick="showOrHide('devicepanel');"{else} class="dark"{/if}>
+		<TD WIDTH="1%" class="fleftu">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononumodels.gif" ALT="">
+		</TD>
+		<TD WIDTH="99%" class="frightu">
+			<B>{$netdevinfo.name} ({$netdevinfo.id|string_format:"%04d"})</B>
+		</TD>
+	</TR>
+	<TR class="light"{if $devicepanel} id="devicepanel" style="display:none;"{/if}>
+	        <TD WIDTH="100%" COLSPAN="2"{if $devicepanel} class="fall" ALIGN="RIGHT"{else}class="flr"{/if}>
+			<TABLE WIDTH="100%" CELLPADDING="0">
+				<TR class="light">
+					<TD WIDTH="50%" style="vertical-align:top;">
+						<TABLE WIDTH="100%" CELLPADDING="3">
+        {if $netdevinfo.producer}
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/producer.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%">
+		        <B>{trans("Producer:")}</B>
+		</TD>
+		<TD WIDTH="98%">
+		        {$netdevinfo.producer}
+		</TD>
+	</TR>
+	{/if}
+	
+        {if $netdevinfo.description}
+        <TR class="light">
+                <TD WIDTH="1%">
+                        <IMG SRC="img/desc.gif" ALT="">
+                </TD>
+                <TD WIDTH="99%" COLSPAN="2">
+                        <TABLE WIDTH="100%" CELLPADDING="5">
+                                <TR>
+                                        <TD class="fall superlight">
+						{$netdevinfo.description|escape|replace:"\n":"<BR>"}
+                                        </TD>
+                                </TR>
+                        </TABLE>
+                </TD>
+        </TR>
+        {/if}
+        <TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/port.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>Porty:</B>
+		</TD>
+		<TD WIDTH="98%" align="left">
+			<table width="200" cellpadding="2" cellspacing="1" border="1">
+			{foreach $portstype as $type}
+			<TR CLASS="LIGHT{if $portstype2models[$type.id].portscount == 0} blend{/if}">
+			<td align="right"><b>{$type.name}:</b></td>
+			<td width="30%" align="right">{$portstype2models[$type.id].portscount}</td>
+			</tr>
+			{/foreach}
+			</table>
+		</TD>
+		</TR>
+		{if $netdevinfo.xmltemplate}
+		<TR class="light">
+			<TD style="width: 1%;">
+				<IMG SRC="img/folder.gif" ALT="">
+			</TD>
+			<TD style="width: 99%;" colspan="2">
+					<TABLE width="100%" cellpadding="5">
+						<TR>
+							<TD class="fall superlight">
+								{$netdevinfo.xmltemplate|escape|replace:" ":"&nbsp;"|nl2br}
+							</TD>
+						</TR>
+					</TABLE>
+			</TD>
+		</TR>
+		{/if}
+	                                        </TABLE>
+					</TD>
+				</TR>
+			</TABLE>
+{if !$devicepanel}
+    		</TD>
+	</TR>
+	<TR class="light">
+	        <TD WIDTH="100%" COLSPAN="2" class="fbottomu" ALIGN="RIGHT">
+{/if}
+			<A href="?m=gpondasanonumodelsedit&id={$netdevinfo.id}" ACCESSKEY="E">{trans("Edit")} <IMG src="img/edit.gif" ALT="[ {trans("Edit")} ]"></A>
+			<A href="?m=gpondasanonumodelsdel&id={$netdevinfo.id}" OnClick="return confirmLink(this, '{t a=$netdevinfo.name}Are you sure, you want to remove device \'$a\' from database?{/t}');">{trans("Delete")} <img src="img/delete.gif" ALT=""></A>
+		</TD>
+	</TR>
+</TABLE>
+{if $devicepanel}
+<SCRIPT type="text/javascript">
+<!--
+if(getCookie('devicepanel')=='1')
+        document.getElementById('devicepanel').style.display = '';
+//-->
+</SCRIPT>
+{/if}

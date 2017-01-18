@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 $CONFIG_FILE = DIRECTORY_SEPARATOR . 'etc' . DIRECTORY_SEPARATOR . 'lms' . DIRECTORY_SEPARATOR . 'lms.ini';
@@ -14,23 +15,22 @@ define('CONFIG_FILE', $CONFIG_FILE);
 
 $CONFIG = (array) parse_ini_file($CONFIG_FILE, true);
 
+$CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
 $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'lib' : $CONFIG['directories']['lib_dir']);
 $CONFIG['directories']['plugin_dir'] = (!isset($CONFIG['directories']['plugin_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'plugins' : $CONFIG['directories']['plugin_dir']);
 $CONFIG['directories']['plugins_dir'] = $CONFIG['directories']['plugin_dir'];
 
+define('SYS_DIR', $CONFIG['directories']['sys_dir']);
 define('LIB_DIR', $CONFIG['directories']['lib_dir']);
 define('PLUGIN_DIR', $CONFIG['directories']['plugin_dir']);
 define('PLUGINS_DIR', $CONFIG['directories']['plugin_dir']);
 
 // Load autoloader
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'autoloader.php');
-
-// Do some checks and load config defaults
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'config.php');
-
-$CONFIG['directories']['rrd_dir'] = (!isset($CONFIG['directories']['rrd_dir']) ? PLUGINS_DIR . DIRECTORY_SEPARATOR
-	. LMSGponDasanPlugin::plugin_directory_name . DIRECTORY_SEPARATOR . 'rrd' : $CONFIG['directories']['rrd_dir']);
-define('RRD_DIR', $CONFIG['directories']['rrd_dir']);
+$composer_autoload_path = SYS_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (file_exists($composer_autoload_path))
+	require_once $composer_autoload_path;
+else
+	die("Composer autoload not found. Run 'composer install' command from LMS directory and try again. More informations at https://getcomposer.org/" . PHP_EOL);
 
 // Init database
 
@@ -44,23 +44,23 @@ try {
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
-$rrdtool = ConfigHelper::getConfig('gpon-dasan.rrdtool', '/usr/bin/rrdtool');
+define('RRD_DIR', LMSGponDasanPlugin::getRrdDirectory());
+define('RRDTOOL_BINARY', ConfigHelper::getConfig('gpon-dasan.rrdtool_binary', '/usr/bin/rrdtool'));
 
-if (!file_exists($rrdtool))
-	die("No rrdtool binary found on path $rrdtool!" . PHP_EOL);
+if (!file_exists(RRDTOOL_BINARY))
+	die("No rrdtool binary found on path " . RRDTOOL_BINARY . "!" . PHP_EOL);
 
 $AUTH = null;
-$GPON = new GPON($DB, $AUTH);
+$GPON = new GPON_DASAN();
 
 function update_signal_onu_rrd($onuid, $signal, $oltrx) {
-	global $rrdtool;
 	if ((strlen($onuid) == 0) || (strlen($signal) == 0))
 		return;
 
 	$fname = RRD_DIR . DIRECTORY_SEPARATOR . 'signal_onu_' . $onuid . '.rrd';
 	if (!file_exists($fname)) {
 		//create rrd
-		$cmd  = $rrdtool." create $fname --step 3600 ";
+		$cmd  = RRDTOOL_BINARY . " create $fname --step 3600 ";
 		$cmd .= "DS:Signal:GAUGE:7200:-50:10 ";
 		$cmd .= "DS:oltrx:GAUGE:7200:-50:10 ";
 		$cmd .= "RRA:AVERAGE:0.5:1:288 "; //12 dni co godzine
@@ -75,7 +75,7 @@ function update_signal_onu_rrd($onuid, $signal, $oltrx) {
 		exec($cmd);
 	}
 	//update rrd file
-	$cmd  = $rrdtool . " update $fname N:$signal:$oltrx";
+	$cmd  = RRDTOOL_BINARY . " update $fname N:$signal:$oltrx";
 	//update via rrdcached deamon, tylko ze jesli to dziala raz na godzine to nie ma to sensu ;)
 	//$cmd  = "/usr/bin/rrdupdate $fname --daemon /var/run/rrdcached.sock N:$signal:$oltrx";
 	exec($cmd);
@@ -83,8 +83,8 @@ function update_signal_onu_rrd($onuid, $signal, $oltrx) {
 
 $minute = intval(strftime("%M"));
 
-$olts = $DB->GetAll("SELECT g.*, nd.id AS netdevid, nd.name FROM gponolt g
-	JOIN netdevices nd ON nd.gponoltid = g.id");
+$olts = $DB->GetAll("SELECT g.*, nd.id AS netdevid, nd.name FROM " . GPON_DASAN::SQL_TABLE_GPONOLT . " g
+	JOIN netdevices nd ON nd.id = g.netdeviceid");
 if (!empty($olts))
 	foreach ($olts as $olt) {
 		$GPON->snmp->clear_options();
@@ -100,8 +100,8 @@ if (!empty($olts))
 		foreach ($signals as $snmpid => $signal) {
 			if (!preg_match('/sleGponOnuRxPower\.([0-9]+)\.([0-9]+)/', $snmpid, $matchids))
 				continue;
-			$onuid = $DB->GetOne("SELECT o.id  FROM gpononu o 
-				JOIN gpononu2olt p ON p.gpononuid=o.id
+			$onuid = $DB->GetOne("SELECT o.id FROM " . GPON_DASAN::SQL_TABLE_GPONONU . " o
+				JOIN " . GPON_DASAN::SQL_TABLE_GPONONU2OLT . " p ON p.gpononuid=o.id
 				WHERE netdevicesid = ? AND numport =? AND onuid = ?", array($olt['netdevid'], $matchids[1], $matchids[2]));
 			if (!$onuid)
 				continue;

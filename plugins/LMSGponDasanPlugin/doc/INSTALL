@@ -1,11 +1,12 @@
-Dodatek GPON Dasan do LMS w wersji git (ver 2.1) / 21.07.2015
+Dodatek GPON Dasan do LMS w wersji git 21.07.2016
 
 ==========================================================
 Wymagania:
 1. Wersja LMS z git (testowane w dniu 21 lipca 2015)
 2. PHP w wersji 5.3 lub nowszej.
 3. Moduł snmp dla PHP
-4. Uprawnienia do odczytu i zapisu przez snmp (wersja do wyboru 1-3) na OLT
+4. Pakiet narzędziowy net-snmp-utils.
+5. Uprawnienia do odczytu i zapisu przez snmp (wersja do wyboru 1-3) na OLT
 
 Instalacja:
 1. Zawartość paczki umieścić w katalogu plugins w LMS.
@@ -14,3 +15,84 @@ Instalacja:
 3. W pliku /etc/snmp/snmp.conf wskazać katalog <lms-path>/plugins/LMSGponDasanPlugin/mibs:
    mibdirs +<lms-path>/plugins/LMSGponDasanPlugin/mibs:<lms-path>/plugins/LMSGponDasanPlugin/mibs/SLE:<lms-path>/plugins/LMSGponDasanPlugin/mibs/DSSHE
 4. Zrestartować serwer www.
+
+Statystyki poziomu sygnału (skrypt bin/gponsignalrrd.php):
+1. Zainstalować pakiet narzędziowy rrdtool.
+2. Ustawieniem konfiguracyjnym gpon-dasan.rrdtool_binary wskazać ścieżkę programu rrdtool (domyślnie /usr/bin/rrdtool).
+3. Skonfigurować cykliczne uruchamianie skryptu co godzinę np. z cron.
+4. Wykresy powinny pokazywać poziom sygnału co najmniej 2h po skonfigurowaniu skryptu.
+
+Provisioning XML (skrypt bin/lms-xml-provisioning.php):
+1. Ustawić adres URL wskazujący plik xml konfiguracji końcówki wstawiany jako jeden z atrybutów
+   serwera Radius - gpon-dasan.xml_provisioning_url, np. ftp://login:password@ftp-server.pl/%sn%.xml
+   (symbol %sn% będzie zastępowany numerem seryjnym końcówki)
+2. Ustawić dla modeli końcówek szablony konfiguracji xml.
+3. Ustawienie gpon-dasan.xml_provisioning_default_enabled (true/false) decyduje czy dla nowo
+   dodawanych końcówek automatycznie zaznaczana jest flaga "Provisioning XML".
+4. Ustawieniem gpon-dasan.xml_provisioning_filename wskazać ścieżkę do plików, które
+   będzie generował skrypt bin/lms-xml-provisioning.php (może wystąpić symbol %sn%
+   za który zostanie wstaiony numer seryjny końcówki).
+5. Ustawienie gpon-dasan.xml_provisioning_password_characters ustala zestaw znaków używany przy
+   generowaniu losowych haseł (domyślnie: 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ).
+6. Ustawienia gpon-dasan.xml_provisioning_admin_password, gpon-dasan.xml_provisioning_telnet_password
+   i gpon-dasan.xml_provisioning_user_password ustalają odpowiednio domyślne hasła administratora końcówki,
+   usługi telnet działającej na końcówce oraz hasło użytkownika końcówki. W haśle użytkownika końcówki
+   może wystąpić symbol specjalny %14random% za który wstawiany jest losowy ciąg znaków o długości 14
+   (długość można zmieniać poprzez wpisane przed słowem random innej liczby).
+7. Ustawienie gpon-dasan.xml_provisioning_web_port ustala port tcp na którym
+   działa interfejs www końcówki.
+8. Ustawienia gpon-dasan.xml_provisioning_default_wifi_ssid oraz gpon-dasan.xml_provisioning_default_wifi_password
+   ustalają wzorzec automatycznie generowanych z poziomu UI wtyczki ustawień sieci bezprzewodowej
+   (gdy ustawienia są niepuste w UI jest dostępny przycisk "Generuj"). Pierwsze ustawienie obsługuje
+   symbol specjalny %sn% za który wstawiany jest numer seryjny końcówki. Drugie ustawienie obsługuje
+   symbol specjalny %14random% za który wstawiany jest losowy ciąg znaków o długości 14 (długość można
+   zmieniać poprzez wpisane przed słowem random innej liczby).
+9. Ustawienie gpon-dasan.xml_provisioning_lan_networks określa listę predefiniowanych konfiguracji sieci IP
+   dla sieci LAN na końcówce od strony klienta. Dobrym przykładem jest domyślna wartość tego pola.
+10. Ustawienie gpon-dasan.xml_provisioning_vlans określa listę obsługiwanych przez operatora vlanów, których
+   możliwość konfiguracji ma być dostępna na portach końcówki od strony klienta
+   (przykład: 16|BIURO,101|ADMIN - vlan 16 o nazwie BIURO i vlan 101 o nazwie ADMIN).
+11. Symbole specjalne obsługiwane w szablonie konfiguracji xml:
+   {$admin_password} - hasło administratora końcówki (pobrane z ustawienia końcówki lub ze zmiennej
+   konfiguracyjnej gpon-dasan.xml_provisioning_admin_password),
+   {$telnet_password} - hasło usługi telnet na końcówce (pobrane z ustawienia końcówki lub ze zmiennej
+   konfiguracyjnej gpon-dasan.xml_provisioning_telnet_password),
+   {$user_password} - hasło użytkownika końcówki (pobrane z ustawienia końcówki - może być puste!),
+   {$web_port} - port tcp na którym działa interfejs www końcówki,
+   {$modified_time} - data ostatniej modyfikacji automatycznie generowana przez skrypt,
+   {$customerid} - najniższy identyfikator klienta spośród klientów przypisanych do końcówki,
+   {$wifi_ssid}, {$wifi_password} - ustawienie sieci bezprzewodowej na końcówce,
+   {$host1_ip}, {$host1_mask}, {$host1_gateway}, {$host1_vlanid} - ustawienia pierwszego hosta IP na końcówce
+     pobrane z przypisanego pierwszego komputera lub urządzenia,
+   {$host1_login}, {$host1_password}, {$host1_authtype} - ustawienia loginu/nazwy, hasła oraz typu połączenia
+     pierwszego komputera/urządzenia przypisanego do końcówki,
+   {$host2_ip}, {$host2_mask}, {$host2_gateway}, {$host2_vlanid} - ustawienia drugiego hosta IP na końcówce
+     pobrane z przypisanego drugiego komputera lub urządzenia,
+   {$host2_login}, {$host2_password}, {$host2_authtype} - ustawienia loginu/nazwy, hasła oraz typu połączenia
+     drugiego komputera/urządzenia przypisanego do końcówki,
+   {$sip1_login}, {$sip1_password}, {$sip1_phone} - login, hasło i numer telefonu pobrane z pierwszego konta
+     VoIP przypisanego do końcówki,
+   {$sip2_login}, {$sip2_password}, {$sip2_phone} - login, hasło i numer telefonu pobrane z drugiego konta
+     VoIP przypisanego do końcówki,
+   {$portsettings['...'].portdisable} - czy dany port końcówki ma być aktywny (jako indeksy wpisujemy np.
+   'eth.1', 'eth.2', 'wifi.1', 'pots.1', 'pots.2', itd.),
+   {$lan_netaddress} - adres sieci LAN na końcówce od strony klienta
+   {$lan_netmask} - maska sieci LAN na końcówce od strony klienta
+   {$lan_gateway} - adres bramy w LAN na końcówce od strony klienta
+   {$lan_firstdhcpip} - pierwszy adres DHCP w LAN na końcówce od strony klienta
+   {$lan_lastdhcpip} - ostatni adres DHCP w LAN na końcówce od strony klienta
+   {$vlans['...']} - jakie vlany obsługuje dany port końcówki (jako indeksy wpisujemy np.
+   'eth.1', 'eth.2', 'wifi.1', 'pots.1', 'pots.2', itd.). Znaczenie wartości dla pojedynczego portu:
+     - pusta - ustawienia vlanów z profilu końcówki na OLT,
+     - 0 - port w trybie tagged/trunk - przenosi wszystkie możliwe vlany,
+     - wartość, np. 101 - port w trybie untagged/access - wskazanie konkretnego przenoszonego vlanu,
+   {$vlan_ports['...']} - lista portów końcówki dla poszczególnych vlanów np.
+     - $vlan_ports['101'] = array('eth.1' => true, 'eth.2' => true, 'eth.3' => false, 'eth.4' => false, 'wifi.1' => true)
+       (porty eth.1, eth.2 i wifi.1 w trybie untagged/access dla vlan 101),
+     - $vlan_ports['0'] = array('eth.1' => false, 'eth.2.' => false, 'eth.3' => true, 'eth.4' => false, 'wifi.1' => false)
+       (port eth.3 w trybie tagged/trunk),
+     - $vlan_ports['default'] = array('eth.1' => false, 'eth.2.' => false, 'eth.3' => false, 'eth.4' => true, 'wifi.1' => false)
+       (port eth.4 w konfiguracji domyślnej wynikającej z profilu końcówki.
+
+   Uwaga! Jako, że szablony xml są przetwarzane przez bibliotekę Smarty można w nich posługiwać się językiem
+   szablonów identycznym jak w zwykłych szablonach Smarty.

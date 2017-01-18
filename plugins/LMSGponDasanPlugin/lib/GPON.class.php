@@ -3,7 +3,7 @@
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -24,87 +24,49 @@
  *  $Id$
  */
 
-// GPON Class
+class GPON_DASAN {
+	const SQL_TABLE_SYSLOG = 'syslog';
+	const SQL_TABLE_GPONOLT = 'gpondasanolts';
+	const SQL_TABLE_GPONOLTPORTS = 'gpondasanoltports';
+	const SQL_TABLE_GPONONU2OLT = 'gpondasanonu2olts';
+	const SQL_TABLE_GPONOLTPROFILES = 'gpondasanoltprofiles';
+	const SQL_TABLE_GPONONU = 'gpondasanonus';
+	const SQL_TABLE_GPONONU2CUSTOMERS = 'gpondasanonu2customers';
+	const SQL_TABLE_GPONONUMODELS = 'gpondasanonumodels';
+	const SQL_TABLE_GPONONUPORTTYPE2MODELS = 'gpondasanonuporttype2models';
+	const SQL_TABLE_GPONONUPORTTYPES = 'gpondasanonuporttypes';
+	const SQL_TABLE_GPONONUPORTS = 'gpondasanonuports';
+	const SQL_TABLE_GPONONUTV = 'gpondasanonutv';
+	const SQL_TABLE_GPONAUTHLOG = 'gpondasanauthlog';
 
-class GPON {
 	private $DB;			// database object
 	private $AUTH;			// object from Session.class.php (session management)
 	public $snmp;
 
-	public function __construct(&$DB, &$AUTH) { // class variables setting
-		$this->DB = &$DB;
-		$this->AUTH = &$AUTH;
+	public function __construct() { // class variables setting
+		global $AUTH;
+
+		$this->DB = LMSDB::getInstance();
+		$this->AUTH = $AUTH;
 
 		$options = array();
-		$this->snmp = new GPON_SNMP($options, $this);
-	}
-
-	public function FlatArrayFromDB($arraydata,$keyname,$valuename)
-	{
-		$result=array();
-		if(is_array($arraydata) && count($arraydata)>0)
-		{
-			foreach ($arraydata as $k=>$v)
-			{
-				if(is_array($v) && key_exists($keyname,$v) && key_exists($valuename,$v))
-				{
-					$result[$v[$keyname]]=$v[$valuename];
-				}
-			}
-		}
-		return $result;
+		$this->snmp = new GPON_DASAN_SNMP($options, $this);
 	}
 
 	public function Log($loglevel = 0, $what = NULL, $xid = NULL, $message = NULL, $detail = NULL) {
 		$detail = str_replace("'", '"', $detail);
 		if (ConfigHelper::getConfig('gpon-dasan.syslog'))
-			$this->DB->Execute('INSERT INTO syslog (time, userid, level, what, xid, message, detail)
+			$this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_SYSLOG . ' (time, userid, level, what, xid, message, detail)
 				VALUES (?NOW?, ?, ?, ?, ?, ?, ?)', array($this->AUTH->id, $loglevel, $what, $xid, $message, $detail));
 	}
 
 	//--------------OLT----------------
-	function GponOltAdd($gponoltdata)
-	{
-		if ($this->DB->Execute('INSERT INTO gponolt (snmp_version,snmp_description,snmp_host,snmp_community,snmp_auth_protocol,snmp_username,snmp_password,snmp_sec_level,snmp_privacy_passphrase,snmp_privacy_protocol) 
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+	public function GponOltAdd($gponoltdata) {
+		if ($this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONOLT . ' (snmp_version, snmp_description, snmp_host,
+				snmp_community, snmp_auth_protocol, snmp_username, snmp_password, snmp_sec_level,
+				snmp_privacy_passphrase, snmp_privacy_protocol, netdeviceid)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 				array(
-					$gponoltdata['snmp_version'],
-					$gponoltdata['snmp_description'],
-					$gponoltdata['snmp_host'],
-					$gponoltdata['snmp_community'],
-					$gponoltdata['snmp_auth_protocol'],
-					$gponoltdata['snmp_username'],
-					$gponoltdata['snmp_password'],
-					$gponoltdata['snmp_sec_level'],
-					$gponoltdata['snmp_privacy_passphrase'],
-					$gponoltdata['snmp_privacy_protocol']
-		))) {
-		
-			$id = $this->DB->GetLastInsertID('gponolt');			
-			$dump = var_export($gponoltdata, true);
-			$this->Log(4, 'gponolt', $id, 'added '. $gponoltdata['snmp_host'], $dump);
-			return $id;
-		}
-		else
-			return FALSE;
-	}
-	
-	function GetGponOlt($id)
-	{
-		$result = $this->DB->GetRow('SELECT g.*
-			FROM gponolt g
-			WHERE g.id = ?', array($id));
-		return $result;
-	}
-	
-	function GponOltUpdate($gponoltdata)
-	{
-		$dump = var_export($gponoltdata, true);
-		$this->Log(4, 'gponolt', $gponoltdata['gponoltid'], 'updated '. $gponoltdata['snmp_host'], $dump);
-
-		$this->DB->Execute('UPDATE gponolt SET snmp_version=?,snmp_description=?,snmp_host=?,snmp_community=?,snmp_auth_protocol=?,snmp_username=?,snmp_password=?,snmp_sec_level=?,snmp_privacy_passphrase=?,snmp_privacy_protocol=?
-				WHERE id=?', 
-				array( 
 					$gponoltdata['snmp_version'],
 					$gponoltdata['snmp_description'],
 					$gponoltdata['snmp_host'],
@@ -115,466 +77,534 @@ class GPON {
 					$gponoltdata['snmp_sec_level'],
 					$gponoltdata['snmp_privacy_passphrase'],
 					$gponoltdata['snmp_privacy_protocol'],
+					$gponoltdata['netdevid'],
+			))) {
+			$id = $this->DB->GetLastInsertID(self::SQL_TABLE_GPONOLT);
+			$dump = var_export($gponoltdata, true);
+			$this->Log(4, self::SQL_TABLE_GPONOLT, $id, 'added ' . $gponoltdata['snmp_host'], $dump);
+			return $id;
+		} else
+			return false;
+	}
+
+	public function NetDevUpdate($netdevdata) {
+		$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONOLT . ' SET netdeviceid = ? WHERE id = ?',
+			array($netdevdata['id'], $netdevdata['gponoltid']));
+	}
+
+	public function GetGponOltIdByNetdeviceId($netdeviceid) {
+		return $this->DB->GetOne('SELECT id FROM ' . self::SQL_TABLE_GPONOLT
+			. ' WHERE netdeviceid = ?', array($netdeviceid));
+	}
+
+	public function GetGponOlt($id) {
+		$result = $this->DB->GetRow('SELECT g.*
+			FROM ' . self::SQL_TABLE_GPONOLT . ' g
+			WHERE g.id = ?', array($id));
+		return $result;
+	}
+
+	public function GetGponOltList($o) {
+		return $this->DB->GetAll('SELECT nd.id, COUNT(gp.id) AS gponports,
+				nd.name, nd.location, nd.description, nd.producer, nd.model, nd.serialnumber,
+				nd.ports, go.id AS gponoltid
+			FROM ' . self::SQL_TABLE_GPONOLT . ' go
+			JOIN netdevices nd ON nd.id = go.netdeviceid
+			LEFT JOIN ' . self::SQL_TABLE_GPONOLTPORTS . ' gp ON gp.gponoltid = go.id
+			GROUP BY nd.id, nd.name, nd.location, nd.description, nd.producer, nd.model,
+				nd.serialnumber, nd.ports, go.id');
+	}
+
+	public function GponOltUpdate($gponoltdata) {
+		$dump = var_export($gponoltdata, true);
+		$this->Log(4, self::SQL_TABLE_GPONOLT, $gponoltdata['gponoltid'], 'updated '. $gponoltdata['snmp_host'], $dump);
+
+		$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONOLT . ' SET snmp_version=?, snmp_description=?, snmp_host=?, snmp_community=?,
+			snmp_auth_protocol=?, snmp_username=?, snmp_password=?, snmp_sec_level=?, snmp_privacy_passphrase=?,
+			snmp_privacy_protocol=?, netdeviceid = ? WHERE id = ?',array(
+					$gponoltdata['snmp_version'],
+					$gponoltdata['snmp_description'],
+					$gponoltdata['snmp_host'],
+					$gponoltdata['snmp_community'],
+					$gponoltdata['snmp_auth_protocol'],
+					$gponoltdata['snmp_username'],
+					$gponoltdata['snmp_password'],
+					$gponoltdata['snmp_sec_level'],
+					$gponoltdata['snmp_privacy_passphrase'],
+					$gponoltdata['snmp_privacy_protocol'],
+					$gponoltdata['id'],
 					$gponoltdata['gponoltid']
 				));
+		if ($gponoltdata['id'] != $gponoltdata['oldid']) {
+			$this->DB->Execute('UPDATE netdevices SET name = ? WHERE id = ?',
+				array($gponoltdata['name'], $gponoltdata['id']));
+			$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONONU2OLT
+				. ' SET netdevicesid = ? WHERE netdevicesid = ?', array($gponoltdata['id'], $gponoltdata['oldid']));
+		} else
+			$this->DB->Execute('UPDATE netdevices SET name = ? WHERE id = ?', array($gponoltdata['name'], $gponoltdata['id']));
 	}
-	function DeleteGponOlt($id)
-	{
+
+	public function DeleteGponOlt($id) {
 		$this->DB->BeginTrans();
-		$gponoltid=$this->DB->GetOne('SELECT gponoltid FROM netdevices WHERE id=?', array($id));
-		$this->DB->Execute('DELETE FROM gponolt WHERE id=?', array($gponoltid));
-		$this->DB->Execute('DELETE FROM gponoltports WHERE gponoltid=?', array($gponoltid));
-		$this->Log(4, 'gponolt', $gponoltid, 'deleted, devid: '.$id);
+		$gponoltid = $this->GetGponOltIdByNetdeviceId($id);
+		$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONOLT . ' WHERE id = ?', array($gponoltid));
+		$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONOLTPORTS . ' WHERE gponoltid = ?', array($gponoltid));
+		$this->Log(4, self::SQL_TABLE_GPONOLT, $gponoltid, 'deleted, devid: '.$id);
 		$this->DB->CommitTrans();
 	}
-	function GponOltPortsAdd($gponoltportsdata)
-	{
-		if(is_array($gponoltportsdata) && count($gponoltportsdata)>0)
-		{
+
+	public function GponOltPortsAdd($gponoltportsdata) {
+		if (is_array($gponoltportsdata) && count($gponoltportsdata)) {
 			$logolt=0;
-			foreach($gponoltportsdata as $v)
-			{
-				$this->DB->Execute('INSERT INTO gponoltports (gponoltid,numport,maxonu) 
-						VALUES (?, ?, ?)', 
-						array(
-							$v['gponoltid'],
-							$v['numport'],
-							$v['maxonu']	
-				));
-				$logolt=$v['gponoltid'];
+			foreach ($gponoltportsdata as $v) {
+				$this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONOLTPORTS . ' (gponoltid, numport, maxonu)
+					VALUES (?, ?, ?)', array($v['gponoltid'], $v['numport'], $v['maxonu']));
+				$logolt = $v['gponoltid'];
 			}
 			$dump = var_export($gponoltportsdata, true);
-			$this->Log(4, 'gponolt', $logolt, 'ports added', $dump);
+			$this->Log(4, self::SQL_TABLE_GPONOLT, $logolt, 'ports added', $dump);
 		}
 	}
-	function GetGponOltPorts($gponoltid)
-	{
-		if($result = $this->DB->GetAll('SELECT gp.*, nd.model,
-		    (SELECT COUNT(go2o.gpononuid) FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE nd.gponoltid=gp.gponoltid AND go2o.numport=gp.numport) AS countlinkport
-			FROM gponoltports gp
-			JOIN netdevices nd ON nd.gponoltid=gp.gponoltid
-			WHERE gp.gponoltid = ? ORDER BY gp.numport ASC', array($gponoltid)))
-		{
-		    foreach($result as $idx => $row)
-		    {
-			if(preg_match('/8240/', $row['model']))
-				$result[$idx]['numportf'] = $this->OLT8240_format($row['numport']);
-		    }
-		}
+
+	public function GetGponOltPorts($gponoltid) {
+		if ($result = $this->DB->GetAll('SELECT gp.*, nd.model,
+			(SELECT COUNT(go2o.gpononuid) FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+				JOIN netdevices nd ON nd.id = go2o.netdevicesid
+				JOIN ' . self::SQL_TABLE_GPONOLT . ' g ON g.netdeviceid = nd.id
+				WHERE g.id = gp.gponoltid AND go2o.numport = gp.numport
+			) AS countlinkport
+			FROM ' . self::SQL_TABLE_GPONOLTPORTS . ' gp
+			JOIN ' . self::SQL_TABLE_GPONOLT . ' go ON go.id = gp.gponoltid
+			JOIN netdevices nd ON nd.id = go.netdeviceid
+			WHERE gp.gponoltid = ? ORDER BY gp.numport ASC',
+			array($gponoltid)))
+			foreach ($result as $idx => $row)
+				if (preg_match('/8240/', $row['model']))
+					$result[$idx]['numportf'] = $this->OLT8240_format($row['numport']);
 
 		return $result;
 	}
-	function GponOltPortsUpdate($gponoltportsdata)
-	{
+
+	public function GponOltPortsUpdate($gponoltportsdata) {
 		$this->DB->BeginTrans();
-		if(is_array($gponoltportsdata) && count($gponoltportsdata)>0)
-		{
-			$countport=$this->DB->GetOne('SELECT COUNT(numport) as cn FROM gponoltports WHERE gponoltid=?', array($gponoltportsdata[1]['gponoltid']));
-			if(count($gponoltportsdata)<$countport)
-			{
-				$this->DB->Execute('DELETE FROM gponoltports WHERE gponoltid=? AND numport>?', 
-						array(
-						$gponoltportsdata[1]['gponoltid'],
-							count($gponoltportsdata)	
-				));
-			}
-			foreach($gponoltportsdata as $v)
-			{
-				$numport=$this->DB->GetOne('SELECT numport FROM gponoltports WHERE gponoltid=? AND numport=?', array($v['gponoltid'],$v['numport']));
-				if($numport>0)
-				{
-					$this->DB->Execute('UPDATE gponoltports SET maxonu=?
-							WHERE gponoltid=? AND numport=?', 
-							array( 
-								$v['maxonu'],
-								$v['gponoltid'],
-								$v['numport']
-							));
-				}
-				else 
-				{
-					$this->DB->Execute('INSERT INTO gponoltports (gponoltid,numport,maxonu) 
-						VALUES (?, ?, ?)', 
-						array(
-							$v['gponoltid'],
-							$v['numport'],
-							$v['maxonu']	
-					));
-				}
+		if (is_array($gponoltportsdata) && count($gponoltportsdata)) {
+			$countport = $this->DB->GetOne('SELECT COUNT(numport) as cn FROM ' . self::SQL_TABLE_GPONOLTPORTS
+				. ' WHERE gponoltid = ?', array($gponoltportsdata[1]['gponoltid']));
+			if (count($gponoltportsdata) < $countport)
+				$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONOLTPORTS . ' WHERE gponoltid=? AND numport>?',
+						array($gponoltportsdata[1]['gponoltid'], count($gponoltportsdata)));
+			foreach ($gponoltportsdata as $v) {
+				$numport = $this->DB->GetOne('SELECT numport FROM ' . self::SQL_TABLE_GPONOLTPORTS
+					. ' WHERE gponoltid = ? AND numport = ?', array($v['gponoltid'], $v['numport']));
+				if ($numport)
+					$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONOLTPORTS . ' SET maxonu = ?
+							WHERE gponoltid = ? AND numport = ?',
+							array($v['maxonu'], $v['gponoltid'], $v['numport']));
+				else
+					$this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONOLTPORTS . ' (gponoltid, numport, maxonu)
+						VALUES (?, ?, ?)', array($v['gponoltid'], $v['numport'], $v['maxonu']));
 			}
 		}
 		$dump = var_export($gponoltportsdata, true);
-		$this->Log(4, 'gponolt', $gponoltportsdata[1]['gponoltid'], 'ports updated', $dump);
+		$this->Log(4, self::SQL_TABLE_GPONOLT, $gponoltportsdata[1]['gponoltid'], 'ports updated', $dump);
 		$this->DB->CommitTrans();
 	}
-	function GetGponOltPortsMaxOnu($netdevicesid,$numport)
-	{
-		$netdevicesid=intval($netdevicesid);
-		$numport=intval($numport);
-		return $this->DB->GetOne('SELECT gop.maxonu FROM gponoltports gop
-		inner join netdevices nd on nd.gponoltid=gop.gponoltid
-		WHERE nd.id=? AND gop.numport=?', array($netdevicesid,$numport));
+
+	public function GetGponOltPortsMaxOnu($netdeviceid, $numport) {
+		$netdeviceid = intval($netdeviceid);
+		$numport = intval($numport);
+		return $this->DB->GetOne('SELECT gop.maxonu FROM ' . self::SQL_TABLE_GPONOLTPORTS . ' gop
+			JOIN ' . self::SQL_TABLE_GPONOLT . ' go ON go.id = gop.gponoltid
+			JOIN netdevices nd ON nd.id = go.netdeviceid
+			WHERE nd.id = ? AND gop.numport = ?', array($netdeviceid, $numport));
 	}
-	function GetGponOltPortsExists($netdevicesid,$numport)
-	{
-		$netdevicesid=intval($netdevicesid);
-		$numport=intval($numport);
-		return $this->DB->GetOne('SELECT gop.id FROM gponoltports gop
-		inner join netdevices nd on nd.gponoltid=gop.gponoltid
-		WHERE nd.id=? AND gop.numport=?', array($netdevicesid,$numport));
+
+	public function GetGponOltPortsExists($netdeviceid, $numport) {
+		$netdeviceid = intval($netdeviceid);
+		$numport = intval($numport);
+		return $this->DB->GetOne('SELECT gop.id FROM ' . self::SQL_TABLE_GPONOLTPORTS . ' gop
+			JOIN ' . self::SQL_TABLE_GPONOLT . ' go ON go.id = gop.gponoltid
+			JOIN netdevices nd ON nd.id = go.netdeviceid
+			WHERE nd.id = ? AND gop.numport = ?', array($netdeviceid, $numport));
 	}
-	function GetNotConnectedOlt()
-	{
-		return $this->DB->GetAll('SELECT distinct nd.id,nd.name
-		FROM netdevices nd
-		inner join gponoltports gop on gop.gponoltid=nd.gponoltid
-		where gop.maxonu>(select count(id) from gpononu2olt where netdevicesid=nd.id and numport=gop.numport) ORDER BY nd.name ASC');
+
+	public function GetNotConnectedOlt() {
+		return $this->DB->GetAll('SELECT DISTINCT nd.id, nd.name
+			FROM netdevices nd
+			JOIN ' . self::SQL_TABLE_GPONOLT . ' go ON go.netdeviceid = nd.id
+			JOIN ' . self::SQL_TABLE_GPONOLTPORTS . ' p ON p.gponoltid = go.id
+			WHERE p.maxonu > (SELECT COUNT(id) FROM ' . self::SQL_TABLE_GPONONU2OLT . ' WHERE netdevicesid = nd.id AND numport = p.numport)
+			ORDER BY nd.name ASC');
 	}
-	function GetFreeOltPort($netdevicesid)
-	{
-		return $this->DB->GetAll('SELECT distinct nd.id, gop.numport
-		FROM netdevices nd
-		inner join gponoltports gop on gop.gponoltid=nd.gponoltid
-		where gop.maxonu>(select count(id) from gpononu2olt where netdevicesid=nd.id and numport=gop.numport) and nd.id=?',array($netdevicesid));
+
+	public function GetFreeOltPort($netdeviceid) {
+		return $this->DB->GetAll('SELECT DISTINCT nd.id, gop.numport
+			FROM netdevices nd
+			JOIN ' . self::SQL_TABLE_GPONOLT . ' go ON go.netdeviceid = nd.id
+			JOIN ' . self::SQL_TABLE_GPONOLTPORTS . ' gop ON gop.gponoltid = go.id
+			WHERE gop.maxonu > (SELECT COUNT(id) FROM ' . self::SQL_TABLE_GPONONU2OLT
+					. ' WHERE netdevicesid = nd.id AND numport = gop.numport)
+				AND nd.id = ?', array($netdeviceid));
 	}
-	function GetGponOltConnectedNames($gponoltid)
-	{
-		if($list = $this->DB->GetAll('SELECT nd.*,go2o.numport
-			FROM gponolt g 
-			inner join netdevices nd on nd.gponoltid=g.id
-			inner join gpononu2olt go2o on go2o.netdevicesid=nd.id
-		    WHERE go2o.gpononuid=?', array($gponoltid)))
-		{
-		    foreach($list as $idx => $row)
-		    {
-			if(preg_match('/8240/', $row['model']))
-				$list[$idx]['numportf'] = $this->OLT8240_format($row['numport']);
-		    }
-		}
+
+	public function GetGponOltConnectedNames($gpononuid) {
+		if ($list = $this->DB->GetAll('SELECT nd.*, go2o.numport, g.id AS gponoltid
+			FROM ' . self::SQL_TABLE_GPONOLT . ' g
+			JOIN netdevices nd ON nd.id = g.netdeviceid
+			JOIN ' . self::SQL_TABLE_GPONONU2OLT . ' go2o ON go2o.netdevicesid = nd.id
+			WHERE go2o.gpononuid = ?', array($gpononuid)))
+			foreach ($list as &$row)
+				if (preg_match('/8240/', $row['model']))
+					$row['numportf'] = $this->OLT8240_format($row['numport']);
 		return $list;
 	}
-	function GetGponOltProfiles()
-	{
-		$result = $this->DB->GetAll('SELECT gop.id,gop.name 
-		FROM  gponoltprofiles gop
-		ORDER BY gop.name ASC');
-		
+
+	public function GetGponOltProfiles($gponoltid = null) {
+		$result = $this->DB->GetAllByKey('SELECT p.id, p.name' . (empty($gponoltid) ? ', nd.name AS oltname' : '') . '
+			FROM ' . self::SQL_TABLE_GPONOLTPROFILES . ' p
+			JOIN ' . self::SQL_TABLE_GPONOLT . ' go ON go.id = p.gponoltid
+			LEFT JOIN netdevices nd ON nd.id = go.netdeviceid '
+			. (empty($gponoltid) ? '' : 'WHERE p.gponoltid IS NULL OR p.gponoltid = ' . intval($gponoltid)) . '
+			ORDER BY p.name ASC', 'id');
+
 		return $result;
 	}
-	function AddGponOltProfiles($name)
-	{
-		$name=trim($name);
-		if(strlen($name)>0)
-		{
-			if($this->DB->GetOne('SELECT COUNT(id) as id FROM gponoltprofiles 
-			WHERE name=?',array($name))==false)
-			{
-				$this->DB->Execute('INSERT INTO gponoltprofiles (name) VALUES (?)',array($name));
-				$pid = $this->DB->GetLastInsertID('gponoltprofiles');
-				$this->Log(4, 'gponoltprofile', $pid, 'added '.$name);
-			}
+
+	public function AddGponOltProfile($name, $gponoltid) {
+		$name = trim($name);
+		if (!strlen($name))
+			return;
+
+		if ($pid = $this->DB->GetOne('SELECT id FROM ' . self::SQL_TABLE_GPONOLTPROFILES . '
+			WHERE name = ? AND (gponoltid IS NULL OR gponoltid = ?) LIMIT 1',
+				array($name, $gponoltid))) {
+			$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONOLTPROFILES . ' SET name = ?, gponoltid = ?
+				WHERE id = ?', array($name, $gponoltid, $pid));
+			$this->Log(4, self::SQL_TABLE_GPONOLTPROFILES, $pid, 'updated ' . $name
+				. ' oltid ' . $gponoltid);
+		} else {
+			$this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONOLTPROFILES . ' (name, gponoltid)
+				VALUES (?, ?)', array($name, $gponoltid));
+			$pid = $this->DB->GetLastInsertID(self::SQL_TABLE_GPONOLTPROFILES);
+			$this->Log(4, self::SQL_TABLE_GPONOLTPROFILES, $pid, 'added ' . $name
+				. ' oltid ' . $gponoltid);
 		}
 	}
+
+	public function GetNotGponOltDevices($gponoltid = null) {
+		return $this->DB->GetAll('SELECT n.id, n.name FROM netdevices n
+			LEFT JOIN ' . self::SQL_TABLE_GPONOLT . ' g ON g.netdeviceid = n.id
+			WHERE g.netdeviceid IS NULL OR g.id = ?
+			ORDER BY name', array($gponoltid));
+	}
+
 	//--------------ONU----------------
-	function DeleteGponOnu($id)
-	{
+	public function DeleteGponOnu($id) {
 		$this->DB->BeginTrans();
-		$this->DB->Execute('DELETE FROM gpononu WHERE id=? and id not in(select distinct gpononuid from gpononu2olt)', array($id));
-		$this->Log(4, 'gpononu', $id, 'deleted');
+		$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONONU
+			. ' WHERE id=? AND id NOT IN (SELECT DISTINCT gpononuid FROM ' . self::SQL_TABLE_GPONONU2OLT . ')', array($id));
+		$this->Log(4, self::SQL_TABLE_GPONONU, $id, 'deleted');
 		$this->DB->CommitTrans();
 	}
-	function IsGponOnuLink2olt($gpononuid)
-	{
-		$gpononuid=intval($gpononuid);
-		return $this->DB->GetOne('SELECT COUNT(id) as liczba FROM gpononu2olt WHERE gpononuid=?',array($gpononuid));
-	}
-	function IsGponOnuLink($netdevicesid,$numport,$gpononuid)
-	{
-		$netdevicesid=intval($netdevicesid);
-		$numport=intval($numport);
-		$gpononuid=intval($gpononuid);
-		return $this->DB->GetOne('SELECT COUNT(id) as liczba FROM gpononu2olt 
-			WHERE netdevicesid=? and numport=? and gpononuid=?',
-			array($netdevicesid,$numport,$gpononuid));
-	}
-	function GponOnuLink($netdevicesid,$numport,$gpononuid)
-	{
-		$netdevicesid=intval($netdevicesid);
-		$numport=intval($numport);
-		$gpononuid=intval($gpononuid);
-		if($netdevicesid>0 && $numport>0 && $gpononuid>0 && !$this->IsGponOnuLink($netdevicesid,$numport,$gpononuid))
-		{
-			$this->Log(4, 'gpononu', $gpononuid, 'link to ' .$netdevicesid. ', port ' .$numport);
 
-			return $this->DB->Execute('INSERT INTO gpononu2olt
-					(netdevicesid,numport,gpononuid) 
-					VALUES (?, ?, ?)', 
-					array($netdevicesid,$numport,$gpononuid));
+	public function IsGponOnuLink2olt($gpononuid) {
+		$gpononuid = intval($gpononuid);
+		return $this->DB->GetOne('SELECT COUNT(id) AS liczba FROM ' . self::SQL_TABLE_GPONONU2OLT
+			. ' WHERE gpononuid=?', array($gpononuid));
+	}
+
+	public function IsGponOnuLink($netdeviceid, $numport, $gpononuid) {
+		$netdeviceid = intval($netdeviceid);
+		$numport = intval($numport);
+		$gpononuid = intval($gpononuid);
+		return $this->DB->GetOne('SELECT COUNT(id) AS liczba FROM ' . self::SQL_TABLE_GPONONU2OLT
+			. ' WHERE netdevicesid = ? AND numport = ? AND gpononuid = ?',
+			array($netdeviceid, $numport, $gpononuid));
+	}
+
+	public function GponOnuLink($netdeviceid, $numport, $gpononuid) {
+		$netdeviceid = intval($netdeviceid);
+		$numport = intval($numport);
+		$gpononuid = intval($gpononuid);
+		if ($netdeviceid && $numport && $gpononuid && !$this->IsGponOnuLink($netdeviceid, $numport, $gpononuid)) {
+			$this->Log(4, self::SQL_TABLE_GPONONU, $gpononuid, 'link to ' .$netdeviceid. ', port ' .$numport);
+
+			return $this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONONU2OLT
+				. ' (netdevicesid, numport, gpononuid) VALUES (?, ?, ?)',
+				array($netdeviceid, $numport, $gpononuid));
 		}
 
 		return FALSE;
 	}
-	function GponOnuUnLink($netdevicesid,$numport,$gpononuid)
-	{
-		$netdevicesid=intval($netdevicesid);
-		$numport=intval($numport);
-		$gpononuid=intval($gpononuid);
-		$this->DB->Execute('DELETE FROM gpononu2olt WHERE netdevicesid=? and numport=? and gpononuid=?',array($netdevicesid,$numport,$gpononuid));
-		$this->DB->Execute('update gpononu set onuid=null,autoscript=0 WHERE id=?',array($gpononuid));
-		$this->Log(4, 'gpononu', $gpononuid, 'unlink with ' .$netdevicesid. ', port ' .$numport);
+
+	public function GponOnuUnLink($netdeviceid, $numport, $gpononuid) {
+		$netdeviceid = intval($netdeviceid);
+		$numport = intval($numport);
+		$gpononuid = intval($gpononuid);
+		$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONONU2OLT
+			. ' WHERE netdevicesid = ? AND numport = ? AND gpononuid = ?',
+			array($netdeviceid, $numport, $gpononuid));
+		$this->DB->Execute('update ' . self::SQL_TABLE_GPONONU
+			. ' SET onuid = NULL, autoscript = 0 WHERE id = ?', array($gpononuid));
+		$this->Log(4, self::SQL_TABLE_GPONONU, $gpononuid, 'unlink with ' .$netdeviceid. ', port ' .$numport);
 	}
-	function GponOnuUnLinkAll($gpononuid)
-	{
-		$gpononuid=intval($gpononuid);
-		$this->DB->Execute('DELETE FROM gpononu2olt WHERE gpononuid=?',array($gpononuid));
-		$this->Log(4, 'gpononu', $gpononuid, 'unlink with all');
+
+	public function GponOnuUnLinkAll($gpononuid) {
+		$gpononuid = intval($gpononuid);
+		$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONONU2OLT . ' WHERE gpononuid = ?',
+			array($gpononuid));
+		$this->Log(4, self::SQL_TABLE_GPONONU, $gpononuid, 'unlink with all');
 	}
-	function GponOnuUpdateOnuId($gpononuid,$onuid)
-	{
+
+	public function GponOnuUpdateOnuId($gpononuid, $onuid) {
 		$gpononuid=intval($gpononuid);
-		$this->DB->Execute('UPDATE gpononu SET onuid=?
-				WHERE id=?', 
-				array( 
-					$onuid,
-					$gpononuid
-				));
-		$this->Log(4, 'gpononu', $gpononuid, 'onuid updated:'.$onuid);
+		$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONONU . ' SET onuid = ?
+				WHERE id = ?', array($onuid, $gpononuid));
+		$this->Log(4, self::SQL_TABLE_GPONONU, $gpononuid, 'onuid updated:'.$onuid);
 	}
-	function GetGponOnuConnectedNames($netdevicesid, $order='numport,asc', $oltport=0)
-	{
-		list($order,$direction) = sscanf($order, '%[^,],%s');
+
+	function GetGponOnuConnectedNames($netdeviceid, $order='numport,asc', $oltport = 0) {
+		list ($order, $direction) = sscanf($order, '%[^,],%s');
 		($direction=='desc') ? $direction = 'desc' : $direction = 'asc';
-		switch($order)
-		{
-		    case 'id':
-			    $sqlord = ' ORDER BY id';
-		    break;
-		    case 'numport':
-			    $sqlord = ' ORDER BY go2o.numport';
-		    break;
-		    case 'onuid':
-			    $sqlord = ' ORDER BY onuid';
-		    break;
-		    default:
-			    $sqlord = ' ORDER BY id';
-		    break;
-		}
-
-		if(intval($oltport) > 0)
-		    $where = ' AND go2o.numport='.intval($oltport);
-		else
-		    $where = ' ';
-
-		if($list = $this->DB->GetAll('SELECT n.gponoltid, n.model AS oltmodel, g.*, gom.name AS model, gom.producer, go2o.numport,
-		    (SELECT SUM(portscount) FROM gpononuportstype2models WHERE gpononumodelsid=g.gpononumodelsid) AS ports
-			FROM gpononu g 
-			inner join gpononumodels gom on gom.id=g.gpononumodelsid 
-			inner join gpononu2olt go2o on go2o.gpononuid=g.id
-			inner join netdevices n on n.id=go2o.netdevicesid
-		    WHERE go2o.netdevicesid=? '.$where . $sqlord .' '. $direction, array($netdevicesid)))
-		{
-		    foreach($list as $idx => $row)
-		    {
-			if(preg_match('/8240/', $row['oltmodel']))
-				$list[$idx]['numportf'] = $this->OLT8240_format($row['numport']);
-		    }
-		}
-
-		return $list;
-
-	}
-	function GetGponOnuCustomersNames($ownerid)
-	{
-		$list = null;
-		if($list = $this->DB->GetAll('SELECT g.*, gom.name AS model, gom.producer, n.model AS oltmodel, gp.name AS profil,
-		    (SELECT SUM(portscount) FROM gpononuportstype2models WHERE gpononumodelsid=g.gpononumodelsid) AS ports,
-		    (SELECT nd.name FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponolt,
-		    (SELECT nd.gponoltid FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponoltid,
-		    (SELECT go2o.numport FROM gpononu2olt go2o WHERE go2o.gpononuid=g.id) AS gponoltnumport,
-		    (SELECT nd.id AS name FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponoltnetdevicesid
-			FROM gpononu g 
-			INNER JOIN gpononumodels gom ON gom.id=g.gpononumodelsid 
-			INNER JOIN gpononu2customers g2c ON g2c.gpononuid=g.id
-			LEFT JOIN gpononu2olt go2o ON go2o.gpononuid=g.id
-			LEFT JOIN netdevices n ON n.id=go2o.netdevicesid
-			LEFT JOIN gponoltprofiles gp ON gp.id = g.gponoltprofilesid
-		WHERE g2c.customersid=?', array($ownerid)))
-		{
-		    foreach($list as $idx => $row)
-		    {
-			if(preg_match('/8240/', $row['oltmodel']))
-				$list[$idx]['gponoltnumportf'] = $this->OLT8240_format($row['gponoltnumport']);
-		    }
-		}
-
-		return $list;
-	}
-	function GetGponOnu2Customers($gpononuid)
-	{
-		return $this->DB->GetAll("SELECT g2c.id,c.id as customersid, (" . $this->DB->Concat('c.lastname', "' '", 'c.name') . ") as customersname 
-			FROM gpononu2customers g2c
-			INNER JOIN customers c On c.id=g2c.customersid
-			WHERE g2c.gpononuid=? ORDER BY g2c.id ASC", array($gpononuid));
-	}
-	function GponOnuClearCustomers($gpononuid)
-	{
-		$this->DB->Execute('DELETE FROM gpononu2customers WHERE gpononuid=?', array($gpononuid));
-		$this->Log(4, 'gpononu', $gpononuid, 'customers removed');
-	}
-	function GponOnuAddCustomer($gpononuid,$customersid)
-	{
-		if($gpononuid>0 && $customersid>0)
-		{
-			if(intval($this->DB->GetOne('SELECT COUNT(id) as liczba FROM gpononu2customers WHERE gpononuid=? AND customersid=?',array($gpononuid,$customersid)))==0)
-			{
-				$this->DB->Execute('INSERT INTO gpononu2customers (gpononuid,customersid) 
-					VALUES (?, ?)', 
-					array(
-						$gpononuid,
-						$customersid
-				));
-				$this->Log(4, 'gpononu', $gpononuid, 'customers added: '.$customersid);
-			}
-		}
-	}
-	function GetGponOnuForCustomer($ownerid)
-	{
-		$result = $this->DB->GetRow('SELECT g.*,gom.name AS model,(select sum(portscount) from gpononuportstype2models where gpononumodelsid=g.gpononumodelsid) as ports,gom.producer,(select nd.name from gpononu2olt go2o inner join netdevices nd on nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) as gponolt,(select go2o.numport from gpononu2olt go2o WHERE go2o.gpononuid=g.id) as gponoltnumport,(select nd.id AS name from gpononu2olt go2o inner join netdevices nd on nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) as gponoltnetdevicesid  
-			FROM gpononu g
-			inner join gpononumodels gom on gom.id=g.gpononumodelsid
-			inner join gpononu2customers g2c on g2c.gpononuid=g.id
-			WHERE g2c.customersid = ?', array($ownerid));
-		
-		return $result;
-	}
-	
-	function GetGponOnuPhoneVoip($gpononuid)
-	{
-		$result = $this->DB->GetAll('SELECT v.id,v.phone 
-		FROM  voipaccounts v
-		INNER JOIN customers c ON c.id = v.ownerid
-		INNER JOIN gpononu2customers g2c ON g2c.customersid = c.id
-		WHERE g2c.gpononuid=?', array($gpononuid));
-		
-		return $result;
-	}
-	function GetPhoneVoip($id)
-	{
-		$result=array();
-		if($id>0)
-		{
-			$result = $this->DB->GetRow('SELECT v.id,v.login,v.passwd,v.phone 
-			FROM  voipaccounts v
-			WHERE v.id=?', array($id));
-		}
-		
-		return $result;
-	}
-	function GetPhoneVoipForCustomer($ownerid)
-	{
-		$result=array();
-		if($ownerid>0)
-		{
-			$result = $this->DB->GetAll('SELECT v.id,v.phone 
-			FROM  voipaccounts v
-			INNER JOIN customers c ON c.id = v.ownerid
-			WHERE c.id=?', array($ownerid));
-		}
-		
-		return $result;
-	}	
-	function GetHostNameForCustomer($ownerid)
-	{
-		$result=array();
-		if($ownerid>0)
-		{
-			$result = $this->DB->GetAll("SELECT n.id, (" . $this->DB->Concat('n.name', "' / '", 'INET_NTOA(ipaddr)') . ") AS host
-			FROM nodes n
-			INNER JOIN customers c ON c.id = n.ownerid
-			WHERE c.id=?", array($ownerid));
-		}
-		
-		return $result;
-	}
-	function GetHostForNetdevices()
-	{
-	    return $this->DB->GetAll("SELECT n.id, (" . $this->DB->Concat('n.name', "' / '", 'INET_NTOA(ipaddr)') . ") AS host
-		FROM nodes n 
-		LEFT JOIN gpononu g1 ON g1.host_id1 = n.id
-		LEFT JOIN gpononu g2 ON g2.host_id2 = n.id
-		WHERE g1.host_id1 IS NULL
-		  AND g2.host_id2 IS NULL
-		  AND n.ownerid=0 ORDER BY host");
-	}
-	function IsNodeIdNetDevice($id)
-	{
-	    if($this->DB->GetOne("SELECT id FROM nodes WHERE ownerid=0 AND id = ?", array($id)))
-		return true;
-	    else
-		return false;
-	}
-	function GetGponOnuCountOnPort($netdevicesid,$numport)
-	{
-		$netdevicesid=intval($netdevicesid);
-		$numport=intval($numport);
-		return $this->DB->GetOne('SELECT count(gpononuid) as CountOnPort FROM gpononu2olt go2o
-		WHERE go2o.netdevicesid=? AND go2o.numport=?', array($netdevicesid,$numport));
-	}
-	function GetGponOnuList($order='name,asc')
-	{
-		list($order,$direction) = sscanf($order, '%[^,],%s');
-
-		($direction=='desc') ? $direction = 'desc' : $direction = 'asc';
-
-		switch($order)
-		{
+		switch ($order) {
 			case 'id':
 				$sqlord = ' ORDER BY id';
-			break;
+				break;
+			case 'numport':
+				$sqlord = ' ORDER BY go2o.numport';
+				break;
+			case 'onuid':
+				$sqlord = ' ORDER BY onuid';
+				break;
+			default:
+				$sqlord = ' ORDER BY id';
+				break;
+		}
+
+		$oltport = intval($oltport);
+		if ($oltport)
+			$where = ' AND go2o.numport=' . $oltport;
+		else
+			$where = ' ';
+
+		if ($list = $this->DB->GetAll('SELECT go.id AS gponoltid, n.model AS oltmodel, g.*, gom.name AS model, gom.producer, go2o.numport,
+			(SELECT SUM(portscount) FROM ' . self::SQL_TABLE_GPONONUPORTTYPE2MODELS . ' WHERE gpononumodelsid = g.gpononumodelsid) AS ports
+			FROM ' . self::SQL_TABLE_GPONONU . ' g
+			JOIN ' . self::SQL_TABLE_GPONONUMODELS . ' gom ON gom.id = g.gpononumodelsid
+			JOIN ' . self::SQL_TABLE_GPONONU2OLT . ' go2o ON go2o.gpononuid = g.id
+			JOIN netdevices n ON n.id = go2o.netdevicesid
+			JOIN ' . self::SQL_TABLE_GPONOLT . ' go ON go.netdeviceid = n.id
+			WHERE go2o.netdevicesid=? '. $where . $sqlord .' '. $direction, array($netdeviceid)))
+			foreach ($list as $idx => $row)
+				if (preg_match('/8240/', $row['oltmodel']))
+					$list[$idx]['numportf'] = $this->OLT8240_format($row['numport']);
+
+		return $list;
+	}
+
+	public function GetGponOnuCustomersNames($ownerid) {
+		if ($list = $this->DB->GetAll('SELECT g.*, gom.name AS model, gom.producer, n.model AS oltmodel, gp.name AS profil,
+			(SELECT SUM(portscount) FROM ' . self::SQL_TABLE_GPONONUPORTTYPE2MODELS . ' WHERE gpononumodelsid=g.gpononumodelsid) AS ports,
+			(SELECT nd.name FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+				JOIN netdevices nd ON nd.id = go2o.netdevicesid
+				WHERE go2o.gpononuid = g.id) AS gponolt,
+			(SELECT go.id AS gponoltid FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+				JOIN netdevices nd ON nd.id = go2o.netdevicesid
+				JOIN ' . self::SQL_TABLE_GPONOLT . ' go ON go.netdeviceid = nd.id
+				WHERE go2o.gpononuid = g.id) AS gponoltid,
+			(SELECT go2o.numport FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+				WHERE go2o.gpononuid = g.id) AS gponoltnumport,
+			(SELECT nd.id AS name FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+				JOIN netdevices nd ON nd.id = go2o.netdevicesid
+				WHERE go2o.gpononuid = g.id) AS gponoltnetdevicesid
+			FROM ' . self::SQL_TABLE_GPONONU . ' g
+			JOIN ' . self::SQL_TABLE_GPONONUMODELS . ' gom ON gom.id=g.gpononumodelsid
+			JOIN ' . self::SQL_TABLE_GPONONU2CUSTOMERS . ' g2c ON g2c.gpononuid=g.id
+			LEFT JOIN ' . self::SQL_TABLE_GPONONU2OLT . ' go2o ON go2o.gpononuid=g.id
+			LEFT JOIN netdevices n ON n.id=go2o.netdevicesid
+			LEFT JOIN ' . self::SQL_TABLE_GPONOLTPROFILES . ' gp ON gp.id = g.gponoltprofilesid
+			WHERE g2c.customersid=?', array($ownerid)))
+			foreach ($list as $idx => $row)
+				if (preg_match('/8240/', $row['oltmodel']))
+					$list[$idx]['gponoltnumportf'] = $this->OLT8240_format($row['gponoltnumport']);
+
+		return $list;
+	}
+
+	public function GetGponOnu2Customers($gpononuid) {
+		return $this->DB->GetAll("SELECT g2c.id,c.id as customersid,
+				(" . $this->DB->Concat('c.lastname', "' '", 'c.name') . ") as customersname
+			FROM " . self::SQL_TABLE_GPONONU2CUSTOMERS . " g2c
+			JOIN customers c On c.id = g2c.customersid
+			WHERE g2c.gpononuid = ? ORDER BY g2c.id ASC", array($gpononuid));
+	}
+
+	public function GponOnuClearCustomers($gpononuid) {
+		$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONONU2CUSTOMERS
+			. ' WHERE gpononuid = ?', array($gpononuid));
+		$this->Log(4, 'gpononu', $gpononuid, 'customers removed');
+	}
+
+	public function GponOnuAddCustomer($gpononuid, $customerid) {
+		$gpononuid = intval($gpononuid);
+		$customerid = intval($customerid);
+		if ($gpononuid && $customerid && !($this->DB->GetOne('SELECT COUNT(id) AS liczba FROM ' . self::SQL_TABLE_GPONONU2CUSTOMERS
+				. ' WHERE gpononuid=? AND customersid=?', array($gpononuid, $customerid)))) {
+				$this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONONU2CUSTOMERS . ' (gpononuid, customersid)
+					VALUES (?, ?)', array($gpononuid, $customerid));
+				$this->Log(4, self::SQL_TABLE_GPONONU, $gpononuid, 'customers added: ' . $customerid);
+			}
+	}
+
+	public function GetGponOnuForCustomer($ownerid) {
+		$result = $this->DB->GetRow('SELECT g.*, gom.name AS model,
+				(SELECT sum(portscount) FROM ' . self::SQL_TABLE_GPONONUPORTTYPE2MODELS
+					. ' WHERE gpononumodelsid = g.gpononumodelsid) AS ports,
+					gom.producer,
+					(SELECT nd.name FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+						JOIN netdevices nd ON nd.id = go2o.netdevicesid
+						WHERE go2o.gpononuid = g.id) AS gponolt,
+					(SELECT go2o.numport FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+						WHERE go2o.gpononuid=g.id) AS gponoltnumport,
+					(SELECT nd.id AS name FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+						JOIN netdevices nd ON nd.id = go2o.netdevicesid
+						WHERE go2o.gpononuid = g.id) AS gponoltnetdevicesid
+			FROM ' . self::SQL_TABLE_GPONONU . ' g
+			JOIN ' . self::SQL_TABLE_GPONONUMODELS . ' gom ON gom.id = g.gpononumodelsid
+			JOIN ' . self::SQL_TABLE_GPONONU2CUSTOMERS . ' g2c ON g2c.gpononuid = g.id
+			WHERE g2c.customersid = ?', array($ownerid));
+
+		return $result;
+	}
+
+	public function GetGponOnuPhoneVoip($gpononuid) {
+		$result = $this->DB->GetAll('SELECT v.id, v.login AS phone
+			FROM voipaccounts v
+			JOIN customers c ON c.id = v.ownerid
+			JOIN ' . self::SQL_TABLE_GPONONU2CUSTOMERS . ' g2c ON g2c.customersid = c.id
+			WHERE g2c.gpononuid = ?', array($gpononuid));
+
+		return $result;
+	}
+
+	public function GetPhoneVoip($id) {
+		if (intval($id))
+			$result = $this->DB->GetRow('SELECT v.id, v.login, v.passwd, v.login AS phone
+			FROM voipaccounts v
+			WHERE v.id = ?', array($id));
+		else
+			$result = array();
+
+		return $result;
+	}
+
+	public function GetPhoneVoipForCustomer($ownerid) {
+		if (intval($ownerid))
+			$result = $this->DB->GetAll('SELECT v.id, v.login AS phone
+				FROM voipaccounts v
+				JOIN customers c ON c.id = v.ownerid
+				WHERE c.id=?', array($ownerid));
+		else
+			$result = array();
+		return $result;
+	}
+
+	public function GetHostNameForCustomer($ownerid) {
+		if (intval($ownerid))
+			$result = $this->DB->GetAll("SELECT n.id, (" . $this->DB->Concat('n.name', "' / '", 'INET_NTOA(ipaddr)') . ") AS host
+				FROM nodes n
+				JOIN customers c ON c.id = n.ownerid
+				WHERE c.id=?", array($ownerid));
+		else
+			$result = array();
+		return $result;
+	}
+
+	public function GetHostForNetdevices() {
+		return $this->DB->GetAll("SELECT n.id, (" . $this->DB->Concat('n.name', "' / '", 'INET_NTOA(ipaddr)') . ") AS host
+			FROM nodes n
+			LEFT JOIN " . self::SQL_TABLE_GPONONU . " g1 ON g1.host_id1 = n.id
+			LEFT JOIN " . self::SQL_TABLE_GPONONU . " g2 ON g2.host_id2 = n.id
+			WHERE g1.host_id1 IS NULL AND g2.host_id2 IS NULL AND n.ownerid = 0
+			ORDER BY host");
+	}
+
+	public function IsNodeIdNetDevice($id) {
+		if ($this->DB->GetOne("SELECT id FROM nodes WHERE ownerid = 0 AND id = ?", array($id)))
+			return true;
+		else
+			return false;
+	}
+
+	public function GetGponOnuCountOnPort($netdeviceid, $numport) {
+		$netdeviceid = intval($netdeviceid);
+		$numport = intval($numport);
+		return $this->DB->GetOne('SELECT COUNT(gpononuid) AS CountOnPort FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+			WHERE go2o.netdevicesid = ? AND go2o.numport = ?', array($netdeviceid, $numport));
+	}
+
+	public function GetGponOnuList($order = 'name,asc') {
+		list ($order, $direction) = sscanf($order, '%[^,],%s');
+
+		($direction == 'desc') ? $direction = 'desc' : $direction = 'asc';
+
+		switch ($order) {
+			case 'id':
+				$sqlord = ' ORDER BY id';
+				break;
 			case 'profil':
 				$sqlord = ' ORDER BY gp.name';
-			break;
+				break;
 			case 'model':
 				$sqlord = ' ORDER BY gom.name';
-			break;
+				break;
 			case 'ports':
 				$sqlord = ' ORDER BY ports';
-			break;
+				break;
 			case 'serialnumber':
 				$sqlord = ' ORDER BY serialnumber';
-			break;
+				break;
 			case 'location':
 				$sqlord = ' ORDER BY location';
-			break;
+				break;
 			case 'owner':
 				$sqlord = ' ORDER BY owner';
-			break;
+				break;
 			case 'gponolt':
 				$sqlord = ' ORDER BY gponolt';
-			break;
+				break;
 			default:
 				$sqlord = ' ORDER BY name';
-			break;
+				break;
 		}
-		$where=' WHERE 1=1 ';
-		if($netdevlist = $this->DB->GetAll('SELECT g.*,gom.name AS model,gom.producer,(select sum(portscount) from gpononuportstype2models where gpononumodelsid=g.gpononumodelsid) as ports, gp.name AS profil,
-		(SELECT nd.name FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponolt,
-		(SELECT nd.gponoltid FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponoltid,
-		(SELECT nd.model FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponoltmodel,
-		(SELECT go2o.numport from gpononu2olt go2o WHERE go2o.gpononuid=g.id) AS gponoltnumport,
-		(SELECT nd.id AS name from gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponoltnetdevicesid  
-			FROM gpononu g 
-			LEFT JOIN gponoltprofiles gp ON gp.id = g.gponoltprofilesid
-			INNER JOIN gpononumodels gom ON gom.id=g.gpononumodelsid '.$where
-			.($sqlord != '' ? $sqlord.' '.$direction : '')))
-		{
-		    foreach($netdevlist as $idx => $row)
-		    {
-			if(preg_match('/8240/', $row['gponoltmodel'])) //jesli duzy olt to formatujemy 1/1,...
-			{
-				$netdevlist[$idx]['gponoltnumportf'] = $this->OLT8240_format($row['gponoltnumport']);
-			}
-		    }
+		$where = ' WHERE 1=1 ';
+
+		if ($netdevlist = $this->DB->GetAll('
+			SELECT g.*, gom.name AS model,gom.producer,
+				(SELECT SUM(portscount) FROM ' . self::SQL_TABLE_GPONONUPORTTYPE2MODELS
+					. ' WHERE gpononumodelsid = g.gpononumodelsid) AS ports, gp.name AS profil,
+				(SELECT nd.name FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+					JOIN netdevices nd ON nd.id = go2o.netdevicesid
+					WHERE go2o.gpononuid = g.id) AS gponolt,
+				(SELECT go.id FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+					JOIN netdevices nd ON nd.id = go2o.netdevicesid
+					JOIN ' . self::SQL_TABLE_GPONOLT . ' go ON go.netdeviceid = nd.id
+					WHERE go2o.gpononuid = g.id) AS gponoltid,
+				(SELECT nd.model FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+					JOIN netdevices nd ON nd.id = go2o.netdevicesid
+					WHERE go2o.gpononuid = g.id) AS gponoltmodel,
+				(SELECT go2o.numport FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+					WHERE go2o.gpononuid = g.id) AS gponoltnumport,
+				(SELECT nd.id AS name FROM ' . self::SQL_TABLE_GPONONU2OLT . ' go2o
+					JOIN netdevices nd ON nd.id = go2o.netdevicesid
+					WHERE go2o.gpononuid=g.id) AS gponoltnetdevicesid
+			FROM ' . self::SQL_TABLE_GPONONU . ' g
+			LEFT JOIN ' . self::SQL_TABLE_GPONOLTPROFILES . ' gp ON gp.id = g.gponoltprofilesid
+			JOIN ' . self::SQL_TABLE_GPONONUMODELS . ' gom ON gom.id = g.gpononumodelsid ' . $where
+			. ($sqlord != '' ? $sqlord . ' ' . $direction : ''))) {
+			foreach ($netdevlist as $idx => $row)
+				if (preg_match('/8240/', $row['gponoltmodel'])) //jesli duzy olt to formatujemy 1/1,...
+					$netdevlist[$idx]['gponoltnumportf'] = $this->OLT8240_format($row['gponoltnumport']);
 		}
 
 		$netdevlist['total'] = sizeof($netdevlist);
@@ -582,125 +612,159 @@ class GPON {
 		$netdevlist['direction'] = $direction;
 		return $netdevlist;
 	}
-	function OLT8240_format($port)
-	{
+
+	public function OLT8240_format($port) {
 		$a = ceil(intval($port) / 4);
-		$b = intval($port ) % 4;
-		if ($b == 0)
+		$b = intval($port) % 4;
+		if (!$b)
 			$b = 4;
 
 		return $a . '/'. $b;
 	}
-	function GetNotConnectedOnu()
-	{
-		return $this->DB->GetAll('SELECT g.*,gom.name AS model,gom.producer,(select sum(portscount) from gpononuportstype2models where gpononumodelsid=g.gpononumodelsid) as ports
-			FROM gpononu g 
-			inner join gpononumodels gom on gom.id=g.gpononumodelsid
-			where g.id not in (select distinct gpononuid from gpononu2olt)
+
+	public function GetNotConnectedOnu() {
+		return $this->DB->GetAll('SELECT g.*, gom.name AS model, gom.producer,
+				(SELECT SUM(portscount) FROM ' . self::SQL_TABLE_GPONONUPORTTYPE2MODELS
+					. ' WHERE gpononumodelsid = g.gpononumodelsid) AS ports
+			FROM ' . self::SQL_TABLE_GPONONU . ' g
+			JOIN ' . self::SQL_TABLE_GPONONUMODELS . ' gom ON gom.id = g.gpononumodelsid
+			WHERE g.id NOT IN (SELECT DISTINCT gpononuid FROM ' . self::SQL_TABLE_GPONONU2OLT . ')
 			ORDER BY name');
 	}
-	function GetGponOnu($id)
-	{
-		$result = $this->DB->GetRow("SELECT g.*, gom.name AS model,
-		    (SELECT SUM(portscount) FROM gpononuportstype2models WHERE gpononumodelsid=g.gpononumodelsid) AS ports, gom.producer, 
-		    (SELECT portscount FROM gpononuportstype2models gm2p JOIN gpononuportstype gpt ON gpt.id = gm2p.gpononuportstypeid WHERE gpononumodelsid=g.gpononumodelsid AND gpt.name='pots') AS potsports, 
-		    (SELECT nd.name FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponolt,
-		    (SELECT nd.id AS name FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponoltnetdevicesid,
-		    (SELECT go2o.numport FROM gpononu2olt go2o WHERE go2o.gpononuid=g.id) AS gponoltnumport,
-		    (SELECT nd.gponoltid AS name FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponoltid,
-		    (SELECT gop.name FROM gponoltprofiles gop WHERE gop.id=g.gponoltprofilesid) AS profil_olt,
-		    (SELECT va.phone FROM voipaccounts va WHERE va.id=g.voipaccountsid1) AS voipaccountsid1_phone,
-		    (SELECT va.phone FROM voipaccounts va WHERE va.id=g.voipaccountsid2) AS voipaccountsid2_phone,
-		    (SELECT (" . $this->DB->Concat('no.name', "' / '", 'INET_NTOA(ipaddr)') . ") FROM nodes no WHERE no.id=g.host_id1) AS host_id1_host,
-		    (SELECT (" . $this->DB->Concat('no.name', "' / '", 'INET_NTOA(ipaddr)') . ") FROM nodes no WHERE no.id=g.host_id2) AS host_id2_host
-		FROM gpononu g
-		INNER JOIN gpononumodels gom on gom.id=g.gpononumodelsid
-		WHERE g.id = ?", array($id));
 
-		$result['createdby'] = $this->DB->GetOne('SELECT name FROM users WHERE id=?', array($result['creatorid']));
-		$result['modifiedby'] = $this->DB->GetOne('SELECT name FROM users WHERE id=?', array($result['modid']));
-		$result['creationdateh'] = date('Y/m/d, H:i',$result['creationdate']);
-		$result['moddateh'] = date('Y/m/d, H:i',$result['moddate']);
-		
+	public function GetGponOnu($id) {
+		$result = $this->DB->GetRow("SELECT g.*, d.name AS netdevname, gom.name AS model,
+				(SELECT SUM(portscount) FROM " . self::SQL_TABLE_GPONONUPORTTYPE2MODELS
+					. " WHERE gpononumodelsid = g.gpononumodelsid) AS ports, gom.producer,
+				(SELECT nd.name FROM " . self::SQL_TABLE_GPONONU2OLT . " go2o
+					JOIN netdevices nd ON nd.id = go2o.netdevicesid
+					WHERE go2o.gpononuid = g.id) AS gponolt,
+				(SELECT nd.id FROM " . self::SQL_TABLE_GPONONU2OLT . " go2o
+					JOIN netdevices nd ON nd.id = go2o.netdevicesid
+					WHERE go2o.gpononuid = g.id) AS gponoltnetdevicesid,
+				(SELECT go2o.numport FROM " . self::SQL_TABLE_GPONONU2OLT . " go2o
+					WHERE go2o.gpononuid = g.id) AS gponoltnumport,
+				(SELECT go.id FROM " . self::SQL_TABLE_GPONONU2OLT . " go2o
+					JOIN netdevices nd ON nd.id = go2o.netdevicesid
+					JOIN " . self::SQL_TABLE_GPONOLT . " go ON go.netdeviceid = nd.id
+					WHERE go2o.gpononuid = g.id) AS gponoltid,
+				(SELECT gop.name FROM " . self::SQL_TABLE_GPONOLTPROFILES . " gop
+					WHERE gop.id = g.gponoltprofilesid) AS profil_olt,
+				(SELECT va.login AS phone FROM voipaccounts va
+					WHERE va.id = g.voipaccountsid1) AS voipaccountsid1_phone,
+				(SELECT va.login AS phone FROM voipaccounts va
+					WHERE va.id = g.voipaccountsid2) AS voipaccountsid2_phone,
+				(SELECT (" . $this->DB->Concat('no.name', "' / '", 'INET_NTOA(ipaddr)') . ") FROM nodes no
+					WHERE no.id=g.host_id1) AS host_id1_host,
+				(SELECT (" . $this->DB->Concat('no.name', "' / '", 'INET_NTOA(ipaddr)') . ") FROM nodes no
+					WHERE no.id=g.host_id2) AS host_id2_host
+			FROM " . self::SQL_TABLE_GPONONU . " g
+			JOIN " . self::SQL_TABLE_GPONONUMODELS . " gom ON gom.id = g.gpononumodelsid
+			LEFT JOIN netdevices d ON d.id = g.netdevid
+			WHERE g.id = ?", array($id));
+		$result['portdetails'] = $this->DB->GetAllByKey("SELECT pt.name, portscount FROM " . self::SQL_TABLE_GPONONU . " o
+			JOIN " . self::SQL_TABLE_GPONONUPORTTYPE2MODELS . " t2m ON o.gpononumodelsid = t2m.gpononumodelsid
+			JOIN " . self::SQL_TABLE_GPONONUPORTTYPES . "  pt ON pt.id = gpononuportstypeid
+			WHERE o.id = ?", 'name', array($id));
+
+		$result['properties'] = unserialize($result['properties']);
+		$users_table = $this->DB->ResourceExists('vusers', LMSDB::RESOURCE_TYPE_VIEW)
+			? 'vusers' : 'users';
+		$result['createdby'] = $this->DB->GetOne('SELECT name FROM ' . $users_table . ' WHERE id=?', array($result['creatorid']));
+		$result['modifiedby'] = $this->DB->GetOne('SELECT name FROM ' . $users_table . ' WHERE id=?', array($result['modid']));
+		$result['creationdateh'] = date('Y/m/d, H:i', $result['creationdate']);
+		$result['moddateh'] = date('Y/m/d, H:i', $result['moddate']);
+
 		return $result;
 	}
-	function GetGponOnuFromName($name)
-	{
+
+	public function GetGponOnuProperties($id) {
+		$properties = $this->DB->GetOne("SELECT properties FROM " . self::SQL_TABLE_GPONONU
+			. " WHERE id = ?", array($id));
+		return unserialize($properties);
+	}
+
+	public function GetGponOnuFromName($name) {
 		$result = $this->DB->GetRow("SELECT g.*,
-		    (SELECT SUM(portscount) FROM gpononuportstype2models WHERE gpononumodelsid=g.gpononumodelsid) AS ports,
-		    (SELECT portscount FROM gpononuportstype2models gm2p JOIN gpononuportstype gpt ON gpt.id = gm2p.gpononuportstypeid WHERE gpononumodelsid=g.gpononumodelsid AND gpt.name='pots') AS potsports,
-		    (SELECT nd.name FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponolt,
-		    (SELECT nd.id AS name FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponoltnetdevicesid,
-		    (SELECT go2o.numport FROM gpononu2olt go2o WHERE go2o.gpononuid=g.id) AS gponoltnumport,
-		    (SELECT nd.gponoltid AS name FROM gpononu2olt go2o INNER JOIN netdevices nd ON nd.id=go2o.netdevicesid WHERE go2o.gpononuid=g.id) AS gponoltid,
-		    (SELECT gop.name FROM gponoltprofiles gop WHERE gop.id=g.gponoltprofilesid) AS profil_olt,
-		    (SELECT va.phone FROM voipaccounts va WHERE va.id=g.voipaccountsid1) AS voipaccountsid1_phone,
-		    (SELECT va.phone FROM voipaccounts va WHERE va.id=g.voipaccountsid2) AS voipaccountsid2_phone,
-		    (SELECT (" . $this->DB->Concat('no.name', "' / '", 'INET_NTOA(ipaddr)') . ") FROM nodes no WHERE no.id=g.host_id1) AS host_id1_host,
-		    (SELECT (" . $this->DB->Concat('no.name', "' / '", 'INET_NTOA(ipaddr)') . ") FROM nodes no WHERE no.id=g.host_id2) AS host_id2_host
-			FROM gpononu g
+				(SELECT SUM(portscount) FROM " . self::SQL_TABLE_GPONONUPORTTYPE2MODELS
+					. " WHERE gpononumodelsid = g.gpononumodelsid) AS ports,
+				(SELECT nd.name FROM " . self::SQL_TABLE_GPONONU2OLT . " go2o
+					JOIN netdevices nd ON nd.id = go2o.netdevicesid
+					WHERE go2o.gpononuid = g.id) AS gponolt,
+				(SELECT nd.id FROM " . self::SQL_TABLE_GPONONU2OLT . " go2o
+					JOIN netdevices nd ON nd.id = go2o.netdevicesid
+					WHERE go2o.gpononuid = g.id) AS gponoltnetdevicesid,
+				(SELECT go2o.numport FROM " . self::SQL_TABLE_GPONONU2OLT . " go2o
+					WHERE go2o.gpononuid = g.id) AS gponoltnumport,
+				(SELECT go.id FROM " . self::SQL_TABLE_GPONONU2OLT . " go2o
+					JOIN netdevices nd ON nd.id = go2o.netdevicesid
+					JOIN " . self::SQL_TABLE_GPONOLT . " go ON go.netdeviceid = nd.id
+					WHERE go2o.gpononuid=g.id) AS gponoltid,
+				(SELECT gop.name FROM " . self::SQL_TABLE_GPONOLTPROFILES . " gop
+					WHERE gop.id = g.gponoltprofilesid) AS profil_olt,
+				(SELECT va.login AS phone FROM voipaccounts va
+					WHERE va.id=g.voipaccountsid1) AS voipaccountsid1_phone,
+				(SELECT va.login AS phone FROM voipaccounts va
+					WHERE va.id=g.voipaccountsid2) AS voipaccountsid2_phone,
+				(SELECT (" . $this->DB->Concat('no.name', "' / '", 'INET_NTOA(ipaddr)') . ") FROM nodes no
+					WHERE no.id=g.host_id1) AS host_id1_host,
+				(SELECT (" . $this->DB->Concat('no.name', "' / '", 'INET_NTOA(ipaddr)') . ") FROM nodes no
+					WHERE no.id=g.host_id2) AS host_id2_host
+			FROM " . self::SQL_TABLE_GPONONU . " g
 			WHERE g.name = ?", array($name));
-		
+		if (!empty($result))
+			$result['portdetails'] = $this->DB->GetAllByKey("
+				SELECT pt.name, portscount FROM " . self::SQL_TABLE_GPONONU . " o
+				JOIN " . self::SQL_TABLE_GPONONUPORTTYPE2MODELS . " t2m ON o.gpononumodelsid = t2m.gpononumodelsid
+				JOIN " . self::SQL_TABLE_GPONONUPORTTYPES . " pt ON pt.id = gpononuportstypeid
+				WHERE o.id = ?", 'name', array($result['id']));
+
 		return $result;
 	}
-	function GponOnuNameExists($name)
-	{
-		return ($this->DB->GetOne("SELECT * FROM gpononu WHERE name=?", array($name)) ? TRUE : FALSE);
+
+	public function GponOnuNameExists($name) {
+		return ($this->DB->GetOne("SELECT * FROM " . self::SQL_TABLE_GPONONU
+			. " WHERE name = ?", array($name)) ? true : false);
 	}
-	
-	function GponOnuExists($id)
-	{
-		return ($this->DB->GetOne('SELECT * FROM gpononu WHERE id=?', array($id)) ? TRUE : FALSE);
+
+	public function GponOnuExists($id) {
+		return ($this->DB->GetOne('SELECT * FROM ' . self::SQL_TABLE_GPONONU
+			. ' WHERE id = ?', array($id)) ? true : false);
 	}
-	function GponOnuAdd($gpononudata)
-	{
-		$ogonek     = array("ą", "ś", "ż", "ź", "ć", "ń", "ł", "ó", "ę", "Ą", "Ś", "Ż", "Ź", "Ć", "Ń", "Ł", "Ó", "Ę");
-		$bez_ogonek = array("a", "s", "z", "z", "c", "n", "l", "o", "e", "A", "S", "Z", "Z", "C", "N", "L", "O", "E");
-		$gpononudata['onu_description'] = str_replace($ogonek, $bez_ogonek, $gpononudata['onu_description']);
-		$gpononudata['gpononumodelsid']=intval($gpononudata['gpononumodelsid']);
-		$gpononumodelid=1;
-		if($gpononudata['gpononumodelsid']==0)
-		{
-			$gpononudata['onu_model']=trim($gpononudata['onu_model']);
-			if(strlen($gpononudata['onu_model'])>0)
-			{
-				$result = $this->DB->GetRow("SELECT id FROM gpononumodels
-				WHERE name = ?", array($gpononudata['onu_model']));
-				$gpononudata['gpononumodelsid']=intval($result['id']);
-				if($gpononudata['gpononumodelsid']==0)
-				{
-					if ($this->DB->Execute('INSERT INTO gpononumodels (name) 
-						VALUES (?)', 
-						array(
-							$gpononudata['onu_model'],
-						)))
-					{
-						$gpononudata['gpononumodelsid'] = $this->DB->GetLastInsertID('gpononumodels');
-						$this->Log(4, 'gpononumodel', $gpononudata['gpononumodelsid'], 'model added via onuadd: '.$gpononudata['onu_model']);
+
+	public function GponOnuAdd($gpononudata) {
+		$gpononudata['onu_description'] = iconv('UTF-8', 'ASCII//TRANSLIT', $gpononudata['onu_description']);
+		$gpononudata['gpononumodelsid'] = intval($gpononudata['gpononumodelid']);
+		$gpononumodelid = 1;
+		if (empty($gpononudata['gpononumodelsid'])) {
+			$gpononudata['onu_model'] = trim($gpononudata['onu_model']);
+			if (strlen($gpononudata['onu_model'])) {
+				$result = $this->DB->GetRow("SELECT id FROM " . self::SQL_TABLE_GPONONUMODELS
+				. " WHERE name = ?", array($gpononudata['onu_model']));
+				$gpononudata['gpononumodelsid'] = intval($result['id']);
+				if (empty($gpononudata['gpononumodelsid'])) {
+					if ($this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONONUMODELS . ' (name)
+						VALUES (?)', array($gpononudata['onu_model']))) {
+						$gpononudata['gpononumodelsid'] = $this->DB->GetLastInsertID(self::SQL_TABLE_GPONONUMODELS);
+						$this->Log(4, self::SQL_TABLE_GPONONUMODELS, $gpononudata['gpononumodelsid'], 'model added via onuadd: ' . $gpononudata['onu_model']);
 					}
 				}
 			}
 		}
-		$gpononudata['gpononumodelsid']=intval($gpononudata['gpononumodelsid']);
-		if($gpononudata['gpononumodelsid']==0)
-		{
-			$gpononudata['gpononumodelsid']=1;
-		}
-		$gpononudata['gponoltprofilesid']=intval($gpononudata['gponoltprofilesid'])>0 ? $gpononudata['gponoltprofilesid']: NULL;
-		$gpononudata['voipaccountsid1']=intval($gpononudata['voipaccountsid1'])>0 ? $gpononudata['voipaccountsid1']: NULL;
-		$gpononudata['voipaccountsid2']=intval($gpononudata['voipaccountsid2'])>0 ? $gpononudata['voipaccountsid2']: NULL;
-		$gpononudata['host_id1']=intval($gpononudata['host_id1'])>0 ? $gpononudata['host_id1']: NULL;
-		$gpononudata['host_id2']=intval($gpononudata['host_id2'])>0 ? $gpononudata['host_id2']: NULL;
-		if ($this->DB->Execute('INSERT INTO gpononu (name, location, gpononumodelsid, description, serialnumber, purchasetime, guaranteeperiod, password, autoprovisioning, onudescription, gponoltprofilesid, voipaccountsid1, voipaccountsid2, host_id1, host_id2, creatorid, creationdate) 
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?NOW?)', 
+		$gpononudata['gpononumodelsid'] = intval($gpononudata['gpononumodelsid']);
+		if (empty($gpononudata['gpononumodelsid']))
+			$gpononudata['gpononumodelsid'] = 1;
+		$gpononudata['gponoltprofilesid'] = intval($gpononudata['gponoltprofilesid']) ? $gpononudata['gponoltprofilesid']: NULL;
+		$gpononudata['voipaccountsid1'] = intval($gpononudata['voipaccountsid1']) ? $gpononudata['voipaccountsid1']: NULL;
+		$gpononudata['voipaccountsid2'] = intval($gpononudata['voipaccountsid2']) ? $gpononudata['voipaccountsid2']: NULL;
+		$gpononudata['host_id1'] = intval($gpononudata['host_id1']) ? $gpononudata['host_id1']: NULL;
+		$gpononudata['host_id2'] = intval($gpononudata['host_id2']) ? $gpononudata['host_id2']: NULL;
+		if ($this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONONU . ' (name, gpononumodelsid, password, autoprovisioning, onudescription, gponoltprofilesid,
+			voipaccountsid1, voipaccountsid2, host_id1, host_id2, creatorid, creationdate, netdevid, xmlprovisioning, properties)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?NOW?, ?, ?, ?)',
 				array(
 					$gpononudata['name'],
-					$gpononudata['location'],
 					$gpononudata['gpononumodelsid'],
-					$gpononudata['description'],
-					$gpononudata['serialnumber'],
-					$gpononudata['purchasetime'],
-					$gpononudata['guaranteeperiod'],
 					$gpononudata['password'],
 					$gpononudata['autoprovisioning'],
 					$gpononudata['onu_description'],
@@ -709,82 +773,59 @@ class GPON {
 					$gpononudata['voipaccountsid2'],
 					$gpononudata['host_id1'],
 					$gpononudata['host_id2'],
-					$this->AUTH->id
+					$this->AUTH->id,
+					empty($gpononudata['netdevid']) ? null : $gpononudata['netdevid'],
+					$gpononudata['xmlprovisioning'],
+					$gpononudata['properties'],
 		))) {
-		
-			$id = $this->DB->GetLastInsertID('gpononu');
+			$id = $this->DB->GetLastInsertID(self::SQL_TABLE_GPONONU);
 			$dump = var_export($gpononudata, true);
-			$this->Log(4, 'gpononu', $id, 'added '.$gpononudata['name'], $dump);
+			$this->Log(4, self::SQL_TABLE_GPONONU, $id, 'added '.$gpononudata['name'], $dump);
 			return $id;
-		}
-		else
-			return FALSE;
+		} else
+			return false;
 	}
-	function GponOnuDescriptionUpdate($id,$onudescription)
-	{
-		$ogonek     = array("ą", "ś", "ż", "ź", "ć", "ń", "ł", "ó", "ę", "Ą", "Ś", "Ż", "Ź", "Ć", "Ń", "Ł", "Ó", "Ę");
-		$bez_ogonek = array("a", "s", "z", "z", "c", "n", "l", "o", "e", "A", "S", "Z", "Z", "C", "N", "L", "O", "E");
-		$onudescription = str_replace($ogonek, $bez_ogonek, $onudescription);
-		$id=intval($id);
-		if($id>0)
-		{
-			$this->DB->Execute('UPDATE gpononu SET onudescription=?
-				WHERE id=?', 
-				array( 
-					$onudescription,
-					$id
-				));
-			$this->Log(4, 'gpononu', $id, 'description set: '.$onudescription);
-		}
-	}
-	function GponOnuVoipUpdate($id, $port, $voipid)
-	{
-		if ($port > 0)
-		{
-			$colname = 'voipaccountsid'. $port;
-			$this->DB->Execute('UPDATE gpononu SET '. $colname .' = ? WHERE id = ?', array($voipid, $id));
-			$this->Log(4, 'gpononu', $id, 'voip '.$port.' set: '.$voipid);
-		}
-	}
-	function GponOnuProfileUpdateByName($id, $profile)
-	{
-		$id=intval($id);
-		if($id>0)
-		{
-			if ($pid = $this->DB->GetOne('SELECT id FROM gponoltprofiles WHERE name = ?', array($profile)))
-			{
-				$this->DB->Execute('UPDATE gpononu SET gponoltprofilesid = ?
-					WHERE id=?',
-					array(
-						$pid,
-						$id
-					));
-				$this->Log(4, 'gpononu', $id, 'profile set: '.$profile);
-			}
-		}
 
+	public function GponOnuDescriptionUpdate($id, $onudescription) {
+		$onudescription = iconv('UTF-8', 'ASCII//TRANSLIT', $onudescription);
+		if(intval($id)) {
+			$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONONU . ' SET onudescription = ?
+				WHERE id = ?', array($onudescription, $id));
+			$this->Log(4, self::SQL_TABLE_GPONONU, $id, 'description set: ' . $onudescription);
+		}
 	}
-	function GponOnuUpdate($gpononudata)
-	{
-		$ogonek     = array("ą", "ś", "ż", "ź", "ć", "ń", "ł", "ó", "ę", "Ą", "Ś", "Ż", "Ź", "Ć", "Ń", "Ł", "Ó", "Ę");
-		$bez_ogonek = array("a", "s", "z", "z", "c", "n", "l", "o", "e", "A", "S", "Z", "Z", "C", "N", "L", "O", "E");
-		$gpononudata['onudescription'] = str_replace($ogonek, $bez_ogonek, $gpononudata['onudescription']);
-		$gpononudata['gponoltprofilesid']=intval($gpononudata['gponoltprofilesid'])>0 ? $gpononudata['gponoltprofilesid']: NULL;
-		$gpononudata['voipaccountsid1']=intval($gpononudata['voipaccountsid1'])>0 ? $gpononudata['voipaccountsid1']: NULL;
-		$gpononudata['voipaccountsid2']=intval($gpononudata['voipaccountsid2'])>0 ? $gpononudata['voipaccountsid2']: NULL;
-		$gpononudata['host_id1']=intval($gpononudata['host_id1'])>0 ? $gpononudata['host_id1']: NULL;
-		$gpononudata['host_id2']=intval($gpononudata['host_id2'])>0 ? $gpononudata['host_id2']: NULL;
-		$this->DB->Execute('UPDATE gpononu SET location=?, gpononumodelsid=?, description=?, serialnumber=?, purchasetime=?,
-			    guaranteeperiod=?, password=?, autoprovisioning=?, onudescription=?, gponoltprofilesid=?,
-			    voipaccountsid1=?, voipaccountsid2=?, host_id1=?, host_id2=?, modid=?, moddate=?NOW?
-				WHERE id=?', 
-				array( 
-					$gpononudata['location'],
+
+	public function GponOnuVoipUpdate($id, $port, $voipid) {
+		if (intval($port)) {
+			$colname = 'voipaccountsid' . $port;
+			$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONONU . ' SET '. $colname .' = ?
+				WHERE id = ?', array($voipid, $id));
+			$this->Log(4, self::SQL_TABLE_GPONONU, $id, 'voip '.$port.' set: '.$voipid);
+		}
+	}
+
+	public function GponOnuProfileUpdateByName($id, $profile) {
+		if (intval($id) && ($pid = $this->DB->GetOne('SELECT id FROM ' . self::SQL_TABLE_GPONOLTPROFILES
+			. ' WHERE name = ?', array($profile)))) {
+			$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONONU . ' SET gponoltprofilesid = ?
+				WHERE id=?', array($pid, $id));
+			$this->Log(4, self::SQL_TABLE_GPONONU, $id, 'profile set: '.$profile);
+		}
+	}
+
+	public function GponOnuUpdate($gpononudata) {
+		$gpononudata['onudescription'] = iconv('UTF-8', 'ASCII//TRANSLIT', $gpononudata['onudescription']);
+		$gpononudata['gponoltprofilesid'] = intval($gpononudata['gponoltprofilesid']) ? $gpononudata['gponoltprofilesid']: NULL;
+		$gpononudata['voipaccountsid1'] = intval($gpononudata['voipaccountsid1']) ? $gpononudata['voipaccountsid1']: NULL;
+		$gpononudata['voipaccountsid2'] = intval($gpononudata['voipaccountsid2']) ? $gpononudata['voipaccountsid2']: NULL;
+		$gpononudata['host_id1'] = intval($gpononudata['host_id1']) ? $gpononudata['host_id1']: NULL;
+		$gpononudata['host_id2'] = intval($gpononudata['host_id2']) ? $gpononudata['host_id2']: NULL;
+		$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONONU . ' SET gpononumodelsid=?, password=?, autoprovisioning=?,
+				onudescription=?, gponoltprofilesid=?, voipaccountsid1=?, voipaccountsid2=?,
+				host_id1=?, host_id2=?, netdevid=?, xmlprovisioning=?, properties=?, modid=?, moddate=?NOW?
+				WHERE id=?',
+				array(
 					intval($gpononudata['gpononumodelsid']),
-					$gpononudata['description'],
-					$gpononudata['serialnumber'],
-					$gpononudata['purchasetime'],
-					$gpononudata['guaranteeperiod'],
 					$gpononudata['password'],
 					$gpononudata['autoprovisioning'],
 					$gpononudata['onudescription'],
@@ -793,29 +834,29 @@ class GPON {
 					$gpononudata['voipaccountsid2'],
 					$gpononudata['host_id1'],
 					$gpononudata['host_id2'],
+					empty($gpononudata['netdevid']) ? null : $gpononudata['netdevid'],
+					$gpononudata['xmlprovisioning'],
+					$gpononudata['properties'],
 					$this->AUTH->id,
-					
 					$gpononudata['id']
 				));
 		$dump = var_export($gpononudata, true);
-		$this->Log(4, 'gpononu', $gpononudata['id'], 'updated '.$gpononudata['name'], $dump);
+		$this->Log(4, self::SQL_TABLE_GPONONU, $gpononudata['id'], 'updated '.$gpononudata['name'], $dump);
 	}
-	function GetGponOnuCheckList($devid=0)
-	{
-		$onu_list=array();
-		$olts=$this->GetGponAllOlt($devid);
-		if(is_array($olts) && count($olts)>0)
-		{
-			$i=0;
-			foreach($olts as $k=>$v)
-			{
+
+	public function GetGponOnuCheckList($devid = 0) {
+		$onu_list = array();
+		$olts = $this->GetGponAllOlt($devid);
+		if (is_array($olts) && !empty($olts)) {
+			$i = 0;
+			foreach ($olts as $k => $v) {
 				$this->snmp->clear_options();
-				if(is_array($v) && count($v)>0)
-				{
+				$gponoltid = null;
+				if (is_array($v) && !empty($v)) {
 					$this->snmp->set_options($v);
-					$olt_name=$v['name'];
-					$olt_netdevicesid=$v['netdevicesid'];
-					$gponoltid=$v['id'];
+					$olt_name = $v['name'];
+					$olt_netdevicesid = $v['netdevicesid'];
+					$gponoltid = $v['id'];
 				}
 				$error_snmp=$this->snmp->get_correct_connect_snmp();
 				if(strlen($error_snmp)>0)
@@ -837,7 +878,7 @@ class GPON {
 						foreach($profiles_olt as $k_p=>$v_p)
 						{
 							$v_p=$this->snmp->clean_snmp_value($v_p);
-							$this->AddGponOltProfiles($v_p);
+							$this->AddGponOltProfile($v_p, $gponoltid);
 						}
 					}
 					foreach($olts_walk as $k1=>$v1)
@@ -884,8 +925,8 @@ class GPON {
 												$this->GponOnuUpdateOnuId($gpon_onu_in_db['id'],$onu_id);
 												$this->GponOnuLink($olt_netdevicesid,$olt_port,$gpon_onu_in_db['id']);
 												$this->snmp->ONU_set_description($olt_port,$onu_id,$gpon_onu_in_db['onudescription']);
-												$gponoltprofiles_temp=$this->FlatArrayFromDB($this->GetGponOltProfiles(),'id','name');
-												$this->snmp->ONU_SetProfile($olt_port,$onu_id,$gponoltprofiles_temp[$gpon_onu_in_db['gponoltprofilesid']]);
+												$gponoltprofiles_temp = $this->GetGponOltProfiles($gponoltid);
+												$this->snmp->ONU_SetProfile($olt_port,$onu_id, $gponoltprofiles_temp[$gpon_onu_in_db['gponoltprofilesid']]['name']);
 												
 												$phone_data=$this->GetPhoneVoip($gpon_onu_in_db['voipaccountsid1']);
 												$VoIP1=$this->snmp->ONU_SetPhoneVoip($olt_port,$onu_id,2,1,$phone_data);
@@ -906,8 +947,8 @@ class GPON {
 		}
 		return $onu_list;
 	}
-	function GetDuplicateOnu($devid=0)
-	{
+
+	public function GetDuplicateOnu($devid = 0) {
 		$onu_list=array();
 		$olts=$this->GetGponAllOlt($devid);
 		$output='';
@@ -961,30 +1002,26 @@ class GPON {
 		}
 		return $result;
 	}
-	function GetGponAutoScript($debug)
-	{
-		$output='';
-		$output.=$this->GetDuplicateOnu();
-		$onu_list=array();
-		$olts=$this->GetGponAllOlt();
-		
-		$podlaczam=0;
-		if($debug==1)
-		{
-			$output.='<br />OLT## Wczytanie wszystkich OLT z bazy danych';
-		}
-		if(is_array($olts) && count($olts)>0)
-		{
-			$i=0;
-			foreach($olts as $k=>$v)
-			{
+
+	public function GetGponAutoScript($debug) {
+		$output = '';
+		$output .= $this->GetDuplicateOnu();
+		$onu_list = array();
+		$olts = $this->GetGponAllOlt();
+
+		$podlaczam = 0;
+		if ($debug == 1)
+			$output .= '<br />OLT## Wczytanie wszystkich OLT z bazy danych';
+		if (is_array($olts) && !empty($olts)) {
+			$i = 0;
+			foreach ($olts as $k => $v) {
 				$this->snmp->clear_options();
-				if(is_array($v) && count($v)>0)
-				{
+				$gponoltid = null;
+				if (is_array($v) && !empty($v)) {
 					$this->snmp->set_options($v);
-					$olt_name=$v['name'];
-					$olt_netdevicesid=$v['netdevicesid'];
-					$gponoltid=$v['id'];
+					$olt_name = $v['name'];
+					$olt_netdevicesid = $v['netdevicesid'];
+					$gponoltid = $v['id'];
 				}
 				$error_snmp=$this->snmp->get_correct_connect_snmp();
 				if(strlen($error_snmp)>0)
@@ -1006,7 +1043,7 @@ class GPON {
 						foreach($profiles_olt as $k_p=>$v_p)
 						{
 							$v_p=$this->snmp->clean_snmp_value($v_p);
-							$this->AddGponOltProfiles($v_p);
+							$this->AddGponOltProfile($v_p, $gponoltid);
 						}
 					}
 					foreach($olts_walk as $k1=>$v1)
@@ -1241,96 +1278,109 @@ class GPON {
 		}
 		return $output;
 	}
-	function GetSNMPresultMsg($result_array=array())
-	{
-		$result='<b>OK</b>';
-		if(is_array($result_array) && count($result_array)>0)
-		{
-			foreach($result_array as $k=>$v)
-			{
-				if($v==false)
-				{
-					$result='<font color="red"><b>ERROR</b></font>';
-				}
-			}
-		}
+
+	public function GetSNMPresultMsg($result_array = array()) {
+		$result = '<b>OK</b>';
+		if (is_array($result_array) && count($result_array))
+			foreach ($result_array as $k => $v)
+				if ($v == false)
+					$result = '<font color="red"><b>ERROR</b></font>';
 		return $result;
 	}
-	function GponOnuSetAutoScript($gpononuid,$autoscript=1)
-	{
-		$gpononuid=intval($gpononuid);
-		if($gpononuid>0)	
-		{
-			$this->DB->Execute('UPDATE gpononu SET autoscript=?
-				WHERE id=?', 
-				array( 
-					$autoscript,
-					$gpononuid
-				));
-			$this->Log(4, 'gpononu', $gpononuid, 'autoscript set to '.$autoscript);
+
+	public function GponOnuSetAutoScript($gpononuid, $autoscript = 1) {
+		if (intval($gpononuid)) {
+			$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONONU . ' SET autoscript = ?
+				WHERE id = ?', array($autoscript, $gpononuid));
+			$this->Log(4, self::SQL_TABLE_GPONONU, $gpononuid, 'autoscript set to '.$autoscript);
 		}
 	}
-	function GetGponAllOlt($olt=0)
-	{
+
+	public function GetGponAllOlt($olt = 0) {
 		$where = ' WHERE 1=1';
-		if($olt > 0)
-		{
-			$where .= ' AND d.id = '.$olt;
-		}
+		if (intval($olt))
+			$where .= ' AND d.id = ' . $olt;
 
-		$result = $this->DB->GetAll('SELECT g.*,d.name,d.id AS netdevicesid
-			FROM gponolt g INNER JOIN netdevices d ON d.gponoltid=g.id'. $where);
+		$result = $this->DB->GetAll('SELECT g.*, d.name, d.id AS netdevicesid
+			FROM ' . self::SQL_TABLE_GPONOLT . ' g
+			JOIN netdevices d ON d.id = g.netdeviceid' . $where);
 		return $result;
 	}
-	function IsGponOnuSerialConected($gponoltid,$olt_port,$onu_id,$onu_serial)
-	{
-		return ($this->DB->GetOne("SELECT g2o.* FROM gpononu2olt g2o 
-		INNER JOIN netdevices n ON n.id=g2o.netdevicesid 
-		INNER JOIN gpononu go ON go.id=g2o.gpononuid
-		
-		WHERE n.gponoltid=? AND g2o.numport=? AND go.onuid=? AND go.name=?", array($gponoltid,$olt_port,$onu_id,$onu_serial)) ? TRUE : FALSE);
+
+	public function IsGponOnuSerialConected($gponoltid, $olt_port, $onu_id, $onu_serial) {
+		return ($this->DB->GetOne("SELECT g2o.* FROM " . self::SQL_TABLE_GPONONU2OLT . " g2o
+			JOIN netdevices n ON n.id = g2o.netdevicesid
+			JOIN " . self::SQL_TABLE_GPONOLT . " g ON g.netdeviceid = n.id
+			JOIN " . self::SQL_TABLE_GPONONU . " go ON go.id = g2o.gpononuid
+			WHERE g.id = ? AND g2o.numport = ? AND go.onuid = ? AND go.name = ?",
+			array($gponoltid, $olt_port, $onu_id, $onu_serial)) ? true : false);
 	}
-	function IsGponOnuSerialConectedOtherOlt($gponoltid,$onu_serial)
-	{
-		return ($this->DB->GetOne("SELECT g2o.* FROM gpononu2olt g2o 
-		INNER JOIN netdevices n ON n.id=g2o.netdevicesid 
-		INNER JOIN gpononu go ON go.id=g2o.gpononuid
-		
-		WHERE n.gponoltid<>? AND go.name=?", array($gponoltid,$onu_serial)) ? TRUE : FALSE);
+
+	public function IsGponOnuSerialConectedOtherOlt($gponoltid, $onu_serial) {
+		return ($this->DB->GetOne("SELECT g2o.* FROM " . self::SQL_TABLE_GPONONU2OLT . " g2o
+			JOIN netdevices n ON n.id=g2o.netdevicesid
+			JOIN " . self::SQL_TABLE_GPONOLT . " g ON g.netdeviceid = n.id
+			JOIN " . self::SQL_TABLE_GPONONU . " go ON go.id=g2o.gpononuid
+			WHERE g.id <> ? AND go.name = ?",
+			array($gponoltid, $onu_serial)) ? true : false);
 	}
-	function GponGetOnuNameFromOltOnuId($gponoltid,$olt_port,$onu_id)
-	{
-		$result = $this->DB->GetRow("SELECT go.name FROM gpononu2olt g2o 
-		INNER JOIN netdevices n ON n.id=g2o.netdevicesid 
-		INNER JOIN gpononu go ON go.id=g2o.gpononuid
-		
-		WHERE n.gponoltid=? AND g2o.numport=? AND go.onuid=?", array($gponoltid,$olt_port,$onu_id));
-		//var_dump($this->DB);
+
+	public function GponGetOnuNameFromOltOnuId($gponoltid, $olt_port, $onu_id) {
+		$result = $this->DB->GetRow("SELECT go.name FROM " . self::SQL_TABLE_GPONONU2OLT . " g2o
+			JOIN netdevices n ON n.id = g2o.netdevicesid
+			JOIN " . self::SQL_TABLE_GPONOLT . " g ON g.netdeviceid = n.id
+			JOIN " . self::SQL_TABLE_GPONONU2OLT . " go ON go.id = g2o.gpononuid
+			WHERE g.id = ? AND g2o.numport = ? AND go.onuid = ?",
+			array($gponoltid, $olt_port, $onu_id));
 		return $result;
 	}
+
+	public function GetNotGponOnuDevices($gpononuid = null) {
+		return $this->DB->GetAll('SELECT d.id, d.name FROM netdevices d
+			LEFT JOIN ' . self::SQL_TABLE_GPONONU . ' o ON o.netdevid = d.id
+			WHERE o.netdevid IS NULL OR o.id = ?
+			ORDER BY name', array($gpononuid));
+	}
+
+	public function GponOnuRadiusDisconnect($id) {
+		$rdata = $this->DB->GetRow("SELECT INET_NTOA(ipaddr) AS nas, numport AS oltport, g.name, d.secret
+				FROM " . self::SQL_TABLE_GPONONU . " g
+			JOIN " . self::SQL_TABLE_GPONONU2OLT . " go ON go.gpononuid = g.id
+			JOIN netdevices d ON go.netdevicesid = d.id
+			JOIN nodes n ON n.netdev = d.id
+			WHERE g.id = ? AND ownerid = 0", array($id));
+
+		$cmd = ConfigHelper::getConfig('gpon-dasan.radius_disconnect_helper',
+			"echo \"Dasan-Gpon-Olt-Id=%port%,Dasan-Gpon-Onu-Serial-Num=%sn%\"| radclient -r 1 %nas% disconnect %secret%");
+		$cmd = str_replace(array('%port%', '%sn%', '%nas%', '%secret%'),
+			array($rdata['oltport'], $rdata['name'], $rdata['nas'], $rdata['secret']), $cmd);
+		$res = 0;
+		system($cmd . " >/dev/null", $res);
+
+		return $res;
+	}
+
 	//--------------ONU_MODELS----------------
-	function GetGponOnuModelsList($order='name,asc')
-	{
-		list($order,$direction) = sscanf($order, '%[^,],%s');
+	public function GetGponOnuModelsList($order = 'name,asc') {
+		list ($order, $direction) = sscanf($order, '%[^,],%s');
 
-		($direction=='desc') ? $direction = 'desc' : $direction = 'asc';
+		($direction == 'desc') ? $direction = 'desc' : $direction = 'asc';
 
-		switch($order)
-		{
+		switch ($order) {
 			case 'id':
 				$sqlord = ' ORDER BY id';
-			break;
+				break;
 			case 'producer':
 				$sqlord = ' ORDER BY producer';
-			break;		
+				break;
 			default:
 				$sqlord = ' ORDER BY name';
-			break;
+				break;
 		}
-		$where=' WHERE 1=1 ';
-		$netdevlist = $this->DB->GetAll('SELECT *
-			FROM gpononumodels g '.$where
-			.($sqlord != '' ? $sqlord.' '.$direction : ''));
+		$where = ' WHERE 1=1 ';
+		$netdevlist = $this->DB->GetAllByKey('SELECT *
+			FROM ' . self::SQL_TABLE_GPONONUMODELS . ' g ' . $where
+			. ($sqlord != '' ? $sqlord . ' ' . $direction : ''), 'id');
 
 		$netdevlist['total'] = sizeof($netdevlist);
 		$netdevlist['order'] = $order;
@@ -1338,166 +1388,182 @@ class GPON {
 
 		return $netdevlist;
 	}
-	function GponOnuModelsExists($id)
-	{
-		return ($this->DB->GetOne('SELECT * FROM gpononumodels WHERE id=?', array($id)) ? TRUE : FALSE);
+
+	public function GponOnuModelsExists($id) {
+		return ($this->DB->GetOne('SELECT * FROM ' . self::SQL_TABLE_GPONONUMODELS
+			. ' WHERE id = ?', array($id)) ? true : false);
 	}
-	function CountGponOnuModelsLinks($id)
-	{
-		return $this->DB->GetOne('SELECT COUNT(*) FROM gpononu WHERE gpononumodelsid = ?', 
-				array($id));
+
+	public function CountGponOnuModelsLinks($id) {
+		return $this->DB->GetOne('SELECT COUNT(*) FROM ' . self::SQL_TABLE_GPONONU
+			. ' WHERE gpononumodelsid = ?', array($id));
 	}
-	function GetGponOnuModels($id)
-	{
-		$result = $this->DB->GetRow('SELECT g.*
-			FROM gpononumodels g
+
+	public function GetGponOnuModels($id) {
+		return $this->DB->GetRow('SELECT g.* FROM ' . self::SQL_TABLE_GPONONUMODELS . ' g
 			WHERE g.id = ?', array($id));
-		return $result;
 	}
-	function GponOnuModelsUpdate($gpononumodelsdata)
-	{
-		$this->DB->Execute('UPDATE gpononumodels SET name=?,description=?,producer=?
-				WHERE id=?', 
-				array( 
-					$gpononumodelsdata['name'],
-					$gpononumodelsdata['description'],
-					$gpononumodelsdata['producer'],
-					$gpononumodelsdata['id']
-				));
+
+	public function GponOnuModelsUpdate($gpononumodelsdata) {
+		$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONONUMODELS . ' SET name=?, description=?, producer=?, xmltemplate=?
+			WHERE id=?', array($gpononumodelsdata['name'], $gpononumodelsdata['description'],
+				$gpononumodelsdata['producer'], $gpononumodelsdata['xmltemplate'], $gpononumodelsdata['id']));
 		$dump = var_export($gpononumodelsdata, true);
-		$this->Log(4, 'gpononumodel', $gpononumodelsdata['id'], 'updated '.$gpononudata['name'], $dump);
+		$this->Log(4, self::SQL_TABLE_GPONONUMODELS, $gpononumodelsdata['id'], 'updated ' . $gpononudata['name'], $dump);
 	}
-	function GponOnuModelsAdd($gpononumodelsdata)
-	{
-		if ($this->DB->Execute('INSERT INTO gpononumodels (name,description,producer) 
-				VALUES (?, ?, ?)', 
-				array(
-					$gpononumodelsdata['name'],
-					$gpononumodelsdata['description'],
-					$gpononumodelsdata['producer']
-		))) {
-		
-			$id = $this->DB->GetLastInsertID('gpononumodels');
+
+	public function GponOnuModelsAdd($gpononumodelsdata) {
+		if ($this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONONUMODELS
+			. ' (name, description, producer, xmltemplate) VALUES (?, ?, ?, ?)',
+			array($gpononumodelsdata['name'], $gpononumodelsdata['description'],
+				$gpononumodelsdata['producer'], $gpononumodelsdata['xmltemplate']))) {
+			$id = $this->DB->GetLastInsertID(self::SQL_TABLE_GPONONUMODELS);
 			$dump = var_export($gpononumodelsdata, true);
-			$this->Log(4, 'gpononumodel', $id, 'added '.$gpononudata['name'], $dump);
+			$this->Log(4, self::SQL_TABLE_GPONONUMODELS, $id, 'added ' . $gpononudata['name'], $dump);
 			return $id;
-		}
-		else
-			return FALSE;
+		} else
+			return false;
 	}
-	function DeleteGponOnuModels($id)
-	{
+
+	public function DeleteGponOnuModels($id) {
 		$this->DB->BeginTrans();
-		$this->DB->Execute('DELETE FROM gpononumodels WHERE id=?', array($id));
-		$this->DB->Execute('DELETE FROM gpononuportstype2models WHERE gpononumodelsid=?', array($id));
-		$this->Log(4, 'gpononumodel', $id, 'model removed');
+		$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONONUMODELS . ' WHERE id=?', array($id));
+		$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONONUPORTTYPE2MODELS . ' WHERE gpononumodelsid=?', array($id));
+		$this->Log(4, self::SQL_TABLE_GPONONUMODELS, $id, 'model removed');
 		$this->DB->CommitTrans();
 	}
-	function GetGponOnuModelPorts($model)
-	{
-		$result = $this->DB->GetAll('SELECT p.id, p.name, portscount FROM gpononuportstype2models p2m
-			JOIN gpononuportstype p ON p.id = p2m.gpononuportstypeid
-			JOIN gpononumodels m ON m.id = p2m.gpononumodelsid
-			WHERE m.id = ? ORDER BY name', array($model));
 
-		return $result;
+	public function GetGponOnuModelPorts($model) {
+		return $this->DB->GetAllByKey("SELECT p.id, p.name, portscount
+			FROM " . self::SQL_TABLE_GPONONUPORTTYPE2MODELS . " p2m
+			JOIN " . self::SQL_TABLE_GPONONUPORTTYPES . " p ON p.id = p2m.gpononuportstypeid
+			JOIN " . self::SQL_TABLE_GPONONUMODELS . " m ON m.id = p2m.gpononumodelsid
+			WHERE m.id = ? ORDER BY name", 'name', array($model));
 	}
-	function GetGponOnuPorts($id, $disabled=0)
-	{
-		if($disabled = 1)
-			$where_dis = ' AND portdisable =1';
-		else
-			$where_dis = '';
 
-		$result = $this->DB->GetAll('SELECT p.*, t.name FROM gpononuport p
-			JOIN gpononuportstype t ON t.id = p.typeid
-			WHERE p.onuid = ?'.
-			$where_dis
-			, array($id));
+	public function GetGponOnuPorts($id) {
+		return $this->DB->GetAllByKey("SELECT p.*, t.name, " . $this->DB->Concat('t.name', "'.'", 'p.portid') . " AS portname
+			FROM " . self::SQL_TABLE_GPONONUPORTS . " p
+			JOIN " . self::SQL_TABLE_GPONONUPORTTYPES . " t ON t.id = p.typeid
+			WHERE p.onuid = ?
+			ORDER BY p.typeid, p.portid", 'portname', array($id));
+	}
 
-		return $result;
-	}
-	function EnableGponOnuPortDB($onu, $porttype, $port)
-	{
-		$this->DB->Execute('UPDATE gpononuport SET portdisable =0 WHERE onuid=? AND typeid=? AND portid=?',
-			array($onu, $porttype, $port));
-		$this->Log(4, 'gpononu', $onu, 'port enabled: '.$port.', typ: '.$porttype);
-	}
-	function DisableGponOnuPortDB($onu, $porttype, $port)
-	{
-		$rows = $this->DB->Execute('UPDATE gpononuport SET portdisable =1 WHERE onuid=? AND typeid=? AND portid=?',
-			array($onu, $porttype, $port));
-		if($rows == 0)
-		{
-			$rows = $this->DB->Execute('INSERT INTO gpononuport(onuid, typeid, portid, portdisable)
-				VALUES(?, ?, ?, 1)',
-				array($onu, $porttype, $port));
-		}
-		$this->Log(4, 'gpononu', $onu, 'port disabled: '.$port.', typ: '.$porttype);
-	}
-	function GetGponOnuPortsType()
-	{
-		$result = $this->DB->GetAll('SELECT gpt.*
-			FROM gpononuportstype gpt
-			 ORDER BY gpt.id ASC');
-		return $result;
-	}
-	function GetGponOnuPortsType2Models($gpononumodelsid)
-	{
-		$result = $this->DB->GetAll('SELECT gpt2m.*
-			FROM gpononuportstype2models gpt2m
-			WHERE gpt2m.gpononumodelsid=? ORDER BY gpt2m.gpononuportstypeid ASC', array($gpononumodelsid));
-		return $result;
-	}
-	function SetGponOnuPortsType2Models($gpononumodelsid,$portstypedata)
-	{
-		if($gpononumodelsid>0)
-		{
-			$this->DB->BeginTrans();
-			$this->DB->Execute('DELETE FROM gpononuportstype2models WHERE gpononumodelsid=?', array($gpononumodelsid));
-			if(is_array($portstypedata) && count($portstypedata)>0)
-			{
-				foreach($portstypedata as $k=>$v)
-				{
-					if(intval($v)>0)
-					{
-						$this->DB->Execute('INSERT INTO gpononuportstype2models(gpononuportstypeid,gpononumodelsid,portscount) 
-								VALUES (?, ?, ?)', 
-								array(
-									intval($k),
-									$gpononumodelsid,
-									intval($v)
-						));
-					}
+	public function GetGponOnuAllPorts($modelports, $onuports) {
+		$portsettings = array();
+		foreach ($modelports as $porttype => $portdetails)
+			for ($i = 1; $i <= $portdetails['portscount']; $i++) {
+				$portname = $porttype . '.' . $i;
+				if (isset($onuports[$portname]))
+					$portsettings[$portname] = $onuports[$portname];
+				else {
+					$portsettings[$portname] = array(
+						'onuid' => $_GET['id'],
+						'typeid' => $portdetails['id'],
+						'portid' => $i,
+						'portdisable' => 0,
+						'name' => $porttype,
+						'portname' => $portname,
+					);
 				}
 			}
-			$dump = var_export($portstypedata, true);
-			$this->Log(4, 'gpononumodel', $gpononumodelsid, 'ports type updated', $dump);
+		return $portsettings;
+	}
+
+	public function UpdateGponOnuPorts($onu, $portsettings) {
+		$this->DB->Execute("DELETE FROM " . self::SQL_TABLE_GPONONUPORTS . " WHERE onuid = ?", array($onu));
+		$porttypes = $this->DB->GetAllByKey("SELECT * FROM " . self::SQL_TABLE_GPONONUPORTTYPES, 'name');
+		foreach ($portsettings as $portname => $port) {
+			list ($porttype, $portid) = explode('.', $portname);
+			$porttypeid = $porttypes[$porttype]['id'];
+			$dbfields = array();
+			foreach ($port as $property => $value) {
+				switch ($property) {
+					case 'portdisable':
+						if ($value == 1)
+							$dbfields['portdisable'] = 1;
+						break;
+				}
+			}
+			if (!empty($dbfields)) {
+				$args = array($onu, $porttypeid, $portid);
+				$args = array_merge($args, array_values($dbfields));
+				$this->DB->Execute("INSERT INTO " . self::SQL_TABLE_GPONONUPORTS
+					. " (onuid, typeid, portid, " . implode(', ', array_keys($dbfields)) . ")
+					VALUES (?, ?, ?, " . implode(', ', array_fill(0, count($dbfields), '?')) . ")", $args);
+			}
+		}
+	}
+
+	public function EnableGponOnuPortDB($onu, $porttype, $port) {
+		if (!($rows = $this->DB->Execute("UPDATE " . self::SQL_TABLE_GPONONUPORTS . " SET portdisable = 0
+			WHERE onuid = ? AND typeid = ? AND portid = ?",
+			array($onu, $porttype, $port))))
+			$rows = $this->DB->Execute("INSERT INTO " . self::SQL_TABLE_GPONONUPORTS . " (onuid, typeid, portid, portdisable)
+				VALUES(?, ?, ?, 0)", array($onu, $porttype, $port));
+		if ($rows)
+			$this->Log(4, self::SQL_TABLE_GPONONU, $onu, 'port enabled: '.$port.', typ: '.$porttype);
+	}
+
+	public function DisableGponOnuPortDB($onu, $porttype, $port) {
+		if (!($rows = $this->DB->Execute("UPDATE " . self::SQL_TABLE_GPONONUPORTS . " SET portdisable = 1
+			WHERE onuid = ? AND typeid = ? AND portid = ?",
+			array($onu, $porttype, $port))))
+			$rows = $this->DB->Execute("INSERT INTO " . self::SQL_TABLE_GPONONUPORTS . " (onuid, typeid, portid, portdisable)
+				VALUES(?, ?, ?, 1)", array($onu, $porttype, $port));
+		if ($rows)
+			$this->Log(4, self::SQL_TABLE_GPONONU, $onu, 'port disabled: '.$port.', typ: '.$porttype);
+	}
+
+	public function GetGponOnuPortsType() {
+		return $this->DB->GetAll('SELECT gpt.* FROM ' . self::SQL_TABLE_GPONONUPORTTYPES . ' gpt
+			ORDER BY gpt.id ASC');
+	}
+
+	public function GetGponOnuPortsType2Models($gpononumodelid) {
+		return $this->DB->GetAllByKey('SELECT gpt2m.* FROM ' . self::SQL_TABLE_GPONONUPORTTYPE2MODELS . ' gpt2m
+			WHERE gpt2m.gpononumodelsid = ?
+			ORDER BY gpt2m.gpononuportstypeid ASC', 'gpononuportstypeid',
+			array($gpononumodelid));
+	}
+
+	public function SetGponOnuPortsType2Models($gpononumodelid,$porttypes) {
+		if (intval($gpononumodelid)) {
+			$this->DB->BeginTrans();
+			$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONONUPORTTYPE2MODELS
+				. ' WHERE gpononumodelsid=?', array($gpononumodelid));
+			if (is_array($porttypes) && count($porttypes))
+				foreach ($porttypes as $k => $v)
+					if (intval($v))
+						$this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONONUPORTTYPE2MODELS
+							. ' (gpononuportstypeid, gpononumodelsid, portscount)
+							VALUES (?, ?, ?)', array(intval($k), $gpononumodelid, $v));
+			$dump = var_export($porttypes, true);
+			$this->Log(4, self::SQL_TABLE_GPONONUMODELS, $gpononumodelid, 'ports type updated', $dump);
 			$this->DB->CommitTrans();
 		}
 	}
+
 	//--------------GPON_TV----------------
-	function GetGponOnuTvList($order='name,asc')
-	{
-		list($order,$direction) = sscanf($order, '%[^,],%s');
+	public function GetGponOnuTvList($order='name,asc') {
+		list ($order, $direction) = sscanf($order, '%[^,],%s');
 
-		($direction=='desc') ? $direction = 'desc' : $direction = 'asc';
+		($direction == 'desc') ? $direction = 'desc' : $direction = 'asc';
 
-		switch($order)
-		{
+		switch ($order) {
 			case 'id':
 				$sqlord = ' ORDER BY id';
-			break;
+				break;
 			case 'producer':
 				$sqlord = ' ORDER BY ipaddr';
-			break;		
+				break;		
 			default:
 				$sqlord = ' ORDER BY channel';
-			break;
+				break;
 		}
-		$where=' WHERE 1=1 ';
-		$netdevlist = $this->DB->GetAll('SELECT  g.id,inet_ntoa(g.ipaddr) AS ipaddr,g.channel
-			FROM gpononutv g '.$where
+		$where = ' WHERE 1=1 ';
+		$netdevlist = $this->DB->GetAll('SELECT g.id,inet_ntoa(g.ipaddr) AS ipaddr, g.channel
+			FROM ' . self::SQL_TABLE_GPONONUTV . ' g ' . $where
 			.($sqlord != '' ? $sqlord.' '.$direction : ''));
 
 		$netdevlist['total'] = sizeof($netdevlist);
@@ -1506,116 +1572,104 @@ class GPON {
 
 		return $netdevlist;
 	}
-	function GetGponOnuTv($id)
-	{
-		$result = $this->DB->GetRow('SELECT g.id,inet_ntoa(g.ipaddr) AS ipaddr,g.channel
-			FROM gpononutv g
+
+	public function GetGponOnuTv($id) {
+		$result = $this->DB->GetRow('SELECT g.id, INET_NTOA(g.ipaddr) AS ipaddr, g.channel
+			FROM ' . self::SQL_TABLE_GPONONUTV . ' g
 			WHERE g.id = ?', array($id));
 		return $result;
 	}
-	function GponOnuTvUpdate($gpononutvdata)
-	{
-		$this->DB->Execute('UPDATE gpononutv SET ipaddr=inet_aton(?),channel=?
-				WHERE id=?', 
-				array( 
-					$gpononutvdata['ipaddr'],
-					$gpononutvdata['channel'],
-					$gpononutvdata['id']
-				));
-		$this->Log(4, 'gpononutv', $gpononutvdata['id'], 'updated: '.$gpononutvdata['channel'].' - '.$gpononutvdata['ipaddr']);
+
+	public function GponOnuTvUpdate($gpononutvdata) {
+		$this->DB->Execute('UPDATE ' . self::SQL_TABLE_GPONONUTV . ' SET ipaddr = INET_ATON(?), channel = ?
+				WHERE id = ?', array($gpononutvdata['ipaddr'], $gpononutvdata['channel'], $gpononutvdata['id']));
+		$this->Log(4, self::SQL_TABLE_GPONONUTV, $gpononutvdata['id'], 'updated: '.$gpononutvdata['channel'].' - '.$gpononutvdata['ipaddr']);
 	}
-	function GponOnuTvAdd($gpononutvdata)
-	{
-		if ($this->DB->Execute('INSERT INTO gpononutv (ipaddr,channel) 
-				VALUES (inet_aton(?), ?)', 
-				array(
-					$gpononutvdata['ipaddr'],
-					$gpononutvdata['channel']
-		))) {
-		
-			$id = $this->DB->GetLastInsertID('gpononutv');
-			$this->Log(4, 'gpononutv', $id, 'added: '.$gpononutvdata['channel'].' - '.$gpononutvdata['ipaddr']);
+
+	public function GponOnuTvAdd($gpononutvdata) {
+		if ($this->DB->Execute('INSERT INTO ' . self::SQL_TABLE_GPONONUTV . ' (ipaddr,channel)
+				VALUES (INET_ATON(?), ?)', array($gpononutvdata['ipaddr'], $gpononutvdata['channel']))) {
+			$id = $this->DB->GetLastInsertID(self::SQL_TABLE_GPONONUTV);
+			$this->Log(4, self::SQL_TABLE_GPONONUTV, $id, 'added: '.$gpononutvdata['channel'].' - '.$gpononutvdata['ipaddr']);
 			return $id;
-		}
-		else
-			return FALSE;
+		} else
+			return false;
 	}
-	function DeleteGponOnuTv($id)
-	{
+
+	public function DeleteGponOnuTv($id) {
 		$this->DB->BeginTrans();
-		$this->DB->Execute('DELETE FROM gpononutv WHERE id=?', array($id));
-		$this->Log(4, 'gpononutv', $id, 'deleted');
+		$this->DB->Execute('DELETE FROM ' . self::SQL_TABLE_GPONONUTV . ' WHERE id = ?', array($id));
+		$this->Log(4, self::SQL_TABLE_GPONONUTV, $id, 'deleted');
 		$this->DB->CommitTrans();
 	}
-	function GponOnuTvIpExists($ip,$id=0)
-	{
-		if($id==0)
-		{
-			return ($this->DB->GetOne('SELECT * FROM gpononutv WHERE ipaddr=inet_aton(?)', array($ip)) ? TRUE : FALSE);
-		}
-		else 
-		{
-			return ($this->DB->GetOne('SELECT * FROM gpononutv WHERE ipaddr=inet_aton(?) AND id<>?', array($ip,$id)) ? TRUE : FALSE);
-		}
-	}
-	function GponOnuTvExists($id)
-	{
-		return ($this->DB->GetOne('SELECT * FROM gpononutv WHERE id=?', array($id)) ? TRUE : FALSE);
-	}
-	function GetGponOnuTvChannel($ipaddr)
-	{
-		$ipaddr=trim($ipaddr);
-		$result = $this->DB->GetRow("SELECT g.channel
-			FROM gpononutv g
-			WHERE g.ipaddr = inet_aton(?)", array($ipaddr));
-		return $result;
-	}
-	function IsGponOnuTvMulticast($ipaddr)
-	{
-		$result=false;
-		$address=explode('.',$ipaddr);
-		if(is_array($address) && count($address)>0)
-		{
-			if(intval($address[0])>223)
-			{
-				$result=true;
-			}
-		}
-		return $result;
-	}
-	function IsNotOldOnuModel($model)
-	{
-		$oldonu = array('H640V',
-		    'H640GV',
-		    'H640R',
-		    'H640GR',
-		    'H640RW',
-		    'H645A',
-		    'H645B',
-		    'H640GW');
 
-		if(in_array($model, $oldonu))
-			return false;
+	public function GponOnuTvIpExists($ip,$id=0) {
+		if (!intval($id))
+			return ($this->DB->GetOne('SELECT * FROM ' . self::SQL_TABLE_GPONONUTV
+				. ' WHERE ipaddr = INET_ATON(?)', array($ip)) ? true : false);
 		else
-			return true;
+			return ($this->DB->GetOne('SELECT * FROM ' . self::SQL_TABLE_GPONONUTV
+				. ' WHERE ipaddr = INET_ATON(?) AND id <> ?', array($ip, $id)) ? true : false);
 	}
-	function OnuModelWithRF($model)
-	{
-	    $onurf = array('H640GR',
-		    'H640GR-02',
-		    'H640RW',
-		    'H640RW-02');
 
-	    if(in_array($model, $onurf))
-		    return true;
-	    else
-		    return false;
+	public function GponOnuTvExists($id) {
+		return ($this->DB->GetOne('SELECT * FROM ' . self::SQL_TABLE_GPONONUTV
+			. ' WHERE id=?', array($id)) ? true : false);
 	}
-	function GetGponOnuLastAuth($onuid)
-	{
-	    return $this->DB->GetAll("SELECT * FROM gponauthlog 
-		WHERE onuid = ? ORDER BY time DESC",
-		array($onuid));
+
+	public function GetGponOnuTvChannel($ipaddr) {
+		$ipaddr = trim($ipaddr);
+		$result = $this->DB->GetRow("SELECT g.channel
+			FROM " . self::SQL_TABLE_GPONONUTV . " g
+			WHERE g.ipaddr = INET_ATON(?)", array($ipaddr));
+		return $result;
+	}
+
+	public function IsGponOnuTvMulticast($ipaddr) {
+		$address = explode('.',$ipaddr);
+		return is_array($address) && count($address) && intval($address[0]);
+	}
+
+	public function IsNotOldOnuModel($model) {
+		$oldonu = array('H640V',
+			'H640GV',
+			'H640R',
+			'H640GR',
+			'H640RW',
+			'H645A',
+			'H645B',
+			'H640GW');
+		return !in_array($model, $oldonu);
+	}
+
+	public function OnuModelWithRF($model) {
+		$onurf = array('H640GR',
+			'H640GR-02',
+			'H640RW',
+			'H640RW-02');
+		return in_array($model, $onurf);
+	}
+
+	public function GetGponOnuLastAuth($onuid) {
+		return $this->DB->GetAll("SELECT * FROM " . self::SQL_TABLE_GPONAUTHLOG
+			. " WHERE onuid = ? ORDER BY time DESC", array($onuid));
+	}
+
+	public function GponOnuXmlProvisioning($params) {
+		if (!isset($params['id']))
+			return -1;
+
+		$id = intval($params['id']);
+		if (empty($id))
+			return -1;
+
+		$cmd = ConfigHelper::getConfig('gpon-dasan.xml_provisioning_helper', SYS_DIR . DIRECTORY_SEPARATOR . 'plugins'
+			. DIRECTORY_SEPARATOR . LMSGponDasanPlugin::plugin_directory_name . DIRECTORY_SEPARATOR
+			. 'bin' . DIRECTORY_SEPARATOR . 'lms-xml-provisioning.php -i %id%');
+		$cmd = str_replace('%id%', $id, $cmd);
+		$res = 0;
+		system($cmd . " >/dev/null", $res);
+		return $res;
 	}
 }
 

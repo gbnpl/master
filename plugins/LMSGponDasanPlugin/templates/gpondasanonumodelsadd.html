@@ -1,0 +1,95 @@
+{include file="header.html"}
+<!--// $Id$ //-->
+{include file="calendar_js.html"}
+<SCRIPT TYPE="text/javascript" SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpon.js""></SCRIPT>
+<H1>{$layout.pagetitle}</H1>
+<FORM NAME="netdevadd" METHOD="POST" ACTION="?m=gpondasanonumodelsadd">
+<INPUT type="submit" class="hiddenbtn">
+<TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="dark">
+		<TD WIDTH="1%" class="fleftu">
+			<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononumodels.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" class="fbt">
+			<B>{t}Name:{/t}</B>
+		<TD WIDTH="98%" class="frightu">
+			<INPUT TYPE="TEXT" NAME="netdev[name]" VALUE="{$netdev.name}" MAXLENGTH="32" {tip trigger="name" text="Enter device name" bold=1}> 
+		</TD>
+	</TR>
+	<TR class="light">
+                <TD WIDTH="100%" COLSPAN="3" class="flr">
+		        <TABLE WIDTH="100%" CELLPADDING="0">
+				<TR class="light">
+					<TD WIDTH="50%" style="vertical-align:top;">
+					        <TABLE WIDTH="100%" CELLPADDING="3">
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/producer.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{t}Manufacturer:{/t}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<INPUT TYPE="TEXT" NAME="netdev[producer]" VALUE="{$netdev.producer}" {tip text="Enter producer name (optional)"}>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/desc.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>{t}Description:{/t}</B>
+		</TD>
+		<TD WIDTH="98%">
+			<TEXTAREA NAME="netdev[description]" COLS="40" ROWS="5" {tip text="Enter additional information (optional)"}>{$netdev.description}</TEXTAREA>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD style="width: 1%;">
+			<IMG SRC="img/folder.gif" ALT="">
+		</TD>
+		<TD style="width: 1%;" class="bold nobr">
+			{trans("XML configuration template:")}
+		</TD>
+		<TD style="width: 98%;">
+			<TEXTAREA NAME="netdev[xmltemplate]" COLS="80" ROWS="25" {tip text="Enter XML configuration template contents (optional)"}>{$netdev.xmltemplate}</TEXTAREA>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="1%">
+			<IMG SRC="img/port.gif" ALT="">
+		</TD>
+		<TD WIDTH="1%" NOWRAP>
+			<B>Porty:</B>
+		</TD>
+		<TD WIDTH="98%">
+			<table cellpadding="1" cellspacing="1" border="0">
+			{foreach from=$portstype item=item key=key}
+			<tr>
+			<td><b>{$item.name}</b></td>
+			<td><INPUT TYPE="TEXT" NAME="portstype[{$item.id}]" VALUE="" onkeyup="ZamienNaLiczbe(this)" {tip text="Wprowadź liczbę portów"}></td>
+			</tr>
+			{/foreach}
+			</table>
+		</TD>
+	</TR>
+	                                        </TABLE>
+					</TD>
+				</TR>
+			</TABLE>
+		</TD>
+	</TR>
+	<TR class="light">
+		<TD WIDTH="100%" class="fbottomu" COLSPAN="3" ALIGN="RIGHT">
+			<A HREF="javascript:document.netdevadd.submit();" ACCESSKEY="s">{t}Submit{/t} <IMG SRC="img/save.gif" alt=""></A>
+			<A HREF="?m=gpondasanonumodelslist">{t}Cancel{/t} <IMG SRC="img/cancel.gif" alt=""></A>
+		</TD>
+	</TR>	
+</TABLE>
+</FORM>
+<SCRIPT type="text/javascript">
+<!--
+document.forms['netdevadd'].elements['netdev[name]'].focus();
+//-->
+</SCRIPT>
+{include file="footer.html"}

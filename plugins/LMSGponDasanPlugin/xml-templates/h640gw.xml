@@ -1,0 +1,893 @@
+<?xml version="1.0"?>
+<Motive.Development.ONTProvision_H640.Configuration_H640>
+  <dhcpc_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <dhcpc_configs>
+      <DictionaryEntry>
+        <Key ClassID="1" IsNewClass="true" ClassName="java.lang.Integer">1</Key>
+        <Value ClassID="2" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.dhcpc_config_item">
+          <ipaddr/>
+          <mac/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="2">
+          <ipaddr/>
+          <mac/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="2">
+          <ipaddr/>
+          <mac/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="2">
+          <ipaddr/>
+          <mac/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">5</Key>
+        <Value ClassID="2">
+          <ipaddr/>
+          <mac/>
+        </Value>
+      </DictionaryEntry>
+    </dhcpc_configs>
+  </dhcpc_configuration>
+  <dmz_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <dmz>0</dmz>
+    <ipaddr/>
+  </dmz_configuration>
+  <ipv6_advertise>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>1</fixed_flag>
+    <send_advert>On</send_advert>
+    <min_advert_interval>30</min_advert_interval>
+    <max_advert_interval>100</max_advert_interval>
+    <management_flag>Off</management_flag>
+    <otherconfig_flag>On</otherconfig_flag>
+    <advert_onlink>On</advert_onlink>
+    <advert_router_addr>On</advert_router_addr>
+    <rdnss_life_time>0</rdnss_life_time>
+    <dnssl_life_time>0</dnssl_life_time>
+  </ipv6_advertise>
+  <ipv6_dhcpd>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>1</fixed_flag>
+    <default_lease_time>2592000</default_lease_time>
+    <preferred_lifetime>604800</preferred_lifetime>
+    <dhcp_renewal_time>3600</dhcp_renewal_time>
+    <dhcp_rebinding_time>7200</dhcp_rebinding_time>
+    <info_refresh_time>21600</info_refresh_time>
+    <range6_start>2001:db8:1:0::10</range6_start>
+    <range6_end>2001:db8:1:0::ffff</range6_end>
+    <prefix6_start>2001:db8:1:0::</prefix6_start>
+    <prefix6_end>2001:db8:1:0::f00</prefix6_end>
+    <prefix6_prefix>64</prefix6_prefix>
+  </ipv6_dhcpd>
+  <ipv6_lan_prefix>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <lan_prefix>2001:db8:1:0::/64</lan_prefix>
+  </ipv6_lan_prefix>
+  <ipv6_route>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>1</fixed_flag>
+    <ipv6_route_enable>0</ipv6_route_enable>
+  </ipv6_route>
+  <ipv6_route_table>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>1</fixed_flag>
+    <ipv6_route_configs>
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="3" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.ipv6_route_config_item">
+          <table_attribute/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="3">
+          <table_attribute/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="3">
+          <table_attribute/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="3">
+          <table_attribute/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">5</Key>
+        <Value ClassID="3">
+          <table_attribute/>
+        </Value>
+      </DictionaryEntry>
+    </ipv6_route_configs>
+  </ipv6_route_table>
+  <lan_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <local_ip>192.168.7.100</local_ip>
+    <subnetmask>255.255.255.0</subnetmask>
+    <dhcp_server>1</dhcp_server>
+    <dhcp_iprange_start>192.168.7.101</dhcp_iprange_start>
+    <dhcp_iprange_end>192.168.7.200</dhcp_iprange_end>
+    <dhcp_leasetime>86400</dhcp_leasetime>
+  </lan_configuration>
+  <mac_filtering_configuration>
+    <m_category>MAC Filtering Config</m_category>
+    <m_category_key>mac_filtering</m_category_key>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <mac_filter>1</mac_filter>
+    <default_policy>1</default_policy>
+    <mac_filtering_configs>
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="4" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.mac_filtering_config_item">
+          <mac_source/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="4">
+          <mac_source/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="4">
+          <mac_source/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="4">
+          <mac_source/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">5</Key>
+        <Value ClassID="4">
+          <mac_source/>
+        </Value>
+      </DictionaryEntry>
+    </mac_filtering_configs>
+  </mac_filtering_configuration>
+  <nat_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>1</fixed_flag>
+    <nat_enable>1</nat_enable>
+  </nat_configuration>
+  <port_forwarding_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <port_forwarding_configs>
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="5" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.port_forwarding_config_item">
+          <rule_name/>
+          <target_ip/>
+          <target_netmask>0</target_netmask>
+          <protocol/>
+          <external_port_from>0</external_port_from>
+          <external_port_to>-1</external_port_to>
+          <internal_port_from>0</internal_port_from>
+          <internal_port_to>-1</internal_port_to>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="5">
+          <rule_name/>
+          <target_ip/>
+          <target_netmask>0</target_netmask>
+          <protocol/>
+          <external_port_from>0</external_port_from>
+          <external_port_to>-1</external_port_to>
+          <internal_port_from>0</internal_port_from>
+          <internal_port_to>-1</internal_port_to>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="5">
+          <rule_name/>
+          <target_ip/>
+          <target_netmask>0</target_netmask>
+          <protocol/>
+          <external_port_from>0</external_port_from>
+          <external_port_to>-1</external_port_to>
+          <internal_port_from>0</internal_port_from>
+          <internal_port_to>-1</internal_port_to>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="5">
+          <rule_name/>
+          <target_ip/>
+          <target_netmask>0</target_netmask>
+          <protocol/>
+          <external_port_from>0</external_port_from>
+          <external_port_to>-1</external_port_to>
+          <internal_port_from>0</internal_port_from>
+          <internal_port_to>-1</internal_port_to>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">5</Key>
+        <Value ClassID="5">
+          <rule_name/>
+          <target_ip/>
+          <target_netmask>0</target_netmask>
+          <protocol/>
+          <external_port_from>0</external_port_from>
+          <external_port_to>-1</external_port_to>
+          <internal_port_from>0</internal_port_from>
+          <internal_port_to>-1</internal_port_to>
+        </Value>
+      </DictionaryEntry>
+    </port_forwarding_configs>
+  </port_forwarding_configuration>
+  <remote_weblogo_configuration>
+    <keep_ne_cfg>0</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <use_remotelogo>1</use_remotelogo>
+    <server_url>ftp://91.235.192.4/logolimo.png</server_url>
+  </remote_weblogo_configuration>
+  <ssid_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>1</fixed_flag>
+    <ssid_configs>
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="6" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.ssid_config_item">
+          <name>BW_Limonka-Fiber_756135000</name>
+          <maximum_connections>16</maximum_connections>
+          <hidden_ssid>0</hidden_ssid>
+          <authentication>4</authentication>
+          <encryption>4</encryption>
+          <selected_key>1</selected_key>
+          <keys>
+            <DictionaryEntry>
+              <Key ClassID="1">1</Key>
+              <Value ClassID="7" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.ssid_key">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">2</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">3</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">4</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+          </keys>
+          <pre_shared_key>MF2RRRG170A1625</pre_shared_key>
+          <radius_server/>
+          <password/>
+          <port>1</port>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="6">
+          <name/>
+          <maximum_connections>16</maximum_connections>
+          <hidden_ssid>0</hidden_ssid>
+          <authentication>0</authentication>
+          <encryption>0</encryption>
+          <selected_key>1</selected_key>
+          <keys>
+            <DictionaryEntry>
+              <Key ClassID="1">1</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">2</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">3</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">4</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+          </keys>
+          <pre_shared_key/>
+          <radius_server/>
+          <password/>
+          <port>0</port>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="6">
+          <name/>
+          <maximum_connections>16</maximum_connections>
+          <hidden_ssid>0</hidden_ssid>
+          <authentication>0</authentication>
+          <encryption>0</encryption>
+          <selected_key>1</selected_key>
+          <keys>
+            <DictionaryEntry>
+              <Key ClassID="1">1</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">2</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">3</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">4</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+          </keys>
+          <pre_shared_key/>
+          <radius_server/>
+          <password/>
+          <port>0</port>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="6">
+          <name/>
+          <maximum_connections>16</maximum_connections>
+          <hidden_ssid>0</hidden_ssid>
+          <authentication>0</authentication>
+          <encryption>0</encryption>
+          <selected_key>1</selected_key>
+          <keys>
+            <DictionaryEntry>
+              <Key ClassID="1">1</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">2</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">3</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+            <DictionaryEntry>
+              <Key ClassID="1">4</Key>
+              <Value ClassID="7">
+                <value/>
+              </Value>
+            </DictionaryEntry>
+          </keys>
+          <pre_shared_key/>
+          <radius_server/>
+          <password/>
+          <port>1</port>
+        </Value>
+      </DictionaryEntry>
+    </ssid_configs>
+  </ssid_configuration>
+  <static_routing_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <static_routing_configs>
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="8" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.static_routing_config_item">
+          <destination_ip/>
+          <netmask>24</netmask>
+          <gateway/>
+          <input_interface/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="8">
+          <destination_ip/>
+          <netmask>24</netmask>
+          <gateway/>
+          <input_interface/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="8">
+          <destination_ip/>
+          <netmask>24</netmask>
+          <gateway/>
+          <input_interface/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="8">
+          <destination_ip/>
+          <netmask>24</netmask>
+          <gateway/>
+          <input_interface/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">5</Key>
+        <Value ClassID="8">
+          <destination_ip/>
+          <netmask>24</netmask>
+          <gateway/>
+          <input_interface/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">6</Key>
+        <Value ClassID="8">
+          <destination_ip/>
+          <netmask>24</netmask>
+          <gateway/>
+          <input_interface/>
+        </Value>
+      </DictionaryEntry>
+    </static_routing_configs>
+  </static_routing_configuration>
+  <system_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>1</fixed_flag>
+    <cfg_after_factory>1</cfg_after_factory>
+    <web_port>{$web_port}</web_port>
+    <user_wan_cfg>1</user_wan_cfg>
+    <admin_passwd>{$admin_password}</admin_passwd>
+    <user_passwd>nazwisko</user_passwd>
+    <gpon_passwd_method>0</gpon_passwd_method>
+    <gpon_passwd/>
+    <web_language>polish</web_language>
+    <telnet_admin_passwd>{$admin_password}</telnet_admin_passwd>
+    <password_ecrytion>1</password_ecrytion>
+  </system_configuration>
+  <system_service_rule_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <system_service_rule_configs>
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="9" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.system_service_rule_config_item">
+          <ipaddr/>
+          <netmask>0</netmask>
+          <protocol/>
+          <port>0</port>
+          <service_interface>0</service_interface>
+          <policy>0</policy>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="9">
+          <ipaddr/>
+          <netmask>0</netmask>
+          <protocol/>
+          <port>0</port>
+          <service_interface>0</service_interface>
+          <policy>0</policy>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="9">
+          <ipaddr/>
+          <netmask>0</netmask>
+          <protocol/>
+          <port>0</port>
+          <service_interface>0</service_interface>
+          <policy>0</policy>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="9">
+          <ipaddr/>
+          <netmask>0</netmask>
+          <protocol/>
+          <port>0</port>
+          <service_interface>0</service_interface>
+          <policy>0</policy>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">5</Key>
+        <Value ClassID="9">
+          <ipaddr/>
+          <netmask>0</netmask>
+          <protocol/>
+          <port>0</port>
+          <service_interface>0</service_interface>
+          <policy>0</policy>
+        </Value>
+      </DictionaryEntry>
+    </system_service_rule_configs>
+  </system_service_rule_configuration>
+  <voip_account_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <mgc_account_message_id/>
+    <mgc_account_termination_id_pots1/>
+    <mgc_account_termination_id_pots2/>
+    <sip_account_phone_number_pots1/>
+    <sip_account_display_name_pots1/>
+    <sip_account_user_name_pots1/>
+    <sip_account_password_pots1/>
+    <sip_account_phone_number_pots2/>
+    <sip_account_display_name_pots2/>
+    <sip_account_user_name_pots2/>
+    <sip_account_password_pots2/>
+  </voip_account_configuration>
+  <voip_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <used_flag>0</used_flag>
+    <use_interface>0</use_interface>
+    <signalling_protocol_used>1</signalling_protocol_used>
+    <media_1st_codec_selection>0</media_1st_codec_selection>
+    <media_1st_packet_period_selection>10</media_1st_packet_period_selection>
+    <media_1st_silence_suppression>0</media_1st_silence_suppression>
+    <media_2st_codec_selection>0</media_2st_codec_selection>
+    <media_2st_packet_period_selection>10</media_2st_packet_period_selection>
+    <media_2st_silence_suppression>0</media_2st_silence_suppression>
+    <media_3st_codec_selection>0</media_3st_codec_selection>
+    <media_3st_packet_period_selection>10</media_3st_packet_period_selection>
+    <media_3st_silence_suppression>0</media_3st_silence_suppression>
+    <media_4st_codec_selection>0</media_4st_codec_selection>
+    <media_4st_packet_period_selection>10</media_4st_packet_period_selection>
+    <media_4st_silence_suppression>0</media_4st_silence_suppression>
+    <uni_pots1_rx_gain>0.0</uni_pots1_rx_gain>
+    <uni_pots1_tx_gain>0.0</uni_pots1_tx_gain>
+    <uni_pots2_rx_gain>0.0</uni_pots2_rx_gain>
+    <uni_pots2_tx_gain>0.0</uni_pots2_tx_gain>
+    <uni_pots_impedance>600</uni_pots_impedance>
+    <media_fax_mode>0</media_fax_mode>
+    <oob_dtmf>0</oob_dtmf>
+    <rtp_dtmf_event>0</rtp_dtmf_event>
+    <voice_announcement>1</voice_announcement>
+    <echo_cancel>0</echo_cancel>
+    <hook_flash_min_time>0</hook_flash_min_time>
+    <hook_flash_max_time>700</hook_flash_max_time>
+    <pstn_country_code>0</pstn_country_code>
+    <rtp_dscp_mark>0</rtp_dscp_mark>
+    <rtp_local_port_min>50000</rtp_local_port_min>
+    <threeway_ssw_mixing>0</threeway_ssw_mixing>
+    <special_line_service>0</special_line_service>
+    <warm_line_timeout>0</warm_line_timeout>
+    <line_number/>
+    <mgc_primary/>
+    <mgc_secondary/>
+    <mgc_soft_switch/>
+    <mgc_tcp_udp_protocol>17</mgc_tcp_udp_protocol>
+    <mgc_tcp_udp_port>2427</mgc_tcp_udp_port>
+    <mgc_tcp_udp_tos>46</mgc_tcp_udp_tos>
+    <host_part_server/>
+    <outbound_proxy_server/>
+    <proxy_server/>
+    <register_server/>
+    <primary_dns/>
+    <secondary_dns/>
+    <sip_tcp_udp_protocol>17</sip_tcp_udp_protocol>
+    <sip_tcp_udp_port>5060</sip_tcp_udp_port>
+    <sip_tcp_udp_tos>46</sip_tcp_udp_tos>
+    <sip_soft_switch/>
+    <dns_cache_policy>0</dns_cache_policy>
+    <end_of_digit>1</end_of_digit>
+    <end_sharp_token>0</end_sharp_token>
+    <reg_exp_time>3600</reg_exp_time>
+    <rereg_head_start_time>3600</rereg_head_start_time>
+    <session_timer>0</session_timer>
+    <sip_timer_t1>500</sip_timer_t1>
+    <sip_timer_t2>4000</sip_timer_t2>
+    <sip_timer_td>32000</sip_timer_td>
+    <sip_ciritical_dial_timeout>4000</sip_ciritical_dial_timeout>
+    <sip_partial_dial_timeout>16000</sip_partial_dial_timeout>
+    <sip_call_waiting_features>0</sip_call_waiting_features>
+    <dial_plan_configs>
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="10" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.dial_plan_item">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">5</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">6</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">7</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">8</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">9</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">10</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">11</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">12</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">13</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">14</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">15</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">16</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">17</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">18</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">19</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">20</Key>
+        <Value ClassID="10">
+          <token_string/>
+        </Value>
+      </DictionaryEntry>
+    </dial_plan_configs>
+  </voip_configuration>
+  <wan_ppp_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>1</fixed_flag>
+    <wan_ipmode>2</wan_ipmode>
+    <pppoe>0</pppoe>
+    <authtype>0</authtype>
+    <lcp_echo_interval>20</lcp_echo_interval>
+    <lcp_echo_failure>3</lcp_echo_failure>
+    <mtu>1492</mtu>
+    <user>0147</user>
+    <passwd>doWkKvGbmCIfpLyZ</passwd>
+  </wan_ppp_configuration>
+  <wifi_mac_filtering_configuration>
+    <m_category>WiFi MAC Filtering Config</m_category>
+    <m_category_key>wifi_mac_filtering</m_category_key>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <mac_filter>1</mac_filter>
+    <default_policy>1</default_policy>
+    <mac_filtering_configs>
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="11" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.wifi_mac_filtering_config_item">
+          <mac_source/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="11">
+          <mac_source/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="11">
+          <mac_source/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="11">
+          <mac_source/>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">5</Key>
+        <Value ClassID="11">
+          <mac_source/>
+        </Value>
+      </DictionaryEntry>
+    </mac_filtering_configs>
+  </wifi_mac_filtering_configuration>
+  <wlan_bind_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>1</fixed_flag>
+    <wlan_bind_configs>
+      <DictionaryEntry>
+        <Key ClassID="1">1</Key>
+        <Value ClassID="12" IsNewClass="true" ClassName="Motive.Development.ONTProvision_H640.wlan_bind_ssid_item">
+          <port>0</port>
+          <vid>0</vid>
+          <cos>0</cos>
+          <vid2>0</vid2>
+          <cos2>0</cos2>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">2</Key>
+        <Value ClassID="12">
+          <port>0</port>
+          <vid>0</vid>
+          <cos>0</cos>
+          <vid2>0</vid2>
+          <cos2>0</cos2>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">3</Key>
+        <Value ClassID="12">
+          <port>0</port>
+          <vid>0</vid>
+          <cos>0</cos>
+          <vid2>0</vid2>
+          <cos2>0</cos2>
+        </Value>
+      </DictionaryEntry>
+      <DictionaryEntry>
+        <Key ClassID="1">4</Key>
+        <Value ClassID="12">
+          <port>0</port>
+          <vid>0</vid>
+          <cos>0</cos>
+          <vid2>0</vid2>
+          <cos2>0</cos2>
+        </Value>
+      </DictionaryEntry>
+    </wlan_bind_configs>
+  </wlan_bind_configuration>
+  <wlan_configuration>
+    <keep_ne_cfg>1</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <radio>1</radio>
+    <mode>4</mode>
+    <bandwidth>40</bandwidth>
+    <wmm>1</wmm>
+    <channel>0</channel>
+    <txpower>20</txpower>
+    <beacon_period>100</beacon_period>
+    <country_code>PL</country_code>
+  </wlan_configuration>
+  <remote_mgmt_configuration>
+    <keep_ne_cfg>0</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <iphost2_telnet_blocking>1</iphost2_telnet_blocking>
+    <iphost2_web_blocking>0</iphost2_web_blocking>
+  </remote_mgmt_configuration>
+  <autoreset_ping_configuration>
+    <keep_ne_cfg>0</keep_ne_cfg>
+    <fixed_flag>0</fixed_flag>
+    <autoreset_ping>1</autoreset_ping>
+    <ping_destination1>91.235.192.1</ping_destination1>
+    <ping_destination2>8.8.4.4</ping_destination2>
+    <ping_destination3>0.0.0.0</ping_destination3>
+    <ping_transaction_interval>3600</ping_transaction_interval>
+    <ping_reqnum_in_transaction>10</ping_reqnum_in_transaction>
+    <ping_request_interval>10</ping_request_interval>
+    <ping_request_timeout>10</ping_request_timeout>
+    <ping_loss_threshold>10</ping_loss_threshold>
+    <reboot_threshold>3</reboot_threshold>
+  </autoreset_ping_configuration>
+  <m_ConfigType>H640</m_ConfigType>
+  <modified_time>{$modified_time}</modified_time>
+</Motive.Development.ONTProvision_H640.Configuration_H640>

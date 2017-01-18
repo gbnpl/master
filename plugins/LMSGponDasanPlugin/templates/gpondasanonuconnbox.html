@@ -1,0 +1,118 @@
+<!--// $Id$ //-->
+{$xajax}
+<TABLE WIDTH="100%" CELLPADDING="3">
+        <TR class="dark">
+	        <TD width="100%" class="fall hand" align="left" nowrap="nowrap" onClick="showOrHide('devicedevices');">
+			<IMG SRC="img/mac.gif" alt="">
+			<B>{t a=$netdevlist|@count}Podłączone do OLT ($a):{/t}</B>
+		</TD>
+	</TR>
+	<TR id="devicedevices" style="display:none;">
+	        <TD WIDTH="100%" class="fall">
+			<TABLE cellpadding="5" cellspacing="0" WIDTH="100%">
+	<TR class="dark">
+		<TD class="fleftu" width="97%">
+			<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt.gif" ALT=""> <B>{trans("Name")} / {trans("Producer")} / {trans("Model")}:</B><BR>
+			<IMG src="img/home.gif" ALT=""> {trans("Location:")}
+		</TD>
+		<TD class="fbt" width="1%" align="right" NOWRAP>
+			<BR>
+			{trans("ID:")}
+		</TD>
+		<TD class="fbt" width="1%" NOWRAP>
+			<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu_takenports.gif" ALT=""> Port OLT:<BR>
+			<IMG src="img/port.gif" ALT=""> Liczba portów OLT:
+		</TD>
+		<TD class="frightu" width="1%">
+			&nbsp;
+		</TD>
+	</TR>
+	{cycle values="light,lucid" print=false}
+	{section name=netdevlist loop=$netdevlist start=$start}
+	<TR class="{cycle}" onmouseover="addClass(this, 'highlight')" onmouseout="removeClass(this, 'highlight')">
+		<TD width="97%" onClick="return self.location.href='?m=gpondasanoltinfo&id={$netdevlist[netdevlist].id}';" VALIGN="TOP" NOWRAP>
+			<IMG src="img/{LMSGponDasanPlugin::plugin_directory_name}/gponolt.gif" ALT=""> <a name="{$netdevlist[netdevlist].id}"><B>{$netdevlist[netdevlist].name} {if $netdevlist[netdevlist].producer}/ {$netdevlist[netdevlist].producer}{/if} {if $netdevlist[netdevlist].model}/ {$netdevlist[netdevlist].model}{/if}</B></A><BR>
+			<IMG src="img/home.gif" ALT=""> {$netdevlist[netdevlist].location}
+		</TD>
+		<TD width="1%" align="right" onClick="return self.location.href='?m=gpondasanonuinfo&id={$netdevlist[netdevlist].id}';" NOWRAP>
+			<IMG src="img/empty.gif" height="16"><BR>
+			({$netdevlist[netdevlist].id|string_format:"%04d"})
+		</TD>
+		<TD width="1%" onClick="return self.location.href='?m=gpondasanonuinfo&id={$netdevlist[netdevlist].id}';" NOWRAP>
+				<IMG SRC="img/{LMSGponDasanPlugin::plugin_directory_name}/gpononu_takenports.gif" alt=""></A> 
+			[{if $netdevlist[netdevlist].numport}
+			    {if $netdevlist[netdevlist].numportf}{$netdevlist[netdevlist].numportf}
+			    {else}{$netdevlist[netdevlist].numport}{/if}
+			    {/if}]
+			<BR><IMG SRC="img/port.gif" ALT=""> {$netdevlist[netdevlist].ports}
+		</TD>
+		<TD WIDTH="1%">
+			<A HREF="?m=gpondasanonuedit&action=disconnect&id={$netdevinfo.id}&devid={$netdevlist[netdevlist].id}&numport={$netdevlist[netdevlist].numport}" OnClick="return confirmLink(this, '{trans("Are you sure, you want to delete that connection?")}');"><IMG SRC="img/delete.gif" {tip text="Delete connection"}></A>
+		</TD>
+	</TR>
+	{sectionelse}
+	<TR>
+		<TD colspan="4" align="center">
+			<P>&nbsp;</P>
+			<P><B>Nie podłączono do OLT</B></P>
+			<P>&nbsp;</P>
+		</TD>
+	</TR>
+	{/section}
+	{if $netdevlist|@count eq 0}
+	<TR class="light">
+		<TD WIDTH="100%" class="ftop" COLSPAN="4" ALIGN="CENTER" NOWRAP>
+			{if $netdevinfo.ports eq $netdevinfo.takenports}
+			<B>{trans("All ports in that device are in use.")}</B>
+			{elseif !$restnetdevlist}
+			<B>{trans("No such devices for connection.")}</B>
+			{else}
+			<FORM METHOD="GET" ACTION="?m=gpondasanonuedit" NAME="connect">
+			<INPUT type="submit" class="hiddenbtn">
+			<INPUT TYPE="HIDDEN" NAME="m" VALUE="gpondasanonuedit">
+			<INPUT TYPE="HIDDEN" NAME="id" VALUE="{$netdevinfo.id}">
+			<INPUT TYPE="HIDDEN" NAME="action" VALUE="connect">
+			<TABLE width="100%">
+			    <TR>
+				<TD width="99%" NOWRAP>
+				<b>Podłącz do OLT:</b>
+			<SELECT NAME="netdevicesid" style="width: 300px" {tip trigger="linkolt" text="Wybierz OLT"} onchange="xajax_GetFreeOltPort_Xj(this.value);">
+				{section name=restnetdevlist loop=$restnetdevlist}
+				{assign var=netdevname value=$restnetdevlist[restnetdevlist].name}
+				{if $restnetdevlist[restnetdevlist].producer}{assign var=netdevname value=$netdevname|cat:" - "|cat:$restnetdevlist[restnetdevlist].producer}{/if}
+				{if $restnetdevlist[restnetdevlist].model}{assign var=netdevname value=$netdevname|cat:" / "|cat:$restnetdevlist[restnetdevlist].model}{/if}
+				{if $restnetdevlist[restnetdevlist].location}{assign var=netdevname value=$netdevname|cat:" ("|cat:$restnetdevlist[restnetdevlist].location|cat:")"}{/if}
+				<OPTION VALUE="{$restnetdevlist[restnetdevlist].id}"{if $connect.id == $restnetdevlist[restnetdevlist].id} selected{/if}>{$netdevname|truncate:120:"...":true}</OPTION>
+				{/section}
+			</SELECT>
+			
+			{trans("Port")}:
+			<SELECT NAME="numport" ID="numport" {tip trigger="numport" text="Wybierz numer portu"}>
+			{section name=numports loop=$numports}
+				<OPTION VALUE="{$numports[numports].numport}">{$numports[numports].numport}</OPTION>
+				{/section}
+			</select>
+				    </TD>
+				    <TD width="1%">
+					<NOBR><A HREF="javascript:document.connect.submit(); ">{trans("Connect")}</A> <IMG src="img/save.gif" alt=""></NOBR>
+				    </TD>
+				</TR>
+			</TABLE>
+			</FORM>
+			{/if}
+		</TD>
+	</TR>
+	{/if}
+</TABLE>
+{if $connect.linkolt}
+				<div style="background-color:white;border:1px solid black;margin:3px;padding:3px;"><b><font color="red">{$connect.linkolt}</font></b><br /><br /></div>
+			{/if}
+               </TD>
+       </TR>
+</TABLE>
+<SCRIPT type="text/javascript">
+<!--
+if(getCookie('devicedevices')=='1')
+	document.getElementById('devicedevices').style.display = '';
+//-->
+</SCRIPT>

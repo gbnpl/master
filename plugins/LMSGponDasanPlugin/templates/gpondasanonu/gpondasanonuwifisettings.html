@@ -1,0 +1,34 @@
+<tr class="light" id="wifisettings"{if !$netdevinfo.xmlprovisioning || !isset($netdevinfo['portsettings']['wifi.1'])} style="display: none;"{/if}>
+	<TD colspan="3">
+		<fieldset style="width: 1%;" class="nobr">
+			<legend class="bold"><IMG SRC="img/wireless.gif" ALT=""> {trans("WiFi settings")}</legend>
+			<table cellpadding="2">
+				<tr>
+					<TD class="bold nobr">
+						{trans("SSID:")}
+					</TD>
+					<TD>
+						<input type="text" name="netdev[properties][wifi_ssid]" id="wifi_ssid" placeholder="{trans("minimum 8 characters")}" value="{$netdevinfo.properties.wifi_ssid}" size="25" {tip trigger="wifi_ssid"}>
+					</TD>
+				</tr>
+				<tr>
+					<TD class="bold nobr">
+						{trans("Password:")}
+					</TD>
+					<TD>
+						<input type="text" name="netdev[properties][wifi_password]" id="wifi_password" placeholder="{trans("minimum 8 characters")}" value="{$netdevinfo.properties.wifi_password}" size="25" {tip trigger="wifi_password"}>
+					</TD>
+				</tr>
+				{if ConfigHelper::getConfig('gpon-dasan.xml_provisioning_default_wifi_ssid', '') || ConfigHelper::getConfig('gpon-dasan.xml_provisioning_default_wifi_password', '')}
+				<tr>
+					<TD colspan="2" class="text-center">
+						<a onclick="javascript:xajax_ONU_GenerateWifiSettings({ {if $netdevinfo.id}'id': {$netdevinfo.id}{else}'sn': xjx.$('netdevname').value, 'customerid': document.forms['netdevadd'].elements['netdev[cid][0]'].value{/if} });">
+							<IMG src="img/reload.gif" alt=""> {trans("Generate automatically")}
+						</a>
+					</TD>
+				</tr>
+				{/if}
+			</table>
+		</fieldset>
+	</td>
+</tr>
