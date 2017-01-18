@@ -3,7 +3,7 @@
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2013 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -60,10 +60,10 @@ if (isset($_POST['nodedata']))
 		$nodedata['macs'][$key] = str_replace('-',':',$value);
 
 	foreach($nodedata as $key => $value)
-		if($key != 'macs' && $key != 'authtype')
+		if($key != 'macs' && $key != 'authtype' && $key != 'wysiwyg')
 			$nodedata[$key] = trim($value);
 
-	if($nodedata['ipaddr']=='' && $nodedata['ipaddr_pub'] && $nodedata['mac']=='' && $nodedata['name']=='')
+	if($nodedata['ipaddr']=='' && $nodedata['ipaddr_pub'] && $nodedata['mac']=='' && $nodedata['name']=='' && !isset($nodedata['wholenetwork']))
 		if($_GET['ownerid'])
 		{
 			$SESSION->redirect('?m=customerinfo&id='.$_GET['ownerid']);
@@ -80,7 +80,13 @@ if (isset($_POST['nodedata']))
 	elseif($LMS->GetNodeIDByName($nodedata['name']))
 		$error['name'] = trans('Specified name is in use!');
 
-	if(!$nodedata['ipaddr'])
+	if (isset($nodedata['wholenetwork'])) {
+		$nodedata['ipaddr'] = '0.0.0.0';
+		$nodedata['ipaddr_pub'] = '0.0.0.0';
+		$net = $LMS->GetNetworkRecord($nodedata['netid'], 0, 1);
+		if (!empty($net['ownerid']) && !empty($nodedata['ownerid']) && $net['ownerid'] != $nodedata['ownerid'])
+			$error['netid'] = trans('Selected network is already assigned to customer $a ($b)!', $net['customername'], $net['ownerid']);
+	} elseif (!$nodedata['ipaddr'])
 		$error['ipaddr'] = trans('Node IP address is required!');
 	elseif(!check_ip($nodedata['ipaddr']))
 		$error['ipaddr'] = trans('Incorrect node IP address!');
@@ -113,18 +119,15 @@ if (isset($_POST['nodedata']))
     		$nodedata['ipaddr_pub'] = '0.0.0.0';
 
 	$macs = array();
-	foreach($nodedata['macs'] as $key => $value)
-		if(check_mac($value))
-		{
-			if($value!='00:00:00:00:00:00' && !ConfigHelper::checkValue(ConfigHelper::getConfig('phpui.allow_mac_sharing', false)))
-			{
-				if($LMS->GetNodeIDByMAC($value))
-					$error['mac'.$key] = trans('Specified MAC address is in use!');
+	foreach ($nodedata['macs'] as $key => $value)
+		if (check_mac($value)) {
+			if ($value != '00:00:00:00:00:00' && !ConfigHelper::checkConfig('phpui.allow_mac_sharing')) {
+				if ($LMS->GetNodeIDByMAC($value))
+					$error['mac' . $key] = trans('Specified MAC address is in use!');
 			}
 			$macs[] = $value;
-		}
-		elseif($value!='')
-			$error['mac'.$key] = trans('Incorrect MAC address!');
+		} elseif($value != '')
+			$error['mac' . $key] = trans('Incorrect MAC address!');
 	if(empty($macs))
 		$error['mac0'] = trans('MAC address is required!');
 	$nodedata['macs'] = $macs;
@@ -276,10 +279,8 @@ if($customerid = $nodedata['ownerid'])
 else
 	$SMARTY->assign('allnodegroups', $LMS->GetNodeGroupNames());
 
-if (!ConfigHelper::checkValue(ConfigHelper::getConfig('phpui.big_networks', false)))
-{
-    $SMARTY->assign('customers', $LMS->GetCustomerNames());
-}
+if (!ConfigHelper::checkConfig('phpui.big_networks'))
+	$SMARTY->assign('customers', $LMS->GetCustomerNames());
 
 $nprojects = $DB->GetAll("SELECT * FROM invprojects WHERE type<>? ORDER BY name",
 	array(INV_PROJECT_SYSTEM));

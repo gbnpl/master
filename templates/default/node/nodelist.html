@@ -12,7 +12,8 @@
 </p>
 <TABLE class="lmsbox">
 	<COLGROUP>
-		<COL style="width: 97%;">
+		<COL style="width: 96%;">
+		<COL style="width: 1%;">
 		<COL style="width: 1%;">
 		<COL style="width: 1%;">
 		<COL style="width: 1%;">
@@ -48,6 +49,11 @@
 					<OPTION VALUE="1"{if $listdata.state == 1} SELECTED{/if}>{trans("connected<!plural:item>")}</OPTION>
 					<OPTION VALUE="2"{if $listdata.state == 2} SELECTED{/if}>{trans("disconnected<!plural:item>")}</OPTION>
 					<OPTION VALUE="3"{if $listdata.state == 3} SELECTED{/if}>{trans("online")}</OPTION>
+					<OPTION VALUE="4"{if $listdata.state == 4} SELECTED{/if}>{trans("without tariff")}</OPTION>
+					<OPTION VALUE="5"{if $listdata.state == 5} SELECTED{/if}>{trans("TERRIT not specified")}</OPTION>
+					<OPTION VALUE="6"{if $listdata.state == 6} SELECTED{/if}>{trans("Net Device not specified")}</OPTION>
+					<OPTION VALUE="7"{if $listdata.state == 7} SELECTED{/if}>{trans("with warning")}</OPTION>
+					<OPTION value="8"{if $listdata.state == 8} selected{/if}>{trans("without gps coords")}</OPTION>
 				</SELECT></SPAN>
 				<SPAN class="nobr">{trans("Network:")}
 				<SELECT SIZE="1" NAME="n" ONCHANGE="document.choosefilter.submit();">
@@ -69,6 +75,14 @@
 					{section name=customergroups loop=$customergroups}
 					<OPTION value="{$customergroups[customergroups].id}" {if $listdata.customergroup == $customergroups[customergroups].id} SELECTED {/if}>{$customergroups[customergroups].name|truncate:30:"...":true}</OPTION>
 					{/section}
+				</SELECT></SPAN>
+				<SPAN class="nobr">{trans("Project:")}
+				<SELECT SIZE="1" NAME="p" ONCHANGE="document.choosefilter.submit();">
+					<OPTION VALUE="-1"{if $listdata.invprojectid == -1} selected{/if}>- {trans("all")} -</OPTION>
+					<OPTION VALUE="-2"{if $listdata.invprojectid == -2} selected{/if}>- {trans("without project")} -</OPTION>
+					{foreach $NNprojects as $project}
+					<OPTION VALUE="{$project.id}"{if $listdata.invprojectid == $project.id} selected{/if}>{$project.name}</OPTION>
+					{/foreach}
 				</SELECT></SPAN>
 		</TD>
 	</TR>
@@ -125,10 +139,10 @@
 			    <IMG src="img/info1.gif" alt="" {tip text=$nodelist[nodelist].info}>
 			{/if}
 			{$nodelist[nodelist].name}</A></span><BR>
-			<span class="nobr{if ! $nodelist[nodelist].access} blend{/if}"><img src="img/customer.gif" alt=""> <A href="?m=customerinfo&amp;id={$nodelist[nodelist].ownerid}" {tip a=$nodelist[nodelist].ownerid dynpopup='?m=customerinfoshort&amp;id=$a'}>{$nodelist[nodelist].owner|truncate:40:"...":true|replace:" ":"&nbsp;"}</A></span>
+			<span class="nobr{if ! $nodelist[nodelist].access} blend{/if}"><img src="img/customer.gif" alt=""> <A href="?m=customerinfo&amp;id={$nodelist[nodelist].ownerid}" class="lms-ui-tooltip-customerinfo" data-resourceid="{$nodelist[nodelist].ownerid}">{$nodelist[nodelist].owner|truncate:40:"...":true|replace:" ":"&nbsp;"}</A></span>
 		</TD>
 		<TD class="nobr" onClick="return self.location.href='?m=nodeinfo&amp;id={$nodelist[nodelist].id}';">
-		{$nodelist[nodelist].location}{if $nodelist[nodelist].borough_name} ({$nodelist[nodelist].state_name} / {$nodelist[nodelist].district_name} / {$_BOROUGHTYPES[$nodelist[nodelist].borough_type]} {$nodelist[nodelist].borough_name}){/if}
+		{$nodelist[nodelist].location}{if $nodelist[nodelist].borough_name}<br><span class="blend">({$nodelist[nodelist].state_name} / {$nodelist[nodelist].district_name} / {$_BOROUGHTYPES[$nodelist[nodelist].borough_type]} {$nodelist[nodelist].borough_name})</span>{/if}
 		</TD>
 		<TD class="text-right" onClick="return self.location.href='?m=nodeinfo&amp;id={$nodelist[nodelist].id}';">
 			({$nodelist[nodelist].id|string_format:"%04d"})<BR>
@@ -150,9 +164,7 @@
 	{sectionelse}
 	<TR>
 		<TD colspan="5" class="empty-table">
-			<p>&nbsp;</p>
 			<p>{trans("No such nodes in database.")}</p>
-			<p>&nbsp;</p>
 		</TD>
 	</TR>
 	{/section}

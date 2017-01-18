@@ -109,7 +109,7 @@ if(isset($_POST['tariff']))
 
 	if(!$error)
 	{
-		$SESSION->redirect('?m=tarifflist&id='.$LMS->TariffAdd($tariff));
+		$SESSION->redirect('?m=tariffinfo&id='.$LMS->TariffAdd($tariff));
 	}
 
 	$SMARTY->assign('error',$error);
@@ -143,6 +143,9 @@ $layout['pagetitle'] = trans('New Subscription');
 
 $SMARTY->assign('taxeslist',$LMS->GetTaxes());
 $SMARTY->assign('tariff', $tariff);
+$SMARTY->assign('voip_tariffs', $LMS->getVoipTariffs());
+$SMARTY->assign('voip_tariffrules', $LMS->getVoipTariffRuleGroups());
+$SMARTY->assign('numberplanlist', $LMS->GetNumberPlans(DOC_INVOICE));
 $SMARTY->display('tariff/tariffadd.html');
 
 ?>

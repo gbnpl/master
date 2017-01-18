@@ -3,7 +3,7 @@
 /*
  *  LMS version 1.11-git
  *
- *  Copyright (C) 2001-2013 LMS Developers
+ *  Copyright (C) 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -39,12 +39,10 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
 
     public function NetworkSet($id, $disabled = -1)
     {
-        global $SYSLOG_RESOURCE_KEYS;
-
         if ($this->syslog) {
             $args = array(
-                $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK] => $id,
-                $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_HOST] =>
+                SYSLOG::RES_NETWORK => $id,
+                SYSLOG::RES_HOST =>
                 $this->db->GetOne('SELECT hostid FROM networks WHERE id = ?', array($id)),
             );
         }
@@ -67,8 +65,7 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
             $res = $this->db->Execute('UPDATE networks SET disabled = 1 WHERE id = ?', array($id));
         }
         if ($this->syslog && $res)
-            $this->syslog->AddMessage(SYSLOG_RES_NETWORK, SYSLOG_OPER_UPDATE, $args, array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK],
-                $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_HOST]));
+            $this->syslog->AddMessage(SYSLOG::RES_NETWORK, SYSLOG::OPER_UPDATE, $args);
         return $res;
     }
 
@@ -102,8 +99,6 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
 
     public function NetworkAdd($netadd)
     {
-        global $SYSLOG_RESOURCE_KEYS;
-
         if ($netadd['prefix'] != '')
             $netadd['mask'] = prefix2mask($netadd['prefix']);
 
@@ -122,41 +117,44 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
             'dhcpstart' => $netadd['dhcpstart'],
             'dhcpend' => $netadd['dhcpend'],
             'notes' => $netadd['notes'],
-            $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_HOST] => $netadd['hostid'],
+			'vlanid' => intval($netadd['vlanid']),
+            SYSLOG::RES_HOST => $netadd['hostid'],
+            'authtype' => $netadd['authtype'],
         );
-        if ($this->db->Execute('INSERT INTO networks (name, address, mask, interface, gateway, 
-				dns, dns2, domain, wins, dhcpstart, dhcpend, notes, hostid) 
-				VALUES (?, inet_aton(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array_values($args))) {
-            $netid = $this->db->GetOne('SELECT id FROM networks WHERE address = inet_aton(?) AND hostid = ?', array($netadd['address'], $netadd['hostid']));
-            if ($this->syslog && $netid) {
-                $args[$SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK]] = $netid;
-                $keys = array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK], $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_HOST]);
-
-                if($netadd['ownerid']) {
-                    $args[$SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST]] = $netadd['ownerid'];
-                    $keys[] = $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST];
-                    $this->db->Execute('INSERT INTO nodes (name, ownerid, netid) VALUES(?, ?, ?)', array($netadd['name'], $netadd['ownerid'], $netid));
-                }
-
-                $this->syslog->AddMessage(SYSLOG_RES_NETWORK, SYSLOG_OPER_ADD, $args, $keys);
-            }
-            return $netid;
-        } else
-            return FALSE;
+		if ($this->db->Execute('INSERT INTO networks (name, address, mask, interface, gateway,
+				dns, dns2, domain, wins, dhcpstart, dhcpend, notes, vlanid, hostid, authtype)
+				VALUES (?, inet_aton(?), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', array_values($args))) {
+			$netid = $this->db->GetLastInsertID('networks');
+			if (!$netid)
+				return false;
+			if ($this->syslog)
+				$this->syslog->AddMessage(SYSLOG::RES_NETWORK, SYSLOG::OPER_ADD, $args);
+			if ($netadd['ownerid']) {
+				$args = array(
+					'name' => $netadd['name'],
+					SYSLOG::RES_CUST => $netadd['ownerid'],
+					SYSLOG::RES_NETWORK => $netid,
+				);
+				$this->db->Execute('INSERT INTO nodes (name, ownerid, netid) VALUES(?, ?, ?)', array_values($args));
+				if ($this->syslog)
+					$this->syslog->AddMessage(SYSLOG::RES_NODE, SYSLOG::OPER_ADD, $args);
+			}
+			return $netid;
+		} else
+			return false;
     }
 
     public function NetworkDelete($id)
     {
-        global $SYSLOG_RESOURCE_KEYS;
         if ($this->syslog)
             $hostid = $this->db->GetOne('SELECT hostid FROM networks WHERE id=?', array($id));
         $res = $this->db->Execute('DELETE FROM networks WHERE id=?', array($id));
         if ($this->syslog && $res) {
             $args = array(
-                $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK] => $id,
-                $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_HOST] => $hostid,
+                SYSLOG::RES_NETWORK => $id,
+                SYSLOG::RES_HOST => $hostid,
             );
-            $this->syslog->AddMessage(SYSLOG_RES_NETWORK, SYSLOG_OPER_DELETE, $args, array_keys($args));
+            $this->syslog->AddMessage(SYSLOG::RES_NETWORK, SYSLOG::OPER_DELETE, $args);
         }
         return $res;
     }
@@ -215,21 +213,27 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
     public function GetNetDevIPs($id)
     {
         return $this->db->GetAll('SELECT n.id, n.name, mac, ipaddr, inet_ntoa(ipaddr) AS ip, 
-			ipaddr_pub, inet_ntoa(ipaddr_pub) AS ip_pub, access, info, port, n.netid, net.name AS netname, authtype
+			ipaddr_pub, inet_ntoa(ipaddr_pub) AS ip_pub, access, info, port, n.netid, net.name AS netname, n.authtype
 			FROM vnodes n
 			JOIN networks net ON net.id = n.netid
 			WHERE ownerid = 0 AND netdev = ?', array($id));
     }
 
-    public function GetNetworkList($order = 'id,asc')
+    public function GetNetworkList( $search = 'id,asc' )
     {
-        if ($order == '')
-            $order = 'id,asc';
+		if( is_array($search) )
+			$order = array_key_exists($search['order']) ? $search['order'] : 'id,asc';
+		else if( $search == '' )
+			$order = 'id,asc';
+		else
+			$order = $search;
+		if (!is_array($search))
+			$search = array();
 
         list($order, $direction) = sscanf($order, '%[^,],%s');
 
         ($direction == 'desc') ? $direction = 'desc' : $direction = 'asc';
-
+		
         switch ($order) {
             case 'name':
                 $sqlord = ' ORDER BY n.name';
@@ -258,28 +262,100 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
             case 'online':
                 $sqlord = ' ORDER BY online';
                 break;
+			case 'vlanid':
+                $sqlord = ' ORDER BY vlanid';
+                break;
         }
 
-        if ($networks = $this->db->GetAll('SELECT n.id, h.name AS hostname, n.name, inet_ntoa(address) AS address, 
-				address AS addresslong, mask, interface, gateway, dns, dns2, 
-				domain, wins, dhcpstart, dhcpend,
-				mask2prefix(inet_aton(mask)) AS prefix,
-				broadcast(address, inet_aton(mask)) AS broadcastlong,
-				inet_ntoa(broadcast(address, inet_aton(mask))) AS broadcast,
-				pow(2,(32 - mask2prefix(inet_aton(mask)))) AS size, disabled,
-				(SELECT COUNT(*) 
-					FROM nodes 
-					WHERE netid = n.id AND ipaddr <> 0 AND (ipaddr >= address AND ipaddr <= broadcast(address, inet_aton(mask))) 
-						OR (ipaddr_pub >= address AND ipaddr_pub <= broadcast(address, inet_aton(mask)))
-				) AS assigned,
-				(SELECT COUNT(*) 
-					FROM nodes 
-					WHERE netid = n.id AND ipaddr <> 0 AND ((ipaddr >= address AND ipaddr <= broadcast(address, inet_aton(mask))) 
-						OR (ipaddr_pub >= address AND ipaddr_pub <= broadcast(address, inet_aton(mask))))
-						AND (?NOW? - lastonline < ?)
-				) AS online
-				FROM networks n
-				LEFT JOIN hosts h ON h.id = n.hostid' . ($sqlord != '' ? $sqlord . ' ' . $direction : ''), array(intval(ConfigHelper::getConfig('phpui.lastonline_limit'))))) {
+		$search = array_filter($search);
+		$sqlwhere = ' WHERE';
+
+		if( isset($search['compareType']) ) {
+			$p = '%';
+			$search['compareType'] = 'LIKE';
+		} else {
+			$p = '';
+			$search['compareType'] = '=';
+		}
+		
+		foreach($search as $k=>$v) {
+			if($v != '')
+				switch($k) {
+					case 'network_name':
+						$sqlwhere .= " lower(n.name) ?LIKE? lower('" . $p.$v.$p . "') " . $search['operatorType'];
+					break;
+
+					case 'network_address':
+						$sqlwhere .= " inet_ntoa(address) " . $search['compareType'] . " lower('" . $p.$v.$p . "') " . $search['operatorType'];
+					break;
+
+					case 'dhcp':
+						$sqlwhere .= " '$v' BETWEEN n.dhcpstart AND n.dhcpend " . $search['operatorType'];
+					break;
+
+					case 'size':
+						$sqlwhere .= " $v ". $search['size_compare_char'] . " pow(2, 32 - mask2prefix(inet_aton(n.mask))) " . $search['operatorType'];
+					break;
+
+					case 'interface':
+						$sqlwhere .= " lower(n.interface) ?LIKE? lower('" . $p.$v.$p . "') " . $search['operatorType'];
+					break;
+
+					case 'vlanid':
+						$sqlwhere .= " vlanid = " . $v . " " . $search['operatorType'];
+					break;
+
+					case 'gateway':
+						$sqlwhere .= " n.gateway " . $search['compareType'] . " '" . $p.$v.$p . "' " . $search['operatorType'];
+					break;
+
+					case 'dns':
+						$sqlwhere .= " (n.dns " . $search['compareType'] . " '" . $p.$v.$p . "' OR n.dns2 " . $search['compareType'] . " '" . $p.$v.$p . "') " . $search['operatorType'];
+					break;
+
+					case 'wins':
+						$sqlwhere .= " n.wins " . $search['compareType'] . " '" . $p.$v.$p . "' " . $search['operatorType'];
+					break;
+
+					case 'domain':
+						$sqlwhere .= " lower(n.domain) " . $search['compareType'] . " lower('" . $p.$v.$p . "') " . $search['operatorType'];
+					break;
+
+					case 'host':
+						$sqlwhere .= " 1 IN (SELECT 1 FROM hosts WHERE name ?LIKE? '" . $p.$v.$p . "') " . $search['operatorType'];
+					break;
+
+					case 'description':
+						$sqlwhere .= " lower(n.notes) ?LIKE? lower('" . $p.$v.$p . "') " . $search['operatorType'];
+					break;
+				}
+		}
+		$sqlwhere = rtrim($sqlwhere, $search['operatorType']);
+
+		$networks = $this->db->GetAll( 'SELECT 
+														n.id, h.name AS hostname, n.name, inet_ntoa(address) AS address, 
+														address AS addresslong, mask, interface, gateway, dns, dns2, 
+														domain, wins, dhcpstart, dhcpend,
+														mask2prefix(inet_aton(mask)) AS prefix,
+														broadcast(address, inet_aton(mask)) AS broadcastlong, vlanid,
+														inet_ntoa(broadcast(address, inet_aton(mask))) AS broadcast,
+														pow(2,(32 - mask2prefix(inet_aton(mask)))) AS size, disabled,
+														(SELECT COUNT(*) 
+															FROM nodes 
+															WHERE netid = n.id AND ipaddr <> 0 AND (ipaddr >= address AND ipaddr <= broadcast(address, inet_aton(mask))) 
+																OR (ipaddr_pub >= address AND ipaddr_pub <= broadcast(address, inet_aton(mask)))
+														) AS assigned,
+														(SELECT COUNT(*) 
+															FROM nodes 
+															WHERE netid = n.id AND ipaddr <> 0 AND ((ipaddr >= address AND ipaddr <= broadcast(address, inet_aton(mask))) 
+																OR (ipaddr_pub >= address AND ipaddr_pub <= broadcast(address, inet_aton(mask))))
+																AND (?NOW? - lastonline < ?)
+														) AS online
+													FROM 
+														networks n LEFT JOIN hosts h ON h.id = n.hostid' . ($sqlwhere != ' WHERE' ? $sqlwhere : '') . ($sqlord != '' ? $sqlord . ' ' . $direction : '')
+													, array(intval(ConfigHelper::getConfig('phpui.lastonline_limit'))));
+		
+        if($networks) {											
             $size = 0;
             $assigned = 0;
             $online = 0;
@@ -296,6 +372,7 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
             $networks['order'] = $order;
             $networks['direction'] = $direction;
         }
+		
         return $networks;
     }
 
@@ -328,8 +405,6 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
 
     public function NetworkShift($netid, $network = '0.0.0.0', $mask = '0.0.0.0', $shift = 0)
     {
-        global $SYSLOG_RESOURCE_KEYS;
-
         if ($this->syslog) {
             $nodes = array_merge(
                     (array) $this->db->GetAll('SELECT id, ownerid, ipaddr FROM vnodes
@@ -339,17 +414,15 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
             if (!empty($nodes))
                 foreach ($nodes as $node) {
                     $args = array(
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE] => $node['id'],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST] => $node['ownerid'],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK] => $netid,
+                        SYSLOG::RES_NODE => $node['id'],
+                        SYSLOG::RES_CUST => $node['ownerid'],
+                        SYSLOG::RES_NETWORK => $netid,
                     );
                     unset($node['id']);
                     unset($node['ownerid']);
                     foreach ($node as $key => $value)
                         $args[$key] = $value + $shift;
-                    $this->syslog->AddMessage(SYSLOG_RES_NODE, SYSLOG_OPER_UPDATE, $args, array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST]));
+                    $this->syslog->AddMessage(SYSLOG::RES_NODE, SYSLOG::OPER_UPDATE, $args);
                 }
         }
         return ($this->db->Execute('UPDATE nodes SET ipaddr = ipaddr + ? 
@@ -359,13 +432,12 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
 
     public function NetworkUpdate($networkdata)
     {
-        global $SYSLOG_RESOURCE_KEYS;
-
         $args = array(
             'name' => strtoupper($networkdata['name']),
             'address' => $networkdata['address'],
             'mask' => $networkdata['mask'],
             'interface' => strtolower($networkdata['interface']),
+            'vlanid' => intval($networkdata['vlanid']),
             'gateway' => $networkdata['gateway'],
             'dns' => $networkdata['dns'],
             'dns2' => $networkdata['dns2'],
@@ -374,28 +446,21 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
             'dhcpstart' => $networkdata['dhcpstart'],
             'dhcpend' => $networkdata['dhcpend'],
             'notes' => $networkdata['notes'],
-            $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_HOST] => $networkdata['hostid'],
-            $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK] => $networkdata['id']
+            SYSLOG::RES_HOST => $networkdata['hostid'],
+            'authtype' => $networkdata['authtype'],
+            SYSLOG::RES_NETWORK => $networkdata['id']
         );
-        $keys = array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK], $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_HOST]);
 
         $res = $this->db->Execute('UPDATE networks SET name=?, address=inet_aton(?), 
-            mask=?, interface=?, gateway=?, dns=?, dns2=?, domain=?, wins=?, 
-            dhcpstart=?, dhcpend=?, notes=?, hostid=? WHERE id=?', array_values($args));
+            mask=?, interface=?, vlanid=?, gateway=?, dns=?, dns2=?, domain=?, wins=?,
+            dhcpstart=?, dhcpend=?, notes=?, hostid=?, authtype=? WHERE id=?', array_values($args));
 
-        if($networkdata['ownerid']) {
-            $args[$SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST]] = $networkdata['ownerid'];
-            $keys[] = $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST];
-        }
-
-        if ($this->syslog && $res)
-            $this->syslog->AddMessage(SYSLOG_RES_NETWORK, SYSLOG_OPER_UPDATE, $args, $keys);
+		if ($res && $this->syslog)
+			$this->syslog->AddMessage(SYSLOG::RES_NETWORK, SYSLOG::OPER_UPDATE, $args);
     }
 
     public function NetworkCompress($id, $shift = 0)
     {
-        global $SYSLOG_RESOURCE_KEYS;
-
         $nodes = array();
         $network = $this->GetNetworkRecord($id);
         $address = $network['addresslong'] + $shift;
@@ -445,27 +510,23 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
                 if ($this->syslog) {
                     $node = $this->db->GetRow('SELECT id, ownerid FROM vnodes WHERE netid = ? AND ipaddr = ?', array($id, $ip));
                     $args = array(
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE] => $node['id'],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST] => $node['ownerid'],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK] => $id,
+                        SYSLOG::RES_NODE => $node['id'],
+                        SYSLOG::RES_CUST => $node['ownerid'],
+                        SYSLOG::RES_NETWORK => $id,
                         'ipaddr' => $i,
                     );
-                    $this->syslog->AddMessage(SYSLOG_RES_NODE, SYSLOG_OPER_UPDATE, $args, array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK]));
+                    $this->syslog->AddMessage(SYSLOG::RES_NODE, SYSLOG::OPER_UPDATE, $args);
                 }
             } elseif ($this->db->Execute('UPDATE nodes SET ipaddr_pub=? WHERE netid=? AND ipaddr_pub=?', array($i, $id, $ip))) {
                 if ($this->syslog) {
                     $node = $this->db->GetRow('SELECT id, ownerid FROM vnodes WHERE netid = ? AND ipaddr_pub = ?', array($id, $ip));
                     $args = array(
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE] => $node['id'],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST] => $node['ownerid'],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK] => $id,
+                        SYSLOG::RES_NODE => $node['id'],
+                        SYSLOG::RES_CUST => $node['ownerid'],
+                        SYSLOG::RES_NETWORK => $id,
                         'ipaddr_pub' => $i,
                     );
-                    $this->syslog->AddMessage(SYSLOG_RES_NODE, SYSLOG_OPER_UPDATE, $args, array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK]));
+                    $this->syslog->AddMessage(SYSLOG::RES_NODE, SYSLOG::OPER_UPDATE, $args);
                 }
             }
         }
@@ -473,8 +534,6 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
 
     public function NetworkRemap($src, $dst)
     {
-        global $SYSLOG_RESOURCE_KEYS;
-
         $network['source'] = $this->GetNetworkRecord($src);
         $network['dest'] = $this->GetNetworkRecord($dst);
         $address = $network['dest']['addresslong'] + 1;
@@ -498,25 +557,22 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
                 if ($this->syslog) {
                     $node = $this->db->GetRow('SELECT id, ownerid FROM vnodes WHERE netid = ? AND ipaddr = ?', array($dst, $ip));
                     $args = array(
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE] => $node['id'],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST] => $node['ownerid'],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK] => $dst,
+                        SYSLOG::RES_NODE => $node['id'],
+                        SYSLOG::RES_CUST => $node['ownerid'],
+                        SYSLOG::RES_NETWORK => $dst,
                         'ipaddr' => $i,
                     );
-                    $this->syslog->AddMessage(SYSLOG_RES_NODE, SYSLOG_OPER_UPDATE, $args, array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NETWORK]));
+                    $this->syslog->AddMessage(SYSLOG::RES_NODE, SYSLOG::OPER_UPDATE, $args);
                 }
             } elseif ($this->db->Execute('UPDATE nodes SET ipaddr_pub=? WHERE ipaddr_pub=?', array($i, $ip))) {
                 if ($this->syslog) {
                     $node = $this->db->GetRow('SELECT id, ownerid FROM vnodes WHERE netid = ? AND ipaddr_pub = ?', array($dst, $ip));
                     $args = array(
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE] => $node['id'],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST] => $node['ownerid'],
+                        SYSLOG::RES_NODE => $node['id'],
+                        SYSLOG::RES_CUST => $node['ownerid'],
                         'ipaddr' => $i,
                     );
-                    $this->syslog->AddMessage(SYSLOG_RES_NODE, SYSLOG_OPER_UPDATE, $args, array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE],
-                        $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST]));
+                    $this->syslog->AddMessage(SYSLOG::RES_NODE, SYSLOG::OPER_UPDATE, $args);
                 }
             }
 
@@ -528,9 +584,9 @@ class LMSNetworkManager extends LMSManager implements LMSNetworkManagerInterface
 
     public function GetNetworkRecord($id, $page = 0, $plimit = 4294967296, $firstfree = false)
     {
-        $network = $this->db->GetRow('SELECT no.ownerid, ne.id, ne.name, inet_ntoa(ne.address) AS address,
+        $network = $this->db->GetRow('SELECT no.ownerid, ne.id, ne.name, ne.vlanid, inet_ntoa(ne.address) AS address,
                 ne.address AS addresslong, ne.mask, ne.interface, ne.gateway, ne.dns, ne.dns2,
-                ne.domain, ne.wins, ne.dhcpstart, ne.dhcpend, ne.hostid,
+                ne.domain, ne.wins, ne.dhcpstart, ne.dhcpend, ne.hostid, ne.authtype,
                 mask2prefix(inet_aton(ne.mask)) AS prefix, ne.notes,
                 inet_ntoa(broadcast(ne.address, inet_aton(ne.mask))) AS broadcast
             FROM networks ne

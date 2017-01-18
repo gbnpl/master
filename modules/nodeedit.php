@@ -3,7 +3,7 @@
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2013 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -55,12 +55,11 @@ switch ($action) {
 		$DB->Execute('UPDATE nodes SET chkmac=? WHERE id=?', array($_GET['chkmac'], $nodeid));
 		if ($SYSLOG) {
 			$args = array(
-				$SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE] => $nodeid,
-				$SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST] => $customerid,
+				SYSLOG::RES_NODE => $nodeid,
+				SYSLOG::RES_CUST => $customerid,
 				'chkmac' => $_GET['chkmac']
 			);
-			$SYSLOG->AddMessage(SYSLOG_RES_NODE, SYSLOG_OPER_UPDATE, $args,
-				array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE], $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST]));
+			$SYSLOG->AddMessage(SYSLOG::RES_NODE, SYSLOG::OPER_UPDATE, $args);
 		}
 		$SESSION->redirect('?m=nodeinfo&id=' . $nodeid);
 		break;
@@ -68,12 +67,11 @@ switch ($action) {
 		$DB->Execute('UPDATE nodes SET halfduplex=? WHERE id=?', array($_GET['duplex'], $nodeid));
 		if ($SYSLOG) {
 			$args = array(
-				$SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE] => $nodeid,
-				$SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST] => $customerid,
+				SYSLOG::RES_NODE => $nodeid,
+				SYSLOG::RES_CUST => $customerid,
 				'halfduplex' => $_GET['duplex']
 			);
-			$SYSLOG->AddMessage(SYSLOG_RES_NODE, SYSLOG_OPER_UPDATE, $args,
-				array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE], $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST]));
+			$SYSLOG->AddMessage(SYSLOG::RES_NODE, SYSLOG::OPER_UPDATE, $args);
 		}
 		$SESSION->redirect('?m=nodeinfo&id=' . $nodeid);
 		break;
@@ -81,12 +79,11 @@ switch ($action) {
 		$DB->Execute('UPDATE nodes SET authtype=? WHERE id=?', array(intval($_GET['authtype']), $nodeid));
 		if ($SYSLOG) {
 			$args = array(
-				$SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE] => $nodeid,
-				$SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST] => $customerid,
+				SYSLOG::RES_NODE => $nodeid,
+				SYSLOG::RES_CUST => $customerid,
 				'authtype' => intval($_GET['authtype']),
 			);
-			$SYSLOG->AddMessage(SYSLOG_RES_NODE, SYSLOG_OPER_UPDATE, $args,
-				array($SYSLOG_RESOURCE_KEYS[SYSLOG_RES_NODE], $SYSLOG_RESOURCE_KEYS[SYSLOG_RES_CUST]));
+			$SYSLOG->AddMessage(SYSLOG::RES_NODE, SYSLOG::OPER_UPDATE, $args);
 		}
 		$SESSION->redirect('?m=nodeinfo&id=' . $nodeid);
 		break;
@@ -116,7 +113,7 @@ if (isset($_POST['nodeedit'])) {
 		$nodeedit['macs'][$key] = str_replace('-', ':', $value);
 
 	foreach ($nodeedit as $key => $value)
-		if ($key != 'macs' && $key != 'authtype')
+		if ($key != 'macs' && $key != 'authtype' && $key != 'wysiwyg')
 			$nodeedit[$key] = trim($value);
 
 	if ($nodeedit['ipaddr'] == '' && $nodeedit['ipaddr_pub'] == '' && empty($nodeedit['macs']) && $nodeedit['name'] == '' && $nodeedit['info'] == '' && $nodeedit['passwd'] == '' && !isset($nodeedit['wholenetwork'])) {
@@ -126,6 +123,9 @@ if (isset($_POST['nodeedit'])) {
 	if(isset($nodeedit['wholenetwork'])) {
 		$nodeedit['ipaddr'] = '0.0.0.0';
 		$nodeedit['ipaddr_pub'] = '0.0.0.0';
+		$net = $LMS->GetNetworkRecord($nodeedit['netid'], 0, 1);
+		if (!empty($net['ownerid']) && !empty($nodeedit['ownerid']) && $net['ownerid'] != $nodeedit['ownerid'])
+			$error['netid'] = trans('Selected network is already assigned to customer $a ($b)!', $net['customername'], $net['ownerid']);
 	} elseif (check_ip($nodeedit['ipaddr'])) {
 		if ($LMS->IsIPValid($nodeedit['ipaddr'])) {
 			if (empty($nodeedit['netid']))
@@ -169,13 +169,12 @@ if (isset($_POST['nodeedit'])) {
 	$macs = array();
 	foreach ($nodeedit['macs'] as $key => $value)
 		if (check_mac($value)) {
-			if ($value != '00:00:00:00:00:00' && !ConfigHelper::checkValue(ConfigHelper::getConfig('phpui.allow_mac_sharing', false))) {
+			if ($value != '00:00:00:00:00:00' && !ConfigHelper::checkConfig('phpui.allow_mac_sharing')) {
 				if (($nodeid = $LMS->GetNodeIDByMAC($value)) != NULL && $nodeid != $nodeinfo['id'])
 					$error['mac' . $key] = trans('Specified MAC address is in use!');
 			}
 			$macs[] = $value;
-		}
-		elseif ($value != '')
+		} elseif ($value != '')
 			$error['mac' . $key] = trans('Incorrect MAC address!');
 	if (empty($macs))
 		$error['mac0'] = trans('MAC address is required!');
@@ -321,6 +320,7 @@ if (isset($_POST['nodeedit'])) {
 	$nodeinfo['latitude'] = $nodeedit['latitude'];
 	$nodeinfo['longitude'] = $nodeedit['longitude'];
 	$nodeinfo['invprojectid'] = $nodeedit['invprojectid'];
+	$nodeinfo['wysiwyg'] = $nodeedit['wysiwyg'];
 
 	if ($nodeedit['ipaddr_pub'] == '0.0.0.0')
 		$nodeinfo['ipaddr_pub'] = '';
@@ -336,9 +336,8 @@ if (empty($nodeinfo['macs']))
 
 include(MODULES_DIR . '/customer.inc.php');
 
-if (!ConfigHelper::checkValue(ConfigHelper::getConfig('phpui.big_networks', false))) {
+if (!ConfigHelper::checkConfig('phpui.big_networks'))
 	$SMARTY->assign('customers', $LMS->GetCustomerNames());
-}
 
 include(MODULES_DIR . '/nodexajax.inc.php');
 
@@ -367,6 +366,7 @@ $SMARTY->assign('error', $error);
 $SMARTY->assign('nodeinfo', $nodeinfo);
 $SMARTY->assign('objectid', $nodeinfo['id']);
 $SMARTY->assign('nodeauthtype', $nodeauthtype);
+$SMARTY->assign('nodeedit_sortable_order', $SESSION->get_persistent_setting('nodeedit-sortable-order'));
 $SMARTY->display('node/nodeedit.html');
 
 ?>

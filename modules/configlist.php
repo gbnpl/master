@@ -3,7 +3,7 @@
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2013 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -24,29 +24,11 @@
  *  $Id$
  */
 
-function GetConfigList($order='var,asc', $section='', $search='')
-{
-	global $DB;
-
-	list($order, $direction) = sscanf($order, '%[^,],%s');
-
-	$direction = ($direction != 'desc') ? 'asc' : 'desc';
-
-	switch($order)
-	{
-		case 'section':
-			$sqlord = " ORDER BY section $direction, var";
-		break;
-		default:
-			$sqlord = " ORDER BY var $direction";
-		break;
-	}
+function GetConfigList() {
+	$DB = LMSDB::getInstance();
 
 	$config = $DB->GetAll('SELECT id, section, var, value, description as usercomment, disabled 
-			FROM uiconfig WHERE section != \'userpanel\''
-			.($section ? ' AND section = '.$DB->Escape($section) : '')
-			.($search ? ' AND var ?LIKE? '.$DB->Escape('%'.$search.'%') : '')
-			.$sqlord);
+			FROM uiconfig WHERE section != \'userpanel\'');
 
 	if($config) foreach ($config as $idx => $item)
 	{
@@ -54,7 +36,19 @@ function GetConfigList($order='var,asc', $section='', $search='')
 		{
 			case 'phpui':
 				switch($item['var'])
-				{
+				{	
+				case 'autosuggest_max_length':
+					$config[$idx]['description'] = trans('Max length of auto suggest proposal, further characters will be dotted.');
+				break;
+
+				case 'default_autosuggest_placement':
+					$config[$idx]['description'] = trans('Default placement of suggestion window (left/right/top/bottom)');
+				break;
+
+				case 'allow_from2':
+					$config[$idx]['description'] = trans('List of networks and IP addresses, with access to LMS. If empty, every IP address has access to LMS. When you write list of addresses or address pools here, LMS will dismiss every unwanted user with HTTP 403 error.');
+				break;
+
 				case 'allow_from':
 					$config[$idx]['description'] = trans('List of networks and IP addresses, with access to LMS. If empty, every IP address has access to LMS. When you write list of addresses or address pools here, LMS will dismiss every unwanted user with HTTP 403 error.');
 				break;
@@ -113,6 +107,10 @@ function GetConfigList($order='var,asc', $section='', $search='')
 				
 				case 'numberplanlist_pagelimit':
 					$config[$idx]['description'] = trans('Limit of records displayed on one page in numbering plans list. Default: 100.');
+				break;
+				
+				case 'billinglist_pagelimit':
+					$config[$idx]['description'] = trans('Limit of billings displayed on one page. Default: 100.');
 				break;
 
 				case 'divisionlist_pagelimit':
@@ -297,10 +295,35 @@ function GetConfigList($order='var,asc', $section='', $search='')
 					$config[$idx]['description'] = trans('Automatically adjusts the size of the selection list to the number of users when set to 0.');
 				break;
 
+				case 'ping_type':
+					$config[$idx]['description'] = trans('Default ping type. You can use "1" for ping or "2" for arping. Default: 1.');
+				break;
+				
+                                case 'default_teryt_city':
+					$config[$idx]['description'] = trans('Default City in TERYT. Set city id in TERYT.');
+				break;
+
 				default:
 					$config[$idx]['description'] = trans('Unknown option. No description.');
 				break;
 			} //end: var
+			break;
+
+			case 'payments':
+				switch($item['var'])
+				{
+					case 'date_format':
+						$config[$idx]['description'] = trans('Define date format for variable: %period, %aligned_period, %current_month used in payments.comment and payments.settlement_comment');
+					break;
+
+					case 'default_unit_name':
+						$config[$idx]['description'] = trans('Unit name on invoice, default: "pcs."');
+					break;
+
+					default:
+						$config[$idx]['description'] = trans('Unknown option. No description.');
+					break;
+				} //end: var
 			break;
 
 			case 'finances':
@@ -465,6 +488,26 @@ function GetConfigList($order='var,asc', $section='', $search='')
 						$config[$idx]['description'] = trans('SMTP settings.');
 					break;
 
+					case 'backend':
+						$config[$idx]['description'] = trans('Mail backend settings. Available options: pear or phpmailer.');
+					break;
+
+					case 'phpmailer_from':
+						$config[$idx]['description'] = trans('E-mail address from which we send mail.');
+					break;
+
+					case 'phpmailer_from_name':
+						$config[$idx]['description'] = trans('E-mail address name from which we send mail.');
+					break;
+
+					case 'phpmailer_is_html':
+						$config[$idx]['description'] = trans('Email message in html format.');
+					break;
+
+					case 'smtp_secure':
+						$config[$idx]['description'] = trans('Security protocol. Available options: ssl or tls.');
+					break;
+
 					default:
 						$config[$idx]['description'] = trans('Unknown option. No description.');
 					break;
@@ -553,64 +596,21 @@ function GetConfigList($order='var,asc', $section='', $search='')
 			$config[$idx]['usercomment'] = str_replace("\n", '<br>', $config[$idx]['usercomment']);
 	} //end: foreach
 
-	$config['total'] = sizeof($config);
-	$config['order'] = $order;
-	$config['direction'] = $direction;
-	$config['section'] = $section;
-
 	return $config;
 }
 
 $layout['pagetitle'] = trans('User Interface Configuration');
 
-if(!isset($_GET['o']))
-	$SESSION->restore('conlo', $o);
-else
-	$o = $_GET['o'];
-$SESSION->save('conlo', $o);
+$configlist = GetConfigList();
 
-if(!isset($_GET['s']))
-        $SESSION->restore('conls', $s);
-else
-	$s = $_GET['s'];
-$SESSION->save('conls', $s);
-
-if(!isset($_GET['n']))
-    $SESSION->restore('conln', $n);
-else
-	$n = $_GET['n'];
-$SESSION->save('conln', $n);
-
-if ($SESSION->is_set('conlp') && !isset($_GET['page']))
-	$SESSION->restore('conlp', $_GET['page']);
-
-$configlist = GetConfigList($o, $s, $n);
-
-$listdata['total'] = $configlist['total'];
-$listdata['order'] = $configlist['order'];
-$listdata['direction'] = $configlist['direction'];
-$listdata['section'] = $configlist['section'];
-$listdata['search'] = $n;
-
-unset($configlist['total']);
-unset($configlist['order']);
-unset($configlist['direction']);
-unset($configlist['section']);
-
-$page = (!isset($_GET['page']) ? 1 : $_GET['page']); 
-$pagelimit = ConfigHelper::getConfig('phpui.configlist_pagelimit', $listdata['total']);
-$start = ($page - 1) * $pagelimit;
-
-$SESSION->save('conlp', $page);
+$pagelimit = ConfigHelper::getConfig('phpui.configlist_pagelimit', count($configlist));
 
 $SESSION->save('backto', $_SERVER['QUERY_STRING']);
 
 $SMARTY->assign('sections', $LMS->GetConfigSections());
 $SMARTY->assign('pagelimit', $pagelimit);
-$SMARTY->assign('page', $page);
-$SMARTY->assign('start', $start);
 $SMARTY->assign('configlist', $configlist);
-$SMARTY->assign('listdata', $listdata);
+$SMARTY->assign('section', isset($_GET['s']) ? $_GET['s'] : '');
 $SMARTY->display('config/configlist.html');
 
 ?>

@@ -1,10 +1,10 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -25,7 +25,7 @@
  *  $Id$
  */
 
-ini_set('error_reporting', E_ALL&~E_NOTICE);
+ini_set('error_reporting', E_ALL & ~E_NOTICE);
 
 $parameters = array(
 	'C:' => 'config-file:',
@@ -34,7 +34,8 @@ $parameters = array(
 	'v' => 'version',
 	't' => 'test',
 	'f:' => 'fakedate:',
-	'i:' => 'invoiceid:',
+	'g:' => 'fakehour:',
+	'e:' => 'extra-file:',
 );
 
 foreach ($parameters as $key => $val) {
@@ -52,7 +53,7 @@ foreach ($short_to_longs as $short => $long)
 if (array_key_exists('version', $options)) {
 	print <<<EOF
 lms-sendinvoices.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 	exit(0);
@@ -61,7 +62,7 @@ EOF;
 if (array_key_exists('help', $options)) {
 	print <<<EOF
 lms-sendinvoices.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 -C, --config-file=/etc/lms/lms.ini      alternate config file (default: /etc/lms/lms.ini);
 -h, --help                      print this help and exit;
@@ -69,7 +70,8 @@ lms-sendinvoices.php
 -v, --version                   print version info and exit;
 -q, --quiet                     suppress any output, except errors;
 -f, --fakedate=YYYY/MM/DD       override system date;
--i, --invoiceid=N               send only selected invoice
+-g, --fakehour=HH               override system hour; if no fakehour is present - current hour will be used;
+-e, --extra-file=/tmp/file.pdf  send additional file as attachment
 
 EOF;
 	exit(0);
@@ -79,7 +81,7 @@ $quiet = array_key_exists('quiet', $options);
 if (!$quiet) {
 	print <<<EOF
 lms-sendinvoices.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 }
@@ -110,11 +112,14 @@ define('LIB_DIR', $CONFIG['directories']['lib_dir']);
 define('SMARTY_COMPILE_DIR', $CONFIG['directories']['smarty_compile_dir']);
 define('SMARTY_TEMPLATES_DIR', $CONFIG['directories']['smarty_templates_dir']);
 
-// Load autoloader
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'autoloader.php');
+define('K_TCPDF_EXTERNAL_CONFIG', true);
 
-// Do some checks and load config defaults
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'config.php');
+// Load autoloader
+$composer_autoload_path = SYS_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (file_exists($composer_autoload_path))
+	require_once $composer_autoload_path;
+else
+	die("Composer autoload not found. Run 'composer install' command from LMS directory and try again. More informations at https://getcomposer.org/" . PHP_EOL);
 
 // Init database
 
@@ -128,9 +133,10 @@ try {
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
-$filetype = ConfigHelper::getConfig('invoices.type', '');
+$invoice_filetype = ConfigHelper::getConfig('invoices.type', '');
+$dnote_filetype = ConfigHelper::getConfig('notes.type', '');
 
-if ($filetype != 'pdf') {
+if ($invoice_filetype != 'pdf' || $dnote_filetype != 'pdf') {
 	// Initialize templates engine (must be before locale settings)
 	$SMARTY = new LMSSmarty;
 
@@ -151,18 +157,14 @@ if ($filetype != 'pdf') {
 
 // Include required files (including sequence is important)
 
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
 include_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
 require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'unstrip.php');
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'SYSLOG.class.php');
 
-if (ConfigHelper::checkConfig('phpui.logging') && class_exists('SYSLOG'))
-	$SYSLOG = new SYSLOG($DB);
-else
-	$SYSLOG = null;
+$SYSLOG = SYSLOG::getInstance();
 
-if ($filetype != 'pdf') {
+if ($invoice_filetype != 'pdf' || $dnote_filetype != 'pdf') {
 	// Set some template and layout variables
 
 	$SMARTY->setTemplateDir(null);
@@ -185,29 +187,44 @@ if ($filetype != 'pdf') {
 }
 
 // now it's time for script settings
-$host = ConfigHelper::getConfig('sendinvoices.smtp_host');
-$port = ConfigHelper::getConfig('sendinvoices.smtp_port');
-$user = ConfigHelper::getConfig('sendinvoices.smtp_user');
-$pass = ConfigHelper::getConfig('sendinvoices.smtp_pass');
-$auth = ConfigHelper::getConfig('sendinvoices.smtp_auth');
+$smtp_options = array(
+	'host' => ConfigHelper::getConfig('sendinvoices.smtp_host'),
+	'port' => ConfigHelper::getConfig('sendinvoices.smtp_port'),
+	'user' => ConfigHelper::getConfig('sendinvoices.smtp_user'),
+	'pass' => ConfigHelper::getConfig('sendinvoices.smtp_pass'),
+	'auth' => ConfigHelper::getConfig('sendinvoices.smtp_auth'),
+	'ssl_verify_peer' => ConfigHelper::checkValue(ConfigHelper::getConfig('sendinvoices.smtp_ssl_verify_peer', true)),
+	'ssl_verify_peer_name' => ConfigHelper::checkValue(ConfigHelper::getConfig('sendinvoices.smtp_ssl_verify_peer_name', true)),
+	'ssl_allow_self_signed' => ConfigHelper::checkConfig('sendinvoices.smtp_ssl_allow_self_signed'),
+);
 
-$debug_email = ConfigHelper::getConfig('sendinvoices.debug_email', '');
-$sender_name = ConfigHelper::getConfig('sendinvoices.sender_name', '');
-$sender_email = ConfigHelper::getConfig('sendinvoices.sender_email', '');
+$debug_email = ConfigHelper::getConfig('sendinvoices.debug_email', '', true);
+$sender_name = ConfigHelper::getConfig('sendinvoices.sender_name', '', true);
+$sender_email = ConfigHelper::getConfig('sendinvoices.sender_email', '', true);
 $mail_subject = ConfigHelper::getConfig('sendinvoices.mail_subject', 'Invoice No. %invoice');
 $mail_body = ConfigHelper::getConfig('sendinvoices.mail_body', ConfigHelper::getConfig('mail.sendinvoice_mail_body'));
 $invoice_filename = ConfigHelper::getConfig('sendinvoices.invoice_filename', 'invoice_%docid');
-$notify_email = ConfigHelper::getConfig('sendinvoices.notify_email', '');
+$dnote_filename = ConfigHelper::getConfig('sendinvoices.debitnote_filename', 'dnote_%docid');
+$notify_email = ConfigHelper::getConfig('sendinvoices.notify_email', '', true);
+$reply_email = ConfigHelper::getConfig('sendinvoices.reply_email', '', true);
+$add_message = ConfigHelper::checkConfig('sendinvoices.add_message');
+$dsn_email = ConfigHelper::getConfig('sendinvoices.dsn_email', '', true);
+$mdn_email = ConfigHelper::getConfig('sendinvoices.mdn_email', '', true);
+$count_limit = intval(ConfigHelper::getConfig('sendinvoices.limit', '0'));
 
 if (empty($sender_email))
 	die("Fatal error: sender_email unset! Can't continue, exiting." . PHP_EOL);
 
-$smtp_auth_type = ConfigHelper::getConfig('mail.smtp_auth_type');
-if (($auth || !empty($smtp_auth_type)) && !preg_match('/^LOGIN|PLAIN|CRAM-MD5|NTLM$/i', $auth ? $auth : $smtp_auth_type))
+$smtp_auth = empty($smtp_auth) ? ConfigHelper::getConfig('mail.smtp_auth_type') : $smtp_auth;
+if (!empty($smtp_auth) && !preg_match('/^LOGIN|PLAIN|CRAM-MD5|NTLM$/i', $smtp_auth))
 	die("Fatal error: smtp_auth setting not supported! Can't continue, exiting." . PHP_EOL);
 
 $fakedate = (array_key_exists('fakedate', $options) ? $options['fakedate'] : NULL);
-$invoiceid = (array_key_exists('invoiceid', $options) ? $options['invoiceid'] : NULL);
+$fakehour = (array_key_exists('fakedate', $options) ? $options['fakehour'] : NULL);
+
+$extrafile = (array_key_exists('extra-file', $options) ? $options['extra-file'] : NULL);
+if ($extrafile && !is_readable($extrafile))
+	die("Unable to read additional file [$extrafile]!" . PHP_EOL);
 
 function localtime2() {
 	global $fakedate;
@@ -218,25 +235,14 @@ function localtime2() {
 		return time();
 }
 
-$ftype = 'text/html';
-$fext = 'html';
-
-if ($filetype == 'pdf') {
-	$ftype = 'application/pdf';
-	$fext = 'pdf';
-}
-
+if (!empty($fakehour))
+	$curr_h = intval($fakehour);
+else
+	$curr_h = intval(date('H', time()));
 $timeoffset = date('Z');
 $currtime = localtime2() + $timeoffset;
-$month = intval(date('m', $currtime));
-$day = intval(date('d', $currtime));
-$year = intval(date('Y', $currtime));
 $daystart = (intval($currtime / 86400) * 86400) - $timeoffset;
 $dayend = $daystart + 86399;
-$from = $sender_email;
-
-if (!empty($sender_name))
-	$from = "$sender_name <$from>";
 
 // prepare customergroups in sql query
 $customergroups = " AND EXISTS (SELECT 1 FROM customergroups g, customerassignments ca 
@@ -256,89 +262,36 @@ if (!empty($groupsql))
 
 // Initialize Session, Auth and LMS classes
 
-$AUTH = NULL;
+$SYSLOG = null;
+$AUTH = null;
 $LMS = new LMS($DB, $AUTH, $SYSLOG);
 $LMS->ui_lang = $_ui_language;
 $LMS->lang = $_language;
 
-if (array_key_exists('test', $options)) {
-	$test = TRUE;
-	printf("WARNING! You are using test mode." . PHP_EOL);
-}
+$test = array_key_exists('test', $options);
+if ($test)
+	echo "WARNING! You are using test mode." . PHP_EOL;
 
-$query = "SELECT d.id, d.number, d.cdate, d.name, d.customerid, n.template, m.email
+if (!empty($count_limit))
+	$count_offset = $curr_h * $count_limit;
+
+$query = "SELECT d.id, d.number, d.cdate, d.name, d.customerid, d.type AS doctype, n.template, m.email
 		FROM documents d 
 		LEFT JOIN customers c ON c.id = d.customerid 
 		JOIN (SELECT customerid, " . $DB->GroupConcat('contact') . " AS email
 			FROM customercontacts WHERE (type & ?) = ? GROUP BY customerid) m ON m.customerid = c.id
 		LEFT JOIN numberplans n ON n.id = d.numberplanid 
-		WHERE c.deleted = 0 AND d.type IN (?, ?) AND c.invoicenotice = 1"
-			. (!empty($invoiceid) ? " AND d.id = " . $invoiceid : " AND d.cdate >= $daystart AND d.cdate <= $dayend")
+		WHERE c.deleted = 0 AND d.type IN (?, ?, ?) AND c.invoicenotice = 1
+			AND d.cdate >= $daystart AND d.cdate <= $dayend"
 			. (!empty($groupnames) ? $customergroups : "")
-		. " ORDER BY d.number";
-$docs = $DB->GetAll($query, array(CONTACT_INVOICES | CONTACT_DISABLED, CONTACT_INVOICES, DOC_INVOICE, DOC_CNOTE));
+		. " ORDER BY d.number" . (!empty($count_limit) ? " LIMIT $count_limit OFFSET $count_offset" : '');
+$docs = $DB->GetAll($query, array(CONTACT_EMAIL | CONTACT_INVOICES | CONTACT_DISABLED,
+	CONTACT_EMAIL | CONTACT_INVOICES, DOC_INVOICE, DOC_CNOTE, DOC_DNOTE));
 
-if (!empty($docs)) {
-	if ($filetype == 'pdf') {
-		$pdf_type = ConfigHelper::getConfig('invoices.pdf_type', 'tcpdf');
-		$pdf_type = ucwords($pdf_type);
-		$classname = 'LMS' . $pdf_type . 'Invoice';
-	}
-	foreach ($docs as $doc) {
-		if ($filetype == 'pdf')
-			$document = new $classname(trans('Invoices'));
-		else
-			$document = new LMSHtmlInvoice($SMARTY);
-
-		$invoice = $LMS->GetInvoiceContent($doc['id']);
-		$invoice['type'] = trans('ORIGINAL');
-		$document->Draw($invoice);
-		$res = $document->WriteToString();
-
-		$custemail = (!empty($debug_email) ? $debug_email : $doc['email']);
-		$invoice_number = (!empty($doc['template']) ? $doc['template'] : '%N/LMS/%Y');
-		$body = $mail_body;
-		$subject = $mail_subject;
-
-		$invoice_number = docnumber($doc['number'], $invoice_number, $doc['cdate'] + date('Z'));
-		$body = preg_replace('/%invoice/', $invoice_number, $body);
-		$body = preg_replace('/%balance/', $LMS->GetCustomerBalance($doc['customerid']), $body);
-		$day = sprintf("%02d",$day);
-		$month = sprintf("%02d",$month);
-		$year = sprintf("%04d",$year);
-		$body = preg_replace('/%today/', $year ."-". $month ."-". $day, $body);
-		$body = str_replace('\n', "\n", $body);
-		$subject = preg_replace('/%invoice/', $invoice_number, $subject);
-		$filename = preg_replace('/%docid/', $doc['id'], $invoice_filename);
-		$filename = str_replace('%number', $invoice_number, $filename);
-		$filename = preg_replace('/[^[:alnum:]_\.]/i', '_', $filename);
-		$doc['name'] = '"' . $doc['name'] . '"';
-
-		$mailto = array();
-		$mailto_qp_encoded = array();
-		foreach (explode(',', $custemail) as $email) {
-			$mailto[] = $doc['name'] . " <$email>";
-			$mailto_qp_encoded[] = qp_encode($doc['name']) . " <$email>";
-		}
-		$mailto = implode(', ', $mailto);
-		$mailto_qp_encoded = implode(', ', $mailto_qp_encoded);
-
-		if (!$quiet || $test)
-			printf("Invoice No. $invoice_number for $mailto" . PHP_EOL);
-
-		if (!$test) {
-			$headers = array('From' => $from, 'To' => $mailto_qp_encoded,
-				'Subject' => $subject);
-			if (!empty($notify_email))
-				$headers['Cc'] = $notify_email;
-			$res = $LMS->SendMail($custemail . ',' . $notify_email, $headers, $body,
-				array(0 => array('content_type' => $ftype, 'filename' => $filename . '.' . $fext,
-					'data' => $res)), $host, $port, $user, $pass, $auth);
-
-			if (is_string($res))
-				fprintf(STDERR, "Error sending mail: $res" . PHP_EOL);
-		}
-	}
-}
+if (!empty($docs))
+	$LMS->SendInvoices($docs, 'backend', compact('SMARTY', 'invoice_filetype', 'dnote_filetype' , 'invoice_filename', 'dnote_filename', 'debug_email',
+		'mail_body', 'mail_subject', 'currtime', 'sender_email', 'sender_name', 'extrafile',
+		'dsn_email', 'reply_email', 'mdn_email', 'notify_email', 'quiet', 'test', 'add_message',
+		'smtp_options'));
 
 ?>

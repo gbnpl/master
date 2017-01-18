@@ -1,18 +1,22 @@
-<TABLE class="lmsbox">
+<TABLE class="lmsbox lms-ui-sortable" id="customernetworksbox">
+	<COLGROUP>
+		<COL style="width: 99%;">
+		<COL style="width: 1%;">
+	</COLGROUP>
 	<THEAD>
-	<TR>
-		<TD style="width: 99%;" class="hand bold" onclick="showOrHide('networkspanel-{$layout.module}');">
+	<TR class="hand lmsbox-titlebar" data-lmsbox-content="networkspanel-{$layout.module}">
+		<TD class="bold">
 			<IMG src="img/network.gif" alt="">
 			{t a=$customernetworks|@count|default:"0"}Customer Networks ($a):{/t}
 		</TD>
-		<TD style="width: 1%;" class="text-right nobr">
+		<TD class="text-right nobr">
 			{if $customerinfo.status != $smarty.const.CSTATUS_INTERESTED && !$customerinfo.deleted}<A href="?m=netadd&amp;ownerid={$customerinfo.id}">{trans("New Network")} &raquo;</A>&nbsp;{/if}
 		</TD>
 	</TR>
 	</THEAD>
 	<TBODY>
 	<TR id="networkspanel-{$layout.module}" style="display:none;">
-		<TD style="width: 100%;" colspan="2">
+		<TD colspan="2">
 			<TABLE class="lmsbox-inner">
 				<THEAD>
 					<TR>
@@ -43,7 +47,7 @@
 							{$network.hostname}
 						</TD>
 						<TD class="nobr">
-							<A href="?m=netedit&networkset&id={$network.id}"><IMG src="img/{if $network.disabled}no{/if}access.gif" alt="[ {if $network.disabled}{trans("Connect")}{else}{trans("Disconnect")}{/if} ]" title="[ {if $network.disabled}{trans("Connect")}{else}{trans("Disconnect")}{/if} ]"></A>
+							<A href="?m=netedit&networkset&amp;id={$network.id}"><IMG src="img/{if $network.disabled}no{/if}access.gif" alt="[ {if $network.disabled}{trans("Connect")}{else}{trans("Disconnect")}{/if} ]" title="[ {if $network.disabled}{trans("Connect")}{else}{trans("Disconnect")}{/if} ]"></A>
 
 							<A href="?m=netdel&amp;id={$network.id}" onClick="return confirmLink(this, '{t a=$network.name}Are you sure, you want to remove network \'$a\' from database?{/t}')"><IMG src="img/delete.gif" alt="[ {trans("Delete")} ]" title="[ {trans("Delete")} ]"></A>
 							<A href="?m=netedit&amp;id={$network.id}"><IMG src="img/edit.gif" alt="[ {trans("Edit")} ]" title="[ {trans("Edit")} ]"></A>
@@ -53,9 +57,7 @@
 					{foreachelse}
 					<TR>
 						<TD class="empty-table" colspan="5">
-							<P>&nbsp;</P>
 							<P>{if $customerinfo.deleted}<span class="red">{trans("That customer has been deleted.")}</span>{else}{trans("That customer hasn't got any network.")}{/if}</P>
-							<P>&nbsp;</P>
 						</TD>
 					</TR>
 					{/foreach}
@@ -66,9 +68,7 @@
 </TABLE>
 <SCRIPT type="text/javascript">
 <!--
-if (getCookie('networkspanel-{$layout.module}') == '1')
-{
-	document.getElementById('networkspanel-{$layout.module}').style.display = '';
-}
+	if (getCookie('networkspanel-{$layout.module}') == '1')
+		document.getElementById('networkspanel-{$layout.module}').style.display = '';
 //-->
 </SCRIPT>

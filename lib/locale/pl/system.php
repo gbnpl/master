@@ -3,7 +3,7 @@
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2013 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -73,21 +73,6 @@ function check_zip($zip)
 	return preg_match('/^[0-9]{2}-[0-9]{3}$/', $zip);
 }
 
-function check_gg($im)
-{
-	return preg_match('/^[0-9]{0,32}$/', $im);  // gadu-gadu ID check
-}
-
-function check_yahoo($im)
-{
-	return preg_match('/^[-_.a-z0-9]{0,32}$/i', $im);
-}
-
-function check_skype($im)
-{
-	return preg_match('/^[-_.a-z0-9]{0,32}$/i', $im);
-}
-
 function check_regon($regon)
 {
 	$regon = str_replace('-', '', $regon);
@@ -145,30 +130,15 @@ function check_icn($icn)
 	return preg_match('/^[A-Z]{2}[0-9]{7}$/i', $icn) || preg_match('/^[A-Z]{3}[0-9]{6}$/i', $icn);
 }
 
-function bankaccount($id, $account=NULL)
-{
-	global $DB;
-
-	if($account === NULL)
-		$account = $DB->GetOne('SELECT account FROM divisions
-			WHERE id IN (SELECT divisionid
-                    		FROM customers WHERE id = ?)', array($id));	
-
-	$acclen = strlen($account);
-	
-	if(!empty($account) && $acclen < 21 && $acclen >= 8)
-	{
-		$cc = '2521';	// Kod kraju - Polska
-		$format = '%0'.(24 - $acclen) .'d';
-		$account .= sprintf($format, $id);
-		return sprintf('%02d', 98-bcmod($account.$cc.'00', 97)).$account;
-	} 
-
-	return $account;
+function bankaccount($id, $account = NULL) {
+	return iban_account('PL', 26, $id, $account);
 }
 
-function format_bankaccount($account)
-{
+function check_bankaccount($account) {
+	return iban_check_account('PL', 26, $account);
+}
+
+function format_bankaccount($account) {
 	return preg_replace('/(..)(....)(....)(....)(....)(....)(....)/i', '${1} ${2} ${3} ${4} ${5} ${6} ${7}', $account);
 }
 
