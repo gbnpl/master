@@ -2,17 +2,22 @@
 <script type="text/javascript" src="img/{LMSStockPlugin::plugin_directory_name}/js/jquery.simplemodal.js"></script>
 <link href="img/{LMSStockPlugin::plugin_directory_name}/js/jquery.simplemodal.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="img/{LMSStockPlugin::plugin_directory_name}/js/common.js"></script>
+<script type="text/javascript">
+<!--
+	var $stock = $.noConflict();
+//-->
+</script>
 <TABLE CELLPADDING="3" width="100%">
 	<TR class="dark">
 		<TD COLSPAN="10" ALIGN="right" class="fleftu frightu">
-			<A HREF="?m={$module}&amp;ssp={!$ssp}"{if $ssp} CLASS="bold"{/if}>{trans("Show sold positions")}</A>
+			<A HREF="?m={$module}&ssp={if $ssp}0{else}1{/if}">{if $ssp}{trans("Show unsold positions")}{else}{trans("Show sold positions")}{/if}</A>
 		</TD>
 	<TR class="dark" {tip text="Click on column name to change sorting order"}>
 		<TD class="fleftu" width="30%">
 			<IMG src="img/producer.gif" ALT="">&nbsp;<A href="?m={$module}&o=name{if $listdata.direction eq "asc" && $listdata.order eq "name"},desc{/if}"><B>{trans("Name:")}</B></A> {if $listdata.order eq "name"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}<BR>
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
-			{trans("Serial number:")}
+			<A href="?m={$module}&o=sn{if $listdata.direction eq "asc" && $listdata.order eq "sn"},desc{/if}">{trans("Serial number:")}</A> {if $listdata.order eq "sn"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="left" valign="top" NOWRAP>
 			<A href="?m={$module}&o=warehouse{if $listdata.direction eq "asc" && $listdata.order eq "warehouse"},desc{/if}">{trans("Warehouse")}:</A> {if $listdata.order eq "warehouse"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
@@ -39,7 +44,7 @@
 			{trans("Gross Value:")}
 		</TD>
 		<TD CLASS="fbt" width="1%" align="right" valign="top" NOWRAP>
-			<A href="?m=stckproductlist&o=id{if $listdata.direction eq "asc" && $listdata.order eq "id"},desc{/if}">ID:</A> {if $listdata.order eq "id"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
+			<A href="?m={$module}&o=id{if $listdata.direction eq "asc" && $listdata.order eq "id"},desc{/if}">ID:</A> {if $listdata.order eq "id"}<IMG src="img/{if $listdata.direction eq "desc"}asc{else}desc{/if}_order.gif" alt="">{/if}
 		</TD>
 		<TD width="1%" class="frightu" align="right" nowrap>
 <!--			<A href="?m=stckproductadd">{trans("Add product")} <IMG src="img/save.gif" alt=""> </A>	-->

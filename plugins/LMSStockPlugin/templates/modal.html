@@ -2,12 +2,17 @@
 <script type="text/javascript" src="img/{LMSStockPlugin::plugin_directory_name}/js/jquery.simplemodal.js"></script>
 <link href="img/{LMSStockPlugin::plugin_directory_name}/js/jquery.simplemodal.css" rel="stylesheet" type="text/css">
 <script type="text/javascript" src="img/{LMSStockPlugin::plugin_directory_name}/js/common.js"></script>
+<script type="text/javascript">
+<!--
+	var $stock = $.noConflict();
+//-->
+</script>
 {if $success}
 <script type="text/javascript">
 <!--
-$(document).ready(function() {
+$stock(document).ready(function() {
 	{if $reload}parent.location.reload();{/if}
-	parent.$.modal.close();
+	parent.$stock.modal.close();
 }
 );
 //-->

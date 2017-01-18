@@ -5,6 +5,11 @@
 {include file="modal.html"}
 {/if}
 <script type="text/javascript" src="img/{LMSStockPlugin::plugin_directory_name}/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">
+<!--
+	var $stock = $.noConflict();
+//-->
+</script>
 <P><FORM METHOD="POST" ACTION="?m=stckproductadd{if $layout.popup}&popup=1{/if}" NAME="productadd">
 <INPUT type="submit" class="hiddenbtn">
 <TABLE WIDTH="100%" CELLPADDING="3">
@@ -118,7 +123,7 @@
 	<TR class="light">
 		<TD width="100%" class="fbottomu" COLSPAN="2" align="right">
 			<A HREF="#" id="fs" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
-			<A HREF="{if $layout.popup}javascript:parent.$.modal.close();{else}?m=stckproductlist{/if}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
+			<A HREF="{if $layout.popup}javascript:parent.$stock.modal.close();{else}?m=stckproductlist{/if}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
 			<label><INPUT type="checkbox" name="productadd[reuse]" id="productadd[reuse]" value="ON" {if $productadd.reuse}checked{/if}> {trans("Display this form again, when this product is saved")}</label>
 		</TD>
 	</TR>
@@ -127,15 +132,15 @@
 <SCRIPT type="text/javascript">
 <!--
 document.forms['productadd'].elements['productadd[name]'].focus();
-$(document).ready(function() {
+$stock(document).ready(function() {
 
 var submited = 0;
 
-$('#fs').click(function(e) {
+$stock('#fs').click(function(e) {
 	e.preventDefault();
 
 	if (!submited) {
-		$('form[name="productadd"]').submit();
+		$stock('form[name="productadd"]').submit();
 		submited =1;
 	} else {
 		alert('{trans("Form already sent!")}');

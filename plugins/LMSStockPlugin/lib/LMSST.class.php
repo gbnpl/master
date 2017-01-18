@@ -587,7 +587,7 @@ class LMSST {
 			$product['price']['taxid'],
 			(string) str_replace(',','.', $product['price']['gross']),
 			$product['group'],
-			$product['warranty']
+			empty($product['warranty']) ? null : $product['warranty'],
 			)))
 			return $this->db->GetLastInsertID('stck_stock');
 		else
@@ -659,6 +659,9 @@ class LMSST {
 		switch($order) {
 			case 'id':
 				$sqlord = ' ORDER BY p.id';
+				break;
+			case 'sn':
+				$sqlord = ' ORDER BY s.serialnumber';
 				break;
 			case 'name':
 				$sqlord = ' ORDER BY pname';

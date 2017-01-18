@@ -15,6 +15,7 @@ $_LANG['Receive Note Info: $a'] = 'Dane dokumentu przyjęcia: $a';
 $_LANG['Receive notes list'] = 'Lista dokumentów przyjęcia';
 $_LANG['Show paid receive notes'] = 'Pokaż zapłacone dokumenty';
 $_LANG['Show sold positions'] = 'Pokaż sprzedane pozycje';
+$_LANG['Show unsold positions'] = 'Pokaż niesprzedane pozycje';
 $_LANG['Manufacturers'] = 'Producenci';
 $_LANG['Manufacturer'] = 'Producent';
 $_LANG['Add manufacturer'] = 'Dodaj producenta';
@@ -129,5 +130,14 @@ $_LANG['Edit receive note'] = 'Edycja dokumentu przyjęcia';
 $_LANG['Edit product group'] = 'Edycja grupy produktów';
 $_LANG['Edit manufacturer'] = 'Edycja producenta';
 $_LANG['Edit warehouse'] = 'Edycja magazynu';
+
+$_LANG['Deletion of product with ID: $a'] = 'Usuwanie produktu o identyfikatorze: $a';
+$_LANG['Product on stock can\'t be deleted.'] = 'Produkt znajdujący się magazynie nie może być usunięty.';
+
+$_LANG['Sell date:'] = 'Data sprzedaży:';
+$_LANG['Sell price:'] = 'Cena sprzedaży:';
+$_LANG['Product\'s sale date'] = 'Data sprzedaży produktu';
+
+$_LANG['Buy report'] = 'Raport zakupów';
 
 ?>

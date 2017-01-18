@@ -75,16 +75,16 @@
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/calendar.gif" ALT="">
-			<B>{trans("Sell date")}:</B>
+			<B>{trans("Sell date:")}</B>
 		</TD>
 		<TD CLASS="fright">
-			<INPUT type="TEXT" name="productedit[leavedate]" value="{$productedit.leavedate|date_format:"%Y/%m/%d"}" OnClick="cal3.popup();" {tip text="Product`s sale date" trigger="leavedate"} SIZE="10">
+			<INPUT type="TEXT" name="productedit[leavedate]" value="{$productedit.leavedate|date_format:"%Y/%m/%d"}" OnClick="cal3.popup();" {tip text="Product's sale date" trigger="leavedate"} SIZE="10">
 		</TD>
 	</TR>
 	<TR class="light">
 		<TD WIDTH="1%" CLASS="fleft" NOWRAP>
 			<IMG SRC="img/money.gif" ALT="">
-			<B>{trans("Sell price")}:</B>
+			<B>{trans("Sell price:")}</B>
 		</TD>
 		<TD CLASS="fright">
 			<INPUT type="text" name="productedit[pricesell]" SIZE="6" style="text-align: right;" VALUE="{$productedit.pricesell}" {tip text="Enter value" trigger="pricesell"}>
@@ -102,7 +102,7 @@
 	<TR class="light">
 		<TD width="100%" class="fbottomu" COLSPAN="2" align="right">
 			<A HREF="javascript:document.productedit.submit();" accesskey="s">{trans("Submit")} <IMG SRC="img/save.gif" ALT=""></A>
-			<A HREF="{if $layout.popup}javascript:parent.$.modal.close();{else}?m=stckproductlist{/if}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
+			<A HREF="{if $layout.popup}javascript:parent.$stock.modal.close();{else}?m=stckproductlist{/if}">{trans("Cancel")} <IMG SRC="img/cancel.gif" ALT=""></A><BR>
 		</TD>
 	</TR>
 </TABLE>
@@ -111,9 +111,6 @@
 <!--
 var cal3 = new calendar(document.forms['productedit'].elements['productedit[leavedate]']);
 cal3.time_comp = false;
-{if !$productedit.leavedate}
-document.forms['productedit'].elements['productedit[leavedate]'].value = '0';
-{/if}
 //-->
 </SCRIPT>
 {/block}

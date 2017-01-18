@@ -153,7 +153,6 @@ class StockInitHandler {
 
 		$menu_keys = array_keys($hook_data);
 		$i = array_search('hosting', $menu_keys);
-		array_splice($hook_data, $i + 1, 0, $menu_stock);
 
 		$hook_data = array_merge(
 			array_slice($hook_data, 0, $i, true),
