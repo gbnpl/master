@@ -1,8 +1,9 @@
 <?php
+
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -30,7 +31,8 @@ $parameters = array(
 	'q' => 'quiet',
 	'h' => 'help',
 	'v' => 'version',
-	'f:' => 'fakedate:',
+	's:' => 'start-date:',
+	'e:' => 'end-date:',
 );
 
 foreach ($parameters as $key => $val) {
@@ -48,7 +50,7 @@ foreach ($short_to_longs as $short => $long)
 if (array_key_exists('version', $options)) {
 	print <<<EOF
 tvbillingimport.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 	exit(0);
@@ -57,13 +59,14 @@ EOF;
 if (array_key_exists('help', $options)) {
 	print <<<EOF
 tvbillingimport.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 -C, --config-file=/etc/lms/lms.ini      alternate config file (default: /etc/lms/lms.ini);
 -h, --help                      print this help and exit;
 -v, --version                   print version info and exit;
 -q, --quiet                     suppress any output, except errors
--f, --fakedate=YYYY/MM/DD       override system date
+-s, --start-date=YYYY/MM/DD     start date for imported billing events
+-e, --end-date=YYYY/MM/DD       end date for imported billing events
 
 EOF;
 	exit(0);
@@ -73,7 +76,7 @@ $quiet = array_key_exists('quiet', $options);
 if (!$quiet) {
 	print <<<EOF
 tvbillingimport.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 }
@@ -105,10 +108,11 @@ define('PLUGIN_DIR', $CONFIG['directories']['plugin_dir']);
 define('PLUGINS_DIR', $CONFIG['directories']['plugin_dir']);
 
 // Load autoloader
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'autoloader.php');
-
-// Do some checks and load config defaults
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'config.php');
+$composer_autoload_path = SYS_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (file_exists($composer_autoload_path))
+	require_once $composer_autoload_path;
+else
+	die("Composer autoload not found. Run 'composer install' command from LMS directory and try again. More informations at https://getcomposer.org/" . PHP_EOL);
 
 // Init database
 
@@ -122,40 +126,43 @@ try {
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
-function localtime2() {
-	global $fakedate;
-	if (!empty($fakedate)) {
-		$date = explode("/", $fakedate);
-		return mktime(0, 0, 0, $date[1], $date[2], $date[0]);
-	} else
-		return time();
-}
+if (array_key_exists('start-date', $options)) {
+	$date = explode('/', $options['start-date']);
+	$start_date = mktime(0, 0, 0, $date[1], $date[2], $date[0]);
+} else
+	$start_date = date("Y-m-d", mktime(0, 0, 0, intval(strftime("%m")) - 1, 1, strftime("%Y")));
 
-$fakedate = (array_key_exists('fakedate', $options) ? $options['fakedate'] : NULL);
+if (array_key_exists('end-date', $options)) {
+	$date = explode('/', $options['end-date']);
+	$end_date = mktime(23, 59, 59, $date[1], $date[2], $date[0]);
+} else
+	$end_date = time();
 
 $AUTH = null;
 $SYSLOG = null;
 $LMSTV = new LMSTV($DB, $AUTH, $SYSLOG);
 
-$year = strftime("%Y", localtime2());
-$month = intval(strftime("%m", localtime2()));
-$start_date = date("Y-m-d", mktime(0, 0, 0, $month - 1, 1, $year));
-//$end_date = date("Y-m-d", mktime(23, 59, 59, $month, 0, $year));
-$end_date = date("Y-m-d");
-//echo "$start_date\n";
-//echo "$end_date\n";
+$suspended_customers = $DB->GetAllByKey('SELECT id, tv_suspend_billing FROM customers
+	WHERE tv_suspend_billing <> 0', 'id');
 
-$res = $LMSTV->GetBillingEvents($start_date, $end_date);
+$res = $LMSTV->GetBillingEvents(date('Y-m-d', $start_date), date('Y-m-d', $end_date));
 
 if (!empty($res)) {
-	foreach ($res as $key => $r){
+	foreach ($res as $key => $r) {
 		try {
 			if ($DB->GetOne('SELECT beid FROM tv_billingevent WHERE beid = ?', array($r['id'])))
 				continue;
-			$DB->Execute('INSERT INTO tv_billingevent (customerid, account_id, be_selling_date, be_desc, be_vat, be_gross, be_b2b_netto, group_id, cust_number, package_id, hash, beid)
-				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+
+			if (empty($r['cust_external_id']))
+				$custid = 0;
+			else
+				$custid = intval($r['cust_external_id']);
+
+			$DB->Execute('INSERT INTO tv_billingevent (customerid, account_id, be_selling_date, be_desc, be_vat, be_gross, be_b2b_netto,
+					group_id, cust_number, package_id, tv_suspend_billing, hash, beid)
+				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
 				array(
-					empty($r['cust_external_id']) ? 0 : $r['cust_external_id'],
+					$custid,
 					$r['account_id'],
 					$r['be_selling_date'],
 					$r['be_desc'],
@@ -165,6 +172,7 @@ if (!empty($res)) {
 					empty($r['group_id']) ? 0 : $r['group_id'],
 					$r['cust_number'],
 					$r['package_id'],
+					$custid && isset($suspended_customers[$custid]) ? $suspended_customers[$custid]['tv_suspend_billing'] : 0,
 					md5($r['id']),
 					$r['id'],
 				)

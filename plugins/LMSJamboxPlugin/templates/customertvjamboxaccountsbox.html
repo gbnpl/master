@@ -17,20 +17,24 @@
 	<div id="#errormsg" class="errormsg">{$errormsg}</div>
 {/if}
 
-<TABLE class="lmsbox">
+<TABLE class="lmsbox lms-ui-sortable" id="jambox-accounts">
+	<COLGROUP>
+		<COL style="width: 99%;">
+		<COL style="width: 1%;">
+	</COLGROUP>
 	<THEAD>
-	<TR class="hand">
-		<TD style="width: 99%;" class="fleftu hand bold" onclick="showOrHide('tvjamboxaccountspanel');">
+	<TR class="hand lmsbox-titlebar" data-lmsbox-content="jambox-account-panel" onclick="showOrHide('jambox-account-panel')">
+		<TD class="bold">
 			<a name="tvaccountbox"></a>
 			<IMG src="img/{LMSJamboxPlugin::plugin_directory_name}/tv_icon.png" alt="">
 			{t a=$customertvjamboxaccounts|@count|default:"0"}Konta TV ($a){if $accblockednum > 0}<span style="color: red;"> ({$accblockednum} wstrzymane)</span>{/if}:{/t}
 		</TD>
-		<TD style="width: 1%;" class="frightu text-right nobr">
-			{if $cust_data.cust_number > 0}			
+		<TD class="text-right nobr">
+			{if $cust_data.cust_number > 0}
 			Numer klienta: {$cust_data.cust_number}, jPIN: {$cust_data.cust_vod_pin}, tvPIN: {$cust_data.cust_master_pin}
-			<a href="#tv-edit-pin0" class="hand" onclick="showOrHide('tv-tr-edit');showOrHide('tv-edit-pin');">Edytuj piny &raquo;</A>					
+			<a href="#tv-edit-pin0" class="hand" onclick="showOrHide('tv-tr-edit');showOrHide('tv-edit-pin');">Edytuj piny &raquo;</A>
 			{/if}
-			{if $customerinfo.status neq "1" and ! $customerinfo.deleted}<a href="#tv-add-account0" class="hand" onclick="showOrHide('tv-tr-edit');showOrHide('tv-add-account');">Nowe konto &raquo;</A>&nbsp;{/if}
+			{if $customerinfo.status != '1' && !$customerinfo.deleted}<a href="#tv-add-account0" class="hand" onclick="showOrHide('tv-tr-edit');showOrHide('tv-add-account');">Nowe konto &raquo;</A>&nbsp;{/if}
 		</TD>
 	</TR>
 	</THEAD>
@@ -84,8 +88,8 @@
 				</div>		
 		</td>
 	</tr>
-	<TR id="tvjamboxaccountspanel" style="display:none;">
-		<TD style="width: 100%;" colspan="2" class="fall">
+	<TR id="jambox-account-panel" style="display:none;">
+		<TD colspan="2" class="fall">
 			<TABLE cellpadding="5" cellspacing="0" WIDTH="100%">
 				{foreach from=$customertvjamboxaccounts item=acc}
 				{if $acc.acc_closed eq 0}
@@ -177,10 +181,10 @@
 						{/foreach}
 					</table><br>	
 					{if $acc.subscriptions|@count eq 0 }
-					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj i aktywuj <img src="img/save.gif" alt=""></a>
-					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj nieaktywną <img src="img/save.gif" alt=""></a>
+					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.acttype.value=1;document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj i aktywuj <img src="img/save.gif" alt=""></a>&nbsp;&nbsp;&nbsp;
+					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.acttype.value=0;document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj nieaktywną <img src="img/save.gif" alt=""></a>&nbsp;&nbsp;&nbsp;
 					{else}
-					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj <img src="img/save.gif" alt=""></a>
+					&nbsp;&nbsp;&nbsp;<a href="javascript:document.formaddpackages{$acc.account_id}.acttype.value=0;javascript:document.formaddpackages{$acc.account_id}.submit();" accesskey="S" style="float:right">Dodaj <img src="img/save.gif" alt=""></a>&nbsp;&nbsp;&nbsp;
 					{/if}
 					<br><br>
 					<input type="hidden" id="account_id" name="account_id" value="{$acc.account_id}">
@@ -433,7 +437,7 @@
 </TABLE>
 <SCRIPT type="text/javascript">
 <!--
-if (getCookie('tvjamboxaccountspanel') == '1')
-	document.getElementById('tvjamboxaccountspanel').style.display = '';
+	if (getCookie('jambox-account-panel') == '1')
+		document.getElementById('jambox-account-panel').style.display = '';
 //-->
 </SCRIPT>

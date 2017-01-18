@@ -14,6 +14,8 @@
 setlocale(LC_ALL,"pl");
 
 function orderBy(&$data, $field, $dir) {
+	if (empty($data))
+		return;
 	if ($dir == "asc"){
 		$code = "return strnatcmp(strtolower(\$a['$field']), strtolower(\$b['$field']));";
 	} else {

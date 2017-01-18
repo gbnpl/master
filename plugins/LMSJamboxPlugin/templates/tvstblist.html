@@ -83,7 +83,7 @@
 		<TD class="valign-top">{$item.stb_ip}</TD>
 		<TD class="valign-top bold">
 			{if $item.stb_usage eq 'customer'}
-			<a href="{$smsurl}customer/show/id/{$item.cust_number|substr:3:6}">{$item.cust_number} <img src="img/customer.gif" alt="[ Klient w SMS ]"></a>
+			<a href="{$smsurl}customer/show/id/{$item.cust_number|substr:-6}">{$item.cust_number} <img src="img/customer.gif" alt="[ Klient w SMS ]"></a>
 			{/if}
 		</TD>
 		<TD class="valign-top bold">

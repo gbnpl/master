@@ -31,7 +31,7 @@
  */
 class LMSJamboxPlugin extends LMSPlugin {
 	const plugin_directory_name = 'LMSJamboxPlugin';
-	const PLUGIN_DBVERSION = '2015121500';
+	const PLUGIN_DBVERSION = '2016050400';
 	const PLUGIN_NAME = 'Jambox';
 	const PLUGIN_DESCRIPTION = 'Jambox Platform Support';
 	const PLUGIN_AUTHOR = 'SGT/ITM Soft,<br>Tomasz Chiliński &lt;tomasz.chilinski@chilan.com&gt;';
@@ -53,6 +53,10 @@ class LMSJamboxPlugin extends LMSPlugin {
 			'menu_initialized' => array(
 				'class' => 'JamboxInitHandler',
 				'method' => 'menuInit'
+			),
+			'access_table_initialized' => array(
+				'class' => 'JamboxInitHandler',
+				'method' => 'accessTableInit'
 			),
 			'customerinfo_before_display' => array(
 				'class' => 'JamboxCustomerHandler',

@@ -102,10 +102,11 @@ define('SYS_DIR', $CONFIG['directories']['sys_dir']);
 define('LIB_DIR', $CONFIG['directories']['lib_dir']);
 
 // Load autoloader
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'autoloader.php');
-
-// Do some checks and load config defaults
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'config.php');
+$composer_autoload_path = SYS_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (file_exists($composer_autoload_path))
+	require_once $composer_autoload_path;
+else
+	die("Composer autoload not found. Run 'composer install' command from LMS directory and try again. More informations at https://getcomposer.org/" . PHP_EOL);
 
 // Init database
 
@@ -119,6 +120,7 @@ try {
 	die("Fatal error: cannot connect to database!" . PHP_EOL);
 }
 
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
 require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
 
@@ -141,6 +143,7 @@ function localtime2() {
 
 $addinvoices = ConfigHelper::checkConfig('jambox.tvbilling_addinvoices');
 
+$timeoffset = date('Z');
 $fakedate = (array_key_exists('fakedate', $options) ? $options['fakedate'] : NULL);
 $cdate = strftime("%s", localtime2());
 $year = strftime("%Y", localtime2());
@@ -148,9 +151,8 @@ $month = intval(strftime("%m", localtime2()));
 $start_date = date("Y-m-d", mktime(12, 0, 0, $month - 1, 1, $year));
 //$end_date = date("Y-m-d", mktime(12, 0, 0, $month, 0, $year));
 $end_date = date("Y-m-d");
-$starttime = intval($cdate / 86400) * 86400;
+$starttime = intval(($cdate + $timeoffset) / 86400) * 86400 - $timeoffset;
 $endtime = $starttime + 86400;
-
 $to_insert = array();
 
 // prepare customergroups in sql query
@@ -171,7 +173,7 @@ if (!empty($groupsql))
 
 $res = $DB->GetAll("SELECT b.* FROM tv_billingevent b
 	JOIN customers c ON c.id = b.customerid
-	WHERE c.tv_suspend_billing = ? AND (docid = 0 OR docid IS NULL)
+	WHERE b.tv_suspend_billing = ? AND (docid = 0 OR docid IS NULL)
 		AND be_selling_date >= ? AND be_selling_date <= ?
 		" . (!empty($groupnames) ? $customergroups : "") . "
 	ORDER BY account_id", array(0, $start_date, $end_date));
@@ -182,7 +184,7 @@ if (!empty($res))
 		$to_insert[$r['cust_number']][] = $r;
 	}
 if (empty($to_insert))
-	die("No billing records!\n");
+	die($quiet ? '' : "No billing records!" . PHP_EOL);
 
 $numbertemplates = array();
 $numberplans = array();
@@ -195,7 +197,7 @@ foreach ($results as $row)
 	if ($row['isdefault'])
 		$numberplans[$row['divid']] = $row['id'];
 if (empty($numberplans))
-	die("No invoice number plans found!\n");
+	die($quiet ? '' : "No invoice number plans found!" . PHP_EOL);
 
 //$DB->BeginTrans();
 foreach ($to_insert as $key => $i){
@@ -208,11 +210,11 @@ foreach ($to_insert as $key => $i){
 	else
 		$document = $DB->GetRow("SELECT MAX(d.id) AS id, MAX(itemid) AS itemid FROM documents d
 				JOIN invoicecontents ic ON ic.docid = d.id
-				WHERE customerid = ? AND sdate >= ? AND sdate < ?
-				GROUP BY d.id", array($customerid, $starttime, $endtime));
+				WHERE customerid = ? AND sdate >= ? AND sdate < ? AND d.type = ?
+				GROUP BY d.id", array($customerid, $starttime, $endtime, DOC_INVOICE));
 	if (empty($document)) {
 		$customer = $DB->GetRow("SELECT lastname, name, address, city, zip, ssn, ten, countryid, divisionid, paytime, paytype
-			FROM customers WHERE id = ?", array($customerid));
+			FROM customeraddressview WHERE id = ?", array($customerid));
 
 		if ($customer['paytime'] != -1)
 			$paytime = $customer['paytime'];
@@ -222,10 +224,11 @@ foreach ($to_insert as $key => $i){
 
 		if ($customer['paytype'])
 			$paytype = $customer['paytype'];
-		elseif ($paytype = $DB->GetOne("SELECT inv_paytype FROM divisions WHERE id = ?",
-			array($customer['divisionid'])) === NULL)
-			if (isset($PAYTYPES[$paytype]))
-				$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
+		else
+			$paytype = $DB->GetOne("SELECT inv_paytype FROM divisions WHERE id = ?",
+				array($customer['divisionid']));
+		if (empty($paytype) || !isset($PAYTYPES[$paytype]))
+			$paytype = intval(ConfigHelper::getConfig('invoices.paytype'));
 
 		$numberplanid = $customer['numberplanid'];
 		if (empty($numberplanid))

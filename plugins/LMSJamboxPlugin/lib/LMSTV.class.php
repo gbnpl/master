@@ -32,20 +32,27 @@ class send {
 		if (!isset($instance)) {
 			$c = __CLASS__;
 			$instance = new $c;
-			
+
 			try {
 				$instance->h = new Zend_XmlRpc_Client(ConfigHelper::getConfig('jambox.server', 'https://sms.sgtsa.pl/sms/xmlrpc'));
-				$instance->h->getHttpClient()->setHeaders(array('User-Agent: LMS SGT')); 
+				$instance->h->getHttpClient()->setHeaders(array('User-Agent: LMS SGT'));
+				$password = ConfigHelper::getConfig('jambox.password');
+				if (!preg_match('/^[0-9a-f]{32}$/', $password))
+					$password = md5($password);
 				$instance->auth_data = array(
 					'user_name' => ConfigHelper::getConfig('jambox.username'),
-					'user_pass' => ConfigHelper::getConfig('jambox.password'),
+					'user_pass' => $password,
 				);
-				
+
 			} catch (Exception $e) {;}
 		}
 		return $instance;
 	}
-	
+
+	public function setTimeout($timeout) {
+		$this->h->getHttpClient()->setConfig(array('timeout' => $timeout));
+	}
+
 	public function get($name, $params = array()){
 		array_unshift($params, $this->auth_data);
 		try {
@@ -104,8 +111,10 @@ class LMSTV extends LMS {
 		$this->tv_cache = Zend_Cache::factory('Page', 'File', $frontendOptions, $backendOptions);
 	
 		$_SESSION['tv_cache'] = ConfigHelper::checkValue(ConfigHelper::getConfig('jambox.cache', '1'));
+
+		$this->s->setTimeout(intval(ConfigHelper::getConfig('jambox.http_timeout', 10)));
 	}
-	
+
 	public function cleanCache() {
 		$this->tv_cache->clean(Zend_Cache::CLEANING_MODE_ALL);
 	}
@@ -117,6 +126,7 @@ class LMSTV extends LMS {
 	public function GetBillingEvents($start_date = '', $end_date = '', $id = '') {
 		$start_date = str_replace("/", "-", $start_date);
 		$end_date = str_replace("/", "-", $end_date);
+		$this->s->setTimeout(intval(ConfigHelper::getConfig('jambox.long_timeout', 30)));
 		return $this->s->get('billingEventsGet', array($start_date, $end_date, $id));
 	}
 	
@@ -166,14 +176,17 @@ class LMSTV extends LMS {
 				'cust_pesel' 		=> $customeradd['ssn'],
 				'cust_m_city' 		=> $customeradd['city'],
 				'cust_m_postal_code'	=> $customeradd['zip'],
-				'cust_m_street' 	=> $customeradd['address'],
-				'cust_m_home_nr' 	=> '.',
-				'cust_m_flat' 		=> '.',
-				'cust_c_city' 		=> $customeradd['city'],
-				'cust_c_postal_code'	=> $customeradd['zip'],
-				'cust_c_street' 	=> $customeradd['address'],
-				'cust_c_home_nr' 	=> '.',
-				'cust_c_flat' 		=> '.',
+				'cust_m_street'	=> $customeradd['street'],
+				'cust_m_home_nr'	=> empty($customeradd['building']) ? '.' : $customeradd['building'],
+				'cust_m_flat'		=> empty($customeradd['apartment']) ? '.' : $customeradd['apartment'],
+				'cust_c_city'		=> empty($customeradd['post_city']) ? $customeradd['city'] : $customeradd['post_city'],
+				'cust_c_postal_code'	=> empty($customeradd['post_zip']) ? $customeradd['zip'] : $customeradd['post_zip'],
+				'cust_c_street'		=> empty($customeradd['post_street']) ? $customeradd['street'] : $customeradd['post_street'],
+				'cust_c_home_nr'	=> empty($customeradd['post_building']) ? (empty($customeradd['building']) ? '.' : $customeradd['building'])
+											: $customeradd['post_building'],
+				'cust_c_flat' 		=> empty($customeradd['post_apartment']) ? (empty($customeradd['apartment']) ? '.' : $customeradd['apartment'])
+											: $customeradd['post_apartment'],
+				'cust_valid_num'	=> $customeradd['icn'],
 				'cust_external_id' => $customeradd['id'],
 			);
 
@@ -288,10 +301,11 @@ class LMSTV extends LMS {
 		if ((int)$cust_number) $id = $this->DB->GetOne('SELECT id FROM customers WHERE tv_cust_number = ?', array($cust_number));
 		
 		if (!$_SESSION['tv_cache'] || !$res = $this->tv_cache->load($cache_name)){
-			try{
+			try {
 				$res = $this->s->get('custList', array($cust_number));
-			}catch (Exception $e){
-			var_dump($e);
+			} catch (Exception $e){
+				//var_dump($e);
+				//$res = $e->getMessage();
 				$res = null;
 			}
 			if ($_SESSION['tv_cache']) $this->tv_cache->save($res, $cache_name, array('customer'.$id));

@@ -1,23 +1,27 @@
 <!--// $Id$ //-->
-<TABLE class="lmsbox">
+<TABLE class="lmsbox lms-ui-sortable" id="jambox-messages">
+	<COLGROUP>
+		<COL style="width: 99%;">
+		<COL style="width: 1%;">
+	</COLGROUP>
 	<THEAD>
-	<TR>
-		<TD class="fleftu hand" onCLick="showOrHide('tvmessagespanel');">
-                        <IMG src="img/mailsms.gif" alt="">
+	<TR class="hand lmsbox-titlebar" data-lmsbox-content="jambox-messages-panel" onclick="showOrHide('jambox-messages-panel')">
+		<TD>
+			<IMG src="img/mailsms.gif" alt="">
 			<span class="bold">Wiadomości wysłane na TV</span>
-						{if $limit}
-                                ({t a=$limit}last $a messages{/t})
-                        {/if}
-                </TD>
-                <TD class="frightu text-right nobr">
+			{if $limit}
+			({t a=$limit}last $a messages{/t})
+			{/if}
+		</TD>
+		<TD class="text-right nobr">
 			<A href="?m=tvmessagessend&customerid={$customerinfo.id}">{trans("New Message")} &raquo;</A>
 			<a href="?m=customerinfo&id={$customerinfo.id}&meldinger_delete_all={$customerinfo.id}" onclick="return confirmLink(this, 'Czy na pewno chcesz wykasować wszystkie wiadomości temu klientowi?')">Usuń wszystkie <img src="img/cancel.gif"></A>
-                </TD>
-        </TR>
-        </THEAD>
+		</TD>
+	</TR>
+	</THEAD>
         <TBODY>
-	<TR id="tvmessagespanel"  style="display:none;">
-		<TD width="100%" colspan="2" class="fall">
+	<TR id="jambox-messages-panel"  style="display:none;">
+		<TD colspan="2" class="fall">
 			<TABLE cellpadding="5" cellspacing="0" WIDTH="100%">
 	<tr class="dark">
 		<td></td>
@@ -66,7 +70,7 @@
 </TABLE>
 <SCRIPT type="text/javascript">
 <!--
-if (getCookie('tvmessagespanel') == '1')
-	document.getElementById('tvmessagespanel').style.display = '';
+	if (getCookie('jambox-messages-panel') == '1')
+		document.getElementById('jambox-messages-panel').style.display = '';
 //-->
 </SCRIPT>
