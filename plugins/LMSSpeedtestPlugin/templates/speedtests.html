@@ -1,16 +1,19 @@
 <!--// $Id$ //-->
-<TABLE class="lmsbox">
+<TABLE class="lmsbox lms-ui-sortable" id="speedtests">
+	<COLGROUP>
+		<COL style="width: 100%;">
+	</COLGROUP>
 	<THEAD>
-	<TR>
-		<TD class="fall hand" onclick="showOrHide('speedtestpanel');">
+	<TR class="hand lmsbox-titlebar" data-lmsbox-content="speedtestpanel" onclick="showOrHide('speedtestpanel')">
+		<TD class="fall">
 			<IMG src="img/traffic.gif" alt="">
-			<span class="bold"><A name="speedtests">{trans("Speed tests:")}</A></span> {t a=ConfigHelper::getConfig('speedtest.display_limit', 20)}(last $a tests){/t}
+			<span class="bold">{trans("Speed tests:")}</span> {t a=ConfigHelper::getConfig('speedtest.display_limit', 20)}(last $a tests){/t}
 		</TD>
 	</TR>
 	</THEAD>
 	<TBODY>
 	<TR id="speedtestpanel" style="display:none;">
-		<TD WIDTH="100%" class="fall">
+		<TD class="fall">
 			<TABLE cellpadding="5" cellspacing="0" WIDTH="100%">
 				<TR class="dark">
 					<TD class="fleftu bold nobr" style="width: 17%;">{trans("Date:")}</TD>
@@ -46,7 +49,7 @@
 </TABLE>
 <SCRIPT type="text/javascript">
 <!--
-	if (getCookie('speedtestpanel')=='1')
+	if (getCookie('speedtestpanel') == '1')
 		document.getElementById('speedtestpanel').style.display = '';
 //-->
 </SCRIPT>
