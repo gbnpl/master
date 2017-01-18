@@ -21,5 +21,3 @@ composer.lock
 *.swo
 
 /vendor/
-
-*.rrd

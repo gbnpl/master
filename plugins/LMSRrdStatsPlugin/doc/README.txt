@@ -4,7 +4,7 @@ Instalacja:
 3. Zainstalować pakiet narzędziowy rrdtool (narzędzia powłoki).
 
 Konfiguracja:
-1. Ustawienie konfiguracyjne rrdstats.directory wskazuje katalog w którym są składowane
+1. Ustawienie konfiguracyjne rrdstats.rrd_directory wskazuje katalog w którym są składowane
    statystyki w postaci plików rrd (domyślnie podkatalog rrd w katalogu głównym wtyczki)
 2. Ustawienie konfiguracyjne rrdstats.rrdtool_binary powinno wskazywać pełną ścieżkę
    do pliku rrdtool (domyślnie /usr/bin/rrdtool).
@@ -19,7 +19,7 @@ Konfiguracja:
    poprzez wyrażenia regularne wzorce komunikatów z pliku linelog
 
 Działanie:
-   Pliki ze statystykami w formacie rrd zbierane są w katalogu rrdstats.directory.
+   Pliki ze statystykami w formacie rrd zbierane są w katalogu rrdstats.rrd_directory.
 Do wypełniania danymi plików rrd trzeba uruchamiać cyklicznie, któreś ze skryptów z
 podkatalogu bin katalogu głównego wtyczki. Przeznaczenie skryptów w tym katalogu jest
 następujące:

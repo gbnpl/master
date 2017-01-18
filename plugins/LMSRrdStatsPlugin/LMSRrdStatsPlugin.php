@@ -3,7 +3,7 @@
 /*
  *  LMS version 1.11-git
  *
- *  Copyright (C) 2001-2015 LMS Developers
+ *  Copyright (C) 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -25,16 +25,21 @@
  */
 
 /**
- * LMSRrdStatsStats
+ * LMSRrdStatsPlugin
  *
  * @author Tomasz Chiliński <tomasz.chilinski@chilan.com>
  */
 class LMSRrdStatsPlugin extends LMSPlugin {
 	const plugin_directory_name = 'LMSRrdStatsPlugin';
-//	const PLUGIN_DBVERSION = '2015102800';
+	const PLUGIN_DBVERSION = '2016111600';
 	const PLUGIN_NAME = 'RRD Statistics';
 	const PLUGIN_DESCRIPTION = 'Rrdtool Node Traffic Statistics Support';
 	const PLUGIN_AUTHOR = 'Tomasz Chiliński &lt;tomasz.chilinski@chilan.com&gt;';
+
+	public static function getRrdDirectory() {
+		return ConfigHelper::getConfig('rrdstats.rrd_directory', PLUGINS_DIR . DIRECTORY_SEPARATOR
+			. self::plugin_directory_name . DIRECTORY_SEPARATOR . 'rrd');
+	}
 
 	public function registerHandlers() {
 		$this->handlers = array(
@@ -45,6 +50,14 @@ class LMSRrdStatsPlugin extends LMSPlugin {
 			'smarty_initialized' => array(
 				'class' => 'RrdStatsInitHandler',
 				'method' => 'smartyInit',
+			),
+			'userpanel_lms_initialized' => array(
+				'class' => 'RrdStatsInitHandler',
+				'method' => 'userpanelLmsInit'
+			),
+			'userpanel_modules_dir_initialized' => array(
+				'class' => 'RrdStatsInitHandler',
+				'method' => 'userpanelModulesDirInit'
 			),
 			'modules_dir_initialized' => array(
 				'class' => 'RrdStatsInitHandler',

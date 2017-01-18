@@ -1,10 +1,10 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 
 /*
  * LMS version 1.11-git
  *
- *  (C) Copyright 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -33,6 +33,7 @@ $parameters = array(
 	'h' => 'help',
 	'v' => 'version',
 	'f:' => 'traffic-log-file:',
+	's:' => 'section:',
 );
 
 foreach ($parameters as $key => $val) {
@@ -50,7 +51,7 @@ foreach ($short_to_longs as $short => $long)
 if (array_key_exists('version', $options)) {
 	print <<<EOF
 lms-traffic.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 	exit(0);
@@ -59,7 +60,7 @@ EOF;
 if (array_key_exists('help', $options)) {
 	print <<<EOF
 lms-traffic.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 -f, --traffic-log-file=/var/log/traffic.log  traffic log file (default: /var/log/traffic.log);
 -C, --config-file=/etc/lms/lms.ini      alternate config file (default: /etc/lms/lms.ini);
@@ -68,6 +69,7 @@ lms-traffic.php
 -q, --quiet                     suppress any output, except errors
 -s, --section=<section-name>    section name from lms configuration where settings
                                 are stored
+
 EOF;
 	exit(0);
 }
@@ -76,7 +78,7 @@ $quiet = array_key_exists('quiet', $options);
 if (!$quiet) {
 	print <<<EOF
 lms-traffic.php
-(C) 2001-2015 LMS Developers
+(C) 2001-2016 LMS Developers
 
 EOF;
 }
@@ -108,15 +110,20 @@ $CONFIG = (array) parse_ini_file($CONFIG_FILE, true);
 // Check for configuration vars and set default values
 $CONFIG['directories']['sys_dir'] = (!isset($CONFIG['directories']['sys_dir']) ? getcwd() : $CONFIG['directories']['sys_dir']);
 $CONFIG['directories']['lib_dir'] = (!isset($CONFIG['directories']['lib_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'lib' : $CONFIG['directories']['lib_dir']);
+$CONFIG['directories']['plugin_dir'] = (!isset($CONFIG['directories']['plugin_dir']) ? $CONFIG['directories']['sys_dir'] . DIRECTORY_SEPARATOR . 'plugins' : $CONFIG['directories']['plugin_dir']);
+$CONFIG['directories']['plugins_dir'] = $CONFIG['directories']['plugin_dir'];
 
 define('SYS_DIR', $CONFIG['directories']['sys_dir']);
 define('LIB_DIR', $CONFIG['directories']['lib_dir']);
+define('PLUGIN_DIR', $CONFIG['directories']['plugin_dir']);
+define('PLUGINS_DIR', $CONFIG['directories']['plugin_dir']);
 
 // Load autoloader
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'autoloader.php');
-
-// Do some checks and load config defaults
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'config.php');
+$composer_autoload_path = SYS_DIR . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if (file_exists($composer_autoload_path))
+	require_once $composer_autoload_path;
+else
+	die("Composer autoload not found. Run 'composer install' command from LMS directory and try again. More informations at https://getcomposer.org/" . PHP_EOL);
 
 // Init database
 
@@ -131,15 +138,14 @@ try {
 	exit(3);
 }
 
-define('RRD_DIR', ConfigHelper::getConfig('rrdstats.directory',
-	dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'rrd'));
+define('RRD_DIR', LMSRrdStatsPlugin::getRrdDirectory());
 define('RRDTOOL_BINARY', ConfigHelper::getConfig('rrdstats.rrdtool_binary', '/usr/bin/rrdtool'));
 
 // Include required files (including sequence is important)
 
+require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 //require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
 //include_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
-require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 
 $stat_freq = intval(ConfigHelper::getConfig('rrdstats.stat_freq',
 	intval(ConfigHelper::getConfig('phpui.stat_freq', 12))
@@ -178,17 +184,33 @@ fclose($fh);
 
 $currtime = time();
 if ($online_update) {
-	foreach ($nodes as $ip => $node)
-		if (isset($data[$ip]))
-			$DB->Execute('UPDATE nodes SET lastonline = ? WHERE id = ?',
-				array($currtime, $node['id']));
+	$nodechunks = array_chunk($nodes, 300);
+	foreach ($nodechunks as $nodechunk) {
+		$nodeids = array();
+		foreach ($nodechunk as $node)
+			if (isset($data[$node['ipaddr']]))
+				$nodeids[] = $node['id'];
+		$DB->Execute('UPDATE nodes SET lastonline = ? WHERE id IN (' . implode(',', $nodeids) . ')',
+			array($currtime));
+	}
 }
+
+$rrdtool_process = proc_open(RRDTOOL_BINARY . ' -',
+	array(
+		0 => array('pipe', 'r'),
+		1 => array('file', '/dev/null', 'w'),
+		2 => array('file', '/dev/null', 'w'),
+	),
+	$rrdtool_pipes
+);
+if (!is_resource($rrdtool_process))
+	die("Couldn't open " . RRDTOOL_BINARY . "!" . PHP_EOL);
 
 $total_download = $total_upload = 0.0;
 foreach ($data as $ip => $record) {
 	$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . $nodes[$ip]['id'] . '.rrd';
 	if (!file_exists($rrd_file)) {
-		$cmd = RRDTOOL_BINARY . " create ${rrd_file} --step ${stat_freq}"
+		$cmd = "create ${rrd_file} --step ${stat_freq}"
 			. ' DS:down:GAUGE:' . ($stat_freq * 2) . ':0:U'
 			. ' DS:up:GAUGE:' . ($stat_freq * 2) . ':0:U'
 			. ' RRA:AVERAGE:0.5:1:' . (7 * 86400 / $stat_freq) // przez 7 dni bez agregacji
@@ -201,10 +223,10 @@ foreach ($data as $ip => $record) {
 			. ' RRA:MAX:0.5:6:' . ((31 * 86400) / ($stat_freq * 6))
 			. ' RRA:MAX:0.5:12:' .  ((61 * 86400) / ($stat_freq * 12))
 			. ' RRA:MAX:0.5:72:' . ((275 * 86400) / ($stat_freq * 72));
-		system($cmd);
+		fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
 	}
-	$cmd = RRDTOOL_BINARY . " update ${rrd_file} N:${record['download']}:${record['upload']}";
-	system($cmd);
+	$cmd = "update ${rrd_file} N:${record['download']}:${record['upload']}";
+	fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
 
 	$total_download += $record['download'];
 	$total_upload += $record['upload'];
@@ -215,7 +237,7 @@ $total_upload = sprintf("%.0f", $total_upload);
 if ($total_download > 0 || $total_upload > 0) {
 	$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . 'traffic.rrd';
 	if (!file_exists($rrd_file)) {
-		$cmd = RRDTOOL_BINARY . " create ${rrd_file} --step ${stat_freq}"
+		$cmd = "create ${rrd_file} --step ${stat_freq}"
 			. ' DS:down:GAUGE:' . ($stat_freq * 2) . ':0:U'
 			. ' DS:up:GAUGE:' . ($stat_freq * 2) . ':0:U'
 			. ' RRA:AVERAGE:0.5:1:' . (7 * 86400 / $stat_freq) // przez 7 dni bez agregacji
@@ -228,11 +250,13 @@ if ($total_download > 0 || $total_upload > 0) {
 			. ' RRA:MAX:0.5:6:' . ((31 * 86400) / ($stat_freq * 6))
 			. ' RRA:MAX:0.5:12:' .  ((61 * 86400) / ($stat_freq * 12))
 			. ' RRA:MAX:0.5:72:' . ((275 * 86400) / ($stat_freq * 72));
-		system($cmd);
+		fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
 	}
-	$cmd = RRDTOOL_BINARY . " update ${rrd_file} N:${total_download}:${total_upload}";
-		system($cmd);
+	$cmd = "update ${rrd_file} N:${total_download}:${total_upload}";
+	fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
 }
+
+proc_close($rrdtool_process);
 
 $DB->Destroy();
 

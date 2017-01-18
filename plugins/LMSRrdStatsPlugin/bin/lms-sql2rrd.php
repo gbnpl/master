@@ -32,6 +32,9 @@ $parameters = array(
 	'q' => 'quiet',
 	'h' => 'help',
 	'v' => 'version',
+	's' => 'section:',
+	'f:' => 'from:',
+	't:' => 'to:',
 );
 
 foreach ($parameters as $key => $val) {
@@ -48,7 +51,7 @@ foreach ($short_to_longs as $short => $long)
 
 if (array_key_exists('version', $options)) {
 	print <<<EOF
-lms-online.php
+lms-sql2rrd.php
 (C) 2001-2016 LMS Developers
 
 EOF;
@@ -57,16 +60,18 @@ EOF;
 
 if (array_key_exists('help', $options)) {
 	print <<<EOF
-lms-online.php
+lms-sql2rrd.php
 (C) 2001-2016 LMS Developers
 
--f, --traffic-log-file=/var/log/traffic.log  traffic log file (default: /var/log/traffic.log);
 -C, --config-file=/etc/lms/lms.ini      alternate config file (default: /etc/lms/lms.ini);
 -h, --help                      print this help and exit;
 -v, --version                   print version info and exit;
 -q, --quiet                     suppress any output, except errors
 -s, --section=<section-name>    section name from lms configuration where settings
                                 are stored
+-f, --from=YYYY/MM/DD           starting date of migration interval
+-t, --to=YYYY/MM/DD             ending date of migration interval
+
 EOF;
 	exit(0);
 }
@@ -74,7 +79,7 @@ EOF;
 $quiet = array_key_exists('quiet', $options);
 if (!$quiet) {
 	print <<<EOF
-lms-online.php
+lms-sql2rrd.php
 (C) 2001-2016 LMS Developers
 
 EOF;
@@ -88,8 +93,10 @@ else
 if (!$quiet)
 	echo "Using file " . $CONFIG_FILE . " as config." . PHP_EOL;
 
-if (!is_readable($CONFIG_FILE))
-	die("Unable to read configuration file [" . $CONFIG_FILE."]!" . PHP_EOL);
+if (!is_readable($CONFIG_FILE)) {
+	print "Unable to read configuration file [" . $CONFIG_FILE."]!" . PHP_EOL;
+	exit(1);
+}
 
 define('CONFIG_FILE', $CONFIG_FILE);
 
@@ -122,10 +129,11 @@ try {
 } catch (Exception $ex) {
 	trigger_error($ex->getMessage(), E_USER_WARNING);
 	// can't working without database
-	die("Fatal error: cannot connect to database!" . PHP_EOL);
+	print "Fatal error: cannot connect to database!" . PHP_EOL;
+	exit(3);
 }
 
-define('RRD_DIR', LMSRrdStatsPlugin::getRrdDirectory());
+define('RRD_DIR', LMSRrdStatsPlugin::getDirectory());
 define('RRDTOOL_BINARY', ConfigHelper::getConfig('rrdstats.rrdtool_binary', '/usr/bin/rrdtool'));
 
 // Include required files (including sequence is important)
@@ -134,26 +142,99 @@ require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'common.php');
 //require_once(LIB_DIR . DIRECTORY_SEPARATOR . 'language.php');
 //include_once(LIB_DIR . DIRECTORY_SEPARATOR . 'definitions.php');
 
-$online_freq = intval(ConfigHelper::getConfig('rrdstats.online_freq',
-	intval(ConfigHelper::getConfig('rrdstats.stat_freq',
-		intval(ConfigHelper::getConfig('phpui.stat_freq', 12))
-	))
-));
+$phpui_stat_freq = intval(ConfigHelper::getConfig('phpui.stat_freq', 12));
+$stat_freq = intval(ConfigHelper::getConfig('rrdstats.stat_freq', $phpui_stat_freq));
+$rrd2sql = round($phpui_stat_freq / $stat_freq);
 
-$online = $DB->GetOne('SELECT COUNT(*) FROM nodes WHERE ?NOW? - lastonline <= ?',
-	array($online_freq * 2));
-$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . 'online.rrd';
-if (!file_exists($rrd_file)) {
-	$cmd = RRDTOOL_BINARY . " create ${rrd_file} --step ${online_freq}"
-		. ' DS:online:GAUGE:' . ($online_freq * 2) . ':0:U'
-		. ' RRA:AVERAGE:0.5:1:' . (183 * 86400 / $online_freq)
-		. ' RRA:MAX:0.5:1:' . (183 * 86400 / $online_freq)
-		. ' RRA:MIN:0.5:1:' . (183 * 86400 / $online_freq)
-		. ' RRA:LAST:0.5:1:' . (183 * 86400 / $online_freq);
-	system($cmd);
+foreach (array('from', 'to') as $datetype)
+	if (array_key_exists($datetype, $options)) {
+		$date = $options[$datetype];
+		if (check_date($date)) {
+			list ($year, $month, $day) = explode('/', $date);
+			if (checkdate($month, $day, $year)) {
+				$variable = array($datetype => mktime(0, 0, 0, $month, $day, $year));
+				extract($variable);
+			}
+		}
+	}
+
+if (!isset($from))
+	$from = 0;
+if (!isset($to))
+	$to = time();
+else
+	$to--;
+
+if ($from > $to)
+	die("Starting date should be less than or equal to ending date!" . PHP_EOL);
+
+$mintime = mktime(0, 0, 0, 1, 1, 2013);
+
+$nodes = $DB->GetCol('SELECT DISTINCT nodeid FROM stats
+	WHERE dt >= ? AND dt <= ?', array($from, $to));
+if (empty($nodes))
+	die("No node stats found in selected time interval!" . PHP_EOL);
+
+$rrd_files = array();
+
+$rrdtool_process = proc_open(RRDTOOL_BINARY . ' -',
+	array(
+		0 => array('pipe', 'r'),
+		1 => array('file', '/dev/null', 'w'),
+		2 => array('file', '/dev/null', 'w'),
+	),
+	$rrdtool_pipes
+);
+if (!is_resource($rrdtool_process))
+	die("Couldn't open " . RRDTOOL_BINARY . "!" . PHP_EOL);
+
+$total = count($nodes);
+$nodeidx = 0;
+foreach ($nodes as $nodeid) {
+	printf("Progress: %.2f%%   ", ($nodeidx * 100) / $total);
+	$nodeidx++;
+
+	$records = $DB->GetAll('SELECT * FROM stats
+		WHERE nodeid = ? AND dt >= ? AND dt <= ?
+		ORDER BY dt', array($nodeid, $from, $to));
+	if (empty($records))
+		continue;
+
+	$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . "$nodeid.rrd";
+
+	if (!array_key_exists($rrd_file, $rrd_files) && !file_exists($rrd_file)) {
+		$cmd = "create ${rrd_file} --start ${mintime} --step ${stat_freq}"
+			. ' DS:down:GAUGE:' . ($stat_freq * 2) . ':0:U'
+			. ' DS:up:GAUGE:' . ($stat_freq * 2) . ':0:U'
+			. ' RRA:AVERAGE:0.5:1:' . (7 * 86400 / $stat_freq) // przez 7 dni bez agregacji
+			. ' RRA:AVERAGE:0.5:3:' . ((21 * 86400) / ($stat_freq * 3)) // przez 21 dni z agregacją 3 próbek
+			. ' RRA:AVERAGE:0.5:6:' . ((31 * 86400) / ($stat_freq * 6)) // przez 31 dni z agregacją 6 próbek
+			. ' RRA:AVERAGE:0.5:12:' .  ((61 * 86400) / ($stat_freq * 12)) // przez 2 miesiące z agregacją 12 próbek
+			. ' RRA:AVERAGE:0.5:72:' . ((275 * 86400) / ($stat_freq * 72)) // przez 9 miesięcy z agregacją 72 próbek
+			. ' RRA:MAX:0.5:1:' . ((7 * 86400) / $stat_freq)
+			. ' RRA:MAX:0.5:3:' . ((21 * 86400) / ($stat_freq * 3))
+			. ' RRA:MAX:0.5:6:' . ((31 * 86400) / ($stat_freq * 6))
+			. ' RRA:MAX:0.5:12:' .  ((61 * 86400) / ($stat_freq * 12))
+			. ' RRA:MAX:0.5:72:' . ((275 * 86400) / ($stat_freq * 72));
+		fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
+		$rrd_files[$rrd_file] = true;
+	}
+
+	foreach ($records as $record) {
+		$cmd = "update ${rrd_file}";
+		$download = intval($record['download'] / $rrd2sql);
+		$upload = intval($record['upload'] / $rrd2sql);
+		for ($i = 1, $dt = $record['dt'] - $phpui_stat_freq + $stat_freq; $i <= $rrd2sql; $i++, $dt += $stat_freq)
+			$cmd .= " $dt:$download:$upload";
+		fwrite($rrdtool_pipes[0], $cmd . PHP_EOL);
+	}
+
+	printf("\r");
 }
-$cmd = RRDTOOL_BINARY . " update ${rrd_file} N:$online";
-system($cmd);
+
+echo PHP_EOL;
+
+proc_close($rrdtool_process);
 
 $DB->Destroy();
 

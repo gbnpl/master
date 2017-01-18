@@ -37,7 +37,8 @@ function RRDGraph($nodeid, $type, $from, $to) {
 			die;
 	}
 
-	$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
+	$rrd_dir = LMSRrdStatsPlugin::getRrdDirectory();
+	$rrd_file = $rrd_dir . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
 	if (!file_exists($rrd_file))
 		die;
 
@@ -90,6 +91,8 @@ function RRDGraph($nodeid, $type, $from, $to) {
 			break;
 	}
 
+	$title .= ': ' . strftime('%Y/%m/%d %H:%M', $from) . ' - ' . strftime('%Y/%m/%d %H:%M', $to);
+
 	//	--rigid \
 	//--start=-86400
 	$cmd = RRDTOOL_BINARY . " graph - --imgformat PNG --start $from --end $to --title '$title' "
@@ -114,7 +117,6 @@ function RRDGraph($nodeid, $type, $from, $to) {
 }
 
 $nodeid = isset($_GET['nodeid']) ? $_GET['nodeid'] : 0;
-$bar = isset($_GET['bar']) ? $_GET['bar'] : NULL;
 $from = isset($_GET['from']) ? $_GET['from'] : NULL;
 $to = isset($_GET['to']) ? $_GET['to'] : NULL;
 $add = !empty($_GET['add']) ? $_GET['add'] : NULL;
@@ -122,6 +124,16 @@ $add = !empty($_GET['add']) ? $_GET['add'] : NULL;
 $type = (isset($_GET['type']) ? $_GET['type'] : 'auto');
 if (!in_array($type, array('auto', 'online', 'traffic')))
 	$type = 'auto';
+
+if (isset($_GET['bar']))
+	$bar = $_GET['bar'];
+else
+	$SESSION->restore('rrdstatsbar_' . $type, $bar);
+$SESSION->save('rrdstatsbar_' . $type, $bar);
+$SESSION->close();
+
+if (empty($bar))
+	$bar = 'day';
 
 if (empty($_GET['popup'])) {
 	$todate = intval($to);

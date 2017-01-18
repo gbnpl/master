@@ -36,8 +36,6 @@ class RrdStatsInitHandler {
      * @param LMS $hook_data Hook data
      */
 	public function lmsInit(LMS $hook_data) {
-		define('RRD_DIR', ConfigHelper::getConfig('rrdstats.directory',
-			PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSRrdStatsPlugin::plugin_directory_name . DIRECTORY_SEPARATOR . 'rrd'));
 		define('RRDTOOL_BINARY', ConfigHelper::getConfig('rrdstats.rrdtool_binary', '/usr/bin/rrdtool'));
 
 		return $hook_data;
@@ -54,6 +52,29 @@ class RrdStatsInitHandler {
 		$plugin_templates = PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSRrdStatsPlugin::plugin_directory_name . DIRECTORY_SEPARATOR . 'templates';
 		array_unshift($template_dirs, $plugin_templates);
 		$hook_data->setTemplateDir($template_dirs);
+		return $hook_data;
+	}
+
+    /**
+     * Sets plugin managers
+     * 
+     * @param LMS $hook_data Hook data
+     */
+	public function userpanelLmsInit(LMS $hook_data) {
+		define('RRDTOOL_BINARY', ConfigHelper::getConfig('rrdstats.rrdtool_binary', '/usr/bin/rrdtool'));
+
+		return $hook_data;
+	}
+
+    /**
+     * Sets plugin userpanel modules directory
+     * 
+     * @param array $hook_data Hook data
+     * @return array Hook data
+     */
+	public function userpanelModulesDirInit(array $hook_data = array()) {
+		$plugin_modules = PLUGINS_DIR . DIRECTORY_SEPARATOR . LMSRrdStatsPlugin::plugin_directory_name . DIRECTORY_SEPARATOR . 'userpanel' . DIRECTORY_SEPARATOR;
+		array_unshift($hook_data, $plugin_modules);
 		return $hook_data;
 	}
 
@@ -85,14 +106,12 @@ class RrdStatsInitHandler {
 //				'accesskey' =>'x',
 				'prio' => 47,
 				'submenu' => array(
-/*
 					array(
 						'name' => trans('Filter'),
 						'link' => '?m=rrdtraffic',
 						'tip' => trans('User-defined stats'),
 						'prio' => 10,
 					),
-*/
 					array(
 						'name' => trans('Last Hour'),
 						'link' => '?m=rrdtraffic&bar=hour',

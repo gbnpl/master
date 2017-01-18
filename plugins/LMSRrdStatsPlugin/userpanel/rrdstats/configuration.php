@@ -3,7 +3,7 @@
 /*
  *  LMS version 1.11-git
  *
- *  Copyright (C) 2001-2015 LMS Developers
+ *  (C) Copyright 2001-2016 LMS Developers
  *
  *  Please, see the doc/AUTHORS for more information about authors!
  *
@@ -24,19 +24,11 @@
  *  $Id$
  */
 
-/**
- * WelcomeHandler
- *
- * @author Tomasz Chiliński <tomasz.chilinski@chilan.com>
- */
-class RrdStatsWelcomeHandler {
-	public function welcomeBeforeModuleDisplay(array $hook_data) {
-		$SMARTY = $hook_data['smarty'];
-
-		$rrd_dir = LMSRrdStatsPlugin::getRrdDirectory();
-		$SMARTY->assign('online', file_exists($rrd_dir . DIRECTORY_SEPARATOR . 'online.rrd'));
-		$SMARTY->assign('traffic', file_exists($rrd_dir . DIRECTORY_SEPARATOR . 'traffic.rrd'));
-	}
-}
+$USERPANEL->AddModule(trans('RRD Stats'),	// Display name
+	'rrdstats', 		// Module name - must be the same as directory name
+	trans('Show bandwidth utilization stats'), // Tip 
+	50,			// Priority
+	trans('This module is for showing bandwidth utilization stats')	// Description
+);
 
 ?>

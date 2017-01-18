@@ -3,6 +3,8 @@
 {block name=module_content}
 <!--// $Id$ //-->
 <H1>{$layout.pagetitle}</H1>
+{if $bars}
+{if !$trafficnet}
 {if $download || $upload}
 <table width="100%">
 	<tr>
@@ -16,6 +18,7 @@
 		</td>
 	</tr>
 </table>
+{/if}
 {/if}
 <TABLE WIDTH="100%" ALIGN="center" CELLPADDING="3">
 	<TR>
@@ -86,4 +89,123 @@
 	<TR><TD WIDTH="100%" COLSPAN="2" ALIGN="center">{t a=$smarty.section.download.index_next}Rows: $a{/t}</TD></TR>
 	{/if}
 </TABLE>
+{else}
+<FORM NAME="traffic" METHOD="POST" ACTION="?m=rrdtraffic&bar=user">
+<INPUT type="submit" class="hiddenbtn">
+<TABLE class="lmsbox">
+    <THEAD>
+	<TR>
+		<TD COLSPAN="3">
+			<B>{trans("Enter search criteria:")}</B>
+		</TD>
+	</TR>
+    </THEAD>
+    <TBODY>
+	<TR {tip text="Limit results to selected period"}>
+		<TD WIDTH="1%">
+			<IMG src="img/calendar.gif">
+		</TD>
+		<TD WIDTH="1%" nowrap>
+			<B>{trans("From (day/month/year hh:mm):")}</B>
+		</TD>
+		<TD WIDTH="98%" nowrap>
+			{html_select_date field_array="from" prefix="" time=$starttime field_order="DMY" field_separator=" / " start_year=$startyear end_year=$endyear}
+			&nbsp;
+			{html_select_time field_array="from" prefix="" time=$starttime display_seconds=0}
+		</TD>
+	</TR>
+	<TR {tip text="Limit results to selected period"}>
+		<TD WIDTH="1%">
+			<IMG src="img/calendar.gif">
+		</TD>
+		<TD nowrap>
+			<B>{trans("To (day/month/year hh:mm):")}</B>
+		</TD>
+		<TD nowrap>
+			{html_select_date field_array="to" prefix="" time=$endtime field_order="DMY" field_separator=" / " start_year=$startyear end_year=$endyear}
+			&nbsp;
+			{html_select_time field_array="to" prefix="" time=$endtime display_seconds=0}
+		</TD>
+	</TR>
+	<TR {tip text="Limit results to selected network"}>
+		<TD WIDTH="1%">
+			<IMG src="img/network.gif">
+		</TD>
+		<TD nowrap>
+			<B>{trans("Network:")}</B>
+		</TD>
+		<TD>
+			<SELECT SIZE="1" NAME="net">
+				<OPTION VALUE="0">{trans("- all -")}</OPTION>
+				{section name="netlist" loop=$netlist}
+				<OPTION VALUE="{$netlist[netlist].id}" {if $netlist[netlist].id == $trafficnet}SELECTED{/if}>{$netlist[netlist].name|truncate:30:"...":true}</OPTION>
+				{/section}
+			</SELECT>
+		</TD>
+	</TR>
+{*
+	<TR>
+		<TD style="width: 1%;">
+			<IMG src="img/customer.gif" alt="">
+		</TD>
+		<TD class="bold nobr">
+			{trans("Customer:")}
+		</TD>
+		<TD>
+			{customerlist form="traffic" customers=$customers selectname="custid" inputname="customerid" firstoption="- all customers -"}
+		</TD>
+	</TR>
+*}
+	<TR {tip text="Select results sorting order"}>
+		<TD WIDTH="1%">
+			<IMG src="img/view.gif">
+		</TD>
+		<TD nowrap>
+			<B>{trans("Sorting:")}</B>
+		</TD>
+		<TD>
+			<SELECT SIZE="1" NAME="order">
+{*
+				<OPTION VALUE="name"{if $trafficorder == "name"} SELECTED{/if}>{trans("Node name")}</OPTION>
+				<OPTION VALUE="ip"{if $trafficorder == "ip"} SELECTED{/if}>{trans("Node IP address")}</OPTION>
+				<OPTION VALUE="nodeid"{if $trafficorder == "nodeid"} SELECTED{/if}>{trans("Node number")}</OPTION>
+*}
+				<OPTION VALUE="download"{if $trafficorder == "download"} SELECTED{/if}>{trans("Download")}</OPTION>
+				<OPTION VALUE="upload"{if $trafficorder == "upload"} SELECTED{/if}>{trans("Upload")}</OPTION>
+			</SELECT>
+		</TD>
+	</TR>
+{*
+	<TR {tip text="Limit results to n computers"}>
+		<TD WIDTH="1%">
+			<IMG src="img/node.gif">
+		</TD>
+		<TD nowrap>
+			<B>{trans("Nodes limit:")}</B>
+		</TD>
+		<TD>
+			<INPUT TYPE="text" NAME="limit" SIZE="3">
+		</TD>
+	</TR>
+*}
+	<TR {tip text="Nodes depiction way on charts"}>
+		<TD WIDTH="1%">
+			<IMG src="img/ip.gif">
+		</TD>
+		<TD nowrap>
+			<B>{trans("IP addresses instead of nodes names")}</B>
+		</TD>
+		<TD>
+			<INPUT TYPE="checkbox" NAME="showips" VALUE="1">
+		</TD>
+	</TR>
+	<TR>
+		<TD COLSPAN="3" ALIGN="right">
+			<A HREF="javascript:document.traffic.submit();" ACCESSKEY="s">{trans("Submit")} <IMG SRC="img/save.gif" alt=""></A>
+		</TD>
+	</TR>
+    </TBODY>
+</TABLE>
+</FORM>
+{/if}
 {/block}

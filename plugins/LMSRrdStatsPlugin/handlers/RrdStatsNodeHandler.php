@@ -30,27 +30,47 @@
  * @author Tomasz Chiliński <tomasz.chilinski@chilan.com>
  */
 class RrdStatsNodeHandler {
+	private $rrd_dir;
+
 	private function getLastStats($nodeid, $period) {
 		$out = array();
 		$ret = 0;
-		exec(RRDTOOL_BINARY . ' fetch ' . RRD_DIR . DIRECTORY_SEPARATOR . $nodeid . '.rrd AVERAGE -s now-' . $period, $out, $ret);
+
+		$todate = time();
+		switch ($period) {
+			case '1hour': $fromdate = $todate - 3600; break;
+			case '1day': $fromdate = $todate -  24 * 3600; break;
+			case '1month': $fromdate = $todate - 30 * 24 * 3600; break;
+		}
+		$delta = $todate - $fromdate;
+
+		exec(RRDTOOL_BINARY . ' fetch ' . $this->rrd_dir . DIRECTORY_SEPARATOR . $nodeid . ".rrd AVERAGE -s $fromdate -e $todate", $out, $ret);
 		if ($ret)
 			return null;
+
+		$lines = preg_grep('/^[0-9]+:\s+/', $out);
+		if (empty($lines))
+			return null;
+
+		$stat_freq = intval(ConfigHelper::getConfig('rrdstats.stat_freq', ConfigHelper::getConfig('phpui.stat_freq', 12)));
+
+		sscanf(reset($lines), "%d: %s %s\n", $date1, $download, $upload);
+		sscanf(next($lines), "%d: %s %s\n", $date2, $download, $upload);
+		$multiplier = ($date2 - $date1) / $stat_freq;
+
 		$lines = preg_grep('/^[0-9]+:\s+[0-9]/', $out);
+		if (empty($lines))
+			return null;
+
 		$date = $download = $upload = $total_download = $total_upload = 0;
 		foreach ($lines as $line) {
 			sscanf($line, "%d: %f %f\n", $date, $download, $upload);
-			$total_download += $download;
-			$total_upload += $upload;
-		}
-		switch ($period) {
-			case '1hour': $secs = 3600; break;
-			case '1day': $secs = 24 * 3600; break;
-			case '1month': $secs = 31 * 24 * 3600; break;
+			$total_download += $download * $multiplier;
+			$total_upload += $upload * $multiplier;
 		}
 		$result = array(
-			'downavg' => sprintf("%.0f", $total_download * 8 / 1000 / $secs),
-			'upavg' => sprintf("%.0f", $total_upload * 8 / 1000 / $secs),
+			'downavg' => sprintf("%.0f", $total_download * 8 / ($delta * 1000)),
+			'upavg' => sprintf("%.0f", $total_upload * 8 / ($delta * 1000)),
 		);
 		list ($result['download']['data'], $result['download']['units']) = setunits($total_download);
 		list ($result['upload']['data'], $result['upload']['units']) = setunits($total_upload);
@@ -58,10 +78,12 @@ class RrdStatsNodeHandler {
 	}
 
 	private function getStats($SMARTY, $nodeid) {
+		$this->rrd_dir = LMSRrdStatsPlugin::getRrdDirectory();
+
 		$rrdstats = array();
 		$SMARTY->assignByRef('rrdstats', $rrdstats);
 
-		$rrd_file = RRD_DIR . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
+		$rrd_file = $this->rrd_dir . DIRECTORY_SEPARATOR . $nodeid . '.rrd';
 		if (!is_readable($rrd_file))
 			return $rrdstats;
 
