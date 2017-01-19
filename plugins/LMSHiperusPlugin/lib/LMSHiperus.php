@@ -695,10 +695,12 @@ class LMSHiperus {
 	}
 
 	public function ImportPSTNUsageList() {
-		$this->DB->Execute('DELETE FROM hv_pstnusage');
 		$ranges = $this->DB->GetCol('SELECT id FROM hv_pstnrange');
 		if (!is_array($ranges) || empty($ranges))
 			return;
+
+		$pstnusageids = array();
+
 		foreach ($ranges as $range) {
 			$hlib = new HiperusLib();
 			$r = new stdClass();
@@ -719,15 +721,33 @@ class LMSHiperus {
 					$customername = NULL;
 				else
 					$customername = $usage['customer_name'];
-				$this->DB->Execute('INSERT INTO hv_pstnusage (extension,number,customerid,country_code,customer_name,idrange) VALUES (?,?,?,?,?,?)',
-					array($usage['extension'],
-						$usage['number'],
-						$customerid,
-						$usage['country_code'],
-						$customername,
-						$range));
+				if ($pstnusageid = $this->DB->GetOne('SELECT id FROM hv_pstnusage WHERE extension = ? AND number = ? AND idrange = ?',
+					array($usage['extension'], $usage['number'], $range))) {
+					$this->DB->Execute('UPDATE hv_pstnusage SET extension = ?, number = ?, customerid = ?,
+						country_code = ?, customer_name = ?, idrange = ? WHERE id = ?',
+						array($usage['extension'],
+							$usage['number'],
+							$customerid,
+							$usage['country_code'],
+							$customername,
+							$range,
+							$pstnusageid));
+					$pstnusageids[] = $pstnusageid;
+				} else {
+					$this->DB->Execute('INSERT INTO hv_pstnusage (extension, number, customerid, country_code, customer_name, idrange)
+						VALUES (?, ?, ?, ?, ?, ?)',
+						array($usage['extension'],
+							$usage['number'],
+							$customerid,
+							$usage['country_code'],
+							$customername,
+							$range));
+					$pstnusageids[] = $this->DB->GetLastInsertID('hv_pstnusage');
+				}
 			}
 		}
+
+		$this->DB->Execute('DELETE FROM hv_pstnusage WHERE id NOT IN (' . implode(',', $pstnusageids) . ')');
 	}
 
     function AddPstnForTerminal($dane) 

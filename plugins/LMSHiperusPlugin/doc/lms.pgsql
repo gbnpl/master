@@ -129,7 +129,9 @@ CREATE TABLE hv_pstnrange (
   PRIMARY KEY (id)
 );
 
+CREATE SEQUENCE hv_pstnusage_id_seq;
 CREATE TABLE hv_pstnusage (
+  id integer DEFAULT nextval('hv_pstnusage_id_seq'::text) NOT NULL,
   extension bigint NOT NULL,
   number integer DEFAULT NULL,
   customerid integer DEFAULT NULL,
@@ -138,6 +140,7 @@ CREATE TABLE hv_pstnusage (
   idrange integer DEFAULT NULL,
   PRIMARY KEY (extension)
 );
+CREATE INDEX hv_pstnusage_id_idx ON hv_pstnusage (id);
 CREATE INDEX hv_pstnusage_number_idx ON hv_pstnusage (number);
 CREATE INDEX hv_pstnusage_idrange_idx ON hv_pstnusage (idrange);
 
@@ -714,4 +717,4 @@ SELECT setval('hv_province_id_seq', (SELECT MAX(id) FROM hv_province));
 SELECT setval('hv_county_id_seq', (SELECT MAX(id) FROM hv_county));
 SELECT setval('hv_borough_id_seq', (SELECT MAX(id) FROM hv_borough));
 
-INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSHiperusPlugin', '2015110300');
+INSERT INTO dbinfo (keytype, keyvalue) VALUES ('dbversion_LMSHiperusPlugin', '2017011900');
