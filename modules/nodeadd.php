@@ -34,7 +34,7 @@ if(isset($_GET['ownerid']))
 	{
 		$nodedata['ownerid'] = $_GET['ownerid'];
 		$customerinfo = $LMS->GetCustomer($_GET['ownerid']);
-		$SMARTY->assign('customerinfo', $customerinfo);		
+		$SMARTY->assign('customerinfo', $customerinfo);
 	}
 	else
 		$SESSION->redirect('?m=customerinfo&id='.$_GET['ownerid']);
