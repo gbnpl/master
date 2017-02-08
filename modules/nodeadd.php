@@ -26,7 +26,7 @@
 
 $nodedata['access'] = 1;
 $nodedata['ownerid'] = 0;
-$nodedata['authtype'] = 0;
+$nodedata['authtype'] = ConfigHelper::getConfig('phpui.default_nodeauthtype', 0);
 
 if(isset($_GET['ownerid']))
 {
@@ -34,7 +34,7 @@ if(isset($_GET['ownerid']))
 	{
 		$nodedata['ownerid'] = $_GET['ownerid'];
 		$customerinfo = $LMS->GetCustomer($_GET['ownerid']);
-		$SMARTY->assign('customerinfo', $customerinfo);
+		$SMARTY->assign('customerinfo', $customerinfo);		
 	}
 	else
 		$SESSION->redirect('?m=customerinfo&id='.$_GET['ownerid']);
@@ -297,6 +297,18 @@ $hook_data = $LMS->executeHook('nodeadd_before_display',
 	)
 );
 $nodedata = $hook_data['nodeadd'];
+
+if(ConfigHelper::getConfig('phpui.default_nodename')!="")
+{
+    $nodename = ConfigHelper::getConfig('phpui.default_nodename');
+    $nodename = preg_replace("/\%custid/", $nodedata['ownerid'], $nodename);
+    $nodedata['name'] = $nodename;
+}
+
+if(ConfigHelper::getConfig('phpui.default_macaddress')!="")
+{
+    $nodedata['macs'][0] = ConfigHelper::getConfig('phpui.default_macaddress');
+}
 
 $SMARTY->assign('xajax', $LMS->RunXajax());
 
