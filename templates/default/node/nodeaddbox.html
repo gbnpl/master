@@ -115,7 +115,7 @@
 		</TD>
 		<TD style="width: 99%; white-space: nowrap;">
                         <a href="javascript: void(0);" onclick="return netDevChooseWin(document.nodeadd.elements['nodedata[netdev]']);" {tip trigger="netdev" text="Search device"}>&raquo;&raquo;&raquo;</A>
-			<SELECT SIZE="1" NAME="nodedata[netdev]" {tip text="Select network device (optional)" trigger="netdev"} onchange="change_netdevice(this.options[this.selectedIndex].value)" style="max-width:250px;">
+			<SELECT SIZE="1" NAME="nodedata[netdev]" id="netdev" {tip text="Select network device (optional)" trigger="netdev"} onchange="change_netdevice(this.options[this.selectedIndex].value)" style="max-width:250px;">
 				<OPTION VALUE="0"{if !$nodedata.netdev} SELECTED{/if}>{trans("- select device -")}</OPTION>
 				{section name=netdevices loop=$netdevices}
 				<OPTION VALUE="{$netdevices[netdevices].id}"{if $netdevices[netdevices].id==$nodedata.netdev} SELECTED{/if}>{$netdevices[netdevices].name} {$netdevices[netdevices].producer}{if $netdevices[netdevices].location} / {$netdevices[netdevices].location}{/if}</OPTION>
@@ -326,7 +326,7 @@
 		}
 	}
 
-	function radiosectors_received(radiosectors) {
+	function radio_sectors_received(radiosectors) {
 		var rselem = xjx.$('radiosector');
 		var options = rselem.options;
 
@@ -366,9 +366,19 @@
 				break;
 		}
 		xjx.$('radiosector').style.display = (linktype == 1 ? '' : 'none');
-	}
 
+		if (linktype == 1) {
+		    var selected = xjx.$('netdev').selectedIndex;
+		    if (selected) {
+			netdev = xjx.$('netdev').options[selected].value;
+			xjx.$('radiosector').disabled = true;
+			xajax_getRadioSectors(netdev);
+		    }
+		}
+	}
+	
 	check_teryt('location', true);
+
 	setNNProject();
 
     function set_lat_lon(){
