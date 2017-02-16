@@ -1676,7 +1676,7 @@ class LMS
 				$this->mail_object->Username = (!isset($smtp_options['user']) ? $smtp_username : $smtp_options['user']);
 				$this->mail_object->Password = (!isset($smtp_options['pass']) ? ConfigHelper::getConfig('mail.smtp_password') : $smtp_options['pass']);
 				$this->mail_object->SMTPAuth  = (!isset($smtp_options['auth']) ? ConfigHelper::getConfig('mail.smtp_auth_type', true) : $smtp_options['auth']);
-				$this->mail_object->SMTPSecure  = (!isset($smtp_options['auth']) ? ConfigHelper::getConfig('mail.smtp_secure', true) : $smtp_options['auth']);
+				$this->mail_object->SMTPSecure  = (!isset($smtp_options['auth']) ? ConfigHelper::getConfig('mail.smtp_secure', false) : $smtp_options['auth']);
 			}
 
 			$this->mail_object->SMTPOptions = array(
