@@ -49,6 +49,9 @@ if(isset($_GET['premac']))
 if(isset($_GET['prename']))
 	$nodedata['name'] = $_GET['prename'];
 
+if (!isset($_POST['nodedata']))
+    $nodedata['teryt'] = 1;
+
 if (isset($_POST['nodedata']))
 {
 	$nodedata = $_POST['nodedata'];
